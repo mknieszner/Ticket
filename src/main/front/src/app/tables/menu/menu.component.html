@@ -1,0 +1,7 @@
+<div class="container-fluid">
+  <ul class="nav nav-pills nav-fill justify-content-center">
+    <li *ngFor="let tableName of tableNames" (click)="onChooseName(tableName)" [ngClass]="choosenName == tableName ? 'alert-dark' : ''">
+      <a>{{tableName}}</a>
+    </li>
+  </ul>
+</div>

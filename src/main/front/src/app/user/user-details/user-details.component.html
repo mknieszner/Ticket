@@ -1,0 +1,49 @@
+<div *ngIf="user">
+  <table class="table table-bordered table-striped">
+    <tbody>
+    <tr>
+      <td>USERNAME:</td>
+      <td>{{ user.username }}</td>
+    </tr>
+    <tr>
+      <td>EMAIL:</td>
+      <td> {{ user.email }}</td>
+    </tr>
+    <tr>
+      <td>FIRSTNAME:</td>
+      <td>{{ user.firstName }}</td>
+    </tr>
+    <tr>
+      <td>LASTNAME:</td>
+      <td>{{ user.lastName }}</td>
+    </tr>
+    <tr>
+      <td>ENABLED:</td>
+      <td>{{ user.enabled }}</td>
+    </tr>
+    <tr>
+      <td>ROLES:</td>
+      <td>
+        <ul>
+          <li *ngFor="let roleName of user.roleNames">{{roleName}}</li>
+        </ul>
+      </td>
+    </tr>
+    </tbody>
+  </table>
+
+  <div *ngIf="editRoleMode">
+    <form [formGroup]="roleForm" class="form-group">
+      <select class="form-control-lg" formControlName="role">
+        <option selected>- Select -</option>
+        <option *ngFor="let role of (roles|async)"> {{ role.name }}</option>
+      </select>
+      <button class="btn btn-default" (click)="postAddRole()">Add</button>
+      <button class="btn btn-default" (click)="postRemove()">Remove</button>
+      <button class="btn btn-default" (click)="abortAddRole()">Abort</button>
+    </form>
+  </div>
+  <div *ngIf="!addRoleMode">
+    <button class="btn btn-default" (click)="onEditRoleMode()">Edit Role</button>
+  </div>
+</div>

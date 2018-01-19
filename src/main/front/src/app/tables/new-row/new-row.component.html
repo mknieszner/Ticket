@@ -1,0 +1,113 @@
+<div *ngIf="(newRowMode| async)" class="container col-xs-6 align-middle" style="
+    align-content: center;
+    position: absolute;
+    padding: 20px;
+    left: 200px;
+    top: 50px;
+    z-index: 1;
+    background-color: white;
+    border-radius: 10px;
+    border: black 1px solid;">
+  <div class="col-xs-10 ">
+    <form [formGroup]="newRowForm">
+      <div class="form-group" hidden>
+        <label for="id">ID:</label>
+        <input type="number"
+               id="id"
+               formControlName="id"
+               class="form-control"
+        >
+      </div>
+      <div class="form-group" hidden>
+        <label for="name">Name:</label>
+        <input type="text"
+               id="name"
+               formControlName="name"
+               class="form-control"
+        >
+      </div>
+      <div class="form-group" hidden>
+        <label for="createdBy">Created By:</label>
+        <input type="text"
+               id="createdBy"
+               formControlName="createdBy"
+               class="form-control"
+        >
+      </div>
+      <div class="form-group" hidden>
+        <label for="createdOn">Created On:</label>
+        <input type="datetime-local"
+               id="createdOn"
+               formControlName="createdOn"
+               class="form-control"
+        >
+      </div>
+      <div class="form-group" hidden>
+        <label for="lastModifiedBy">Last modified by:</label>
+        <input type="text"
+               id="lastModifiedBy"
+               formControlName="lastModifiedBy"
+               class="form-control"
+        >
+      </div>
+      <div class="form-group" hidden>
+        <label for="lastModifiedOn">Last modified on:</label>
+        <input type="datetime-local"
+               id="lastModifiedOn"
+               formControlName="lastModifiedOn"
+               class="form-control"
+        >
+      </div>
+      <div formArrayName="columnValueDtos">
+        <div *ngFor="let cell of newRowForm.get('columnValueDtos').controls;let j = index">
+
+          <div [ngSwitch]="(cell.value | valueOnKey).key" formGroupName="{{j}}">
+
+            <div *ngSwitchCase="'DT'" class="form-group" style="margin-top: 10px">
+              <label>{{header[0].columnDetailDefinitionDtoList[j].name}}</label>
+              <input type="datetime-local"
+                     formControlName="DT"
+                     class="form-control"
+                     formControlName="DT">
+            </div>
+            <div *ngSwitchCase="'ST'" class="form-group" style="margin-top: 10px">
+              <label>{{header[0].columnDetailDefinitionDtoList[j].name}}</label>
+              <input
+                [type]="'text'"
+                formControlName="ST"
+                class="form-control">
+            </div>
+            <div *ngSwitchCase="'DE'" class="form-group" style="margin-top: 10px">
+              <label>{{header[0].columnDetailDefinitionDtoList[j].name}}</label>
+              <textarea cols="30" rows="10"
+                        class="form-control"
+                        formControlName="DE">
+                </textarea>
+            </div>
+            <div *ngSwitchCase="'EN'" class="form-group" style="margin-top: 10px">
+              <label>{{header[0].columnDetailDefinitionDtoList[j].name}}</label>
+              <select class="form-control-lg" formControlName="EN">
+                <option *ngFor="let option of header[0].columnDetailDefinitionDtoList[j].optionList"
+                >{{option.value}}
+                </option>
+              </select>
+            </div>
+            <div *ngSwitchCase="'IN'" class="form-group" style="margin-top: 10px">
+              <label>{{header[0].columnDetailDefinitionDtoList[j].name}}</label>
+              <input [id]="(cell.value | valueOnKey).key"
+                     [type]="'number'"
+                     class="form-control"
+                     formControlName="IN">
+            </div>
+          </div>
+        </div>
+      </div>
+      <button type="button" class="btn btn-success"
+              (click)="onSaveNewRow()">Post form
+      </button>
+      <button type="button" class="btn btn-danger"
+              (click)="onAbortNewRow()">Abort
+      </button>
+    </form>
+  </div>
+</div>

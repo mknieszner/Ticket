@@ -1,0 +1,77 @@
+<div class="jumbotron">
+  <div class="container">
+    <div class="row">
+      <div class="col-xs-12">
+        <h3>Table Definition</h3>
+        <form [formGroup]="definitionForm" (ngSubmit)="onSubmit()">
+          <div class="form-group">
+            <label for="table-name">Table Name</label>
+            <input type="text"
+                   id="table-name"
+                   formControlName="name"
+                   placeholder="Table Name"
+                   class="form-control" ngModel
+                   required
+            >
+          </div>
+          <div class="row">
+            <div class="col-xs-12" formArrayName="columnDetailDefinitionDtoList">
+              <div class="row" *ngFor="let columnDetailDefinitionDto of definitionForm.get('columnDetailDefinitionDtoList').controls; let i = index;"
+                   [formGroupName]="i">
+                <div class="col-xs-1">
+                  <label for="type">Type:</label>
+                </div>
+                <div class="col-xs-3">
+                  <select id="type" type="text" class="form-control form-control-lg" formControlName="type">
+                    <option *ngFor="let option of options;" [selected]="option.name" [value]="option.shortcut" required>{{
+                      option.name }}
+                    </option>
+                  </select>
+                  <div *ngIf="definitionForm.value.columnDetailDefinitionDtoList[i].type=='EN'">
+                    <div class="col-xs-12" formArrayName="optionList">
+                      <div *ngFor="let option of columnDetailDefinitionDto.get('optionList').controls;let j = index" class="row">
+                        <div class="form-group" style="margin: 5px 0 0">
+                          <input type="text" class="form-control"
+                                 [value]="definitionForm.value.columnDetailDefinitionDtoList[i].optionList[j]" formControlName="{{j}}"
+                                 placeholder="Option..."
+                                 required>
+                        </div>
+                        <div class="col-xs-1">
+                          <div class="form-group" style="margin: 5px 0">
+                            <button type="button" class="btn btn-danger" (click)="onDeleteOption(i,j)">X</button>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="row">
+                        <div class="form-group" style="margin: 5px 0">
+                          <button type="button" class="btn btn-primary" (click)="onAddOptions(i)">Add
+                            option
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-xs-1">
+                  <label>Name:</label>
+                </div>
+                <div class="col-xs-6">
+                  <input type="text" class="form-control" formControlName="name" required>
+                </div>
+                <div class="col-xs-1">
+                  <button type="button" class="btn btn-danger" (click)="onDeleteColumn(i)">X</button>
+                </div>
+              </div>
+            </div>
+          </div>
+          <br>
+          <div class="form-group">
+            <button type="button" class="btn btn-dark" (click)="onAddColumn()">Add column</button>
+            <button type="button" class="btn btn-danger" (click)="onResetForm()">Reset form</button>
+            <button type="submit" class="btn btn-success" [disabled]="!definitionForm.valid" (click)="postForm()">Post form</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>

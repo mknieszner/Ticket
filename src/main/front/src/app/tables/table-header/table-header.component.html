@@ -1,0 +1,11 @@
+<tr *ngIf="header != null || header != undefined">
+  <td><button type="button" class="btn btn-light" *ngIf="!(newRowMode | async)[0]" (click)="onNewRow()">New Row</button></td>
+  <!--<td>ID</td>-->
+  <!--<td>NAME</td>-->
+  <td *ngFor="let column of (header| async)[0]?.columnDetailDefinitionDtoList"> {{ column.name }}</td>
+  <td>Created by:</td>
+  <td>Created on</td>
+  <td>Last Modified By</td>
+  <td>Last Modified On</td>
+</tr>
+

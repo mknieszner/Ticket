@@ -1,0 +1,260 @@
+<tr *ngIf="editMode == false">
+  <td btn btn-primary
+      (click)="onEditForm()" data-toggle="modal" data-target="#myModal">EDIT
+  </td>
+  <!--<td>{{ row.id }}</td>-->
+  <!--<td>{{ row.name }}</td>-->
+  <td *ngFor="let cellValue of row.columnValueDtos">
+    {{(cellValue | valueOnKey).value.value }}
+  </td>
+  <td>{{ row.createdBy}}</td>
+  <td>{{ row.createdOn }}</td>
+  <td>{{ row.lastModifiedBy }}</td>
+  <td>{{ row.lastModifiedOn }}</td>
+</tr>
+
+<!--<div *ngIf="editMode == true">-->
+<!--<form [formGroup]="rowForm">-->
+<!--<div formArrayName="columnValueDtos">-->
+<!--<div *ngFor="let cell of rowForm.get('columnValueDtos').controls;let j = index">-->
+<!--<div [ngSwitch]="(cell.value | valueOnKey).key" formGroupName="{{j}}">-->
+
+<!--<div *ngSwitchCase="'DT'" class="form-group" style="margin-top: 10px">-->
+<!--<label style="color: #1a1a1a"> {{ header[0].columnDetailDefinitionDtoList[j].name }} </label>-->
+<!--<input type="datetime-local"-->
+<!--formControlName="DT"-->
+<!--class="form-control">-->
+<!--</div>-->
+<!--<div *ngSwitchCase="'ST'" class="form-group" style="margin-top: 10px">-->
+<!--<label style="color: #1a1a1a"> {{ header[0].columnDetailDefinitionDtoList[j].name }} </label>-->
+<!--<input formControlName="ST"-->
+<!--[type]="'text'"-->
+<!--class="form-control">-->
+<!--</div>-->
+<!--<div *ngSwitchCase="'DE'" class="form-group" style="margin-top: 10px">-->
+<!--<label style="color: #1a1a1a"> {{ header[0].columnDetailDefinitionDtoList[j].name }} </label>-->
+<!--<textarea cols="30" rows="10"-->
+<!--formControlName="DE"-->
+<!--class="form-control">-->
+<!--</textarea>-->
+<!--</div>-->
+<!--<div *ngSwitchCase="'EN'" class="form-group" style="margin-top: 10px">-->
+<!--<label style="color: #1a1a1a"> {{ header[0].columnDetailDefinitionDtoList[j].name }} </label>-->
+<!--<select class="form-control"-->
+<!--formControlName="EN"-->
+<!--style="height: 35px"-->
+<!--&gt;-->
+<!--<option *ngFor="let option of header[0].columnDetailDefinitionDtoList[j].optionList"-->
+<!--[value]="option"-->
+<!--[selected]="row.columnValueDtos[j]['EN'].value == option.value"-->
+<!--&gt;{{ option.value }}-->
+<!--</select>-->
+<!--</div>-->
+<!--<div *ngSwitchCase="'IN'" class="form-group" style="margin-top: 10px">-->
+<!--<label style="color: #1a1a1a"> {{ header[0].columnDetailDefinitionDtoList[j].name }} </label>-->
+<!--<input formControlName="IN"-->
+<!--[type]="'number'"-->
+<!--class="form-control">-->
+<!--</div>-->
+<!--</div>-->
+<!--</div>-->
+<!--</div>-->
+<!--<div class="form-group">-->
+<!--<label for="id">ID:</label>-->
+<!--<input type="number"-->
+<!--id="id"-->
+<!--formControlName="id"-->
+<!--class="form-control"-->
+<!--readonly-->
+<!--required-->
+<!--&gt;-->
+<!--</div>-->
+<!--<div class="form-group">-->
+<!--<label for="name">Name:</label>-->
+<!--<input type="text"-->
+<!--id="name"-->
+<!--formControlName="name"-->
+<!--class="form-control"-->
+<!--readonly-->
+<!--required-->
+<!--&gt;-->
+<!--</div>-->
+<!--<div class="form-group">-->
+<!--<label for="createdBy">Created By:</label>-->
+<!--<input type="text"-->
+<!--id="createdBy"-->
+<!--formControlName="createdBy"-->
+<!--class="form-control"-->
+<!--readonly-->
+<!--required-->
+<!--&gt;-->
+<!--</div>-->
+<!--<div class="form-group">-->
+<!--<label>Created On:</label>-->
+<!--<input type="datetime-local"-->
+<!--formControlName="createdOn"-->
+<!--class="form-control"-->
+<!--readonly-->
+<!--required-->
+<!--&gt;-->
+<!--</div>-->
+<!--<div class="form-group">-->
+<!--<label for="lastModifiedBy">Last modified by:</label>-->
+<!--<input type="text"-->
+<!--id="lastModifiedBy"-->
+<!--formControlName="lastModifiedBy"-->
+<!--class="form-control"-->
+<!--readonly-->
+<!--required-->
+<!--&gt;-->
+<!--</div>-->
+<!--<div class="form-group" disabled>-->
+<!--<label for="lastModifiedOn">Last modified on:</label>-->
+<!--<input type="datetime-local"-->
+<!--id="lastModifiedOn"-->
+<!--formControlName="lastModifiedOn"-->
+<!--class="form-control"-->
+<!--readonly-->
+<!--required-->
+<!--&gt;-->
+<!--</div>-->
+<!--<div class="row">-->
+<!--<div class="col-xs-12">-->
+
+<!--</div>-->
+<!--</div>-->
+<!--</form>-->
+
+<!--<button type="button" class="btn btn-primary" (click)="onEditForm()"> {{ !editMode ? 'Edit' : 'Abort'}}</button>-->
+<!--<button *ngIf="editMode" type="button" class="btn btn-success" (click)="onSubmit()">Post form</button>-->
+<!--</div>-->
+
+<!-- Modal -->
+<div class="modal" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3 style="color: #4d4d4d">Edit row:</h3>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+      </div>
+      <div class="modal-body">
+        <form [formGroup]="rowForm">
+          <div formArrayName="columnValueDtos">
+            <div *ngFor="let cell of rowForm.get('columnValueDtos').controls;let j = index">
+              <div [ngSwitch]="(cell.value | valueOnKey).key" formGroupName="{{j}}">
+
+                <div *ngSwitchCase="'DT'" class="form-group" style="margin-top: 10px">
+                  <label style="color: #1a1a1a"> {{ header[0].columnDetailDefinitionDtoList[j]?.name }} </label>
+                  <input type="datetime-local"
+                         formControlName="DT"
+                         class="form-control">
+                </div>
+                <div *ngSwitchCase="'ST'" class="form-group" style="margin-top: 10px">
+                  <label style="color: #1a1a1a"> {{ header[0].columnDetailDefinitionDtoList[j]?.name }} </label>
+                  <input formControlName="ST"
+                         [type]="'text'"
+                         class="form-control">
+                </div>
+                <div *ngSwitchCase="'DE'" class="form-group" style="margin-top: 10px">
+                  <label style="color: #1a1a1a"> {{ header[0].columnDetailDefinitionDtoList[j]?.name }} </label>
+                  <textarea cols="30" rows="10"
+                            formControlName="DE"
+                            class="form-control">
+                </textarea>
+                </div>
+                <div *ngSwitchCase="'EN'" class="form-group" style="margin-top: 10px">
+                  <label style="color: #1a1a1a"> {{ header[0].columnDetailDefinitionDtoList[j]?.name }} </label>
+                  <select class="form-control"
+                          formControlName="EN"
+                          style="height: 35px"
+                  >
+                    <option *ngFor="let option of header[0].columnDetailDefinitionDtoList[j]?.optionList"
+                            [value]="option.value"
+                            [selected]="row.columnValueDtos[j]['EN'].value == option.value"
+                    >{{ option.value }}
+                  </select>
+                </div>
+                <div *ngSwitchCase="'IN'" class="form-group" style="margin-top: 10px">
+                  <label style="color: #1a1a1a"> {{ header[0].columnDetailDefinitionDtoList[j]?.name }} </label>
+                  <input formControlName="IN"
+                         [type]="'number'"
+                         class="form-control">
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="id">ID:</label>
+            <input type="number"
+                   id="id"
+                   formControlName="id"
+                   class="form-control"
+                   readonly
+                   required
+            >
+          </div>
+          <div class="form-group">
+            <label for="name">Name:</label>
+            <input type="text"
+                   id="name"
+                   formControlName="name"
+                   class="form-control"
+                   readonly
+                   required
+            >
+          </div>
+          <div class="form-group">
+            <label for="createdBy">Created By:</label>
+            <input type="text"
+                   id="createdBy"
+                   formControlName="createdBy"
+                   class="form-control"
+                   readonly
+                   required
+            >
+          </div>
+          <div class="form-group">
+            <label>Created On:</label>
+            <input type="datetime-local"
+                   formControlName="createdOn"
+                   class="form-control"
+                   readonly
+                   required
+            >
+          </div>
+          <div class="form-group">
+            <label for="lastModifiedBy">Last modified by:</label>
+            <input type="text"
+                   id="lastModifiedBy"
+                   formControlName="lastModifiedBy"
+                   class="form-control"
+                   readonly
+                   required
+            >
+
+          </div>
+          <div class="form-group" disabled>
+            <label for="lastModifiedOn">Last modified on:</label>
+            <input type="datetime-local"
+                   id="lastModifiedOn"
+                   formControlName="lastModifiedOn"
+                   class="form-control"
+                   readonly
+                   required
+            >
+          </div>
+          <div class="row">
+            <div class="col-xs-12">
+
+            </div>
+          </div>
+        </form>
+      </div>
+
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary" (click)="onEditForm()" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-success" (click)="onSubmit()" data-dismiss="modal">Save changes</button>
+      </div>
+    </div>
+  </div>
+</div>

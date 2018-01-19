@@ -1,0 +1,19 @@
+<div class="container-fluid" style="margin: 0;padding: 0">
+  <div style="border-bottom: 1px solid black;">
+    <app-menu [tableNames]="(tableState | async).tablesNames" (choosenNameChanged)="setTable($event)"></app-menu>
+  </div>
+  <div *ngIf="tableChosen">
+    <div class="table-responsive">
+      <table class="table table-bordered table-dark header-fixed" style="background-color: #343a40; margin-bottom: 0">
+        <thead>
+        <app-table-header></app-table-header>
+        </thead>
+        <tbody>
+        <app-table *ngFor="let row of (tableState | async).tableContent" [row]="row"
+                   [header]="(tableState|async).tableDefinition"></app-table>
+        </tbody>
+      </table>
+    </div>
+    <app-new-row *ngIf="(newRowMode| async)[0]" [header]="(tableState | async).tableDefinition"></app-new-row>
+  </div>
+</div>

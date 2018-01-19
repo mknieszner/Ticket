@@ -1,0 +1,40 @@
+<div *ngIf="role">
+  <table class="table table-bordered table-striped">
+    <tbody>
+    <tr>
+      <td>ID:</td>
+      <td>{{ role.id }}</td>
+    </tr>
+    <tr>
+      <td>NAME:</td>
+      <td>{{ role.name }}</td>
+    </tr>
+    <tr>
+      <td>DESCRIPTION:</td>
+      <td> {{ role.description }}</td>
+    </tr>
+    <tr>
+      <td>USERS:</td>
+      <td>
+        <ul>
+          <li *ngFor="let user of role.userDtos">{{user.username}}</li>
+        </ul>
+      </td>
+    </tr>
+    </tbody>
+  </table>
+  <div *ngIf="editUserMode">
+    <form [formGroup]="userForm" class="form-group">
+      <select class="form-control-lg" formControlName="user">
+        <option selected>- Select -</option>
+        <option *ngFor="let user of (users|async)"> {{ user.username }}</option>
+      </select>
+      <button class="btn btn-default" (click)="postAddUser()">Add</button>
+      <button class="btn btn-default" (click)="postRemoveUser()">Remove</button>
+      <button class="btn btn-default" (click)="abortAddUser()">Abort</button>
+    </form>
+  </div>
+  <div *ngIf="!addUserMode">
+    <button class="btn btn-default" (click)="onEditUserMode()">Edit Role</button>
+  </div>
+</div>
