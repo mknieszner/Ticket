@@ -1,7 +1,18 @@
-<div class="container-fluid">
-  <ul class="nav nav-pills nav-fill justify-content-center">
-    <li *ngFor="let tableName of tableNames" (click)="onChooseName(tableName)" [ngClass]="choosenName == tableName ? 'alert-dark' : ''">
-      <a>{{tableName}}</a>
+<div class="container-fluid" style="padding: 0">
+  <ul class="nav nav-tabs">
+    <li class="nav-item" *ngFor="let tableName of tableNames" (click)="onChooseName(tableName)">
+      <a class="nav-link" [ngClass]="choosenName == tableName ? 'active bg-dark text-white' : ''" style="border: none;">{{tableName}}</a>
     </li>
+    <button class="btn btn-outline-delault my-2 my-sm-0" (click)="onNewRow()">New row</button>
+    <form class="form-inline my-2 my-lg-0" style="padding-left: 20px; border-left: 1px solid lightgray">
+      <input class="form-control mr-sm-2" type="text" placeholder="Search" #filterInput>
+      <div class="btn-group" role="group" aria-label="">
+      <button class="btn btn-outline-delault my-2 my-sm-0" (click)="onFilter(filterInput.value)">Filter</button>
+      <button class="btn btn-outline-delault my-2 my-sm-0" (click)="onExtendedFilterMode()">Extended Filter Mode</button>
+      <button class="btn btn-outline-delault my-2 my-sm-0" *ngIf="extendedFilterMode | async" (click)="onRunExtendedFilter()">
+        {{( extendedFilterAction | async) ? 'Cancel' : 'Run Any'}}
+      </button>
+      </div>
+    </form>
   </ul>
 </div>

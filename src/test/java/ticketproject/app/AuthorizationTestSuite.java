@@ -1,7 +1,17 @@
-package ticketproject.app;
-
-import static org.junit.Assert.assertNotNull;
-
+//package ticketproject.app;
+//
+//import org.junit.Test;
+//import org.junit.runner.RunWith;
+//import org.springframework.beans.factory.annotation.Autowired;
+//import org.springframework.boot.test.context.SpringBootTest;
+//import org.springframework.test.context.junit4.SpringRunner;
+//import ticketproject.app.crud.Dao.RoleRepository;
+//import ticketproject.app.crud.Dao.UserRepository;
+//import ticketproject.app.crud.domain.entities.authorization.Role;
+//import ticketproject.app.crud.domain.entities.authorization.User;
+//
+//import static org.junit.Assert.assertNotNull;
+//
 //@RunWith(SpringRunner.class)
 //@SpringBootTest
 //public class AuthorizationTestSuite {

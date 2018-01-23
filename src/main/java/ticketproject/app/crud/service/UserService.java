@@ -24,9 +24,7 @@ import ticketproject.app.crud.mapper.RoleMapper;
 import ticketproject.app.crud.mapper.UserMapper;
 
 import javax.transaction.Transactional;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import static com.google.common.base.Preconditions.checkArgument;
@@ -43,7 +41,6 @@ public class UserService implements UserDetailsService {
   private final TableService tableService;
 
 
-
   @Transactional
   public UserDto registerNewUserAccount(final UserDto userDto) {
     return userMapper.mapUserToUserDto(userRepository.save(userMapper.mapUserDtoToUser(userDto)));
@@ -56,14 +53,7 @@ public class UserService implements UserDetailsService {
     final boolean credentialsNonExpired = true;
     final boolean accountNonLocked = true;
 
-    return new org.springframework.security.core.userdetails.User(
-        user.getUsername(),
-        user.getPassword(),
-        user.isEnabled(),
-        accountNonExpired,
-        credentialsNonExpired,
-        accountNonLocked,
-        getAuthorities(new ArrayList<>(user.getRoles())));
+    return new org.springframework.security.core.userdetails.User(user.getUsername(), user.getPassword(), user.isEnabled(), accountNonExpired, credentialsNonExpired, accountNonLocked, getAuthorities(new ArrayList<>(user.getRoles())));
   }
 
   private static List<GrantedAuthority> getAuthorities(List<Role> roles) {
@@ -85,7 +75,7 @@ public class UserService implements UserDetailsService {
   public UserDto addRoleToUserByUserName(final String username, final String roleName) {
     Role role = roleRepository.findByName(roleName);
     checkArgument(roleName.equals(role.getName()), new IllegalArgumentException("ROLE NOT FOUND"));
-    User user = checkNotNull(userRepository.findByUsername(username),new IllegalArgumentException("USER NOT FOUND"));
+    User user = checkNotNull(userRepository.findByUsername(username), new IllegalArgumentException("USER NOT FOUND"));
     user.addRole(role);
     userRepository.save(user);
     return userMapper.mapUserToUserDto(user);
@@ -95,7 +85,7 @@ public class UserService implements UserDetailsService {
   public UserDto removeRoleFromUserByUserName(final String username, final String roleName) {
     Role role = roleRepository.findByName(roleName);
     checkArgument(roleName.equals(role.getName()), new IllegalArgumentException("ROLE NOT FOUND"));
-    User user = checkNotNull(userRepository.findByUsername(username),new IllegalArgumentException("USER NOT FOUND"));
+    User user = checkNotNull(userRepository.findByUsername(username), new IllegalArgumentException("USER NOT FOUND"));
     user.removeRoleWARN(role);
     userRepository.save(user);
     return userMapper.mapUserToUserDto(user);
@@ -105,7 +95,16 @@ public class UserService implements UserDetailsService {
     return roleMapper.mapRoleToRoleDto(roleRepository.save(new Role(roleName, roleDescription)));
   }
 
-  public void removeUser(final String username) {
+
+  public void removeUser(final String username) { // Iterator ? Stream
+//    User user = userRepository.findByUsername(username);
+//    for (Iterator<Role> roleIt = user.getRoles().iterator(); roleIt.hasNext()) {
+//      Role role = roleIt.next();
+//      removeUserFromRoleByUserName(role.getName(), username);
+//    }
+    userRepository.findByUsername(username).getRoles().stream().forEach((role) -> {
+      removeUserFromRoleByUserName(role.getName(), username);
+    });
     userRepository.deleteByUsername(username);
   }
 
@@ -118,7 +117,7 @@ public class UserService implements UserDetailsService {
     }
   }
 
-//  @Cacheable("adminAuthority")
+
   public boolean isAdmin(final String username) {
     return roleRepository.findAllByUsers_Username(username).contains(new Role("ROLE_ADMIN", null));
   }
@@ -132,10 +131,7 @@ public class UserService implements UserDetailsService {
   }
 
   public void saveRuleNames(final List<TableDefinitionDto> tableDefinitionDtoList) {
-    tableDefinitionDtoList.forEach(tableDefinitionDto -> roleRepository.save(
-        new Role(
-            tableDefinitionDto.getName(),
-            String.format("Table: %s access role.",tableDefinitionDto.getName()))));
+    tableDefinitionDtoList.forEach(tableDefinitionDto -> roleRepository.save(new Role(tableDefinitionDto.getName(), String.format("Table: %s access role.", tableDefinitionDto.getName()))));
   }
 
   public void deleteRoleByRoleName(final String roleName) {
@@ -143,36 +139,44 @@ public class UserService implements UserDetailsService {
   }
 
   public void saveRuleNames(final TableDefinitionDto tableDefinitionDto) {
-    roleRepository.save(
-        new Role(
-            tableDefinitionDto.getName(),
-            String.format("Table: %s access role.",tableDefinitionDto.getName())));
+    roleRepository.save(new Role(tableDefinitionDto.getName(), String.format("Table: %s access role.", tableDefinitionDto.getName())));
   }
 
-  public void deleteByName(final String tableName) {
-    roleRepository.deleteByName(tableName);
-  }
+//  public void deleteByName(final String tableName) {
+//    roleRepository.deleteByName(tableName);
+//  }
 
   public UserDto getSingleUserByUsername(final String username) {
     return userMapper.mapUserToUserDto(userRepository.findByUsername(username));
   }
 
-  public List<String> getAllRolesAuthorized(
-      //final String username
-  ) {
-   // if (isAdmin(username)) {
+  public List<String> getAllRoleNamesAuthorized(final String username) {
+    if (isAdmin(username)) {
       return getAllRoles().stream().map(RoleDto::getName).collect(Collectors.toList());
-    //} else {
-    //  return userRepository.findByUsername(username).getRoles().stream().map(Role::getName).collect(Collectors.toList());
-    //}
+    } else {
+      return userRepository.findByUsername(username).getRoles().stream().map(Role::getName).collect(Collectors.toList());
+    }
   }
 
   public RoleDto removeUserFromRoleByUserName(final String roleName, final String username) {
     Role role = roleRepository.findByName(roleName);
+    System.out.println(role.getName() + "  " + roleName + "   " + username);
     checkArgument(roleName.equals(role.getName()), new IllegalArgumentException("ROLE NOT FOUND"));
-    User user = checkNotNull(userRepository.findByUsername(username),new IllegalArgumentException("USER NOT FOUND"));
+    User user = checkNotNull(userRepository.findByUsername(username), new IllegalArgumentException("USER NOT FOUND"));
     role.removeUserWARN(user);
     roleRepository.save(role);
     return roleMapper.mapRoleToRoleDto(role);
+  }
+
+  public List<String> getRolesByUsername(final String username) {
+    return this.userRepository.findByUsername(username).getRoles().stream().map(Role::getName).collect(Collectors.toList());
+  }
+
+  public List<RoleDto> getFullRolesAuthorized(final String username) {
+    if (isAdmin(username)) {
+      return getAllRoles();
+    } else {
+      return Lists.newArrayList(roleMapper.mapRoleSetToRoleDtoSet(userRepository.findByUsername(username).getRoles()));
+    }
   }
 }

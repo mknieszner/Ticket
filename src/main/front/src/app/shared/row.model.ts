@@ -5,6 +5,7 @@ export const options = [
   {shortcut: 'EN', name: 'Enum'},
   {shortcut: 'IN', name: 'Number'}
 ];
+
 export interface Token {
   access_token: string
   token_type: string
@@ -12,6 +13,7 @@ export interface Token {
   scope: string
   jti: string
 }
+
 export class RowContentModel {
   public id: number;
   public name: string;
@@ -26,4 +28,14 @@ export class TableDefinitionModel {
   public id: number;
   public name: string;
   public columnDetailDefinitionDtoList: any[];
+}
+
+export interface ExtendedFilterModel { //TODO: Filter do poprawy (własciwe wartości)
+  id: any,
+  name: string,
+  createdBy: string,
+  createdOn: string,
+  lastModifiedBy: string,
+  lastModifiedOn: string,
+  columnValueDtos: {}
 }

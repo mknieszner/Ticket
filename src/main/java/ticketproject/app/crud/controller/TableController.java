@@ -21,7 +21,7 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 @CrossOrigin("*")
 @RestController
 @RequestMapping("/v1/")
-//@PreAuthorize("hasAnyAuthority('ROLE_USER','ROLE_ADMIN')")
+@PreAuthorize("hasAnyAuthority('ROLE_USER','ROLE_ADMIN')")
 public class TableController {
 
   @Autowired
@@ -50,6 +50,7 @@ public class TableController {
   @PutMapping(value = "projects/tables/{tableName}/row")//, consumes = MediaType.MULTIPART_FORM_DATA_VALUE)//TODO TEST
   @PreAuthorize("hasAnyAuthority('ROLE_ADMIN',#tableName)")
   public RowDto updateRow(@PathVariable final String tableName, @RequestBody final RowDto rowDto, Principal principal) {
+
     Long tableId = tableService.getTableIdByName(tableName);
     rowValidator.validateRow(tableId, rowDto);
     return tableService.updateRowByTableId(rowDto, tableId, principal.getName());
@@ -94,7 +95,7 @@ public class TableController {
   }
 
   @GetMapping(value = "projects/tables/{tableName}/rows")
-  //@PreAuthorize("hasAnyAuthority('ROLE_ADMIN',#tableName)")
+  @PreAuthorize("hasAnyAuthority('ROLE_ADMIN',#tableName)")
   public List<RowDto> getTableRowsByTableName(@PathVariable final String tableName) {
     return tableService.getTableRowsByTableName(tableName);
   }

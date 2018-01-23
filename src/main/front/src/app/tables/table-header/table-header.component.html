@@ -1,11 +1,25 @@
-<tr *ngIf="header != null || header != undefined">
-  <td><button type="button" class="btn btn-light" *ngIf="!(newRowMode | async)[0]" (click)="onNewRow()">New Row</button></td>
-  <!--<td>ID</td>-->
-  <!--<td>NAME</td>-->
+<tr *ngIf="(header| async) && !(extendedFilterMode |async)">
+  <!--<td><button type="button" class="btn btn-light" *ngIf="!(newRowMode | async)" (click)="onNewRow()">New Row</button></td>-->
+  <td>ID</td>
+  <td>NAME</td>
   <td *ngFor="let column of (header| async)[0]?.columnDetailDefinitionDtoList"> {{ column.name }}</td>
   <td>Created by:</td>
   <td>Created on</td>
   <td>Last Modified By</td>
   <td>Last Modified On</td>
 </tr>
-
+<form *ngIf="extendedFilterMode |async" [formGroup]="filterForm">
+  <tr>
+    <td><input class="form-control mr-sm-2" type="text" placeholder="ID" formControlName="id" (click)="show()"></td>
+    <td><input class="form-control mr-sm-2" type="text" placeholder="NAME" formControlName="name"></td>
+    <span formArrayName="columnValueDtos">
+      <td *ngFor="let column of (header| async)[0]?.columnDetailDefinitionDtoList; let i = index" formGroupName="{{i}}">
+        <input class="form-control mr-sm-2" type="text" placeholder="{{ column.name }}" formControlName="value">
+      </td>
+    </span>
+    <td><input class="form-control mr-sm-2" type="text" placeholder="Created by" formControlName="createdBy"></td>
+    <td><input class="form-control mr-sm-2" type="text" placeholder="Created on" formControlName="createdOn"></td>
+    <td><input class="form-control mr-sm-2" type="text" placeholder="Last Modified By" formControlName="lastModifiedBy"></td>
+    <td><input class="form-control mr-sm-2" type="text" placeholder="Last Modified On" formControlName="lastModifiedOn"></td>
+  </tr>
+</form>

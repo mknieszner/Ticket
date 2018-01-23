@@ -36,7 +36,7 @@ public class RowValidator {
 
   private void validateValues(final List<ColumnDetail> columnDetailList, final List<ColumnValueDto> columnValues) {
 
-    checkArgument(columnDetailList.size() == columnValues.size(),"Incompatible size of row!");
+    checkArgument(columnDetailList.size() == columnValues.size(),"Incompatible size of row!" + columnDetailList.size() + " " + columnValues.size());
     for (int i = 0; i < columnDetailList.size(); i++) {
       checkArgument(validateValue(columnDetailList.get(i),columnValues.get(i)),"Unsupported value");
     }
@@ -47,7 +47,7 @@ public class RowValidator {
 //    System.out.println(" compare: type " +columnDetail.getType()+"\nname: " +columnDetail.getName()+"\nclass: "+ columnValueDto.getClass());
     switch (columnDetail.getType()) {
       case ("IN"): {
-        System.out.println("wewn: IN"+columnValueDto.getClass());
+        System.out.println("wewn: IN" + columnValueDto.getClass());
         checkArgument(columnValueDto instanceof IntValueDto,"This value should be INT");
         return true;
       }
@@ -58,7 +58,7 @@ public class RowValidator {
               .stream()
               .map(Option::getValue)
               .collect(Collectors.toList())
-              .contains(((EnumValueDto) columnValueDto).getValue()),"Unsupported option value");
+              .contains(((EnumValueDto) columnValueDto).getValue()),"Unsupported option value >" + ((EnumValueDto) columnValueDto).getValue() + '<');
         return true;
       }
       case ("DE"): {

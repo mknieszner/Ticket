@@ -6,6 +6,7 @@ import {UserModel} from "../../user/user.model";
 import {Store} from "@ngrx/store";
 import {DataStorageService} from "../../shared/data-storage.service";
 import * as fromTableReducers from '../../shared/store/tables.reducers'
+import * as TablesActions from "../../shared/store/tables.actions";
 
 @Component({
   selector: 'app-role-details',
@@ -17,12 +18,14 @@ export class RoleDetailsComponent implements OnInit {
   editUserMode = false;
   users: Observable<UserModel[]>;
   userForm: FormGroup;
+  newRoleMode: Observable<boolean>;
 
   constructor(private store: Store<fromTableReducers.AppState>,
               private dss: DataStorageService) {
   }
 
   ngOnInit() {
+    this.newRoleMode = this.store.select('tables', 'newRoleMode');
     this.users = this.store.select('tables', 'users');
     this.dss.getUsers();
     this.userForm =
@@ -56,5 +59,14 @@ export class RoleDetailsComponent implements OnInit {
 
   abortAddUser() {
     this.editUserMode = false;
+  }
+
+  onSubmitRole(name, description) {
+    console.log(name, description);
+    this.dss.saveNewRole({name: name, description: description});
+  }
+
+  onAbortSubmitRole() {
+    this.store.dispatch(new TablesActions.SetNewRoleModeAction(false));
   }
 }

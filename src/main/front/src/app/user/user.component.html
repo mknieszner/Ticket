@@ -4,10 +4,28 @@
       <li class="list-group-item active bg-dark border-dark">Users:</li>
       <li class="list-group-item" *ngFor="let user of (users | async)" (click)="onSelectUser(user)">
         <td>{{ user.username }}</td>
+        <td class="pull-right"><button class="btn btn-dark" (click)="onRemoveUser(user.username)">X</button><td>
       </li>
+      <button class="btn btn-dark text-white" (click)="onNewUser()">New user</button>
     </ul>
   </div>
   <div class="col-xs-6">
     <app-user-details [user]="selectedUser"></app-user-details>
   </div>
 </div>
+
+<!--<div class="row" style="padding: 30px">-->
+  <!--<div class="col-xs-3">-->
+    <!--<ul class="list-group">-->
+      <!--<li class="list-group-item active bg-dark border-dark">Roles:</li>-->
+      <!--<li class="list-group-item" *ngFor="let role of (roles | async)" (click)="onSelectRole(role)">-->
+        <!--<td>{{ role.name }}</td>-->
+        <!--<td class="pull-right"><button class="btn btn-dark" (click)="onRemoveRole(role.name)">X</button><td>-->
+      <!--</li>-->
+      <!--<button class="btn btn-dark text-white" (click)="onNewRole()">New role</button>-->
+    <!--</ul>-->
+  <!--</div>-->
+  <!--<div class="col-xs-6">-->
+    <!--<app-role-details [role]="selectedRole"></app-role-details>-->
+  <!--</div>-->
+<!--</div>-->

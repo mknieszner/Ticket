@@ -42,7 +42,7 @@ public class AuthorizationServerConfiguration extends AuthorizationServerConfigu
   @Bean //shared between Servers!
   JwtAccessTokenConverter accessTokenConverter() {
     final JwtAccessTokenConverter accessTokenConverter = new JwtAccessTokenConverter();
-    accessTokenConverter.setSigningKey(signingKey);//symetrical cryptography
+    accessTokenConverter.setSigningKey(signingKey);//symmetrical cryptography
     return accessTokenConverter;
   }
 

@@ -12,32 +12,57 @@ import * as TablesActions from "../shared/store/tables.actions";
   styleUrls: ['./tables.component.css']
 })
 export class TablesComponent implements OnInit {
-  tableState:Observable<fromTableReducers.State>;
-  tableChosen = false;
-  newRowMode: Observable<boolean>;
+  tableState: Observable<fromTableReducers.State>;
+  tableChosen: boolean;
+  // editRowMode: Observable<boolean>;
+  // editedRow: Observable<RowContentModel>;
 
   constructor(private contentStore: Store<fromTableReducers.AppState>,
               private dss: DataStorageService) {
   }
 
   ngOnInit() {
-    this.tableState = this.contentStore.select('tables');
-    this.newRowMode = this.contentStore.select('tables','newRowMode');
     this.dss.getTableNames();
+    this.tableState = this.contentStore.select('tables');
+    // this.editRowMode = this.contentStore.select('tables', 'editRowMode');
+    // this.editedRow = this.contentStore.select('tables', 'editedRow');
+
   }
-  //
-  // onNewRow() {
-  //   this.newRowMode = true;
-  // }
 
   onToggleRowEditMode() {
-    this.contentStore.dispatch(new TablesActions.SetNewRowModeAction(false));
+    this.contentStore.dispatch(new TablesActions.SetEditRowMode(false));
   }
 
-
-  setTable(tableName) {
+  setTable(tableName) {//TODO: RESET STANU PO ZMIANIE STOLU
+    this.contentStore.dispatch(new TablesActions.SwitchTableReset());
     this.dss.getTableHeaderByName(tableName);
     this.dss.getTableRowsByName(tableName);
     this.tableChosen = true;
+  }
+
+  sort: any = {
+    column: 'id', //to match the variable of one of the columns
+    descending: false
+  };
+
+  selectedClass(columnName): string{
+    return columnName == this.sort.column ? 'sort-' + this.sort.descending : 'false';
+  }
+
+  changeSorting(columnName): void{
+    const sort = {
+      column: 'id', //to match the variable of one of the columns
+      descending: false
+    };
+    if (sort.column == columnName) {
+      sort.descending = !sort.descending;
+    } else {
+      sort.column = columnName;
+      sort.descending = false;
+    }
+  }
+
+  convertSorting(): string{
+    return this.sort.descending ? '-' + this.sort.column : this.sort.column;
   }
 }

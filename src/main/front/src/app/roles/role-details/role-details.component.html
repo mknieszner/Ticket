@@ -1,4 +1,4 @@
-<div *ngIf="role">
+<div *ngIf="role && !(newRoleMode | async)">
   <table class="table table-bordered table-striped">
     <tbody>
     <tr>
@@ -23,7 +23,7 @@
     </tr>
     </tbody>
   </table>
-  <div *ngIf="editUserMode">
+  <div *ngIf="editUserMode && !(newRoleMode | async)">
     <form [formGroup]="userForm" class="form-group">
       <select class="form-control-lg" formControlName="user">
         <option selected>- Select -</option>
@@ -37,4 +37,21 @@
   <div *ngIf="!addUserMode">
     <button class="btn btn-default" (click)="onEditUserMode()">Edit Role</button>
   </div>
+</div>
+
+<div *ngIf="(newRoleMode | async)">
+  <form>
+    <div class="form-group">
+      <label>Role name:</label>
+      <input type="text" class="form-control" #name>
+    </div>
+    <div class="form-group">
+      <label>Role description:</label>
+      <textarea rows="6" class="form-control" #description></textarea>
+    </div>
+    <div class="form-group">
+      <button (click)="onSubmitRole(name.value, description.value)" class="btn btn-default">Submit</button>
+      <button (click)="onAbortSubmitRole()" class="btn btn-default">Close</button>
+    </div>
+  </form>
 </div>

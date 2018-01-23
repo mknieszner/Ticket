@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.RequestPostProcessor;
@@ -24,6 +25,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest
 @AutoConfigureMockMvc
 public class OauthTestSuite {
+  @Autowired
+  PasswordEncoder passwordEncoder;
 
   @Autowired
   MockMvc mockMvc;
@@ -43,6 +46,11 @@ public class OauthTestSuite {
         .params(params))
         .andDo(print())
         .andExpect(status().isOk());
+  }
+
+  @Test
+  public void getHash(){
+    System.out.println(passwordEncoder.encode("mk"));
   }
 
   public static RequestPostProcessor client() {

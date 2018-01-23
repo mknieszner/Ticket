@@ -75,7 +75,7 @@ export class OauthService {
     var expireDate = new Date().getTime() + (1000 * token.expires_in);
     this.store.dispatch(new TablesActions.SetTokenAction(token));
     this.store.dispatch(new TablesActions.SetCurrentUserAction(username));
-    this.cookie.setAuth(token.access_token, token.expires_in)
+    this.cookie.setAuth(token.access_token, token.expires_in);
   }
 
   logout() {

@@ -1,8 +1,6 @@
 import {BrowserModule} from '@angular/platform-browser';
 import {NgModule} from '@angular/core';
 import {HTTP_INTERCEPTORS, HttpClientModule} from "@angular/common/http";
-
-
 import {AppComponent} from './app.component';
 import {HeaderComponent} from './header/header.component';
 import {SigninComponent} from './signin/signin.component';
@@ -14,25 +12,23 @@ import {HomeComponent} from './home/home.component';
 import {RouterModule, Routes} from '@angular/router';
 import {ColumnTypeComponent} from './definition/column-type/column-type.component';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
-import {TableComponent} from './tables/table/table.component';
+import {RowComponent} from './tables/table/row.component';
 import {StoreModule} from '@ngrx/store';
 import {tablesReducers} from './shared/store/tables.reducers';
 import {KeyPipe} from './tables/key.pipe';
 import {QuestionControlService} from './tables/table/question-control.service';
 import {TableHeaderComponent} from './tables/table-header/table-header.component';
-import {NewRowComponent} from './tables/new-row/new-row.component';
 import {UserDetailsComponent} from './user/user-details/user-details.component';
-import {userReducers} from './user/store/user.reducers';
 import {RoleDetailsComponent} from './roles/role-details/role-details.component';
-import {roleReducers} from './roles/store/role.reducers';
 import {DataStorageService} from "./shared/data-storage.service";
 import {MenuComponent} from './tables/menu/menu.component';
-import {TableService} from "./tables/table/table.service";
 import {OauthService} from "./shared/oauth.service";
 import {AuthInterceptor} from "./shared/auth.interceptor";
 import {OAuthModule} from "angular-oauth2-oidc";
 import {AuthCookie} from "./shared/auth-cookies-handler";
-import {AngularDateTimePickerModule} from "angular2-datetimepicker";
+import { TableDetailsComponent } from './tables/table-details/table-details.component';
+import {EffectsModule} from "@ngrx/effects";
+import {TableContentFilterEffects} from "./shared/store/table-content-filter.effects";
 
 
 
@@ -54,15 +50,15 @@ const appRoutes: Routes = [
     UserComponent,
     RolesComponent,
     TablesComponent,
-    TableComponent,
+    RowComponent,
     HomeComponent,
     ColumnTypeComponent,
     KeyPipe,
     TableHeaderComponent,
-    NewRowComponent,
     UserDetailsComponent,
     RoleDetailsComponent,
     MenuComponent,
+    TableDetailsComponent,
   ],
   imports: [
     BrowserModule,
@@ -71,12 +67,12 @@ const appRoutes: Routes = [
     HttpClientModule,
     OAuthModule.forRoot(),
     RouterModule.forRoot(appRoutes),
-    StoreModule.forRoot({tables: tablesReducers, users: userReducers, roles: roleReducers})
+    StoreModule.forRoot({tables: tablesReducers}),// users: userReducers, roles: roleReducers}),//todo: rozdzielić store
+    EffectsModule.forRoot([TableContentFilterEffects])
   ],
   providers: [
     QuestionControlService,
     DataStorageService,
-    TableService,
     OauthService,
     AuthCookie,
     {provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi:true}

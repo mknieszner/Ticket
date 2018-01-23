@@ -16,7 +16,7 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 @CrossOrigin("*")
 @RestController
 @RequestMapping("/v1/")
-//@PreAuthorize("hasAnyAuthority('ROLE_USER','ROLE_ADMIN')")
+@PreAuthorize("hasAnyAuthority('ROLE_USER','ROLE_ADMIN')")
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
 public class UsersAndRolesController {
   private final UserService userService;
@@ -30,17 +30,14 @@ public class UsersAndRolesController {
 //  }
 
   @GetMapping(value = "roles/details")
-  public List<RoleDto> getFullRoles() {
-    return userService.getAllRoles();
+  public List<RoleDto> getFullRolesAuthorized(final Principal principal) {
+    return userService.getFullRolesAuthorized(principal.getName());
   }
 
   @GetMapping(value = "roles")
-  public List<String> getAllRoles(
-      //   final Principal principal
-  ) {
-    return userService.getAllRolesAuthorized(
-        // principal.getName()
-    );
+  @PreAuthorize("hasAuthority('ROLE_ADMIN')")
+  public List<String> getAllRoleNames(final Principal principal) {
+    return userService.getAllRoleNamesAuthorized(principal.getName());
   }
 
   @PostMapping(value = "roles/{roleName}")
@@ -56,12 +53,13 @@ public class UsersAndRolesController {
   }
 
   @DeleteMapping(value = "roles/{roleName}")
-  public void deleteRoleByRoleName(@PathVariable final String roleName) {
+  public boolean deleteRoleByRoleName(@PathVariable final String roleName) {
     userService.deleteRoleByRoleName(roleName);
+    return true;
   }
 
   @GetMapping(value = "users/{username}")
-  public UserDto getUserByUsername(@PathVariable final String username) {
+  public UserDto getUserByUsername(@PathVariable final String username, final Principal principal) {
     return userService.getSingleUserByUsername(username);
   }
 
@@ -104,6 +102,7 @@ public class UsersAndRolesController {
 //  }
 //
   @PostMapping(value = "users", consumes = APPLICATION_JSON_VALUE)
+  @PreAuthorize("hasAuthority('ROLE_ADMIN')")
   public UserDto registerUser(@RequestBody final UserDto userDto) {
     return userService.registerNewUserAccount(userDto);
     //return dbService.createUser(userDto);
@@ -112,7 +111,13 @@ public class UsersAndRolesController {
 
   @DeleteMapping(value = "users/{username}")
   @PreAuthorize("hasAuthority('ROLE_ADMIN')")
-  public void removeUser(@PathVariable final String username) {
+  public boolean removeUser(@PathVariable final String username) {
     userService.removeUser(username);
+    return true;
+  }
+
+  @GetMapping(value = "roles/user/{username}")
+  public List<String> getUserRoles(@PathVariable final String username) {
+    return userService.getRolesByUsername(username);
   }
 }
