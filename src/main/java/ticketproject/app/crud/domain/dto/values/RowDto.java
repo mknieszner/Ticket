@@ -1,8 +1,8 @@
-package ticketproject.app.crud.domain.Dto.values;
+package ticketproject.app.crud.domain.dto.values;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.*;
-import ticketproject.app.crud.domain.Dto.values.column.ColumnValueDto;
+import ticketproject.app.crud.domain.dto.values.column.ColumnValueDto;
 
 import javax.validation.constraints.NotNull;
 import java.util.ArrayList;

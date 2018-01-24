@@ -3,7 +3,7 @@ package ticketproject.app.crud.mapper;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import org.springframework.stereotype.Component;
-import ticketproject.app.crud.domain.Dto.values.column.OptionDto;
+import ticketproject.app.crud.domain.dto.values.column.OptionDto;
 import ticketproject.app.crud.domain.entities.types.Option;
 
 import java.util.List;

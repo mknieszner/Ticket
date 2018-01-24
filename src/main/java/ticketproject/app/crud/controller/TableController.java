@@ -1,22 +1,20 @@
 package ticketproject.app.crud.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.MediaType;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
-import ticketproject.app.crud.domain.Dto.definition.ProjectDefinitionDto;
-import ticketproject.app.crud.domain.Dto.definition.TableDefinitionDto;
-import ticketproject.app.crud.domain.Dto.values.ProjectDto;
-import ticketproject.app.crud.domain.Dto.values.ProjectTableDto;
-import ticketproject.app.crud.domain.Dto.values.RowDto;
-import ticketproject.app.crud.domain.Dto.values.RowInfoDto;
+import ticketproject.app.crud.domain.dto.definition.ProjectDefinitionDto;
+import ticketproject.app.crud.domain.dto.definition.TableDefinitionDto;
+import ticketproject.app.crud.domain.dto.values.ProjectDto;
+import ticketproject.app.crud.domain.dto.values.ProjectTableDto;
+import ticketproject.app.crud.domain.dto.values.RowDto;
+import ticketproject.app.crud.domain.dto.values.RowInfoDto;
 import ticketproject.app.crud.service.*;
 
 import java.security.Principal;
 import java.util.List;
 
 import static com.google.common.base.Preconditions.checkArgument;
-import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 @CrossOrigin("*")
 @RestController

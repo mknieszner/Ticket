@@ -2,8 +2,8 @@ package ticketproject.app.crud.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import ticketproject.app.crud.Dao.ProjectRepository;
-import ticketproject.app.crud.domain.Dto.values.ProjectTableDto;
+import ticketproject.app.crud.dao.ProjectRepository;
+import ticketproject.app.crud.domain.dto.values.ProjectTableDto;
 import ticketproject.app.crud.domain.entities.Project;
 import ticketproject.app.crud.domain.entities.ProjectTable;
 

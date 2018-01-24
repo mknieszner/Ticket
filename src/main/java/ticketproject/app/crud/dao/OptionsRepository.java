@@ -1,4 +1,4 @@
-package ticketproject.app.crud.Dao;
+package ticketproject.app.crud.dao;
 
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.repository.CrudRepository;

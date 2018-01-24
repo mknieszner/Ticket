@@ -1,9 +1,9 @@
 package ticketproject.app.crud.mapper;
 
 import org.springframework.stereotype.Component;
-import ticketproject.app.crud.domain.Dto.definition.ColumnDetailDefinitionDto;
-import ticketproject.app.crud.domain.Dto.definition.ProjectDefinitionDto;
-import ticketproject.app.crud.domain.Dto.definition.TableDefinitionDto;
+import ticketproject.app.crud.domain.dto.definition.ColumnDetailDefinitionDto;
+import ticketproject.app.crud.domain.dto.definition.ProjectDefinitionDto;
+import ticketproject.app.crud.domain.dto.definition.TableDefinitionDto;
 import ticketproject.app.crud.domain.entities.ColumnDetail;
 import ticketproject.app.crud.domain.entities.Project;
 import ticketproject.app.crud.domain.entities.ProjectTable;

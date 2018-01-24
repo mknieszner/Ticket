@@ -1,4 +1,4 @@
-package ticketproject.app.crud.domain.Dto.values.column;
+package ticketproject.app.crud.domain.dto.values.column;
 
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import lombok.Getter;

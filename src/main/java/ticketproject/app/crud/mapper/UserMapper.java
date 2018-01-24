@@ -4,7 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
-import ticketproject.app.crud.domain.Dto.authorization.UserDto;
+import ticketproject.app.crud.domain.dto.authorization.UserDto;
 import ticketproject.app.crud.domain.entities.authorization.User;
 
 import java.util.Set;

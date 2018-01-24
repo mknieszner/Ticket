@@ -1,4 +1,4 @@
-package ticketproject.app.crud.domain.Dto.values;
+package ticketproject.app.crud.domain.dto.values;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

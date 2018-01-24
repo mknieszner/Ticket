@@ -1,4 +1,4 @@
-package ticketproject.app.crud.domain.Dto.authorization;
+package ticketproject.app.crud.domain.dto.authorization;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

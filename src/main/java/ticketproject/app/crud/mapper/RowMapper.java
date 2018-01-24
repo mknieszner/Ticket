@@ -4,8 +4,8 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import ticketproject.app.crud.domain.Dto.values.RowDto;
-import ticketproject.app.crud.domain.Dto.values.RowInfoDto;
+import ticketproject.app.crud.domain.dto.values.RowDto;
+import ticketproject.app.crud.domain.dto.values.RowInfoDto;
 import ticketproject.app.crud.domain.entities.Row;
 
 import java.util.Date;

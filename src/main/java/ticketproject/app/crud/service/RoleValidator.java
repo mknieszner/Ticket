@@ -2,9 +2,9 @@ package ticketproject.app.crud.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import ticketproject.app.crud.Dao.ProjectTableRepository;
-import ticketproject.app.crud.Dao.RoleRepository;
-import ticketproject.app.crud.Dao.UserRepository;
+import ticketproject.app.crud.dao.ProjectTableRepository;
+import ticketproject.app.crud.dao.RoleRepository;
+import ticketproject.app.crud.dao.UserRepository;
 
 import java.util.List;
 

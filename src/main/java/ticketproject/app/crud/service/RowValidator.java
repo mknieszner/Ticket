@@ -3,9 +3,9 @@ package ticketproject.app.crud.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Component;
-import ticketproject.app.crud.Dao.ProjectTableRepository;
-import ticketproject.app.crud.domain.Dto.values.RowDto;
-import ticketproject.app.crud.domain.Dto.values.column.*;
+import ticketproject.app.crud.dao.ProjectTableRepository;
+import ticketproject.app.crud.domain.dto.values.RowDto;
+import ticketproject.app.crud.domain.dto.values.column.*;
 import ticketproject.app.crud.domain.entities.ColumnDetail;
 import ticketproject.app.crud.domain.entities.ProjectTable;
 

@@ -1,4 +1,4 @@
-package ticketproject.app.crud.Dao;
+package ticketproject.app.crud.dao;
 
 import org.springframework.data.repository.CrudRepository;
 import ticketproject.app.crud.domain.entities.Row;

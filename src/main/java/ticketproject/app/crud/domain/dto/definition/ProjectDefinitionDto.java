@@ -1,4 +1,4 @@
-package ticketproject.app.crud.domain.Dto.definition;
+package ticketproject.app.crud.domain.dto.definition;
 
 import lombok.*;
 

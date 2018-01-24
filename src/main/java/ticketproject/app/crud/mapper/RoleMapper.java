@@ -2,7 +2,7 @@ package ticketproject.app.crud.mapper;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import ticketproject.app.crud.domain.Dto.authorization.RoleDto;
+import ticketproject.app.crud.domain.dto.authorization.RoleDto;
 import ticketproject.app.crud.domain.entities.authorization.Role;
 
 import java.util.Set;

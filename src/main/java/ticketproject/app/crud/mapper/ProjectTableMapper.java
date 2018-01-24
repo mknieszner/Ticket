@@ -3,7 +3,7 @@ package ticketproject.app.crud.mapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import ticketproject.app.crud.domain.Dto.values.ProjectTableDto;
+import ticketproject.app.crud.domain.dto.values.ProjectTableDto;
 import ticketproject.app.crud.domain.entities.ProjectTable;
 
 import java.util.List;
