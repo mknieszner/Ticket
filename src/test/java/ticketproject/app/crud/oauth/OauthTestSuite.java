@@ -50,7 +50,7 @@ public class OauthTestSuite {
 
   @Test
   public void getHash(){
-    System.out.println(passwordEncoder.encode("mk"));
+    System.out.println(passwordEncoder.encode("user"));
   }
 
   public static RequestPostProcessor client() {

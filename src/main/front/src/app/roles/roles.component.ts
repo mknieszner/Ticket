@@ -2,9 +2,9 @@ import {Component, OnInit} from '@angular/core';
 import {Observable} from 'rxjs/Observable';
 import {Store} from '@ngrx/store';
 import {RoleModel} from './role.model';
-import * as fromTableReducers from "../shared/store/tables.reducers";
+import * as fromAppReducers from "../shared/store/app.reducers";
 import {DataStorageService} from "../shared/data-storage.service";
-import * as TablesActions from "../shared/store/tables.actions";
+import * as UsersActions from "../shared/store/user/users.actions";
 
 @Component({
   selector: 'app-roles',
@@ -16,12 +16,12 @@ export class RolesComponent implements OnInit {
   selectedRole: RoleModel;
 
 
-  constructor(private roleStore: Store<fromTableReducers.AppState>,
+  constructor(private roleStore: Store<fromAppReducers.AppState>,
               private dss: DataStorageService) {
   }
 
   ngOnInit() {
-    this.roles = this.roleStore.select('tables', 'roles');
+    this.roles = this.roleStore.select('users', 'roles');
     this.dss.getRoles();
   }
 
@@ -30,12 +30,12 @@ export class RolesComponent implements OnInit {
   }
 
   onNewRole() {
-    this.roleStore.dispatch(new TablesActions.SetNewRoleModeAction(true));
+    this.roleStore.dispatch(new UsersActions.SetNewRoleModeAction(true));
   }
 
   onRemoveRole(name: string) {
     this.dss.deleteRole(name);
-    this.roleStore.dispatch(new TablesActions.SetNewRoleModeAction(false))
+    this.roleStore.dispatch(new UsersActions.SetNewRoleModeAction(false))
     this.selectedRole = null;
   }
 }

@@ -5,10 +5,9 @@ import {ExtendedFilterModel, RowContentModel, TableDefinitionModel} from '../../
 import {Question} from './value-types/question-base.model';
 import {Observable} from "rxjs/Observable";
 import {Store} from "@ngrx/store";
-import * as fromTableReducer from '../../shared/store/tables.reducers';
 import {DataStorageService} from "../../shared/data-storage.service";
-import * as fromTableReducers from '../../shared/store/tables.reducers'
-import * as TablesActions from "../../shared/store/tables.actions";
+import * as fromAppReducers from '../../shared/store/app.reducers'
+import * as TablesActions from "../../shared/store/table/tables.actions";
 
 @Component({
   selector: 'app-row',
@@ -26,7 +25,7 @@ export class RowComponent implements OnInit {
 
 
   constructor(private qcs: QuestionControlService,
-              private store: Store<fromTableReducers.AppState>,
+              private store: Store<fromAppReducers.AppState>,
               private dss: DataStorageService) {
     this.filter = this.store.select('tables', 'tableFilter');
   }

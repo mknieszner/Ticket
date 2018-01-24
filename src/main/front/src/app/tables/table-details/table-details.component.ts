@@ -3,8 +3,8 @@ import {RowContentModel, TableDefinitionModel} from "../../shared/row.model";
 import {Observable} from "rxjs/Observable";
 import {DataStorageService} from "../../shared/data-storage.service";
 import {Store} from "@ngrx/store";
-import * as fromTableReducers from '../../shared/store/tables.reducers'
-import * as TablesActions from "../../shared/store/tables.actions";
+import * as fromAppReducers from '../../shared/store/app.reducers'
+import * as TablesActions from "../../shared/store/table/tables.actions";
 import {FormArray, FormControl, FormGroup} from "@angular/forms";
 import {Question} from "../table/value-types/question-base.model";
 import {QuestionControlService} from "../table/question-control.service";
@@ -24,7 +24,7 @@ export class TableDetailsComponent implements OnInit, OnDestroy {
   newRowMode: Observable<boolean>;
 
   constructor(private qcs: QuestionControlService,
-              private store: Store<fromTableReducers.AppState>,
+              private store: Store<fromAppReducers.AppState>,
               private dss: DataStorageService) {
   }
 

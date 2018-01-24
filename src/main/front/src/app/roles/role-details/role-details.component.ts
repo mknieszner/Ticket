@@ -5,8 +5,8 @@ import {Observable} from "rxjs/Observable";
 import {UserModel} from "../../user/user.model";
 import {Store} from "@ngrx/store";
 import {DataStorageService} from "../../shared/data-storage.service";
-import * as fromTableReducers from '../../shared/store/tables.reducers'
-import * as TablesActions from "../../shared/store/tables.actions";
+import * as fromAppReducers from '../../shared/store/app.reducers'
+import * as UsersActions from "../../shared/store/user/users.actions";
 
 @Component({
   selector: 'app-role-details',
@@ -20,13 +20,13 @@ export class RoleDetailsComponent implements OnInit {
   userForm: FormGroup;
   newRoleMode: Observable<boolean>;
 
-  constructor(private store: Store<fromTableReducers.AppState>,
+  constructor(private store: Store<fromAppReducers.AppState>,
               private dss: DataStorageService) {
   }
 
   ngOnInit() {
-    this.newRoleMode = this.store.select('tables', 'newRoleMode');
-    this.users = this.store.select('tables', 'users');
+    this.newRoleMode = this.store.select('users', 'newRoleMode');
+    this.users = this.store.select('users', 'users');
     this.dss.getUsers();
     this.userForm =
       new FormGroup({
@@ -67,6 +67,6 @@ export class RoleDetailsComponent implements OnInit {
   }
 
   onAbortSubmitRole() {
-    this.store.dispatch(new TablesActions.SetNewRoleModeAction(false));
+    this.store.dispatch(new UsersActions.SetNewRoleModeAction(false));
   }
 }

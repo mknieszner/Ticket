@@ -1,9 +1,9 @@
 import {Component, Input, OnDestroy, OnInit} from '@angular/core';
 import {ExtendedFilterModel, RowContentModel, TableDefinitionModel} from '../../shared/row.model';
 import {Store} from "@ngrx/store";
-import * as fromTableReducers from '../../shared/store/tables.reducers';
+import * as fromAppReducers from '../../shared/store/app.reducers';
 import {Observable} from "rxjs/Observable";
-import * as TablesActions from "../../shared/store/tables.actions";
+import * as TablesActions from "../../shared/store/table/tables.actions";
 import {Form, FormArray, FormControl, FormGroup} from "@angular/forms";
 import {Question} from "../table/value-types/question-base.model";
 
@@ -19,7 +19,7 @@ export class TableHeaderComponent implements OnInit {
   filterForm: FormGroup;
   extendedFilterAction: Observable<boolean>;
 
-  constructor(private contentStore: Store<fromTableReducers.AppState>) {
+  constructor(private contentStore: Store<fromAppReducers.AppState>) {
   }
 
   ngOnInit() {

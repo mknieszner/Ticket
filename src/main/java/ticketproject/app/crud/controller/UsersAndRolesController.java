@@ -100,7 +100,7 @@ public class UsersAndRolesController {
 //  public List<UserDto> getUsers(final Principal principal) {
 //    return userService.getUserByUsername(principal.getName());
 //  }
-//
+
   @PostMapping(value = "users", consumes = APPLICATION_JSON_VALUE)
   @PreAuthorize("hasAuthority('ROLE_ADMIN')")
   public UserDto registerUser(@RequestBody final UserDto userDto) {

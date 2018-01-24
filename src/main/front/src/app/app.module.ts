@@ -14,7 +14,8 @@ import {ColumnTypeComponent} from './definition/column-type/column-type.componen
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {RowComponent} from './tables/table/row.component';
 import {StoreModule} from '@ngrx/store';
-import {tablesReducers} from './shared/store/tables.reducers';
+import { tablesReducers } from './shared/store/table/tables.reducers';
+import { usersReducers } from './shared/store/user/users.reducers';
 import {KeyPipe} from './tables/key.pipe';
 import {QuestionControlService} from './tables/table/question-control.service';
 import {TableHeaderComponent} from './tables/table-header/table-header.component';
@@ -27,8 +28,6 @@ import {AuthInterceptor} from "./shared/auth.interceptor";
 import {OAuthModule} from "angular-oauth2-oidc";
 import {AuthCookie} from "./shared/auth-cookies-handler";
 import { TableDetailsComponent } from './tables/table-details/table-details.component';
-import {EffectsModule} from "@ngrx/effects";
-import {TableContentFilterEffects} from "./shared/store/table-content-filter.effects";
 
 
 
@@ -67,8 +66,8 @@ const appRoutes: Routes = [
     HttpClientModule,
     OAuthModule.forRoot(),
     RouterModule.forRoot(appRoutes),
-    StoreModule.forRoot({tables: tablesReducers}),// users: userReducers, roles: roleReducers}),//todo: rozdzielić store
-    EffectsModule.forRoot([TableContentFilterEffects])
+    StoreModule.forRoot({tables: tablesReducers, users: usersReducers})
+    // EffectsModule.forRoot([TableContentFilterEffects])
   ],
   providers: [
     QuestionControlService,

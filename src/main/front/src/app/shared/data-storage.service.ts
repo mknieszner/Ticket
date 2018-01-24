@@ -3,8 +3,9 @@ import {HttpClient} from "@angular/common/http";
 import 'rxjs/add/operator/map';
 import {RowContentModel, TableDefinitionModel} from "./row.model";
 import {Store} from "@ngrx/store";
-import * as TablesActions from "./store/tables.actions";
-import * as fromTableReducers from './store/tables.reducers'
+import * as UsersActions from "./store/user/users.actions";
+import * as TablesActions from "./store/table/tables.actions";
+import * as fromAppReducers from './store/app.reducers'
 import * as fromServerModel from './server.model'
 import {UserModel} from "../user/user.model";
 import {RoleModel} from "../roles/role.model";
@@ -16,7 +17,7 @@ export class DataStorageService {
   basehost = fromServerModel.baseUrl;
 
   constructor(private httpClient: HttpClient,
-              private store: Store<fromTableReducers.AppState>,
+              private store: Store<fromAppReducers.AppState>,
               private oauth: OauthService) {
   }
 
@@ -59,21 +60,21 @@ export class DataStorageService {
   getUsers() {
     this.httpClient.get<UserModel[]>(this.basehost + '/v1/users')
       .subscribe((users: UserModel[]) => {
-        this.store.dispatch(new TablesActions.SetUsersAction(users));
+        this.store.dispatch(new UsersActions.SetUsersAction(users));
       });
   }
 
   getRoles() {
     this.httpClient.get<RoleModel[]>(this.basehost + '/v1/roles/details')
       .subscribe((roles: RoleModel[]) => {
-        this.store.dispatch(new TablesActions.SetRolesAction(roles));
+        this.store.dispatch(new UsersActions.SetRolesAction(roles));
       });
   }
 
   addRoleToUser(data: { username: string, rolename: string }) {
     return this.httpClient.post(this.basehost + '/v1/users/' + data.username + '/roles/' + data.rolename, null)
       .subscribe((user: UserModel) => {
-        this.store.dispatch(new TablesActions.AddRoleToUser(user));
+        this.store.dispatch(new UsersActions.AddRoleToUser(user));
         return true;
       });
   }
@@ -83,7 +84,7 @@ export class DataStorageService {
       .subscribe((response) => {
         if (response) {
           data.user.roleNames.splice(data.user.roleNames.indexOf(data.rolename), 1);
-          this.store.dispatch(new TablesActions.RemoveRoleFromUser(data.user));
+          this.store.dispatch(new UsersActions.RemoveRoleFromUser(data.user));
         }
       });
   }
@@ -91,7 +92,7 @@ export class DataStorageService {
   addUserToRole(data: { rolename: string, username: string }) {
     return this.httpClient.post(this.basehost + '/v1/roles/' + data.rolename + '/users/' + data.username, null)
       .subscribe((role: RoleModel) => {
-        this.store.dispatch(new TablesActions.AddUserToRole(role));
+        this.store.dispatch(new UsersActions.AddUserToRole(role));
         return true;
       });
   }
@@ -107,7 +108,7 @@ export class DataStorageService {
             }
           });
           data.role.userDtos.splice(data.role.userDtos.indexOf(usertoRemove), 1);
-          this.store.dispatch(new TablesActions.RemoveUserFromRole(data.role));
+          this.store.dispatch(new UsersActions.RemoveUserFromRole(data.role));
         }
       });
   }
@@ -138,7 +139,7 @@ export class DataStorageService {
   getCurrentUserRoles(username: string) {
     this.httpClient.get<string[]>(this.basehost + '/v1/roles/user/' + username)
       .subscribe((roles: string[]) => {
-          this.store.dispatch(new TablesActions.SetCurrentUserRolenames(roles));
+          this.store.dispatch(new UsersActions.SetCurrentUserRolenames(roles));
         },
         (err) => {
           console.log(err => {
@@ -151,7 +152,7 @@ export class DataStorageService {
     console.log(this.httpClient.post<RoleModel>(this.basehost + '/v1/roles/' + role.name, role.description)
       .subscribe((savedRole: RoleModel) => {
           console.log('saveNewRole dss OK: ', savedRole)
-          this.store.dispatch(new TablesActions.AddRoleAction(savedRole));
+          this.store.dispatch(new UsersActions.AddRoleAction(savedRole));
         },
         err => {
           console.log('saveNewRole dss err: ', err)
@@ -163,7 +164,7 @@ export class DataStorageService {
       .subscribe((status: boolean) => {
           console.log('deleteRole dss OK: ', status)
           if (status) {
-            this.store.dispatch(new TablesActions.DeleteRoleAction(roleName));
+            this.store.dispatch(new UsersActions.DeleteRoleAction(roleName));
           }
         },
         err => {
@@ -176,7 +177,7 @@ export class DataStorageService {
       .subscribe((status: boolean) => {
           console.log('deleteUser dss OK: ', status)
           if (status) {
-            this.store.dispatch(new TablesActions.DeleteUserAction(username));
+            this.store.dispatch(new UsersActions.DeleteUserAction(username));
           }
         },
         err => {
@@ -188,7 +189,7 @@ export class DataStorageService {
     console.log(this.httpClient.post<UserModel>(this.basehost + '/v1/users',user)
       .subscribe((savedUser: UserModel) => {
           console.log('saveNewUser dss OK: ', savedUser)
-          this.store.dispatch(new TablesActions.AddUserAction(savedUser));
+          this.store.dispatch(new UsersActions.AddUserAction(savedUser));
         },
         err => {
           console.log('saveNewUser dss err: ', err)

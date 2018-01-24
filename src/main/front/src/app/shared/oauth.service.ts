@@ -4,12 +4,13 @@ import {Http, RequestOptions} from "@angular/http";
 import {HttpClient, HttpHeaders, HttpParams} from "@angular/common/http";
 import {Observable} from "rxjs/Observable";
 import {Store} from "@ngrx/store";
-import * as fromAppReducers from './store/tables.reducers'
-import * as TablesActions from "../shared/store/tables.actions";
+import * as fromAppReducers from './store/app.reducers'
+import * as TablesActions from "./store/table/tables.actions";
 import * as fromServerModel from "../shared/server.model";
 import {Token} from "./row.model";
 import {OAuthService} from "angular-oauth2-oidc";
 import {AuthCookie} from "./auth-cookies-handler";
+import * as UserActions from "./store/user/users.actions";
 
 
 export class Foo {
@@ -25,7 +26,7 @@ export class OauthService {
   isAuthenticated: boolean;
 
   constructor(private router: Router, private httpClient: HttpClient, private store: Store<fromAppReducers.AppState>, private cookie: AuthCookie) {
-    this.store.select('tables', 'token').forEach(token => {
+    this.store.select('users', 'token').forEach(token => {
       if(token !== null) {
         this.cookie.setAuth(token.access_token,token.expires_in);
         this.token = token.access_token
@@ -73,15 +74,15 @@ export class OauthService {
 
   saveToken(token: Token, username: string) {
     var expireDate = new Date().getTime() + (1000 * token.expires_in);
-    this.store.dispatch(new TablesActions.SetTokenAction(token));
-    this.store.dispatch(new TablesActions.SetCurrentUserAction(username));
+    this.store.dispatch(new UserActions.SetTokenAction(token));
+    this.store.dispatch(new UserActions.SetCurrentUserAction(username));
     this.cookie.setAuth(token.access_token, token.expires_in);
   }
 
   logout() {
     this.cookie.deleteAuth();
-    this.store.dispatch(new TablesActions.DeleteTokenAction());
-    this.store.dispatch(new TablesActions.DeleteCurrentUserAction())
+    this.store.dispatch(new UserActions.DeleteTokenAction());
+    this.store.dispatch(new UserActions.DeleteCurrentUserAction())
     //TODO: RESTORE STORE??
   }
 }

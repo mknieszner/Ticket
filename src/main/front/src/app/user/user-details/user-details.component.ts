@@ -3,10 +3,10 @@ import {UserModel} from '../user.model';
 import {DataStorageService} from "../../shared/data-storage.service";
 import {RoleModel} from "../../roles/role.model";
 import {Store} from "@ngrx/store";
-import * as fromTableReducers from '../../shared/store/tables.reducers'
+import * as fromAppReducers from '../../shared/store/app.reducers'
 import {Observable} from "rxjs/Observable";
 import {Form, FormArray, FormControl, FormGroup} from "@angular/forms";
-import * as TablesActions from "../../shared/store/tables.actions";
+import * as UsersActions from "../../shared/store/user/users.actions";
 import {el} from "@angular/platform-browser/testing/src/browser_util";
 
 @Component({
@@ -22,14 +22,14 @@ export class UserDetailsComponent implements OnInit {
   newUserMode: Observable<boolean>;
   newUserForm: FormGroup;
 
-  constructor(private store: Store<fromTableReducers.AppState>,
+  constructor(private store: Store<fromAppReducers.AppState>,
               private dss: DataStorageService) {
     this.createForm();
   }
 
   ngOnInit() {
-    this.newUserMode = this.store.select('tables', 'newUserMode');
-    this.roles = this.store.select('tables', 'roles');
+    this.newUserMode = this.store.select('users', 'newUserMode');
+    this.roles = this.store.select('users', 'roles');
     this.dss.getRoles();
     this.roleForm =
       new FormGroup({
@@ -59,7 +59,7 @@ export class UserDetailsComponent implements OnInit {
   }
 
   onAbortSubmitUser() {
-    this.store.dispatch(new TablesActions.SetNewUserModeAction(false));
+    this.store.dispatch(new UsersActions.SetNewUserModeAction(false));
   }
 
   createForm() {

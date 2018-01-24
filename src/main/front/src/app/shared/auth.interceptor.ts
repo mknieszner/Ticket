@@ -1,10 +1,8 @@
 import {
-  HttpEvent,
   HttpHandler, HttpHeaders, HttpInterceptor, HttpRequest, HttpResponse, HttpSentEvent,
-  HttpUserEvent
 } from "@angular/common/http";
 import {Observable} from "rxjs/Observable";
-import * as fromAppReducers from './store/tables.reducers'
+import * as fromAppReducers from './store/table/tables.reducers'
 import {Store} from "@ngrx/store";
 import {Token} from "./row.model";
 import {Injectable} from "@angular/core";

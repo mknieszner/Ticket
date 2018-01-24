@@ -3,8 +3,8 @@ import {Observable} from 'rxjs/Observable';
 import {UserModel} from './user.model';
 import {Store} from '@ngrx/store';
 import {DataStorageService} from "../shared/data-storage.service";
-import * as fromTableReducers from '../shared/store/tables.reducers'
-import * as TablesActions from "../shared/store/tables.actions";
+import * as fromAppReducers from '../shared/store/app.reducers'
+import * as UsersActions from "../shared/store/user/users.actions";
 
 @Component({
   selector: 'app-user',
@@ -15,12 +15,12 @@ export class UserComponent implements OnInit {
   users: Observable<UserModel[]>;
   selectedUser: UserModel;
 
-  constructor(private contentStore: Store<fromTableReducers.AppState>,
+  constructor(private contentStore: Store<fromAppReducers.AppState>,
               private dss: DataStorageService) {
   }
 
   ngOnInit() {
-    this.users = this.contentStore.select('tables', 'users');
+    this.users = this.contentStore.select('users', 'users');
     this.dss.getUsers();
   }
 
@@ -30,12 +30,12 @@ export class UserComponent implements OnInit {
 
   onNewUser() {
     console.log('onNewUser');
-    this.contentStore.dispatch(new TablesActions.SetNewUserModeAction(true))
+    this.contentStore.dispatch(new UsersActions.SetNewUserModeAction(true))
   }
 
   onRemoveUser(username: string) {
     this.dss.deleteUser(username);
-    this.contentStore.dispatch(new TablesActions.SetNewUserModeAction(false))
+    this.contentStore.dispatch(new UsersActions.SetNewUserModeAction(false))
     this.selectedUser = null;
   }
 

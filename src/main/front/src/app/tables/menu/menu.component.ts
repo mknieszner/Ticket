@@ -1,8 +1,8 @@
 import {Component, Input, OnInit, Output} from '@angular/core';
 import {Subject} from "rxjs/Subject";
 import {Store} from "@ngrx/store";
-import * as fromTableReducers from '../../shared/store/tables.reducers'
-import * as TablesActions from "../../shared/store/tables.actions";
+import * as fromAppReducers from '../../shared/store/app.reducers'
+import * as TablesActions from "../../shared/store/table/tables.actions";
 import {Observable} from "rxjs/Observable";
 
 @Component({
@@ -17,7 +17,7 @@ export class MenuComponent implements OnInit {
   extendedFilterMode: Observable<boolean>;
   extendedFilterAction: Observable<boolean>;
 
-  constructor(private store: Store<fromTableReducers.AppState>) {
+  constructor(private store: Store<fromAppReducers.AppState>) {
   }
 
   ngOnInit() {

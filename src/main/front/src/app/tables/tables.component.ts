@@ -3,8 +3,10 @@ import {Store} from '@ngrx/store';
 import {RowContentModel, TableDefinitionModel} from '../shared/row.model';
 import {Observable} from 'rxjs/Observable';
 import {DataStorageService} from "../shared/data-storage.service";
-import * as fromTableReducers from '../shared/store/tables.reducers'
-import * as TablesActions from "../shared/store/tables.actions";
+import * as fromAppReducers from '../shared/store/app.reducers'
+import * as fromTableReducers from '../shared/store/table/tables.reducers'
+import * as TablesActions from "../shared/store/table/tables.actions";
+import * as UsersAction from "../shared/store/user/users.actions";
 
 @Component({
   selector: 'app-tables',
@@ -12,12 +14,12 @@ import * as TablesActions from "../shared/store/tables.actions";
   styleUrls: ['./tables.component.css']
 })
 export class TablesComponent implements OnInit {
-  tableState: Observable<fromTableReducers.State>;
+  tableState: Observable<fromTableReducers.TableState>;
   tableChosen: boolean;
   // editRowMode: Observable<boolean>;
   // editedRow: Observable<RowContentModel>;
 
-  constructor(private contentStore: Store<fromTableReducers.AppState>,
+  constructor(private contentStore: Store<fromAppReducers.AppState>,
               private dss: DataStorageService) {
   }
 
@@ -35,6 +37,7 @@ export class TablesComponent implements OnInit {
 
   setTable(tableName) {//TODO: RESET STANU PO ZMIANIE STOLU
     this.contentStore.dispatch(new TablesActions.SwitchTableReset());
+    this.contentStore.dispatch(new UsersAction.SwitchTableReset());
     this.dss.getTableHeaderByName(tableName);
     this.dss.getTableRowsByName(tableName);
     this.tableChosen = true;

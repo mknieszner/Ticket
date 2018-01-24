@@ -1,59 +1,36 @@
 import * as TableActions from './tables.actions';
-import {ExtendedFilterModel, RowContentModel, TableDefinitionModel, Token} from "../row.model";
-import {UserModel} from "../../user/user.model";
-import {RoleModel} from "../../roles/role.model";
+import {ExtendedFilterModel, RowContentModel, TableDefinitionModel, Token} from "../../row.model";
+import {UserModel} from "../../../user/user.model";
+import {RoleModel} from "../../../roles/role.model";
+import {UserState} from "../user/users.reducers";
 
-export interface AppState {
-  tables: State
-}
-
-export interface State {
-  currentUser: string,
-  currentUserRoles: string[],
-  token: Token,
+export interface TableState {
   editRowMode: boolean,
   newRowMode: boolean,
   editedRow: RowContentModel,
   tableDefinition: TableDefinitionModel,
   tableContent: RowContentModel[],
   tablesNames: string[],
-  users: UserModel[],
-  newUserMode: boolean,
-  roles: RoleModel[],
-  newRoleMode: boolean,
   tableFilter: string,
   extendedFilterMode: boolean,
   extendedFilterAction: boolean
   extendedFilterContent: ExtendedFilterModel
 }
 
-const initialState: State = {
-
-  currentUser: '',
-  currentUserRoles: [],
-  token: null,
+const initialTableState: TableState = {
   editRowMode: false,
   newRowMode: false,
   editedRow: null,
   tableDefinition: null,
-  // tableDefinition: {
-  //   id: 0,
-  //   name: '',
-  //   columnDetailDefinitionDtoList: ['']
-  // },
   tableContent: [],
   tablesNames: [],
-  users: [],
-  newUserMode: false,
-  roles: [],
-  newRoleMode: false,
   tableFilter: '',
   extendedFilterMode: false,
   extendedFilterAction: false,
   extendedFilterContent: null
 };
 
-export function tablesReducers(state: State = initialState, action: TableActions.TablesActions) {
+export function tablesReducers(state: TableState = initialTableState, action: TableActions.TableActions) {
   switch (action.type) {
     case TableActions.ADD_ROW:
       return {
@@ -85,87 +62,6 @@ export function tablesReducers(state: State = initialState, action: TableActions
         ...state,
         tableDefinition: [action.payload]
       };
-    case TableActions.SET_NEW_USER_MODE:
-      return {
-        ...state,
-        newUserMode: action.payload
-      };
-    case TableActions.SET_NEW_ROLE_MODE:
-      return {
-        ...state,
-        newRoleMode: action.payload
-      };
-    case TableActions.ADD_ROLE:
-      return {
-        ...state,
-        roles: [...state.roles, action.payload]
-      };
-    case TableActions.DELETE_ROLE:
-      return {
-        ...state,
-        roles: [...deleteItemByName(state.roles, action.payload)]
-      };
-    case TableActions.DELETE_USER:
-      return {
-        ...state,
-        users: [...deleteItemByUsername(state.users, action.payload)]
-      };
-    case TableActions.SET_USERS:
-      return {
-        ...state,
-        users: [...action.payload]
-      };
-    case TableActions.ADD_USER:
-      return {
-        ...state,
-        users: [...state.users, action.payload]
-      };
-    case TableActions.SET_ROLES:
-      return {
-        ...state,
-        roles: [...action.payload]
-      };
-    case TableActions.ADD_ROLE_TO_USER:
-      return {
-        ...state,
-        users: [...updateUsersRoles(state.users, action.payload)]
-      };
-    case TableActions.REMOVE_ROLE_FROM_USER:
-      return {
-        ...state,
-        users: [...updateUsersRoles(state.users, action.payload)]
-      };
-    case TableActions.REMOVE_USER_FROM_ROLE:
-      return {
-        ...state,
-        roles: [...updateRoleUsers(state.roles, action.payload)]
-      };
-    case TableActions.SET_CURRENT_USER_ROLENAMES:
-      return {
-        ...state,
-        currentUserRoles: action.payload
-      };
-
-    case TableActions.DELETE_TOKEN:
-      return {
-        ...state,
-        token: null
-      };
-    case TableActions.SET_TOKEN:
-      return {
-        ...state,
-        token: action.payload
-      };
-    case TableActions.DELETE_CURRENT_USER:
-      return {
-        ...state,
-        currentUser: ''
-      };
-    case TableActions.SET_CURRENT_USER:
-      return {
-        ...state,
-        currentUser: action.payload
-      };
     case TableActions.EDIT_ROW_MODE:
       return {
         ...state,
@@ -183,7 +79,7 @@ export function tablesReducers(state: State = initialState, action: TableActions
       };
     case TableActions.RESET_STORE:
       return {
-        ...initialState
+        ...initialTableState
       };
     case TableActions.SET_FILTER:
       return {
@@ -207,11 +103,8 @@ export function tablesReducers(state: State = initialState, action: TableActions
       };
     case TableActions.SWITCH_TABLE_RESET:
       return {
-        ...initialState,
+        ...initialTableState,
         tablesNames: state.tablesNames,
-        currentUser: state.currentUser,
-        currentUserRoles: state.currentUserRoles,
-        token: state.token,
       };
     default:
       return state;
