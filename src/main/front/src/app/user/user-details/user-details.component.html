@@ -29,6 +29,14 @@
         </ul>
       </td>
     </tr>
+    <tr>
+      <td>TASKS:</td>
+      <td>
+        <ul>
+          <li *ngFor="let taskDto of user.taskDtos"> {{ taskDto.name }} </li>
+        </ul>
+      </td>
+    </tr>
     </tbody>
   </table>
 

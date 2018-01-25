@@ -3,10 +3,10 @@ import {Store} from "@ngrx/store";
 import {Observable} from "rxjs/Observable";
 import * as fromAppReducers from '../shared/store/app.reducers'
 import * as TablesActions from "../shared/store/table/tables.actions";
-import {Token} from "../shared/row.model";
 import {OauthService} from "../shared/oauth.service";
 import {AuthCookie} from "../shared/auth-cookies-handler";
 import {DataStorageService} from "../shared/data-storage.service";
+import {Token} from "../shared/auth.model";
 
 @Component({
   selector: 'app-header',

@@ -1,0 +1,61 @@
+<div *ngIf="(showedTask | async)">
+  <ul class="list-group">
+    <li class="list-group-item">
+      <button class="btn btn-dark" (click)="onHideTaskDetails()">Hide Details</button>
+    </li>
+    <li class="list-group-item"> ID: {{(showedTask | async)?.id}}</li>
+    <li class="list-group-item"> Name: {{ (showedTask | async)?.name}}</li>
+    <li class="list-group-item"> Description: {{ (showedTask | async)?.description }}</li>
+    <li class="list-group-item"> Status: {{(showedTask | async)?.status}}</li>
+    <ul class="list-group" style="margin-bottom: 0">
+      <li class="list-group-item border border-dark" style="border: none">
+        {{ (showedTask | async)?.userNames.length <= 0 ? 'No users' : 'Assigned Users:'}}
+
+        <form class="form-group">
+          <div class="form-group">
+            <select #userContol class="form-control-lg">
+              <option *ngFor="let tableUser of (tableUsers| async)"> {{ tableUser }}</option>
+            </select>
+            <button class="btn btn-dark-sm" (click)="onAssignUserToTask(userContol.value)">+</button>
+            <button class="btn btn-dark-sm" (click)="onRemoveUserFromTask(userContol.value)">-</button>
+          </div>
+        </form>
+      </li>
+      <li class="list-group-item" *ngFor=" let username of (showedTask | async)?.userNames">{{username}}</li>
+    </ul>
+    <ul class="list-group" style="margin-bottom: 0">
+      <li class="list-group-item border border-dark" style="border: none"> {{ (showedTask | async)?.taskDtos.length <= 0 ? 'No tasks' : 'Assigned Tasks:'}}</li>
+      <li class="list-group-item" *ngFor="let taskDto of (showedTask | async)?.taskDtos">
+        <!--<app-task></app-task>-->
+      </li>
+    </ul>
+  </ul>
+</div>
+
+<div *ngIf="(showedTask | async) == null">
+  <form>
+    <div class="form-group">
+      <label>Name:</label>
+      <input class="form-control" type="text" #nameEl>
+    </div>
+    <div class="form-group">
+      <label>Description:</label>
+      <textarea rows="20" class="form-control" #descriptionEl></textarea>
+    </div>
+    <div class="form-group">
+      <label>Status:</label>
+      <select class="form-control-lg" #statusEl>
+        <option> {{status[0]}}</option>
+        <option> {{status[1]}}</option>
+        <option> {{status[2]}}</option>
+        <option> {{status[3]}}</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <button class="btn btn-dark text-white" (click)="onSaveRowNewTask({name: nameEl.value,description: descriptionEl.value,status: statusEl.value})">
+        Submit
+      </button>
+      <button class="btn btn-dark text-white" (click)="onHideTaskDetails()">Abort</button>
+    </div>
+  </form>
+</div>

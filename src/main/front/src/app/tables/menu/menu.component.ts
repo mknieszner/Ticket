@@ -39,13 +39,11 @@ export class MenuComponent implements OnInit {
   }
 
   onRunExtendedFilter() {
-    // console.log('onRunExtendedFilter');
       this.store.dispatch(new TablesActions.RunExtendedFilter());//true
   }
 
   onNewRow() {
     //TODO new Row
-    console.log('onNewRow');
     this.store.dispatch(new TablesActions.SetEditRowMode(true));
     this.store.dispatch(new TablesActions.SetNewRowModeAction(true));
   }

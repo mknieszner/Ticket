@@ -178,4 +178,12 @@ public class UserService implements UserDetailsService {
       return Lists.newArrayList(roleMapper.mapRoleSetToRoleDtoSet(userRepository.findByUsername(username).getRoles()));
     }
   }
+
+  public List<String> getTableUsers(final String tableName) {
+    return userMapper.mapUserSetToUserDtoSet(userRepository.findAllByRolesEquals(
+        roleRepository.findByName(tableName)))
+        .stream()
+        .map(UserDto::getUsername)
+        .collect(Collectors.toList());
+  }
 }

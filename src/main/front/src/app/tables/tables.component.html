@@ -1,10 +1,17 @@
-<div class="row" style="margin: 0;padding: 0;">
+<div class="row" style="margin: 0 10px;padding: 0;">
   <div [ngClass]="(tableState | async).editRowMode ? 'col-xs-4' : 'hidden'" style="margin: 41px 0px">
-    <app-table-details *ngIf="(tableState | async).editRowMode"></app-table-details>
+    <app-row-details *ngIf="(tableState | async).editRowMode"></app-row-details>
   </div>
-  <div [ngClass]="(tableState | async).editRowMode == true ? 'col-xs-8':'col-xs-12'" style="padding: 0">
+  <div [ngClass]="(taskDetailsMode | async) ? 'col-xs-4' : 'hidden'" style="margin: 41px 0px">
+    <app-task></app-task>
+  </div>
+  <div [ngClass]="(tableState | async).editRowMode ?
+                        ((taskDetailsMode | async) ?
+                                 'col-xs-4'
+                               : 'col-xs-8')
+                        : ('col-xs-12')" style="padding: 0"
+  >
     <div class="panel panel-dark">
-
       <div class="panel-light">
         <app-menu *ngIf="(tableState | async).tablesNames.length != 0"
                   [tableNames]="(tableState | async).tablesNames"

@@ -7,10 +7,11 @@
   <td>Created on</td>
   <td>Last Modified By</td>
   <td>Last Modified On</td>
+  <td>Tasks</td>
 </tr>
 <form *ngIf="extendedFilterMode |async" [formGroup]="filterForm">
   <tr>
-    <td><input class="form-control mr-sm-2" type="text" placeholder="ID" formControlName="id" (click)="show()"></td>
+    <td><input class="form-control mr-sm-2" type="text" placeholder="ID" formControlName="id"></td>
     <td><input class="form-control mr-sm-2" type="text" placeholder="NAME" formControlName="name"></td>
     <span formArrayName="columnValueDtos">
       <td *ngFor="let column of (header| async)[0]?.columnDetailDefinitionDtoList; let i = index" formGroupName="{{i}}">
@@ -21,5 +22,6 @@
     <td><input class="form-control mr-sm-2" type="text" placeholder="Created on" formControlName="createdOn"></td>
     <td><input class="form-control mr-sm-2" type="text" placeholder="Last Modified By" formControlName="lastModifiedBy"></td>
     <td><input class="form-control mr-sm-2" type="text" placeholder="Last Modified On" formControlName="lastModifiedOn"></td>
+    <td><input class="form-control mr-sm-2" type="text" placeholder="Last Modified On" formControlName="taskDtos"></td>
   </tr>
 </form>

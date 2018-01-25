@@ -4,11 +4,14 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import ticketproject.app.crud.domain.entities.Task;
 
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -35,13 +38,20 @@ public class User implements Serializable {
   )
   Set<Role> roles = new HashSet<>();
 
-  public User(final String username, final String firstName, final String lastName, final String email, final String password, final boolean enabled) {
+  public User(final String username,
+              final String firstName,
+              final String lastName,
+              final String email,
+              final String password,
+              final boolean enabled,
+              final List<Task> tasks) {
     this.username = username;
     this.firstName = firstName;
     this.lastName = lastName;
     this.email = email;
     this.password = password;
     this.enabled = enabled;
+    this.tasks.addAll(tasks);
   }
 
   public User(final String username) {
@@ -67,6 +77,9 @@ public class User implements Serializable {
 
     return username.equals(user.username);
   }
+
+  @ManyToMany(mappedBy = "users")
+  List<Task> tasks = new ArrayList<>();
 
   @Override
   public int hashCode() {

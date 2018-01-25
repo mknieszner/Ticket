@@ -14,6 +14,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
 public class UserMapper {
   private final PasswordEncoder passwordEncoder;
+  private final TaskMapper taskMapper;
 
   public User mapUserDtoToUser(final UserDto userDto) {
     User user = new User(
@@ -22,12 +23,20 @@ public class UserMapper {
         userDto.getLastName(),
         userDto.getEmail(),
         passwordEncoder.encode(userDto.getPassword()),
-        userDto.isEnabled());
+        userDto.isEnabled(),
+        taskMapper.mapTaskDtosToTasks(userDto.getTaskDtos()));
     return user;
   }
 
   public UserDto mapUserToUserDto(final User user) {
-    UserDto userDto = new UserDto(user.getUsername(), user.getFirstName(), user.getLastName(), user.getEmail(), user.getPassword(), user.isEnabled());
+    UserDto userDto = new UserDto(
+        user.getUsername(),
+        user.getFirstName(),
+        user.getLastName(),
+        user.getEmail(),
+        user.getPassword(),
+        user.isEnabled(),
+        taskMapper.mapTasksToTaskDtos(user.getTasks()));
     user.getRoles().forEach(role -> userDto.addRoleDto(role.getName()));
     return userDto;
   }

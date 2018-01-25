@@ -7,10 +7,9 @@ import {Store} from "@ngrx/store";
 import * as fromAppReducers from './store/app.reducers'
 import * as TablesActions from "./store/table/tables.actions";
 import * as fromServerModel from "../shared/server.model";
-import {Token} from "./row.model";
-import {OAuthService} from "angular-oauth2-oidc";
 import {AuthCookie} from "./auth-cookies-handler";
 import * as UserActions from "./store/user/users.actions";
+import {Token} from "./auth.model";
 
 
 export class Foo {
@@ -38,7 +37,6 @@ export class OauthService {
   }
 
   obtainAccessToken(loginData: { username: string, password: string }) {
-    // console.log(loginData);
     let params = new HttpParams()
       .append('username', loginData.username)
       .append('password', loginData.password)
@@ -49,8 +47,6 @@ export class OauthService {
       'Authorization': 'Basic ' + btoa("live-test:bG2ZS10ZXN0")
     });
 
-    // console.log(params);
-    // console.log(params.toString());
     this.httpClient.post<Token>(this.basehost +'/oauth/token', null, {
       observe: 'body',
       headers: headers,
@@ -67,10 +63,10 @@ export class OauthService {
       );
   }
 
-  getResource(resourceUrl) : Observable<any> {
-    var headers = new HttpHeaders({'Content-type': 'application/x-www-form-urlencoded; charset=utf-8', 'Authorization': 'Bearer ' + this.cookie.getAuth()});
-    return this.httpClient.get(resourceUrl, { headers: headers }).catch((error:any) => Observable.throw('Server error',error));
-  }
+  // getResource(resourceUrl) : Observable<any> {
+  //   var headers = new HttpHeaders({'Content-type': 'application/x-www-form-urlencoded; charset=utf-8', 'Authorization': 'Bearer ' + this.cookie.getAuth()});
+  //   return this.httpClient.get(resourceUrl, { headers: headers }).subscribe({})//.catch((error:any) => Observable.throw('Server error',error));
+  // }
 
   saveToken(token: Token, username: string) {
     var expireDate = new Date().getTime() + (1000 * token.expires_in);

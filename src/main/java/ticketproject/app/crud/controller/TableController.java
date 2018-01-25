@@ -5,10 +5,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import ticketproject.app.crud.domain.dto.definition.ProjectDefinitionDto;
 import ticketproject.app.crud.domain.dto.definition.TableDefinitionDto;
-import ticketproject.app.crud.domain.dto.values.ProjectDto;
-import ticketproject.app.crud.domain.dto.values.ProjectTableDto;
-import ticketproject.app.crud.domain.dto.values.RowDto;
-import ticketproject.app.crud.domain.dto.values.RowInfoDto;
+import ticketproject.app.crud.domain.dto.values.*;
 import ticketproject.app.crud.service.*;
 
 import java.security.Principal;
@@ -30,6 +27,21 @@ public class TableController {
   private RowValidator rowValidator;
   @Autowired
   private TableValidator tableValidator;
+
+  @PostMapping(value = "projects/tables/rows/tasks/{taskId}")
+  public TaskDto assignUserToTask(@PathVariable final Long taskId, @RequestBody final String username, final Principal principal) {
+    return tableService.assignUserToTaskIfAuthorized(taskId,username,principal.getName());
+  }
+
+  @PostMapping(value = "projects/tables/rows/{rowId}/tasks")
+  public List<TaskDto> addTaskToRow(@PathVariable final Long rowId, @RequestBody final TaskDto taskDto, final Principal principal) {
+    return tableService.addTaskToRowIfAuthorized(rowId,principal.getName(),taskDto);
+  }
+
+  @GetMapping(value = "projects/tables/rows/{rowId}/tasks/")
+  public List<TaskDto> getRowsTasks(@PathVariable final Long rowId, final Principal principal) {
+    return tableService.getRowsTasksIfAuthirized(rowId,principal.getName());
+  }
 
   @DeleteMapping(value = "projects/tables/{tableName}")
   public void deleteTableByName(@PathVariable final String tableName) {

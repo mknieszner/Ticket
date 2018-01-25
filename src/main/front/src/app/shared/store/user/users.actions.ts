@@ -1,7 +1,7 @@
 import {Action} from "@ngrx/store";
 import {UserModel} from "../../../user/user.model";
 import {RoleModel} from "../../../roles/role.model";
-import {Token} from "../../row.model";
+import {Token} from "../../auth.model";
 
 export const SET_NEW_USER_MODE = 'SET_NEW_USER_MODE';
 export const SET_USERS = 'SET_USERS';

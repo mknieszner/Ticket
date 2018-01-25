@@ -1,6 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {FormArray, FormControl, FormGroup} from '@angular/forms';
-import * as fromDefinitionModel from '../shared/row.model';
+import * as fromDefinitionModel from '../shared/table.model';
 import {DataStorageService} from "../shared/data-storage.service";
 
 
@@ -28,10 +28,6 @@ export class DefinitionComponent implements OnInit {
       'name': new FormControl(),
       'columnDetailDefinitionDtoList': new FormArray([])
     });
-  }
-
-  onSubmit() {
-    console.log(this.definitionForm.value);
   }
 
   onAddColumn() {

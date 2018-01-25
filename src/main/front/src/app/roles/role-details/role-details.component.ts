@@ -47,9 +47,6 @@ export class RoleDetailsComponent implements OnInit {
       this.users.subscribe((users: UserModel[]) => {
         users.forEach((user) => {
             if (user.username === this.userForm.value.user) {
-              console.log('users:');
-              console.log(user.username);
-              console.log(this.userForm.value.user);
               this.role.userDtos.push(user);
             }
         })
@@ -62,7 +59,6 @@ export class RoleDetailsComponent implements OnInit {
   }
 
   onSubmitRole(name, description) {
-    console.log(name, description);
     this.dss.saveNewRole({name: name, description: description});
   }
 

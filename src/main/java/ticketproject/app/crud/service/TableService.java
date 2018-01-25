@@ -3,19 +3,20 @@ package ticketproject.app.crud.service;
 import com.google.common.collect.Lists;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.oauth2.common.exceptions.UnauthorizedUserException;
 import org.springframework.stereotype.Service;
 import ticketproject.app.crud.dao.*;
 import ticketproject.app.crud.domain.dto.definition.ProjectDefinitionDto;
 import ticketproject.app.crud.domain.dto.definition.TableDefinitionDto;
-import ticketproject.app.crud.domain.dto.values.ProjectDto;
-import ticketproject.app.crud.domain.dto.values.ProjectTableDto;
-import ticketproject.app.crud.domain.dto.values.RowDto;
-import ticketproject.app.crud.domain.dto.values.RowInfoDto;
+import ticketproject.app.crud.domain.dto.values.*;
 import ticketproject.app.crud.domain.entities.*;
 import ticketproject.app.crud.domain.entities.authorization.Role;
+import ticketproject.app.crud.domain.entities.authorization.User;
 import ticketproject.app.crud.mapper.*;
 
 import javax.transaction.Transactional;
+import java.security.Principal;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -36,6 +37,8 @@ public class TableService {
   private final ProjectTableMapper projectTableMapper;
   private final RoleRepository roleRepository;
   private final UserRepository userRepository;
+  private final TaskMapper taskMapper;
+  private final TaskRepository taskRepository;
 
 //  public ProjectDto saveProjectDto(final ProjectDto projectDto) {
 //    System.out.println("DBSer " + projectDto);
@@ -48,7 +51,7 @@ public class TableService {
     return definitionMapper.mapProjectToProjectDefinitionDto(projectRepository.save(definitionMapper.mapProjectDefinitionToProject(projectDefinitionDto)));
   }
 
-  //@Cacheable("")
+
   public ProjectDefinitionDto getAllProjectHeaders(final Long projectId) {
     return definitionMapper.mapProjectToProjectDefinitionDto(projectRepository.findOne(projectId));
   }
@@ -57,7 +60,6 @@ public class TableService {
     return projectMapper.mapToProjectDto(projectRepository.findOne(projectId));
   }
 
-  //@CachePut(value="row", key="#result.id")
   public RowDto addRowByTableId(final RowDto rowDto, final Long tableId, final String username) {
     ProjectTable projectTable = projectTableRepository.findOne(tableId);
     Row row = rowMapper.mapToRow(rowDto);
@@ -108,13 +110,11 @@ public class TableService {
     return projectTableMapper.mapToProjectTableDto(projectTableRepository.save(projectTable));
   }
 
-  //@CachePut(value="row", key="#result.id")
   public RowDto updateRowByTableId(final RowDto rowDto, final Long tableId, final String username) { // TODO: DO USUNIĘCIA tableID - table z row repo
     Row oldRow = rowRepository.findOne(rowDto.getId());
     return rowMapper.mapToRowDto(rowRepository.save(rowMapper.updateRow(oldRow, rowDto, username)));
   }
 
-  //@CacheEvict(value = "row", allEntries = true)
   public List<RowDto> updateRowsByTableId(final List<RowDto> rowDtos, final Long tableId) {
     ProjectTable projectTable = projectTableRepository.findOne(tableId);
     return rowMapper.mapToRowDtos(Lists.newArrayList(rowRepository.save(rowDtos.stream().map(rowMapper::mapToRow).peek(row -> row.setProjectTable(projectTable)).collect(Collectors.toList()))));
@@ -140,11 +140,9 @@ public class TableService {
     return definitionMapper.mapProjectToProjectDefinitionDto(project);
   }
 
-  //@PreAuthorize("hasRole('ADMIN')")
   public void deleteRowById(final Long rowId) {
     rowRepository.delete(rowId);
   }
-
 
   @Transactional
   public void deleteTablebyId(final Long tableId) { //TODO:TRANSACTION?
@@ -184,7 +182,6 @@ public class TableService {
     return rowMapper.mapToRowDtos(rows);
   }
 
-
   public Long getTableIdByName(final String tableName) {
     return projectTableRepository.findByName(tableName).getId();
   }
@@ -208,5 +205,48 @@ public class TableService {
     } else {
       throw new IllegalArgumentException(String.format("Table: %s, does not contains row with ID: %d.", tableName, rowId));
     }
+  }
+
+  public List<TaskDto> addTaskToRowIfAuthorized(final Long rowId, final String username, TaskDto taskDto) {
+    Row row = rowRepository.findOne(rowId);
+    String tableName = row.getProjectTable().getName();
+    if (userRepository.findByUsername(username).getRoles() //TODO cache roles???
+        .stream()                                          // TODO: validator????
+        .map(Role::getName)
+        .anyMatch((roleName) -> roleName.equals(tableName) || roleName.equals("ROLE_ADMIN"))) {
+      row.getTasks().add(taskMapper.mapTaskDtoToTask(taskDto));
+      return taskMapper.mapTasksToTaskDtos(rowRepository.save(row).getTasks());
+    } else {
+      throw new RuntimeException(String.format("User:%s does not have authority:%s TaskDto: %s", username, tableName, taskDto.toString()));
+    } // TODO: remove table name from exception (tests)
+  }
+
+  public List<TaskDto> getRowsTasksIfAuthirized(final Long rowId, final String username) {
+    Row row = rowRepository.findOne(rowId);
+    String tableName = row.getProjectTable().getName();
+    if (userRepository.findByUsername(username).getRoles() //TODO cache roles???
+        .stream()                                          // TODO: validator????
+        .map(Role::getName)
+        .anyMatch((roleName) -> roleName.equals(tableName) || roleName.equals("ROLE_ADMIN"))) {
+      return taskMapper.mapTasksToTaskDtos(row.getTasks());
+    } else {
+      throw new RuntimeException(String.format("User:%s does not have authority:%s", username, tableName));
+    } // TODO: remove table name from exception (tests)
+  }
+
+  public TaskDto assignUserToTaskIfAuthorized(final Long taskId, final String userNameToAssign, final String username) {
+    Task task = taskRepository.findOne(taskId);
+    final Row row = rowRepository.findByTasksIsContaining(Collections.singletonList(task));
+    final String tableName = row.getProjectTable().getName();
+    if (userRepository.findByUsername(username).getRoles() //TODO cache roles???
+        .stream()                                          // TODO: validator????
+        .map(Role::getName)
+        .anyMatch((roleName) -> roleName.equals(tableName) || roleName.equals("ROLE_ADMIN"))) {
+      final User userToAssign = userRepository.findByUsername(userNameToAssign);
+      task.getUsers().add(userToAssign);
+      return taskMapper.mapTaskToTaskDto(taskRepository.save(task));
+    } else {
+      throw new RuntimeException(String.format("User:%s does not have authority:%s TaskDto: %s", username, tableName, task.toString()));
+    } // TODO: remove tablename and task from exception (tests)
   }
 }

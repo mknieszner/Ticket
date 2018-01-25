@@ -6,6 +6,8 @@ import ticketproject.app.crud.domain.entities.authorization.Role;
 import ticketproject.app.crud.domain.entities.authorization.User;
 
 import javax.transaction.Transactional;
+import java.util.List;
+import java.util.Set;
 
 @Transactional
 @Repository
@@ -14,4 +16,5 @@ public interface UserRepository extends CrudRepository<User, Long> {
   boolean findAllByUsernameAndRoles(String username, Role role);
   User findByUsername(String username);
   void deleteByUsername(String username);
+  Set<User> findAllByRolesEquals(Role role);
 }

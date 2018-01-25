@@ -22,6 +22,8 @@ public class RowDto {
   @NotNull
   private List<ColumnValueDto> columnValueDtos = new ArrayList<>();
   @NotNull
+  private List<TaskDto> taskDtos = new ArrayList<>();
+  @NotNull
   private String createdBy;
   @NotNull
   @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm")
@@ -34,5 +36,8 @@ public class RowDto {
 
   public void addColumnValue(final ColumnValueDto columnValueDto) {
     this.columnValueDtos.add(columnValueDto);
+  }
+  public void addTask(final TaskDto taskDto) {
+    this.taskDtos.add(taskDto);
   }
 }

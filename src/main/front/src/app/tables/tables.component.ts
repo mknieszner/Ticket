@@ -1,6 +1,6 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {Store} from '@ngrx/store';
-import {RowContentModel, TableDefinitionModel} from '../shared/row.model';
+import {RowContentModel, TableDefinitionModel} from '../shared/table.model';
 import {Observable} from 'rxjs/Observable';
 import {DataStorageService} from "../shared/data-storage.service";
 import * as fromAppReducers from '../shared/store/app.reducers'
@@ -16,8 +16,8 @@ import * as UsersAction from "../shared/store/user/users.actions";
 export class TablesComponent implements OnInit {
   tableState: Observable<fromTableReducers.TableState>;
   tableChosen: boolean;
-  // editRowMode: Observable<boolean>;
-  // editedRow: Observable<RowContentModel>;
+  taskDetailsMode: Observable<boolean>;
+
 
   constructor(private contentStore: Store<fromAppReducers.AppState>,
               private dss: DataStorageService) {
@@ -26,9 +26,7 @@ export class TablesComponent implements OnInit {
   ngOnInit() {
     this.dss.getTableNames();
     this.tableState = this.contentStore.select('tables');
-    // this.editRowMode = this.contentStore.select('tables', 'editRowMode');
-    // this.editedRow = this.contentStore.select('tables', 'editedRow');
-
+    this.taskDetailsMode = this.contentStore.select('tasks','taskDetailsMode');
   }
 
   onToggleRowEditMode() {

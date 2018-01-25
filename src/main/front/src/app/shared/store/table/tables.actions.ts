@@ -1,5 +1,6 @@
 import {Action} from '@ngrx/store';
-import {ExtendedFilterModel, RowContentModel, TableDefinitionModel} from '../../row.model';
+import {ExtendedFilterModel, RowContentModel, TableDefinitionModel, TaskModel} from '../../table.model';
+import {UserModel} from "../../../user/user.model";
 
 export const RESET_STORE = 'RESET_STORE';
 
@@ -24,6 +25,9 @@ export const RUN_EXTENDED_FILTER = 'RUN_EXTENDED_FILTER';
 export const SET_EXTENDED_FILTER = 'SET_EXTENDED_FILTER';
 export const SWITCH_TABLE_RESET = 'SWITCH_TABLE_RESET';
 
+export const SET_ROW_TASKS = 'SET_ROW_TASKS';
+export const SET_TABLE_USERS = 'SET_TABLE_USERS';
+export const UPDATE_ROWS_TASK = 'UPDATE_ROWS_TASK';
 
 
 export class SetNewRowModeAction implements Action {
@@ -138,6 +142,29 @@ export class SwitchTableReset implements Action {
   }
 }
 
+export class SetRowsTasksAction implements Action {
+  readonly type = SET_ROW_TASKS;
+
+  constructor(public payload: { tasks: TaskModel[], rowId } ) {
+  }
+}
+
+export class SetTableUsers implements Action {
+  readonly type = SET_TABLE_USERS;
+
+  constructor(public payload: UserModel[] ) {
+  }
+}
+
+export class UpdateRowsTaskAction implements Action {
+  readonly type = UPDATE_ROWS_TASK;
+
+  constructor(public payload: { rowId: number, task: TaskModel } ) {
+    console.log('payload', payload)
+  }
+}
+
+
 export type TableActions =
   AddRowAction |
   SetNamesAction |
@@ -154,4 +181,7 @@ export type TableActions =
   SetExtendedFilterMode |
   RunExtendedFilter |
   SetExtendedFilter |
-  SwitchTableReset;
+  SwitchTableReset|
+  SetRowsTasksAction |
+  SetTableUsers |
+  UpdateRowsTaskAction;

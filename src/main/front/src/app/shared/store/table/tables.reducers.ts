@@ -1,5 +1,5 @@
 import * as TableActions from './tables.actions';
-import {ExtendedFilterModel, RowContentModel, TableDefinitionModel, Token} from "../../row.model";
+import {ExtendedFilterModel, RowContentModel, TableDefinitionModel, TaskModel} from "../../table.model";
 import {UserModel} from "../../../user/user.model";
 import {RoleModel} from "../../../roles/role.model";
 import {UserState} from "../user/users.reducers";
@@ -10,6 +10,7 @@ export interface TableState {
   editedRow: RowContentModel,
   tableDefinition: TableDefinitionModel,
   tableContent: RowContentModel[],
+  tableUsers: UserModel[],
   tablesNames: string[],
   tableFilter: string,
   extendedFilterMode: boolean,
@@ -23,6 +24,7 @@ const initialTableState: TableState = {
   editedRow: null,
   tableDefinition: null,
   tableContent: [],
+  tableUsers: [],
   tablesNames: [],
   tableFilter: '',
   extendedFilterMode: false,
@@ -106,9 +108,47 @@ export function tablesReducers(state: TableState = initialTableState, action: Ta
         ...initialTableState,
         tablesNames: state.tablesNames,
       };
+    case TableActions.SET_ROW_TASKS:
+      return {
+        ...state,
+        tableContent: [...setRowTasks(state.tableContent, action.payload)]
+      };
+    case TableActions.SET_TABLE_USERS:
+      return {
+        ...state,
+        tableUsers: [...action.payload]
+      };
+    case TableActions.UPDATE_ROWS_TASK:
+      return {
+        ...state,
+        tableContent: [...updateTaskUsers(state.tableContent, action.payload)]
+      };
     default:
       return state;
   }
+}
+
+function updateTaskUsers(tableContent: RowContentModel[], payload: { rowId: number, task: TaskModel }): RowContentModel[] {
+  tableContent.forEach((row: RowContentModel,i) => {
+    if (row.id == payload.rowId) {
+      row.taskDtos.forEach((taskDto: TaskModel,j) => {
+        if (taskDto.id == payload.task.id) {
+          tableContent[i].taskDtos[j].userNames = payload.task.userNames;
+        }
+      })
+    }
+  });
+  return tableContent;
+}
+
+
+function setRowTasks(rows: RowContentModel[], data: { tasks: TaskModel[], rowId }): RowContentModel[] {
+  rows.forEach((row, i) => {
+    if (row.id == data.rowId) {
+      row.taskDtos = data.tasks;
+    }
+  });
+  return rows;
 }
 
 function deleteItemByName(array: NameModel[], itemName: string): Array<NameModel> {//TODO GENERIC TYPE FUNCTION???  r.216/255

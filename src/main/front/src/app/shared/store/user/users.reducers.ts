@@ -1,8 +1,9 @@
 import * as UserActions from './users.actions';
-import {ExtendedFilterModel, RowContentModel, TableDefinitionModel, Token} from "../../row.model";
+import {ExtendedFilterModel, RowContentModel, TableDefinitionModel} from "../../table.model";
 import {UserModel} from "../../../user/user.model";
 import {RoleModel} from "../../../roles/role.model";
 import {TableState} from "../table/tables.reducers";
+import {Token} from "../../auth.model";
 
 
 export interface UserState {

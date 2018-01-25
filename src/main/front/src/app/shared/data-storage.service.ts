@@ -1,7 +1,7 @@
 import {Injectable} from "@angular/core";
 import {HttpClient} from "@angular/common/http";
 import 'rxjs/add/operator/map';
-import {RowContentModel, TableDefinitionModel} from "./row.model";
+import {RowContentModel, TableDefinitionModel, TaskModel} from "./table.model";
 import {Store} from "@ngrx/store";
 import * as UsersActions from "./store/user/users.actions";
 import * as TablesActions from "./store/table/tables.actions";
@@ -11,6 +11,7 @@ import {UserModel} from "../user/user.model";
 import {RoleModel} from "../roles/role.model";
 import {FormControl} from "@angular/forms";
 import {OauthService} from "./oauth.service";
+import {TableActions} from "./store/table/tables.actions";
 
 @Injectable()
 export class DataStorageService {
@@ -27,6 +28,8 @@ export class DataStorageService {
         return definition;
       }).subscribe((definition: TableDefinitionModel) => {
         this.store.dispatch(new TablesActions.SetTableDefinitionAction(definition))
+      },(err)=>{
+        console.log('getTableHeaderByName dss err: ', err)
       })
   }
 
@@ -34,26 +37,29 @@ export class DataStorageService {
     return this.httpClient.get<RowContentModel[]>(this.basehost + '/v1/projects/tables/' + tableName + '/rows')
       .subscribe((rows: RowContentModel[]) => {
         this.store.dispatch(new TablesActions.SetRowsAction(rows))
-      })
+      }),(err)=>{
+      console.log('getTableRowsByName dss err: ', err)
+    }
   }
 
   getTableNames() {
-    // this.oauth.getResource(this.basehost +'/v1/projects/tables/names').subscribe(names =>{ //rozwiązanie bez interceptora (http/httpClient)
-    //    console.log(names);
-    //    this.store.dispatch(new TablesActions.SetNamesAction(names))});
-
     this.httpClient.get<string[]>(this.basehost + '/v1/projects/tables/names')
       .subscribe(
         (names) => {
           this.store.dispatch(new TablesActions.SetNamesAction(names))
+        },(err)=>{
+          console.log('getTableNames dss err: ', err)
         }
       );
   }
 
   postTableDefinition(definition: TableDefinitionModel) {
     this.httpClient.post(this.basehost + '/v1/projects/tables/definition', definition)
-      .subscribe(
+      .subscribe(()=>{
 
+        },(err)=>{
+          console.log('postTableDefinition dss err: ', err)
+        }
       );
   }
 
@@ -61,6 +67,8 @@ export class DataStorageService {
     this.httpClient.get<UserModel[]>(this.basehost + '/v1/users')
       .subscribe((users: UserModel[]) => {
         this.store.dispatch(new UsersActions.SetUsersAction(users));
+      },(err)=>{
+        console.log('getUsers dss err: ', err)
       });
   }
 
@@ -68,6 +76,8 @@ export class DataStorageService {
     this.httpClient.get<RoleModel[]>(this.basehost + '/v1/roles/details')
       .subscribe((roles: RoleModel[]) => {
         this.store.dispatch(new UsersActions.SetRolesAction(roles));
+      },(err)=>{
+        console.log('getRoles dss err: ', err)
       });
   }
 
@@ -76,6 +86,8 @@ export class DataStorageService {
       .subscribe((user: UserModel) => {
         this.store.dispatch(new UsersActions.AddRoleToUser(user));
         return true;
+      },(err)=>{
+        console.log('addRoleToUser dss err: ', err)
       });
   }
 
@@ -86,6 +98,8 @@ export class DataStorageService {
           data.user.roleNames.splice(data.user.roleNames.indexOf(data.rolename), 1);
           this.store.dispatch(new UsersActions.RemoveRoleFromUser(data.user));
         }
+      },(err)=>{
+        console.log('removeRoleFromUser dss err: ', err)
       });
   }
 
@@ -94,6 +108,8 @@ export class DataStorageService {
       .subscribe((role: RoleModel) => {
         this.store.dispatch(new UsersActions.AddUserToRole(role));
         return true;
+      },(err)=>{
+        console.log('addUserToRole dss err: ', err)
       });
   }
 
@@ -114,25 +130,25 @@ export class DataStorageService {
   }
 
   addNewRow(tableName: string, newRow: RowContentModel) {
-    console.log(this.httpClient.post<RowContentModel>(this.basehost + '/v1/projects/tables/' + tableName + '/row', newRow)
+    this.httpClient.post<RowContentModel>(this.basehost + '/v1/projects/tables/' + tableName + '/row', newRow)
       .subscribe((savedRow: RowContentModel) => {
-          console.log('addNewRow dss OK: ', savedRow)
+          // console.log('addNewRow dss OK: ', savedRow)
           this.store.dispatch(new TablesActions.AddRowAction(savedRow));
         },
         err => {
           console.log('addNewRow dss err: ', err)
-        }));
+        });
   }
 
   updateRow(tableName: string, updatedRow: RowContentModel) {
-    console.log(this.httpClient.put<RowContentModel>(this.basehost + '/v1/projects/tables/' + tableName + '/row', updatedRow)
+    this.httpClient.put<RowContentModel>(this.basehost + '/v1/projects/tables/' + tableName + '/row', updatedRow)
       .subscribe(
         (savedRow: RowContentModel) => {
-          console.log("updateRow dss OK: ", savedRow);
+          // console.log("updateRow dss OK: ", savedRow);
           this.store.dispatch(new TablesActions.UpdateRowAction(savedRow));
         }, err => {
           console.log("updateRow dss ERR: ", err)
-        })
+        }
     );
   }
 
@@ -142,57 +158,90 @@ export class DataStorageService {
           this.store.dispatch(new UsersActions.SetCurrentUserRolenames(roles));
         },
         (err) => {
-          console.log(err => {
             console.log('getUserRoles dss ERR: ', err)
-          })
-        });
+          }
+      );
   }
 
   saveNewRole(role: { name: string, description: string }) {
-    console.log(this.httpClient.post<RoleModel>(this.basehost + '/v1/roles/' + role.name, role.description)
+    this.httpClient.post<RoleModel>(this.basehost + '/v1/roles/' + role.name, role.description)
       .subscribe((savedRole: RoleModel) => {
-          console.log('saveNewRole dss OK: ', savedRole)
+          // console.log('saveNewRole dss OK: ', savedRole)
           this.store.dispatch(new UsersActions.AddRoleAction(savedRole));
         },
         err => {
           console.log('saveNewRole dss err: ', err)
-        }));
+        });
   }
 
   deleteRole(roleName: string) {
-    console.log(this.httpClient.delete<boolean>(this.basehost + '/v1/roles/' + roleName)
+    this.httpClient.delete<boolean>(this.basehost + '/v1/roles/' + roleName)
       .subscribe((status: boolean) => {
-          console.log('deleteRole dss OK: ', status)
+          // console.log('deleteRole dss OK: ', status)
           if (status) {
             this.store.dispatch(new UsersActions.DeleteRoleAction(roleName));
           }
         },
         err => {
           console.log('deleteRole dss err: ', err)
-        }));
+        });
   }
 
   deleteUser(username: string) {
-    console.log(this.httpClient.delete<boolean>(this.basehost + '/v1/users/' + username)
+    this.httpClient.delete<boolean>(this.basehost + '/v1/users/' + username)
       .subscribe((status: boolean) => {
-          console.log('deleteUser dss OK: ', status)
+          // console.log('deleteUser dss OK: ', status)
           if (status) {
             this.store.dispatch(new UsersActions.DeleteUserAction(username));
           }
         },
         err => {
           console.log('deleteUser dss err: ', err)
-        }));
+        });
   }
 
   saveNewUser(user: UserModel) {
-    console.log(this.httpClient.post<UserModel>(this.basehost + '/v1/users',user)
+    this.httpClient.post<UserModel>(this.basehost + '/v1/users', user)
       .subscribe((savedUser: UserModel) => {
-          console.log('saveNewUser dss OK: ', savedUser)
+          // console.log('saveNewUser dss OK: ', savedUser)
           this.store.dispatch(new UsersActions.AddUserAction(savedUser));
         },
         err => {
           console.log('saveNewUser dss err: ', err)
-        }));
+        });
+  }
+
+  saveNewTask(newTask:TaskModel, rowId: number) {
+    this.httpClient.post<TaskModel[]>(this.basehost + '/v1/projects/tables/rows/' + rowId + '/tasks', newTask)
+      .subscribe((tasks: TaskModel[]) => {
+           // console.log('saveNewTask dss OK: ', tasks)
+          this.store.dispatch(new TablesActions.SetRowsTasksAction({tasks: tasks, rowId: rowId}));
+        },
+        err => {
+           console.log('saveNewTask dss err: ', err)
+        });
+  }
+
+  setTableUsers(tableName: string) {
+    console.log(tableName);
+    this.httpClient.get<UserModel[]>(this.basehost + '/v1/users/table/' + tableName)
+      .subscribe((users: UserModel[]) => {
+          this.store.dispatch(new TablesActions.SetTableUsers(users));
+        },
+        (err) => {
+          console.log('setTableUsers dss ERR: ', err)
+        }
+      );
+  }
+
+  onAssignUserToTask(rowId: number, taskId: number, username: string) {
+    this.httpClient.post<TaskModel>(this.basehost + '/v1/projects/tables/rows/tasks/' + taskId,username)
+      .subscribe((task: TaskModel) => {
+          console.log('onAssignUserToTask dss OK: ', task)
+          this.store.dispatch(new TablesActions.UpdateRowsTaskAction({rowId: rowId,task: task}));
+        },
+        err => {
+          console.log('onAssignUserToTask dss err: ', err)
+        });
   }
 }

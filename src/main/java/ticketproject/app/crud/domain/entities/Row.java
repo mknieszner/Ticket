@@ -54,14 +54,23 @@ public class Row {
 
 
 
-  public Row(final Long id, final String name, final List<ColumnValue> columnValues) {
+  public Row(final Long id, final String name, final List<ColumnValue> columnValues, final List<Task> tasks) {
     this.id = id;
     this.name = name;
     this.columnValues.addAll(columnValues);
+    this.tasks.addAll(tasks);
   }
 
   @Override
   public String toString() {
     return "Row{" + "id=" + id + ", name='" + name + '\'' + ", columnValues=" + columnValues + ", projectTable=" + projectTable.getId() + '}';
   }
+
+  @OneToMany(
+      cascade = CascadeType.ALL,
+      fetch = FetchType.EAGER
+  )
+  @Cascade(org.hibernate.annotations.CascadeType.ALL)
+  @OrderColumn
+  List<Task> tasks = new ArrayList<>();
 }

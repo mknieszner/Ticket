@@ -108,6 +108,12 @@ public class UsersAndRolesController {
     //return dbService.createUser(userDto);
   }
 
+  @GetMapping(value = "users/table/{tablename}")
+  @PreAuthorize("hasAnyAuthority('ROLE_ADMIN','#tablename')")
+  public List<String> getTableUsers(@PathVariable final String tablename) {
+    return userService.getTableUsers(tablename);
+  }
+
 
   @DeleteMapping(value = "users/{username}")
   @PreAuthorize("hasAuthority('ROLE_ADMIN')")

@@ -17,12 +17,14 @@ import java.util.stream.Collectors;
 @Getter
 public class RowMapper {
   private final ColumnValueMapper columnValueMapper;
+  private final TaskMapper taskMapper;
 
   public RowDto mapToRowDto(final Row row) {
     return new RowDto(
         row.getId(),
         row.getName(),
         columnValueMapper.mapToColumnValueDtoList(row.getColumnValues()),
+        taskMapper.mapTasksToTaskDtos(row.getTasks()),
         row.getCreatedBy(),
         row.getCreatedOn(),
         row.getLastModifiedBy(),
@@ -34,7 +36,8 @@ public class RowMapper {
     return new Row(
         rowDto.getId(),
         rowDto.getName(),
-        columnValueMapper.mapToTableColumnList(rowDto.getColumnValueDtos())
+        columnValueMapper.mapToTableColumnList(rowDto.getColumnValueDtos()),
+        taskMapper.mapTaskDtosToTasks(rowDto.getTaskDtos())
     );
   }
 
@@ -61,7 +64,8 @@ public class RowMapper {
         username,
         new Date(),
         columnValueMapper.mapToTableColumnList(newRow.getColumnValueDtos()),
-        oldRow.getProjectTable()
+        oldRow.getProjectTable(),
+        oldRow.getTasks()
     );
   }
 

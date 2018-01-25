@@ -10,14 +10,13 @@ import {RolesComponent} from './roles/roles.component';
 import {TablesComponent} from './tables/tables.component';
 import {HomeComponent} from './home/home.component';
 import {RouterModule, Routes} from '@angular/router';
-import {ColumnTypeComponent} from './definition/column-type/column-type.component';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
-import {RowComponent} from './tables/table/row.component';
+import {RowComponent} from './tables/row/row.component';
 import {StoreModule} from '@ngrx/store';
 import { tablesReducers } from './shared/store/table/tables.reducers';
 import { usersReducers } from './shared/store/user/users.reducers';
 import {KeyPipe} from './tables/key.pipe';
-import {QuestionControlService} from './tables/table/question-control.service';
+import {QuestionControlService} from './tables/row/question-control.service';
 import {TableHeaderComponent} from './tables/table-header/table-header.component';
 import {UserDetailsComponent} from './user/user-details/user-details.component';
 import {RoleDetailsComponent} from './roles/role-details/role-details.component';
@@ -25,9 +24,15 @@ import {DataStorageService} from "./shared/data-storage.service";
 import {MenuComponent} from './tables/menu/menu.component';
 import {OauthService} from "./shared/oauth.service";
 import {AuthInterceptor} from "./shared/auth.interceptor";
-import {OAuthModule} from "angular-oauth2-oidc";
 import {AuthCookie} from "./shared/auth-cookies-handler";
-import { TableDetailsComponent } from './tables/table-details/table-details.component';
+import { RowDetailsComponent } from './tables/row-details/row-details.component';
+import {FilterService} from "./tables/row/filter.service";
+import { TaskComponent } from './tables/task/task.component';
+import { TaskDetailsComponent } from './tables/task/task-details/task-details.component';
+import {tasksReducers} from "./shared/store/task/tasks.reducers";
+import {StoreRouterConnectingModule} from "@ngrx/router-store";
+import {StoreDevtools, StoreDevtoolsModule} from "@ngrx/store-devtools";
+import { environment } from './../environments/environment';
 
 
 
@@ -51,27 +56,29 @@ const appRoutes: Routes = [
     TablesComponent,
     RowComponent,
     HomeComponent,
-    ColumnTypeComponent,
     KeyPipe,
     TableHeaderComponent,
     UserDetailsComponent,
     RoleDetailsComponent,
     MenuComponent,
-    TableDetailsComponent,
+    RowDetailsComponent,
+    TaskComponent,
+    TaskDetailsComponent,
   ],
   imports: [
     BrowserModule,
     FormsModule,
     ReactiveFormsModule,
     HttpClientModule,
-    OAuthModule.forRoot(),
     RouterModule.forRoot(appRoutes),
-    StoreModule.forRoot({tables: tablesReducers, users: usersReducers})
-    // EffectsModule.forRoot([TableContentFilterEffects])
+    StoreModule.forRoot({tables: tablesReducers, users: usersReducers, tasks: tasksReducers}),
+    StoreRouterConnectingModule,
+    !environment.production ? StoreDevtoolsModule.instrument() : []
   ],
   providers: [
     QuestionControlService,
     DataStorageService,
+    FilterService,
     OauthService,
     AuthCookie,
     {provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi:true}
