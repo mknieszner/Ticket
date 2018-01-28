@@ -7,10 +7,12 @@ import {Client} from 'stompjs/lib/stomp.js';
 
 @Injectable()
 export class TaskInfoService {
+  public stompClient: Client;
   constructor(private wsService: WebSocketService) {
   }
 
   getClient(): Client {
-      return this.wsService.connect()
+    this.stompClient = this.wsService.connect();
+      return this.stompClient;
   }
 }

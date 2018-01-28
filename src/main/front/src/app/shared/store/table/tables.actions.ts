@@ -161,7 +161,6 @@ export class UpdateRowsTaskAction implements Action {
   readonly type = UPDATE_ROWS_TASK;
 
   constructor(public payload: { rowId: number, task: TaskModel } ) {
-    console.log('payload', payload)
   }
 }
 
@@ -169,7 +168,6 @@ export class DeleteTask implements Action {
   readonly type = DELETE_ROWS_TASK;
 
   constructor(public payload: { taskId: number, rowId: number } ) {
-    console.log('payload', payload)
   }
 }
 

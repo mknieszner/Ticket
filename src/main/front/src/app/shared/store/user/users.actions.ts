@@ -170,7 +170,7 @@ export class SetNewWebSocketClient implements Action {
   }
 }
 
-export class TaskInfoAction implements Action {
+export class SetTaskInfoAction implements Action {
   readonly type = SET_TASK_INFO;
 
   constructor(public payload: boolean) {
@@ -197,5 +197,5 @@ export type UserActions =
   DeleteCurrentUserAction |
   SwitchTableReset |
   SetNewWebSocketClient |
-  TaskInfoAction;
+  SetTaskInfoAction;
 

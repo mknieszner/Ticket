@@ -1,4 +1,4 @@
-import {Injectable} from "@angular/core";
+import {Injectable, OnInit} from "@angular/core";
 import {HttpClient} from "@angular/common/http";
 import 'rxjs/add/operator/map';
 import {RowContentModel, TableDefinitionModel, TaskModel} from "./table.model";
@@ -11,14 +11,19 @@ import {UserModel} from "../user/user.model";
 import {RoleModel} from "../roles/role.model";
 import {OauthService} from "./oauth.service";
 import * as TaskActions from "./store/task/tasks.actions";
+import {Observable} from "rxjs/Observable";
+import {Client} from 'stompjs/lib/stomp.js';
+import {TaskInfoService} from "./socket/task-info.service";
 
 @Injectable()
 export class DataStorageService {
+  stompClientState: Observable<Client>;
+  stompClient: Client;
   basehost = fromServerModel.baseUrl;
 
   constructor(private httpClient: HttpClient,
               private store: Store<fromAppReducers.AppState>,
-              private oauth: OauthService) {
+              private taskInfoService: TaskInfoService) {
   }
 
   getTableHeaderByName(tableName: string) {
@@ -236,8 +241,9 @@ export class DataStorageService {
   onAssignUserToTask(rowId: number, taskId: number, username: string) {
     this.httpClient.post<TaskModel>(this.basehost + '/v1/projects/tables/rows/tasks/' + taskId,username)
       .subscribe((task: TaskModel) => {
-          console.log('onAssignUserToTask dss OK: ', task)
+          // console.log('onAssignUserToTask dss OK: ', task)
           this.store.dispatch(new TablesActions.UpdateRowsTaskAction({rowId: rowId,task: task}));
+          this.taskInfoService.stompClient.send('/app/newTasks/'+username, {});
         },
         err => {
           console.log('onAssignUserToTask dss err: ', err)

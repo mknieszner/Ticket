@@ -17,7 +17,6 @@ export class WebSocketService {
   }
 
   public connect(): Client {
-
       return this.connectWS();
   }
 
@@ -28,9 +27,8 @@ export class WebSocketService {
       console.log('CONNECT CONNECT', frame);
       this.store.select('users', 'currentUser').subscribe((username: string) => {
         this.stompClient.subscribe('/topic/newTasks/' + username, (messageOutput) => {
-          console.log(messageOutput);
-          this.store.dispatch(new UserActions.TaskInfoAction(true));
-          console.log('new UserActions.TaskInfoAction(true)');
+          // console.log(messageOutput);
+          this.store.dispatch(new UserActions.SetTaskInfoAction(true));
         });
       })
     });

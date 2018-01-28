@@ -12,10 +12,8 @@ export class AuthInterceptor implements HttpInterceptor {
   }
 
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<any> {
-    console.log('intercept');
-    console.log(req);
+    console.log('INTERCPETED REQ:',req);
     if (this.cookie.getAuth()) {
-      console.log('this.cookie.getAuth()',this.cookie.getAuth())
       if (req.method == 'GET') {
         const headers = new HttpHeaders({'Content-type': 'multipart/form-data', 'Authorization': 'Bearer ' + this.cookie.getAuth()});
         // TODO'multipart/form-data' -> urlencoded??
@@ -27,7 +25,6 @@ export class AuthInterceptor implements HttpInterceptor {
         return next.handle(updatedReq);
       }
     } else {
-      console.log('else' + req)
       return next.handle(req);
     }
   }

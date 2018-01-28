@@ -13,6 +13,7 @@
         <form class="form-group" *ngIf="(tableUsers| async).length != 0">
           <div class="form-group">
             <select #userContol class="form-control-lg">
+              <option>-Select user-</option>
               <option *ngFor="let tableUser of (tableUsers| async)"> {{ tableUser }}</option>
             </select>
             <button class="btn btn-dark-sm" (click)="onAssignUserToTask(userContol.value)">+</button>

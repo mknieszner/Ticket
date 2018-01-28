@@ -21,23 +21,16 @@ export class HeaderComponent implements OnInit {
   username: Observable<string>;
   currentUserRoles: Observable<string[]>;
   isAdmin: Observable<boolean>;
-  stompClientState: Observable<Client>;
-  stompClient: Client;
   newTaskState: Observable<boolean>;
   currentUsername: string;
 
   constructor(private store: Store<fromAppReducers.AppState>,
               private oauth: OauthService,
-              private dss: DataStorageService,
-              private taskInfo: TaskInfoService) {
+              private dss: DataStorageService,) {
   }
 
   ngOnInit() {
     this.newTaskState = this.store.select('users', 'newTaskInfo');
-    this.stompClientState = this.store.select('users', 'currentSocketClient');
-    this.stompClientState.forEach((stompClient: Client) => {
-      this.stompClient = stompClient;
-    });
     this.token = this.store.select('users', 'token');
     this.username = this.store.select('users', 'currentUser');
     this.username.subscribe((username: string) => {
@@ -51,7 +44,7 @@ export class HeaderComponent implements OnInit {
         if (role == 'ROLE_ADMIN') {
           condition = true;
         }
-      })
+      });
       return condition;
     });
   }
@@ -61,11 +54,7 @@ export class HeaderComponent implements OnInit {
     this.store.dispatch(new TablesActions.ResetStore());
   }
 
-  sendTaskInfo() {
-    this.stompClient.send('/app/newTasks/mk', {});
-  }
-
   onNewTasksSeen() {
-    this.store.dispatch(new UserActions.TaskInfoAction(false))
+    this.store.dispatch(new UserActions.SetTaskInfoAction(false))
   }
 }
