@@ -28,11 +28,15 @@ import {AuthCookie} from "./shared/auth-cookies-handler";
 import { RowDetailsComponent } from './tables/row-details/row-details.component';
 import {FilterService} from "./tables/row/filter.service";
 import { TaskComponent } from './tables/task/task.component';
-import { TaskDetailsComponent } from './tables/task/task-details/task-details.component';
 import {tasksReducers} from "./shared/store/task/tasks.reducers";
 import {StoreRouterConnectingModule} from "@ngrx/router-store";
 import {StoreDevtools, StoreDevtoolsModule} from "@ngrx/store-devtools";
 import { environment } from './../environments/environment';
+import {UserTaskComponent} from "./user/user-task/user-task.component";
+import {TaskInfoService} from "./shared/socket/task-info.service";
+import {WebSocketService} from "./shared/socket/web-socket.service";
+// import {TaskInfoService} from "./shared/socket/task-info.service";
+// import {WebSocketService} from "./shared/socket/web-socket.service";
 
 
 
@@ -63,7 +67,7 @@ const appRoutes: Routes = [
     MenuComponent,
     RowDetailsComponent,
     TaskComponent,
-    TaskDetailsComponent,
+    UserTaskComponent
   ],
   imports: [
     BrowserModule,
@@ -81,6 +85,8 @@ const appRoutes: Routes = [
     FilterService,
     OauthService,
     AuthCookie,
+    TaskInfoService,
+    WebSocketService,
     {provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi:true}
     // {provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi:true}
     ],

@@ -8,6 +8,7 @@ import {Observable} from "rxjs/Observable";
 import {Form, FormArray, FormControl, FormGroup} from "@angular/forms";
 import * as UsersActions from "../../shared/store/user/users.actions";
 import {el} from "@angular/platform-browser/testing/src/browser_util";
+import {TaskModel} from "../../shared/table.model";
 
 @Component({
   selector: 'app-user-details',
@@ -21,6 +22,7 @@ export class UserDetailsComponent implements OnInit {
   roleForm: FormGroup;
   newUserMode: Observable<boolean>;
   newUserForm: FormGroup;
+  selectedTask: TaskModel;
 
   constructor(private store: Store<fromAppReducers.AppState>,
               private dss: DataStorageService) {
@@ -83,5 +85,9 @@ export class UserDetailsComponent implements OnInit {
   onSubmitUser(elements: HTMLFormControlsCollection, length: number) {
     console.log(this.newUserForm.value);
     this.dss.saveNewUser(this.newUserForm.value);
+  }
+
+  onSelectTask(taskDto: TaskModel) {
+    this.selectedTask = taskDto;
   }
 }

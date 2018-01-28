@@ -31,7 +31,9 @@ public class Task {
   @Enumerated(EnumType.STRING)
   private Status status;
 
-  @ManyToMany(cascade = { CascadeType.ALL })
+  @ManyToMany(
+      fetch = FetchType.EAGER
+  )
   @JoinTable(
       name = "USER_TASK",
       joinColumns = { @JoinColumn(name = "USER_id") },

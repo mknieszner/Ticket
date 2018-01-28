@@ -20,7 +20,8 @@ export class TablesComponent implements OnInit {
 
 
   constructor(private contentStore: Store<fromAppReducers.AppState>,
-              private dss: DataStorageService) {
+              private dss: DataStorageService,
+              ) {
   }
 
   ngOnInit() {

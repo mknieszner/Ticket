@@ -25,6 +25,7 @@ export class RowDetailsComponent implements OnInit, OnDestroy {
   unlockFields: boolean;
   newRowMode: Observable<boolean>;
   selectedTask: TaskModel = null;
+  selesctedRow: RowContentModel;
 
   constructor(private qcs: QuestionControlService,
               private store: Store<fromAppReducers.AppState>,
@@ -38,6 +39,7 @@ export class RowDetailsComponent implements OnInit, OnDestroy {
     this.header = this.store.select('tables', 'tableDefinition');
     this.row.subscribe(row => {
       this.createUpdateRowForm(row)
+      this.selesctedRow = row;
     });
     this.newRowMode = this.store.select('tables', 'newRowMode');
     this.newRowMode.subscribe((action: boolean) => {
@@ -70,6 +72,7 @@ export class RowDetailsComponent implements OnInit, OnDestroy {
   }
 
   createUpdateRowForm(row) {
+
     if (row) {
       this.updateRowForm =
         new FormGroup({
@@ -183,5 +186,10 @@ export class RowDetailsComponent implements OnInit, OnDestroy {
   onShowTaskDetails(task: TaskModel) {
     this.store.dispatch(new TaskActions.SetTaskDetailsModeAction(true));
     this.store.dispatch(new TaskActions.SetShowedTaskAction(task));
+  }
+
+  onDeleteTask(taskId: number) {
+    console.log('onDeleteTask', taskId, this.selesctedRow.id)
+    this.dss.deleteTask(taskId, this.selesctedRow.id);
   }
 }

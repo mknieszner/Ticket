@@ -33,6 +33,7 @@ const initialTableState: TableState = {
 };
 
 export function tablesReducers(state: TableState = initialTableState, action: TableActions.TableActions) {
+
   switch (action.type) {
     case TableActions.ADD_ROW:
       return {
@@ -123,9 +124,27 @@ export function tablesReducers(state: TableState = initialTableState, action: Ta
         ...state,
         tableContent: [...updateTaskUsers(state.tableContent, action.payload)]
       };
+    case TableActions.DELETE_ROWS_TASK:
+      return {
+        ...state,
+        tableContent: [...deleteRowsTask(state.tableContent, action.payload)]
+      };
     default:
       return state;
   }
+}
+
+function deleteRowsTask(tableContent: RowContentModel[], payload: {rowId: number, taskId: number}): RowContentModel[] {
+  tableContent.forEach((row: RowContentModel,i) => {
+    if (row.id == payload.rowId) {
+      row.taskDtos.forEach((taskDto: TaskModel,j) => {
+        if (taskDto.id == payload.taskId) {
+          tableContent[i].taskDtos.splice(j,1);
+        }
+      })
+    }
+  });
+  return tableContent;
 }
 
 function updateTaskUsers(tableContent: RowContentModel[], payload: { rowId: number, task: TaskModel }): RowContentModel[] {

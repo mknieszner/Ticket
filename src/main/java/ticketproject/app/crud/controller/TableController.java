@@ -28,6 +28,11 @@ public class TableController {
   @Autowired
   private TableValidator tableValidator;
 
+  @DeleteMapping(value = "projects/tables/rows/tasks/{taskId}")
+  public boolean deleteTask(@PathVariable final Long taskId, final Principal principal) {
+    return tableService.deleteTask(taskId,principal.getName());
+  }
+
   @PostMapping(value = "projects/tables/rows/tasks/{taskId}")
   public TaskDto assignUserToTask(@PathVariable final Long taskId, @RequestBody final String username, final Principal principal) {
     return tableService.assignUserToTaskIfAuthorized(taskId,username,principal.getName());

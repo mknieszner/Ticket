@@ -78,7 +78,10 @@ public class User implements Serializable {
     return username.equals(user.username);
   }
 
-  @ManyToMany(mappedBy = "users")
+  @ManyToMany(
+      mappedBy = "users",
+      fetch = FetchType.EAGER
+  )
   List<Task> tasks = new ArrayList<>();
 
   @Override

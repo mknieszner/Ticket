@@ -9,9 +9,8 @@ import * as fromAppReducers from './store/app.reducers'
 import * as fromServerModel from './server.model'
 import {UserModel} from "../user/user.model";
 import {RoleModel} from "../roles/role.model";
-import {FormControl} from "@angular/forms";
 import {OauthService} from "./oauth.service";
-import {TableActions} from "./store/table/tables.actions";
+import * as TaskActions from "./store/task/tasks.actions";
 
 @Injectable()
 export class DataStorageService {
@@ -243,5 +242,19 @@ export class DataStorageService {
         err => {
           console.log('onAssignUserToTask dss err: ', err)
         });
+  }
+
+  deleteTask(taskId: number, rowId: number) {
+    console.log('deleteTask',taskId, rowId)
+    this.httpClient.delete<boolean>(this.basehost + '/v1/projects/tables/rows/tasks/' + taskId)
+      .subscribe((response) => {
+        if (response) {
+          this.store.dispatch(new TaskActions.OnDeleteTask(taskId));
+          this.store.dispatch(new TablesActions.DeleteTask({rowId: rowId, taskId: taskId}));
+        }
+      }, err => {
+        console.log('onAssignUserToTask dss err: ', err)
+
+      });
   }
 }

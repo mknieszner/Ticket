@@ -23,6 +23,12 @@ export function tasksReducers(state: TaskState = initialTableState, action: Task
         ...state,
         showedTask: action.payload
       };
+    case TaskActions.ON_DELETE_TASK:
+      state.taskDetailsMode = false;
+      state.showedTask = null;
+      return {
+        state
+      };
     default:
       return state;
   }

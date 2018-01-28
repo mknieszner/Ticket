@@ -4,9 +4,12 @@ import {UserModel} from "../../../user/user.model";
 import {RoleModel} from "../../../roles/role.model";
 import {TableState} from "../table/tables.reducers";
 import {Token} from "../../auth.model";
+import {Client} from 'stompjs/lib/stomp.js';
 
 
 export interface UserState {
+  newTaskInfo: boolean
+  currentSocketClient: Client
   currentUser: string,
   currentUserRoles: string[],
   token: Token,
@@ -17,7 +20,8 @@ export interface UserState {
 }
 
 const initialUserState: UserState = {
-
+  newTaskInfo: false,
+  currentSocketClient: null,
   currentUser: '',
   currentUserRoles: [],
   token: null,
@@ -116,6 +120,21 @@ export function usersReducers(state: UserState = initialUserState, action: UserA
         currentUser: state.currentUser,
         currentUserRoles: state.currentUserRoles,
         token: state.token,
+      };
+    case UserActions.SET_NEW_WEB_SOCKET_CLIENT:
+      return {
+        ...state,
+        currentSocketClient: action.payload
+      };
+    case UserActions.SET_NEW_WEB_SOCKET_CLIENT:
+      return {
+        ...state,
+        currentSocketClient: action.payload
+      };
+    case UserActions.SET_TASK_INFO:
+      return {
+        ...state,
+        newTaskInfo: action.payload
       };
     default:
       return state;

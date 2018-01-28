@@ -37,8 +37,12 @@ dependencies {
 	compile('mysql:mysql-connector-java:5.1.16')
     testCompile("junit:junit")
 	compile 'org.springframework:spring-webmvc'
-	testCompile group: 'org.springframework.security', name: 'spring-security-test', version: '4.0.0.RELEASE'
-
+	compile group: 'org.springframework', name: 'spring-websocket'
+	compile group: 'org.springframework', name: 'spring-messaging'
+	compile group: 'org.springframework.security', name: 'spring-security-messaging'
+	compile group: 'com.fasterxml.jackson.core', name: 'jackson-core'
+    compile group: 'com.fasterxml.jackson.core', name: 'jackson-databind'
+	testCompile group: 'org.springframework.security', name: 'spring-security-test'
 	compile("org.springframework.boot:spring-boot-starter-thymeleaf")
 	compile group: 'org.springframework', name: 'spring-context-support', version: '4.1.0.RELEASE'
 

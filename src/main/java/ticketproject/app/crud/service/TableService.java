@@ -249,4 +249,16 @@ public class TableService {
       throw new RuntimeException(String.format("User:%s does not have authority:%s TaskDto: %s", username, tableName, task.toString()));
     } // TODO: remove tablename and task from exception (tests)
   }
+
+  public boolean deleteTask(final Long taskId, final String username) {
+    Task task = taskRepository.findOne(taskId);
+    String tableName = rowRepository.findByTasks(task).getProjectTable().getName();
+    if (userRepository.findByUsername(username).getRoles() //TODO cache roles???
+        .stream()                                          // TODO: validator????
+        .map(Role::getName)
+        .anyMatch((roleName) -> roleName.equals(tableName) || roleName.equals("ROLE_ADMIN"))) {
+      taskRepository.delete(taskId);
+    }
+    return true;
+  }
 }

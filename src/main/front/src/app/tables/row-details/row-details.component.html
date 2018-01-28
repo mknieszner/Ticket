@@ -88,9 +88,10 @@
               </div>
               <div *ngSwitchCase="'EN'" class="form-group" style="margin-top: 10px">
                 <label>{{(header | async)[0].columnDetailDefinitionDtoList[j].name}}</label>
-                <select class="form-control-lg" formControlName="EN">
-                  <option *ngFor="let option of (header | async)[0].columnDetailDefinitionDtoList[j].optionList"
-                  >{{option.value}}
+                <select class="form-control-lg" formControlName="EN" >
+                  <option selected> -Select value- </option>
+                  <option *ngFor="let option of (header | async)[0].columnDetailDefinitionDtoList[j].optionList">
+                    {{option.value}}
                   </option>
                 </select>
               </div>
@@ -104,12 +105,6 @@
             </div>
           </div>
         </div>
-        <button type="button" class="btn btn-success"
-                (click)="onSaveNewRow()">Post form
-        </button>
-        <button type="button" class="btn btn-danger"
-                (click)="onAbortNewRow()">Abort
-        </button>
       </form>
     </div>
   </div>
@@ -279,6 +274,7 @@
           <div class="pull-right"><button class="btn btn btn-outline-dark bg-white" (click)="onShowTaskDetails(task)"> Details </button></div>
         </li>
         <div *ngIf="task.id == selectedTask?.id">
+          <li class="list-group-item"> <button (click)="onDeleteTask(task.id)"> Delete Task </button></li>
           <li class="list-group-item"> ID: {{task.id}}</li>
           <li class="list-group-item"> Name: {{task.name}}</li>
           <li class="list-group-item"> Description: {{task.description}}</li>

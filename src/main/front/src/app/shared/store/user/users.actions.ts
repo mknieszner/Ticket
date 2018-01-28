@@ -2,6 +2,7 @@ import {Action} from "@ngrx/store";
 import {UserModel} from "../../../user/user.model";
 import {RoleModel} from "../../../roles/role.model";
 import {Token} from "../../auth.model";
+import {Client} from 'stompjs/lib/stomp.js';
 
 export const SET_NEW_USER_MODE = 'SET_NEW_USER_MODE';
 export const SET_USERS = 'SET_USERS';
@@ -25,6 +26,9 @@ export const DELETE_TOKEN = 'DELETE_TOKEN';
 export const DELETE_CURRENT_USER = 'DELETE_CURRENT_USER';
 export const SET_CURRENT_USER = 'SET_CURRENT_USER';
 export const SWITCH_TABLE_RESET = 'SWITCH_TABLE_RESET';
+
+export const SET_NEW_WEB_SOCKET_CLIENT = 'SET_NEW_WEB_SOCKET_CLIENT';
+export const SET_TASK_INFO = 'SET_TASK_INFO';
 
 
 
@@ -159,6 +163,20 @@ export class SwitchTableReset implements Action {
   }
 }
 
+export class SetNewWebSocketClient implements Action {
+  readonly type = SET_NEW_WEB_SOCKET_CLIENT;
+
+  constructor(public payload: Client) {
+  }
+}
+
+export class TaskInfoAction implements Action {
+  readonly type = SET_TASK_INFO;
+
+  constructor(public payload: boolean) {
+  }
+}
+
 export type UserActions =
   SetCurrentUserRolenames |
   DeleteUserAction|
@@ -177,5 +195,7 @@ export type UserActions =
   DeleteTokenAction |
   SetCurrentUserAction |
   DeleteCurrentUserAction |
-  SwitchTableReset;
+  SwitchTableReset |
+  SetNewWebSocketClient |
+  TaskInfoAction;
 

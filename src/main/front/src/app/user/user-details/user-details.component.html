@@ -33,7 +33,7 @@
       <td>TASKS:</td>
       <td>
         <ul>
-          <li *ngFor="let taskDto of user.taskDtos"> {{ taskDto.name }} </li>
+          <li *ngFor="let taskDto of user.taskDtos" (click)="onSelectTask(taskDto)"> {{ taskDto.name }} </li>
         </ul>
       </td>
     </tr>
@@ -91,3 +91,8 @@
     </div>
   </form>
 </div>
+
+<div *ngIf="selectedTask">
+  <app-user-task [task]="selectedTask"></app-user-task>
+</div>
+

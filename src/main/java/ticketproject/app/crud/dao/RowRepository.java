@@ -9,9 +9,10 @@ import java.util.List;
 
 public interface RowRepository extends CrudRepository<Row, Long> {
   @Override
-  Row findOne(Long Id);
+  Row findOne(Long id);
   Row findByProjectTableIdAndId(Long tableId, Long rowId);
   List<Row> findAllByProjectTable_Id(Long tableId);
   List<Row> findAllByProjectTable_Name(String tableName);
   Row findByTasksIsContaining(List<Task> tasks);
+  Row findByTasks(Task task);
 }

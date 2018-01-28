@@ -28,6 +28,7 @@ export const SWITCH_TABLE_RESET = 'SWITCH_TABLE_RESET';
 export const SET_ROW_TASKS = 'SET_ROW_TASKS';
 export const SET_TABLE_USERS = 'SET_TABLE_USERS';
 export const UPDATE_ROWS_TASK = 'UPDATE_ROWS_TASK';
+export const DELETE_ROWS_TASK = 'DELETE_ROWS_TASK';
 
 
 export class SetNewRowModeAction implements Action {
@@ -164,6 +165,13 @@ export class UpdateRowsTaskAction implements Action {
   }
 }
 
+export class DeleteTask implements Action {
+  readonly type = DELETE_ROWS_TASK;
+
+  constructor(public payload: { taskId: number, rowId: number } ) {
+    console.log('payload', payload)
+  }
+}
 
 export type TableActions =
   AddRowAction |
@@ -184,4 +192,5 @@ export type TableActions =
   SwitchTableReset|
   SetRowsTasksAction |
   SetTableUsers |
-  UpdateRowsTaskAction;
+  UpdateRowsTaskAction |
+  DeleteTask;

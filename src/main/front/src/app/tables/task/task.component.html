@@ -10,8 +10,7 @@
     <ul class="list-group" style="margin-bottom: 0">
       <li class="list-group-item border border-dark" style="border: none">
         {{ (showedTask | async)?.userNames.length <= 0 ? 'No users' : 'Assigned Users:'}}
-
-        <form class="form-group">
+        <form class="form-group" *ngIf="(tableUsers| async).length != 0">
           <div class="form-group">
             <select #userContol class="form-control-lg">
               <option *ngFor="let tableUser of (tableUsers| async)"> {{ tableUser }}</option>
@@ -21,13 +20,17 @@
           </div>
         </form>
       </li>
-      <li class="list-group-item" *ngFor=" let username of (showedTask | async)?.userNames">{{username}}</li>
+      <div  *ngFor=" let username of (showedTask | async)?.userNames">
+        <li class="list-group-item">{{username}}</li>
+      </div>
     </ul>
     <ul class="list-group" style="margin-bottom: 0">
-      <li class="list-group-item border border-dark" style="border: none"> {{ (showedTask | async)?.taskDtos.length <= 0 ? 'No tasks' : 'Assigned Tasks:'}}</li>
-      <li class="list-group-item" *ngFor="let taskDto of (showedTask | async)?.taskDtos">
-        <!--<app-task></app-task>-->
-      </li>
+      <li class="list-group-item border border-dark"> {{ (showedTask | async)?.taskDtos.length <= 0 ? 'No tasks' : 'Assigned Tasks:'}}</li>
+      <div  *ngFor="let taskDto of (showedTask | async)?.taskDtos">
+        <li class="list-group-item">
+          <!--<app-task></app-task>-->
+        </li>
+      </div>
     </ul>
   </ul>
 </div>

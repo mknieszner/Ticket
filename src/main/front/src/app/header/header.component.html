@@ -15,6 +15,8 @@
     </ul>
   </div>
   <p class="nav navbar-text font-weight-bold" *ngIf="(token | async)"> Welcome : {{ username | async }}</p>
+  <p *ngIf="(newTaskState | async)" (click)="onNewTasksSeen()" class="nav navbar-text font-weight-bold">!Check Tasks!</p>
+  <p (click)="sendTaskInfo()" class="nav navbar-text font-weight-bold">!Send Tasks!</p>
   <p class="navbar-text navbar-right">
     <a class="nav-link" routerLink="/signin" *ngIf="!(token | async)">Login</a>
   </p>
