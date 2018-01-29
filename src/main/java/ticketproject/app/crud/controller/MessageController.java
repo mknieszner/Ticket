@@ -9,8 +9,10 @@ import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import ticketproject.app.crud.domain.dto.authorization.UserDto;
+import ticketproject.app.crud.domain.dto.chat.ChatMessage;
 import ticketproject.app.crud.domain.dto.values.TaskDto;
 import ticketproject.app.crud.domain.entities.authorization.User;
 import ticketproject.app.crud.service.TaskInfoService;
@@ -29,7 +31,14 @@ public class MessageController {
 
   @MessageMapping("/newTasks/{username}")
   @SendTo("/topic/newTasks/{username}")
-  public List<TaskDto> sendUserTasksMessage(@PathVariable @DestinationVariable("username") String username) throws Exception {
+  public List<TaskDto> sendUserTasksMessage(@PathVariable @DestinationVariable("username") final String username) throws Exception {
     return taskInfoService.getUserTasks(username);
+  }
+
+  @MessageMapping("/chat")
+  @SendTo("/topic/chat")
+  public ChatMessage sendChatMessage(final String messageContent, final Principal principal) throws Exception {
+    System.out.println("sendChatMessage" +  messageContent);
+    return new ChatMessage(principal.getName(),messageContent);
   }
 }

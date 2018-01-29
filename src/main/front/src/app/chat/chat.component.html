@@ -1,0 +1,17 @@
+<div class="row">
+  <div class="col-xs-8">
+    <div class="panel panel-default">
+      <div class="panel-heading bg-datk">Chat:</div>
+      <div class="panel-body" style="height: 300px">
+        <div *ngFor="let message of (chatContent | async)">
+          <div *ngIf="(message.senderName) === (currentUser |async)" class="alert alert-info">{{message.senderName}} : {{message.message}}</div>
+          <div *ngIf="(message.senderName) !== (currentUser |async)" class="alert alert-success">{{message.senderName}} : {{message.message}}</div>
+        </div>
+      </div>
+      <div class="panel-footer bg-datk">
+        <input class="form-control" type="text" #messageContent>
+        <button (click)="postMessage(messageContent.value)" class="btn btn-default">Post</button>
+      </div>
+    </div>
+  </div>
+</div>

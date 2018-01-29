@@ -21,5 +21,7 @@ public class WebSocketConfig extends AbstractWebSocketMessageBrokerConfigurer {
   public void registerStompEndpoints(final StompEndpointRegistry registry) {
     registry.addEndpoint("/newTasks").setAllowedOrigins("*");
     registry.addEndpoint("/newTasks").setAllowedOrigins("*").withSockJS();
+    registry.addEndpoint("/chat").setAllowedOrigins("*");
+    registry.addEndpoint("/chat").setAllowedOrigins("*").withSockJS();
   }
 }

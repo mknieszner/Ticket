@@ -29,14 +29,14 @@ import { RowDetailsComponent } from './tables/row-details/row-details.component'
 import {FilterService} from "./tables/row/filter.service";
 import { TaskComponent } from './tables/task/task.component';
 import {tasksReducers} from "./shared/store/task/tasks.reducers";
+import {chatReducers} from "./shared/store/chat/chat.reducers";
 import {StoreRouterConnectingModule} from "@ngrx/router-store";
 import {StoreDevtools, StoreDevtoolsModule} from "@ngrx/store-devtools";
-import { environment } from './../environments/environment';
+import { environment } from '../environments/environment';
 import {UserTaskComponent} from "./user/user-task/user-task.component";
 import {TaskInfoService} from "./shared/socket/task-info.service";
 import {WebSocketService} from "./shared/socket/web-socket.service";
-// import {TaskInfoService} from "./shared/socket/task-info.service";
-// import {WebSocketService} from "./shared/socket/web-socket.service";
+import { ChatComponent } from './chat/chat.component';
 
 
 
@@ -47,6 +47,7 @@ const appRoutes: Routes = [
   {path: 'tables', component: TablesComponent},
   {path: 'signin', component: SigninComponent},
   {path: 'definitions', component: DefinitionComponent},
+  {path: 'chat', component: ChatComponent},
 ];
 
 @NgModule({
@@ -67,7 +68,8 @@ const appRoutes: Routes = [
     MenuComponent,
     RowDetailsComponent,
     TaskComponent,
-    UserTaskComponent
+    UserTaskComponent,
+    ChatComponent
   ],
   imports: [
     BrowserModule,
@@ -75,7 +77,7 @@ const appRoutes: Routes = [
     ReactiveFormsModule,
     HttpClientModule,
     RouterModule.forRoot(appRoutes),
-    StoreModule.forRoot({tables: tablesReducers, users: usersReducers, tasks: tasksReducers}),
+    StoreModule.forRoot({tables: tablesReducers, users: usersReducers, tasks: tasksReducers, chat: chatReducers}),
     StoreRouterConnectingModule,
     !environment.production ? StoreDevtoolsModule.instrument() : []
   ],

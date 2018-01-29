@@ -6,6 +6,8 @@ import {Stomp, Client, Frame} from 'stompjs/lib/stomp.js';
 import {Store} from "@ngrx/store";
 import * as fromAppReducers from "../store/app.reducers";
 import * as UserActions from "../store/user/users.actions";
+import * as ChatActions from "../store/chat/chat.actions";
+import {ChatMessageModel} from "../chat-message.model";
 
 
 @Injectable()
@@ -29,6 +31,10 @@ export class WebSocketService {
         this.stompClient.subscribe('/topic/newTasks/' + username, (messageOutput) => {
           // console.log(messageOutput);
           this.store.dispatch(new UserActions.SetTaskInfoAction(true));
+        });
+        this.stompClient.subscribe('/topic/chat', (messageOutput: Frame) => {
+          console.log('/topic/chat/',messageOutput.body);
+          this.store.dispatch(new ChatActions.AppendChatWithMessage(JSON.parse(messageOutput.body)));
         });
       })
     });
