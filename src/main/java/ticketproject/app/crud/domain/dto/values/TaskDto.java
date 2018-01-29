@@ -4,6 +4,7 @@ import lombok.*;
 import ticketproject.app.crud.domain.entities.Task;
 import ticketproject.app.crud.domain.entities.authorization.User;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Getter
@@ -24,7 +25,7 @@ public class TaskDto {
   //TODO: adding attachments
   //List<Blob> artifacts;
 
-  private List<String> userNames;
+  private List<String> userNames = new ArrayList<>();
 
-  private List<TaskDto> taskDtos;
+  private List<TaskDto> taskDtos = new ArrayList<>();
 }

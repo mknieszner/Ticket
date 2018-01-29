@@ -42,6 +42,7 @@ dependencies {
 	compile group: 'org.springframework.security', name: 'spring-security-messaging'
 	compile group: 'com.fasterxml.jackson.core', name: 'jackson-core'
     compile group: 'com.fasterxml.jackson.core', name: 'jackson-databind'
+	compile group: 'org.springframework.session', name: 'spring-session'
 	testCompile group: 'org.springframework.security', name: 'spring-security-test'
 	compile("org.springframework.boot:spring-boot-starter-thymeleaf")
 	compile group: 'org.springframework', name: 'spring-context-support', version: '4.1.0.RELEASE'

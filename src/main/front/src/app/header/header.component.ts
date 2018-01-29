@@ -26,7 +26,8 @@ export class HeaderComponent implements OnInit {
 
   constructor(private store: Store<fromAppReducers.AppState>,
               private oauth: OauthService,
-              private dss: DataStorageService,) {
+              private dss: DataStorageService,
+              private ws:TaskInfoService) {
   }
 
   ngOnInit() {
@@ -36,6 +37,7 @@ export class HeaderComponent implements OnInit {
     this.username.subscribe((username: string) => {
       this.dss.getCurrentUserRoles(username);
       this.currentUsername = username;
+      // this.dss.getActiveWsUsers();
     });
     this.currentUserRoles = this.store.select('users', 'currentUserRoles');
     this.isAdmin = this.currentUserRoles.map(roles => {
@@ -51,6 +53,7 @@ export class HeaderComponent implements OnInit {
 
   onLogout() {
     this.oauth.logout();
+    this.ws.stompClient.disconnect();
     this.store.dispatch(new TablesActions.ResetStore());
   }
 

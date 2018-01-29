@@ -23,5 +23,7 @@ public class WebSocketConfig extends AbstractWebSocketMessageBrokerConfigurer {
     registry.addEndpoint("/newTasks").setAllowedOrigins("*").withSockJS();
     registry.addEndpoint("/chat").setAllowedOrigins("*");
     registry.addEndpoint("/chat").setAllowedOrigins("*").withSockJS();
+    registry.addEndpoint("/people/chat").setAllowedOrigins("*");
+    registry.addEndpoint("/people/chat").setAllowedOrigins("*").withSockJS();
   }
 }

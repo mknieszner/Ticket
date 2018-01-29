@@ -11,6 +11,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
+import ticketproject.app.crud.dao.ActiveWebSocketUserRepository;
 import ticketproject.app.crud.dao.RoleRepository;
 import ticketproject.app.crud.dao.UserRepository;
 import ticketproject.app.crud.domain.dto.authorization.RoleDto;
@@ -19,6 +20,7 @@ import ticketproject.app.crud.domain.dto.authorization.UserDto;
 import ticketproject.app.crud.domain.dto.definition.TableDefinitionDto;
 import ticketproject.app.crud.domain.entities.authorization.Role;
 import ticketproject.app.crud.domain.entities.authorization.User;
+import ticketproject.app.crud.domain.entities.chat.ActiveWebSocketUser;
 import ticketproject.app.crud.mapper.RoleMapper;
 import ticketproject.app.crud.mapper.UserMapper;
 
@@ -38,6 +40,7 @@ public class UserService implements UserDetailsService {
   private final UserRepository userRepository;
   private final UserMapper userMapper;
   private final TableService tableService;
+  private final ActiveWebSocketUserRepository activeWebSocketUserRepository;
 
 
   @Transactional
@@ -184,6 +187,14 @@ public class UserService implements UserDetailsService {
         roleRepository.findByName(tableName)))
         .stream()
         .map(UserDto::getUsername)
+        .collect(Collectors.toList());
+  }
+
+  public List<String> getLoggedUsers() {
+    return activeWebSocketUserRepository.findAll()
+        .stream()
+        .map(ActiveWebSocketUser::getName)
+        .distinct()
         .collect(Collectors.toList());
   }
 }

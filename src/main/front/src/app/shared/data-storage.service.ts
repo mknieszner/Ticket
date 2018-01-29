@@ -14,6 +14,7 @@ import * as TaskActions from "./store/task/tasks.actions";
 import {Observable} from "rxjs/Observable";
 import {Client} from 'stompjs/lib/stomp.js';
 import {TaskInfoService} from "./socket/task-info.service";
+import * as ChatActions from "./store/chat/chat.actions";
 
 @Injectable()
 export class DataStorageService {
@@ -24,6 +25,15 @@ export class DataStorageService {
   constructor(private httpClient: HttpClient,
               private store: Store<fromAppReducers.AppState>,
               private taskInfoService: TaskInfoService) {
+  }
+
+  getActiveWsUsers() {
+    this.httpClient.get<string[]>(this.basehost + '/v1/users/ws-active')
+      .subscribe((activeUsers: string[]) => {
+        this.store.dispatch(new ChatActions.SetActiveWsUsers(activeUsers))
+      },(err)=>{
+        console.log('getActiveWsUsers dss err: ', err)
+      })
   }
 
   getTableHeaderByName(tableName: string) {

@@ -74,6 +74,7 @@ export class UserDetailsComponent implements OnInit {
         'email': new FormControl(''),
         'enabled': new FormControl(true),
         'roleNames': new FormArray([]),
+        'taskDtos': new FormArray([])
       })
   }
 

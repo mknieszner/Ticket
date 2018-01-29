@@ -34,6 +34,11 @@ public class UsersAndRolesController {
     return userService.getFullRolesAuthorized(principal.getName());
   }
 
+  @GetMapping(value = "users/ws-active")
+  public List<String> getLoggedUsers(final Principal principal) {
+    return userService.getLoggedUsers();
+  }
+
   @GetMapping(value = "roles")
   @PreAuthorize("hasAuthority('ROLE_ADMIN')")
   public List<String> getAllRoleNames(final Principal principal) {

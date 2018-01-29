@@ -6,6 +6,8 @@ import {Client} from 'stompjs/lib/stomp.js';
 import {Observable} from "rxjs/Observable";
 import {ChatMessageModel} from "../shared/chat-message.model";
 import {UserModel} from "../user/user.model";
+import {DataStorageService} from "../shared/data-storage.service";
+import * as ChatActions from "../shared/store/chat/chat.actions";
 
 
 @Component({
@@ -16,11 +18,14 @@ import {UserModel} from "../user/user.model";
 export class ChatComponent implements OnInit {
   chatContent: Observable<ChatMessageModel[]>;
   currentUser: Observable<string>;
+  activeWsUsers: Observable<string[]>
   username: string;
+  chatName: string;
 
 
   constructor(private store: Store<fromAppReducers.AppState>,
-              private ws: TaskInfoService) {
+              private ws: TaskInfoService,
+              private dss: DataStorageService) {
   }
 
   ngOnInit() {
@@ -28,10 +33,23 @@ export class ChatComponent implements OnInit {
     this.currentUser = this.store.select('users','currentUser');
     this.currentUser.subscribe((username) => {
       this.username = username;
-    })
+    });
+    this.activeWsUsers = this.store.select('chat','activeUsers');
+    this.dss.getActiveWsUsers();
   }
 
   postMessage(messageContent: string) {
-    this.ws.stompClient.send('/app/chat',{}, messageContent);
+    if(this.chatName == 'global'){
+      console.log('postMessage'+ this.chatName);
+      this.ws.stompClient.send('/app/chat',{}, messageContent);
+    } else {
+      this.store.dispatch(new ChatActions.AppendChatWithMessage(new ChatMessageModel(this.username,messageContent,this.chatName)));
+      this.ws.stompClient.send('/app/chat/' + this.chatName, {}, messageContent);
+    }
+  }
+
+  setChat(chatName: string) {
+    console.log('chatName'+ chatName)
+    this.chatName = chatName;
   }
 }
