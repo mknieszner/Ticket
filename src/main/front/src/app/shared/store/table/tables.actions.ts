@@ -21,6 +21,8 @@ export const NEW_ROW_MODE = 'NEW_ROW_MODE';
 
 export const SET_FILTER = 'SET_FILTER';
 export const EXTENDED_FILTER_MODE = 'EXTENDED_FILTER_MODE';
+export const SET_EXTENDED_TABLE_VIEW = 'SET_EXTENDED_TABLE_VIEW';
+export const SET_EXTENDED_ROW_VIEW = 'SET_EXTENDED_ROW_VIEW';
 export const RUN_EXTENDED_FILTER = 'RUN_EXTENDED_FILTER';
 export const SET_EXTENDED_FILTER = 'SET_EXTENDED_FILTER';
 export const SWITCH_TABLE_RESET = 'SWITCH_TABLE_RESET';
@@ -171,6 +173,20 @@ export class DeleteTask implements Action {
   }
 }
 
+export class SetExtendedTableView implements Action {
+  readonly type = SET_EXTENDED_TABLE_VIEW;
+
+  constructor(public payload: boolean) {
+  }
+}
+
+export class SetExtendedRowView implements Action {
+  readonly type = SET_EXTENDED_ROW_VIEW;
+
+  constructor(public payload: boolean) {
+  }
+}
+
 export type TableActions =
   AddRowAction |
   SetNamesAction |
@@ -191,4 +207,6 @@ export type TableActions =
   SetRowsTasksAction |
   SetTableUsers |
   UpdateRowsTaskAction |
-  DeleteTask;
+  DeleteTask |
+  SetExtendedTableView |
+  SetExtendedRowView;

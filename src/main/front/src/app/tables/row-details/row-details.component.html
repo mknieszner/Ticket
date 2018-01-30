@@ -1,11 +1,14 @@
 <div class="panel" *ngIf="editRowMode" style="border: solid 2px #343a40; border-radius: 8px">
 
   <div class="panel-heading bg-dark">
-    <button type="button" class="btn btn-default" (click)="onToggleRowEditMode()">Close</button>
-    <button type="button" class="btn btn-default" (click)="onAddTask()">Add Task</button>
-    <button type="button" class="btn btn-default" *ngIf="unlockFields && !(newRowMode | async)" (click)="onSubmit()">Save</button>
-    <button type="button" class="btn btn-default" *ngIf="!(newRowMode | async)" (click)="toggleUnlock()"> {{ unlockFields ? 'Cancel' : 'Edit' }}</button>
-    <button type="button" class="btn btn-default" *ngIf="(newRowMode | async)" (click)="onSaveNewRow()">Save</button>
+    <div class="btn-group">
+      <button type="button" class="btn btn-default" (click)="onToggleRowEditMode()">Close</button>
+      <button type="button" class="btn btn-default" (click)="onAddTask()">Add Task</button>
+      <button type="button" class="btn btn-default" *ngIf="unlockFields && !(newRowMode | async)" (click)="onSubmit()">Save</button>
+      <button type="button" class="btn btn-default" *ngIf="!(newRowMode | async)" (click)="toggleUnlock()"> {{ unlockFields ? 'Cancel' : 'Edit' }}</button>
+      <button type="button" class="btn btn-default" *ngIf="(newRowMode | async)" (click)="onSaveNewRow()">Save</button>
+      <button type="button" class="btn btn-default" (click)="switchExtendedRowView()">{{(extendedRowView| async) ? 'Reduce' : 'Extend'}}</button>
+    </div>
   </div>
 
 
@@ -88,8 +91,8 @@
               </div>
               <div *ngSwitchCase="'EN'" class="form-group" style="margin-top: 10px">
                 <label>{{(header | async)[0].columnDetailDefinitionDtoList[j].name}}</label>
-                <select class="form-control-lg" formControlName="EN" >
-                  <option selected> -Select value- </option>
+                <select class="form-control-lg" formControlName="EN">
+                  <option selected> -Select value-</option>
                   <option *ngFor="let option of (header | async)[0].columnDetailDefinitionDtoList[j].optionList">
                     {{option.value}}
                   </option>
@@ -170,14 +173,13 @@
              required
       >
     </div>
-    <div class="form-group">
+    <div class="form-group" hidden>
       <label for="name">Name:</label>
       <input type="text"
              id="name"
              formControlName="name"
              class="form-control"
              readonly
-             required
       >
     </div>
     <div class="form-group">
@@ -222,66 +224,75 @@
   </form>
 
   <div *ngIf="!unlockFields && !(newRowMode | async)">
-  <table class="table">
-    <tr>
-      <td>ID</td>
-      <td>{{ (row | async)?.id }}</td>
-    </tr>
-    <tr>
-      <td>Name</td>
-      <td>{{ (row | async)?.name }}</td>
-    </tr>
-    <tr *ngFor="let cellValue of (row | async)?.columnValueDtos; let i = index;">
-      <td> {{ (header | async)[0].columnDetailDefinitionDtoList[i]?.name }}</td>
-      <td>
-        {{(cellValue | valueOnKey).value.value }}
-      </td>
-    </tr>
-    <tr>
-      <td>Created by</td>
-      <td>{{ (row | async)?.createdBy}}</td>
-    </tr>
-    <tr>
-      <td>Created on</td>
-      <td>{{ (row | async)?.createdOn }}</td>
-    </tr>
-    <tr>
-      <td>Last modified by</td>
-      <td>{{ (row | async)?.lastModifiedBy }}</td>
-    </tr>
-    <tr>
-      <td>Last modified on</td>
-      <td>{{ (row | async)?.lastModifiedOn }}</td>
-    </tr>
-  </table>
+    <table class="table">
+      <tbody>
+      <tr *ngFor="let cellValue of (row | async)?.columnValueDtos; let i = index;">
+        <td>
+          {{ (header | async)[0].columnDetailDefinitionDtoList[i]?.name }}
+        </td>
+        <td>
+          {{(cellValue | valueOnKey).value.value }}
+        </td>
+      </tr>
+      <tr *ngIf="extendedRowView | async">
+        <td>ID</td>
+        <td>{{ (row | async)?.id }}</td>
+      </tr>
+      <tr *ngIf="extendedRowView | async" hidden>
+        <td>Name</td>
+        <td>{{ (row | async)?.name }}</td>
+      </tr>
+      <tr *ngIf="extendedRowView | async">
+        <td>Created by</td>
+        <td>{{ (row | async)?.createdBy}}</td>
+      </tr>
+      <tr *ngIf="extendedRowView | async">
+        <td>Created on</td>
+        <td>{{ (row | async)?.createdOn }}</td>
+      </tr>
+      <tr *ngIf="extendedRowView | async">
+        <td>Last modified by</td>
+        <td>{{ (row | async)?.lastModifiedBy }}</td>
+      </tr>
+      <tr *ngIf="extendedRowView | async">
+        <td>Last modified on</td>
+        <td>{{ (row | async)?.lastModifiedOn }}</td>
+      </tr>
 
-  <div *ngIf="(row | async)?.taskDtos.length <= 0">
-    <ul class="list-group" style="margin-bottom: 0">
-      <li class="list-group-item bg-dark text-white" style="border: none">
-        <h4>NO TASKS</h4>
-      </li>
-    </ul>
-  </div>
+      </tbody>
+    </table>
 
-  <div *ngIf="(row | async)?.taskDtos.length > 0">
-    <ul class="list-group" style="margin-bottom: 0">
-      <li class="list-group-item bg-dark text-white" style="border: none">
-        <h4>TASKS</h4>
-      </li>
-      <div *ngFor="let task of (row | async)?.taskDtos; let i = index;">
-        <li class="list-group-item bg-secondary" style="border: 1px darkgray solid; margin-top: 3px">
-          <span class="btn btn-outline-dark bg-white" (click)="task.id == selectedTask?.id ? onShowTask(null) : onShowTask(task)"> {{task.name }} </span>
-          <div class="pull-right"><button class="btn btn btn-outline-dark bg-white" (click)="onShowTaskDetails(task)"> Details </button></div>
+    <div *ngIf="(row | async)?.taskDtos.length <= 0">
+      <ul class="list-group" style="margin-bottom: 0">
+        <li class="list-group-item bg-dark text-white" style="border: none">
+          <h4>NO TASKS</h4>
         </li>
-        <div *ngIf="task.id == selectedTask?.id">
-          <li class="list-group-item"> <button (click)="onDeleteTask(task.id)"> Delete Task </button></li>
-          <li class="list-group-item"> ID: {{task.id}}</li>
-          <li class="list-group-item"> Name: {{task.name}}</li>
-          <li class="list-group-item"> Description: {{task.description}}</li>
-          <li class="list-group-item"> Status: {{task.status}}</li>
+      </ul>
+    </div>
+
+    <div *ngIf="(row | async)?.taskDtos.length > 0">
+      <ul class="list-group" style="margin-bottom: 0">
+        <li class="list-group-item bg-dark text-white" style="border: none">
+          <h4>TASKS</h4>
+        </li>
+        <div *ngFor="let task of (row | async)?.taskDtos; let i = index;">
+          <li class="list-group-item bg-secondary" style="border: 1px darkgray solid; margin-top: 3px">
+            <span class="btn btn-outline-dark bg-white" (click)="task.id == selectedTask?.id ? onShowTask(null) : onShowTask(task)"> {{task.name }} </span>
+            <div class="pull-right">
+              <button class="btn btn btn-outline-dark bg-white" (click)="onShowTaskDetails(task)"> Details</button>
+            </div>
+          </li>
+          <div *ngIf="task.id == selectedTask?.id">
+            <li class="list-group-item">
+              <button class="btn btn-default text-danger" (click)="onDeleteTask(task.id)"> Delete Task</button>
+            </li>
+            <li class="list-group-item"> ID: {{task.id}}</li>
+            <li class="list-group-item"> Name: {{task.name}}</li>
+            <li class="list-group-item"> Description: {{task.description}}</li>
+            <li class="list-group-item"> Status: {{task.status}}</li>
+          </div>
         </div>
-      </div>
-    </ul>
-  </div>
+      </ul>
+    </div>
   </div>
 </div>

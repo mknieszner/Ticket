@@ -16,6 +16,9 @@ export class MenuComponent implements OnInit {
   @Output() choosenNameChanged = new Subject<string>();
   extendedFilterMode: Observable<boolean>;
   extendedFilterAction: Observable<boolean>;
+  extendedTableView: Observable<boolean>;
+  extendedTableViewValue: boolean
+
 
   constructor(private store: Store<fromAppReducers.AppState>) {
   }
@@ -23,6 +26,10 @@ export class MenuComponent implements OnInit {
   ngOnInit() {
     this.extendedFilterMode = this.store.select('tables', 'extendedFilterMode');
     this.extendedFilterAction = this.store.select('tables', 'extendedFilterAction')
+    this.extendedTableView = this.store.select('tables','extendedTableView');
+    this.extendedTableView.subscribe((value)=>{
+      this.extendedTableViewValue = value;
+    })
   }
 
   onChooseName(tableName: string) {
@@ -48,4 +55,7 @@ export class MenuComponent implements OnInit {
     this.store.dispatch(new TablesActions.SetNewRowModeAction(true));
   }
 
+  switchExtendedTableView() {
+  this.store.dispatch(new TablesActions.SetExtendedTableView(!this.extendedTableViewValue))
+  }
 }

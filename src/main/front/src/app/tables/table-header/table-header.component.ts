@@ -18,11 +18,13 @@ export class TableHeaderComponent implements OnInit {
   extendedFilterMode: Observable<boolean>;
   filterForm: FormGroup;
   extendedFilterAction: Observable<boolean>;
+  extendedTableView: Observable<boolean>
 
   constructor(private contentStore: Store<fromAppReducers.AppState>) {
   }
 
   ngOnInit() {
+    this.extendedTableView = this.contentStore.select('tables','extendedTableView');
     this.extendedFilterAction = this.contentStore.select('tables', 'extendedFilterAction');
     this.header = this.contentStore.select('tables', 'tableDefinition');
     this.editRowMode = this.contentStore.select('tables', 'editRowMode');

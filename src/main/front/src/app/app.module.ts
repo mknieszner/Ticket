@@ -37,6 +37,8 @@ import {UserTaskComponent} from "./user/user-task/user-task.component";
 import {TaskInfoService} from "./shared/socket/task-info.service";
 import {WebSocketService} from "./shared/socket/web-socket.service";
 import { ChatComponent } from './chat/chat.component';
+import {StoreResetService} from "./shared/store-reset.service";
+import {ReversePipe} from "./shared/reverse.pipe";
 
 
 
@@ -62,6 +64,7 @@ const appRoutes: Routes = [
     RowComponent,
     HomeComponent,
     KeyPipe,
+    ReversePipe,
     TableHeaderComponent,
     UserDetailsComponent,
     RoleDetailsComponent,
@@ -89,6 +92,7 @@ const appRoutes: Routes = [
     AuthCookie,
     TaskInfoService,
     WebSocketService,
+    StoreResetService,
     {provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi:true}
     // {provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi:true}
     ],

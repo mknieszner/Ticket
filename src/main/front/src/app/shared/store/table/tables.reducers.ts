@@ -15,7 +15,9 @@ export interface TableState {
   tableFilter: string,
   extendedFilterMode: boolean,
   extendedFilterAction: boolean
-  extendedFilterContent: ExtendedFilterModel
+  extendedFilterContent: ExtendedFilterModel,
+  extendedTableView: boolean,
+  extendedRowView:boolean
 }
 
 const initialTableState: TableState = {
@@ -29,7 +31,9 @@ const initialTableState: TableState = {
   tableFilter: '',
   extendedFilterMode: false,
   extendedFilterAction: false,
-  extendedFilterContent: null
+  extendedFilterContent: null,
+  extendedTableView: false,
+  extendedRowView:false
 };
 
 export function tablesReducers(state: TableState = initialTableState, action: TableActions.TableActions) {
@@ -129,17 +133,27 @@ export function tablesReducers(state: TableState = initialTableState, action: Ta
         ...state,
         tableContent: [...deleteRowsTask(state.tableContent, action.payload)]
       };
+    case TableActions.SET_EXTENDED_TABLE_VIEW:
+      return {
+        ...state,
+        extendedTableView: action.payload
+      };
+    case TableActions.SET_EXTENDED_ROW_VIEW:
+      return {
+        ...state,
+        extendedRowView: action.payload
+      };
     default:
       return state;
   }
 }
 
-function deleteRowsTask(tableContent: RowContentModel[], payload: {rowId: number, taskId: number}): RowContentModel[] {
-  tableContent.forEach((row: RowContentModel,i) => {
+function deleteRowsTask(tableContent: RowContentModel[], payload: { rowId: number, taskId: number }): RowContentModel[] {
+  tableContent.forEach((row: RowContentModel, i) => {
     if (row.id == payload.rowId) {
-      row.taskDtos.forEach((taskDto: TaskModel,j) => {
+      row.taskDtos.forEach((taskDto: TaskModel, j) => {
         if (taskDto.id == payload.taskId) {
-          tableContent[i].taskDtos.splice(j,1);
+          tableContent[i].taskDtos.splice(j, 1);
         }
       })
     }
@@ -148,9 +162,9 @@ function deleteRowsTask(tableContent: RowContentModel[], payload: {rowId: number
 }
 
 function updateTaskUsers(tableContent: RowContentModel[], payload: { rowId: number, task: TaskModel }): RowContentModel[] {
-  tableContent.forEach((row: RowContentModel,i) => {
+  tableContent.forEach((row: RowContentModel, i) => {
     if (row.id == payload.rowId) {
-      row.taskDtos.forEach((taskDto: TaskModel,j) => {
+      row.taskDtos.forEach((taskDto: TaskModel, j) => {
         if (taskDto.id == payload.task.id) {
           tableContent[i].taskDtos[j].userNames = payload.task.userNames;
         }

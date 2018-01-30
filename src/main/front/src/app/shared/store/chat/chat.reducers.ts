@@ -23,6 +23,10 @@ export function chatReducers(state: ChatState = initialChatState, action: ChatAc
         ...state,
         activeUsers: [...action.payload]
       };
+    case ChatActions.RESET_STORE:
+      return {
+        ...initialChatState,
+      };
     default:
       return state;
   }

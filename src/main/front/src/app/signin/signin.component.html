@@ -34,11 +34,11 @@
               <div class="form-group">
                 <button value="Sign In" class="btn btn-default bg-secondary" (click)="onSignin()">Sign In</button>
               </div>
-              <div class="alert alert-danger">
-                <span>Invalid username and password.</span>
+              <div class="alert alert-danger" *ngIf="loginFailureInfo | async">
+                <span> {{ loginFailureInfo | async }} </span>
               </div>
-              <div class="alert alert-success">
-                <span>You have been logged out.</span>
+              <div class="alert alert-success" *ngIf="logoutInfo | async">
+                <span> {{ logoutInfo | async}} </span>
               </div>
             </form>
           </div>

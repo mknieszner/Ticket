@@ -4,6 +4,7 @@ import {TaskModel} from "../../table.model";
 export const SET_TASK_DETAILS_MODE = 'SET_TASK_DETAILS_MODE';
 export const SET_SHOWED_TASK = 'SET_SHOWED_TASK';
 export const ON_DELETE_TASK = 'ON_DELETE_TASK';
+export const RESET_STORE = 'RESET_STORE';
 
 export class SetTaskDetailsModeAction implements Action {
   readonly type = SET_TASK_DETAILS_MODE;
@@ -26,7 +27,15 @@ export class OnDeleteTask implements Action {
   }
 }
 
+export class ResetStore implements Action {
+  readonly type = RESET_STORE;
+
+  constructor() {
+  }
+}
+
 export type TaskActions =
   SetTaskDetailsModeAction |
   SetShowedTaskAction |
-  OnDeleteTask;
+  OnDeleteTask |
+  ResetStore;

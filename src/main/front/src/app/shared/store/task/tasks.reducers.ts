@@ -6,12 +6,12 @@ export interface TaskState {
   showedTask: TaskModel
 }
 
-const initialTableState: TaskState = {
+const initialTaskState: TaskState = {
   taskDetailsMode: false,
   showedTask: null
 };
 
-export function tasksReducers(state: TaskState = initialTableState, action: TaskActions.TaskActions) {
+export function tasksReducers(state: TaskState = initialTaskState, action: TaskActions.TaskActions) {
   switch (action.type) {
     case TaskActions.SET_TASK_DETAILS_MODE:
       return {
@@ -28,6 +28,10 @@ export function tasksReducers(state: TaskState = initialTableState, action: Task
       state.showedTask = null;
       return {
         state
+      };
+    case TaskActions.RESET_STORE:
+      return {
+        ...initialTaskState
       };
     default:
       return state;

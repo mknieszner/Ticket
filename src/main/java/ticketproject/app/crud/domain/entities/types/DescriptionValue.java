@@ -22,9 +22,8 @@ import javax.validation.constraints.NotNull;
 public class DescriptionValue extends ColumnValue {
 
   @NotNull
-  @Column(name = "DESCIPTION_VALUE")
+  @Column(name = "DESCIPTION_VALUE",length = 1000)
   String value;
-
   public DescriptionValue(
      // final String typeName,
       final String value) {

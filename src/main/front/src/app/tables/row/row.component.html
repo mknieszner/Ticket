@@ -1,12 +1,15 @@
-<tr (click)="onEditForm()" *ngIf="rowFilterState"main>
-  <td>{{ row.id }}</td>
-  <td>{{ row.name }}</td>
-  <td *ngFor="let cellValue of row.columnValueDtos">
+<tr (click)="onEditForm()" *ngIf="rowFilterState" main>
+  <td *ngFor="let cellValue of row.columnValueDtos"
+      [ngClass]="(cellValue | valueOnKey).key == 'DE' ? 'description' : '' ">
     {{(cellValue | valueOnKey).value.value }}
   </td>
-  <td>{{ row.createdBy}}</td>
-  <td>{{ row.createdOn }}</td>
-  <td>{{ row.lastModifiedBy }}</td>
-  <td>{{ row.lastModifiedOn }}</td>
-  <td>{{ row.taskDtos.length }}</td>
+  <div *ngIf="extendedTableView | async">
+    <td>{{ row.id }}</td>
+    <td hidden>{{ row.name }}</td>
+    <td>{{ row.createdBy}}</td>
+    <td>{{ row.createdOn }}</td>
+    <td>{{ row.lastModifiedBy }}</td>
+    <td>{{ row.lastModifiedOn }}</td>
+    <td>{{ row.taskDtos.length }}</td>
+  </div>
 </tr>

@@ -1,27 +1,34 @@
 <tr *ngIf="(header| async) && !(extendedFilterMode |async)">
   <!--<td><button type="button" class="btn btn-light" *ngIf="!(newRowMode | async)" (click)="onNewRow()">New Row</button></td>-->
-  <td>ID</td>
-  <td>NAME</td>
-  <td *ngFor="let column of (header| async)[0]?.columnDetailDefinitionDtoList"> {{ column.name }}</td>
-  <td>Created by:</td>
-  <td>Created on</td>
-  <td>Last Modified By</td>
-  <td>Last Modified On</td>
-  <td>Tasks</td>
+  <td *ngFor="let column of (header| async)[0]?.columnDetailDefinitionDtoList"
+      [ngClass]="column.type== 'DE' ? 'description' : '' ">
+    {{column.name }}
+  </td>
+  <div *ngIf="extendedTableView | async">
+    <td>ID</td>
+    <td hidden>NAME</td>
+    <td>Created by:</td>
+    <td>Created on</td>
+    <td>Last Modified By</td>
+    <td>Last Modified On</td>
+    <td>Tasks</td>
+  </div>
 </tr>
 <form *ngIf="extendedFilterMode |async" [formGroup]="filterForm">
   <tr>
-    <td><input class="form-control mr-sm-2" type="text" placeholder="ID" formControlName="id"></td>
-    <td><input class="form-control mr-sm-2" type="text" placeholder="NAME" formControlName="name"></td>
     <span formArrayName="columnValueDtos">
       <td *ngFor="let column of (header| async)[0]?.columnDetailDefinitionDtoList; let i = index" formGroupName="{{i}}">
         <input class="form-control mr-sm-2" type="text" placeholder="{{ column.name }}" formControlName="value">
       </td>
     </span>
-    <td><input class="form-control mr-sm-2" type="text" placeholder="Created by" formControlName="createdBy"></td>
-    <td><input class="form-control mr-sm-2" type="text" placeholder="Created on" formControlName="createdOn"></td>
-    <td><input class="form-control mr-sm-2" type="text" placeholder="Last Modified By" formControlName="lastModifiedBy"></td>
-    <td><input class="form-control mr-sm-2" type="text" placeholder="Last Modified On" formControlName="lastModifiedOn"></td>
-    <td><input class="form-control mr-sm-2" type="text" placeholder="Last Modified On" formControlName="taskDtos"></td>
+    <div *ngIf="extendedTableView | async">
+      <td><input class="form-control mr-sm-2" type="text" placeholder="ID" formControlName="id"></td>
+      <td><input class="form-control mr-sm-2" type="text" placeholder="NAME" formControlName="name"></td>
+      <td><input class="form-control mr-sm-2" type="text" placeholder="Created by" formControlName="createdBy"></td>
+      <td><input class="form-control mr-sm-2" type="text" placeholder="Created on" formControlName="createdOn"></td>
+      <td><input class="form-control mr-sm-2" type="text" placeholder="Last Modified By" formControlName="lastModifiedBy"></td>
+      <td><input class="form-control mr-sm-2" type="text" placeholder="Last Modified On" formControlName="lastModifiedOn"></td>
+      <td><input class="form-control mr-sm-2" type="text" placeholder="Last Modified On" formControlName="taskDtos"></td>
+    </div>
   </tr>
 </form>

@@ -26,6 +26,8 @@ export class RowDetailsComponent implements OnInit, OnDestroy {
   newRowMode: Observable<boolean>;
   selectedTask: TaskModel = null;
   selesctedRow: RowContentModel;
+  extendedRowView: Observable<boolean>;
+  extendedRowViewValue: boolean;
 
   constructor(private qcs: QuestionControlService,
               private store: Store<fromAppReducers.AppState>,
@@ -34,6 +36,10 @@ export class RowDetailsComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.unlockFields = false;
+    this.extendedRowView = this.store.select('tables','extendedRowView');
+    this.extendedRowView.subscribe((value: boolean)=> {
+      this.extendedRowViewValue = value;
+    })
     this.editRowMode = this.store.select('tables', 'editRowMode');
     this.row = this.store.select('tables', 'editedRow');
     this.header = this.store.select('tables', 'tableDefinition');
@@ -113,6 +119,9 @@ export class RowDetailsComponent implements OnInit, OnDestroy {
   onToggleRowEditMode() { // TODO reset all details state
     this.store.dispatch(new TablesActions.SetEditRowMode(false));
     this.store.dispatch(new TablesActions.SetNewRowModeAction(false));
+    this.store.dispatch(new TaskActions.SetTaskDetailsModeAction(false));
+    this.store.dispatch(new TaskActions.SetShowedTaskAction(null));
+
     this.unlockFields = false;
   }
 
@@ -191,5 +200,9 @@ export class RowDetailsComponent implements OnInit, OnDestroy {
   onDeleteTask(taskId: number) {
     console.log('onDeleteTask', taskId, this.selesctedRow.id)
     this.dss.deleteTask(taskId, this.selesctedRow.id);
+  }
+
+  switchExtendedRowView(){
+    this.store.dispatch(new TablesActions.SetExtendedRowView(!this.extendedRowViewValue));
   }
 }

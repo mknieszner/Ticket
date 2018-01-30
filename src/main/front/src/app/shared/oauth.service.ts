@@ -10,6 +10,7 @@ import * as fromServerModel from "../shared/server.model";
 import {AuthCookie} from "./auth-cookies-handler";
 import * as UserActions from "./store/user/users.actions";
 import {Token} from "./auth.model";
+import {StoreResetService} from "./store-reset.service";
 
 
 export class Foo {
@@ -24,10 +25,14 @@ export class OauthService {
   token: string;
   isAuthenticated: boolean;
 
-  constructor(private router: Router, private httpClient: HttpClient, private store: Store<fromAppReducers.AppState>, private cookie: AuthCookie) {
+  constructor(private router: Router,
+              private httpClient: HttpClient,
+              private store: Store<fromAppReducers.AppState>,
+              private cookie: AuthCookie,
+              private resetService: StoreResetService) {
     this.store.select('users', 'token').forEach(token => {
-      if(token !== null) {
-        this.cookie.setAuth(token.access_token,token.expires_in);
+      if (token !== null) {
+        this.cookie.setAuth(token.access_token, token.expires_in);
         this.token = token.access_token
         this.isAuthenticated = true;
       } else {
@@ -47,7 +52,7 @@ export class OauthService {
       'Authorization': 'Basic ' + btoa("live-test:bG2ZS10ZXN0")
     });
 
-    this.httpClient.post<Token>(this.basehost +'/oauth/token', null, {
+    this.httpClient.post<Token>(this.basehost + '/oauth/token', null, {
       observe: 'body',
       headers: headers,
       params: params
@@ -55,12 +60,24 @@ export class OauthService {
       .subscribe(
         (data: Token) => {
           this.saveToken(data, loginData.username);
-          this.router.navigate(["/"]);
         },
         err => {
-          alert('Invalid Credentials')
+          console.log(err.message);
+          const errorMessage = err.message;
+          if (errorMessage.includes('live-test')) {
+            this.store.dispatch(new UserActions.SetLoginFailureInfo('Invalid credentials!'));
+          } else {
+            switch (errorMessage) {
+              case 'Http failure response for (unknown url): 0 Unknown Error':
+                this.store.dispatch(new UserActions.SetLoginFailureInfo('Connection problem'));
+                return;
+              default:
+                this.store.dispatch(new UserActions.SetLoginFailureInfo(errorMessage));
+                return;
+            }
+          }
         }
-      );
+      )
   }
 
   // getResource(resourceUrl) : Observable<any> {
@@ -73,12 +90,5 @@ export class OauthService {
     this.store.dispatch(new UserActions.SetTokenAction(token));
     this.store.dispatch(new UserActions.SetCurrentUserAction(username));
     this.cookie.setAuth(token.access_token, token.expires_in);
-  }
-
-  logout() {
-    this.cookie.deleteAuth();
-    this.store.dispatch(new UserActions.DeleteTokenAction());
-    this.store.dispatch(new UserActions.DeleteCurrentUserAction())
-    //TODO: RESTORE STORE??
   }
 }

@@ -1,3 +1,12 @@
 td {
   min-width: 200px;
+  width: 200px;
+  text-align: center;
+  border-right: 1px solid #32383e;
+}
+
+td.description {
+  min-width: 400px;
+  width: 400px;
+  text-align: justify;
 }

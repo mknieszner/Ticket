@@ -23,6 +23,7 @@ export class RowComponent implements OnInit {
   filter: Observable<string>;
   rowFilterState: boolean = true;
   extendedFilterContent: Observable<ExtendedFilterModel>;
+  extendedTableView: Observable<boolean>
 
 
   constructor(private qcs: QuestionControlService,
@@ -35,6 +36,7 @@ export class RowComponent implements OnInit {
   ngOnInit() {
     this.initForm();
     // this.editMode = this.store.select('tables', 'editRowMode');
+    this.extendedTableView = this.store.select('tables','extendedTableView');
     this.filter.subscribe(filter => {
       if (filter !== '') {
         this.rowFilterState = this.filterService.runFilterTable(this.row, filter);

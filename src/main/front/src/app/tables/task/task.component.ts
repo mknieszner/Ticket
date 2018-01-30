@@ -74,6 +74,6 @@ export class TaskComponent implements OnInit {
   }
 
   onRemoveUserFromTask(username: string) {
-    console.log('TODO onRemoveUserFromTask');
+    alert('TODO onRemoveUserFromTask');
   }
 }

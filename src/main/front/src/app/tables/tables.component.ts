@@ -20,8 +20,7 @@ export class TablesComponent implements OnInit {
 
 
   constructor(private contentStore: Store<fromAppReducers.AppState>,
-              private dss: DataStorageService,
-              ) {
+              private dss: DataStorageService) {
   }
 
   ngOnInit() {
@@ -40,31 +39,5 @@ export class TablesComponent implements OnInit {
     this.dss.getTableHeaderByName(tableName);
     this.dss.getTableRowsByName(tableName);
     this.tableChosen = true;
-  }
-
-  sort: any = {
-    column: 'id', //to match the variable of one of the columns
-    descending: false
-  };
-
-  selectedClass(columnName): string{
-    return columnName == this.sort.column ? 'sort-' + this.sort.descending : 'false';
-  }
-
-  changeSorting(columnName): void{
-    const sort = {
-      column: 'id', //to match the variable of one of the columns
-      descending: false
-    };
-    if (sort.column == columnName) {
-      sort.descending = !sort.descending;
-    } else {
-      sort.column = columnName;
-      sort.descending = false;
-    }
-  }
-
-  convertSorting(): string{
-    return this.sort.descending ? '-' + this.sort.column : this.sort.column;
   }
 }

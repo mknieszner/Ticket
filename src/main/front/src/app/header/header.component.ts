@@ -10,6 +10,8 @@ import {Token} from "../shared/auth.model";
 import {TaskInfoService} from "../shared/socket/task-info.service";
 import {Client} from 'stompjs/lib/stomp.js';
 import * as UserActions from "../shared/store/user/users.actions";
+import {StoreResetService} from "../shared/store-reset.service";
+import {Router} from "@angular/router";
 
 @Component({
   selector: 'app-header',
@@ -27,7 +29,8 @@ export class HeaderComponent implements OnInit {
   constructor(private store: Store<fromAppReducers.AppState>,
               private oauth: OauthService,
               private dss: DataStorageService,
-              private ws:TaskInfoService) {
+              private resetService: StoreResetService,
+              private router: Router) {
   }
 
   ngOnInit() {
@@ -52,9 +55,9 @@ export class HeaderComponent implements OnInit {
   }
 
   onLogout() {
-    this.oauth.logout();
-    this.ws.stompClient.disconnect();
-    this.store.dispatch(new TablesActions.ResetStore());
+    this.resetService.resetStore();
+    this.router.navigate(['/signin'])
+    this.store.dispatch(new UserActions.SetLogoutInfo('You have been successfully logged out!'));
   }
 
   onNewTasksSeen() {

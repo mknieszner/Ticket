@@ -17,6 +17,8 @@ export interface UserState {
   newUserMode: boolean,
   roles: RoleModel[],
   newRoleMode: boolean,
+  loginFailureInfo: string,
+  logoutInfo: string
 }
 
 const initialUserState: UserState = {
@@ -29,6 +31,8 @@ const initialUserState: UserState = {
   newUserMode: false,
   roles: [],
   newRoleMode: false,
+  loginFailureInfo:'',
+  logoutInfo: ''
 };
 
 export function usersReducers(state: UserState = initialUserState, action: UserActions.UserActions) {
@@ -126,15 +130,26 @@ export function usersReducers(state: UserState = initialUserState, action: UserA
         ...state,
         currentSocketClient: action.payload
       };
-    case UserActions.SET_NEW_WEB_SOCKET_CLIENT:
-      return {
-        ...state,
-        currentSocketClient: action.payload
-      };
     case UserActions.SET_TASK_INFO:
       return {
         ...state,
         newTaskInfo: action.payload
+      };
+    case UserActions.SET_LOGIN_FAILURE_INFO:
+      return {
+        ...state,
+        loginFailureInfo: action.payload,
+        logoutInfo: initialUserState.logoutInfo
+      };
+    case UserActions.SET_LOGOUT_INFO:
+      return {
+        ...state,
+        loginFailureInfo: initialUserState.loginFailureInfo,
+        logoutInfo: action.payload
+      };
+    case UserActions.RESET_STORE:
+      return {
+        ...initialUserState
       };
     default:
       return state;

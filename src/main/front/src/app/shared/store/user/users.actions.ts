@@ -30,6 +30,10 @@ export const SWITCH_TABLE_RESET = 'SWITCH_TABLE_RESET';
 export const SET_NEW_WEB_SOCKET_CLIENT = 'SET_NEW_WEB_SOCKET_CLIENT';
 export const SET_TASK_INFO = 'SET_TASK_INFO';
 
+export const RESET_STORE = 'RESET_STORE';
+
+export const SET_LOGIN_FAILURE_INFO = 'SET_LOGIN_FAILURE_INFO';
+export const SET_LOGOUT_INFO = 'SET_LOGOUT_INFO';
 
 
 export class DeleteUserAction implements Action {
@@ -141,7 +145,6 @@ export class DeleteRoleAction implements Action {
 }
 
 
-
 export class SetRolesAction implements Action {
   readonly type = SET_ROLES;
 
@@ -177,15 +180,36 @@ export class SetTaskInfoAction implements Action {
   }
 }
 
+export class SetLoginFailureInfo implements Action {
+  readonly type = SET_LOGIN_FAILURE_INFO;
+
+  constructor(public payload: string) {
+  }
+}
+
+export class SetLogoutInfo implements Action {
+  readonly type = SET_LOGOUT_INFO;
+
+  constructor(public payload: string) {
+  }
+}
+
+export class ResetStore implements Action {
+  readonly type = RESET_STORE;
+
+  constructor() {
+  }
+}
+
 export type UserActions =
   SetCurrentUserRolenames |
-  DeleteUserAction|
+  DeleteUserAction |
   SetNewRoleModeAction |
   SetNewUserModeAction |
   SetUsersAction |
   AddUserAction |
   SetRolesAction |
-  AddRoleAction|
+  AddRoleAction |
   DeleteRoleAction |
   AddRoleToUser |
   RemoveRoleFromUser |
@@ -197,5 +221,8 @@ export type UserActions =
   DeleteCurrentUserAction |
   SwitchTableReset |
   SetNewWebSocketClient |
-  SetTaskInfoAction;
+  SetTaskInfoAction |
+  ResetStore |
+  SetLoginFailureInfo |
+  SetLogoutInfo;
 
