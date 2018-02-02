@@ -32,7 +32,7 @@
                          <!--[row]="row"-->
                          <!--[header]="(tableState|async).tableDefinition"></app-row>-->
                 <app-row *ngFor="let row of
-                ((tableState | async).tableContent) | orderBy : sortContentValue"
+                ((tableState | async).tableContent)  | extendedFilter: extendedFilterContent : filterSelect | orderBy : sortContentValue"
                          [row]="row"
                          [header]="(tableState|async).tableDefinition"></app-row>
                 </tbody>

@@ -9,18 +9,14 @@ export class SortByPipe implements PipeTransform {
     if (sortContent == null) {
       return rows;
     } else {
-      console.log('sortContent', sortContent);
       switch (sortContent.dataType) {
         case 'ST':
         case 'DE':
         case 'EN':
-          console.log('EN, DE, ST');
           return this.textSort(rows, sortContent.asc, sortContent.name, sortContent.index);
         case 'IN':
-          console.log('IN');
           return this.numberSort(rows, sortContent.asc, sortContent.name, sortContent.index)
         case 'DT':
-          console.log('DT');
           return this.dateSort(rows, sortContent.asc, sortContent.name, sortContent.index)
         default:
           return rows;
@@ -43,75 +39,56 @@ export class SortByPipe implements PipeTransform {
       case 'lastModifiedOn':
         return this.sortDate(rows, name, index, asc);//toremove?
       case 'taskDtos':
-        return this.sortNumber(rows, name, index, asc);//toremove?
+        return this.sortByArrayLength(rows, name, index, asc);//toremove?
       case 'column':
         return this.sortText(rows, name, index, asc);
     }
   }
 
   numberSort(rows: RowContentModel[], asc: boolean, name: string, index: number): RowContentModel[] {
-    console.log(name);
     switch (name) {
       case 'id':
-        console.log('id');
         return this.sortNumber(rows, name, index, asc);
       case 'name':
-        console.log('name');
         return this.sortText(rows, name, index, asc);//toremove?
       case 'createdBy':
-        console.log('createdBy');
         return this.sortText(rows, name, index, asc);//toremove?
       case 'createdOn':
-        console.log('createdOn');
         return this.sortDate(rows, name, index, asc);//toremove?
       case 'lastModifiedBy':
-        console.log('lastModifiedBy');
         return this.sortText(rows, name, index, asc);//toremove?
       case 'lastModifiedOn':
-        console.log('lastModifiedOn');
         return this.sortDate(rows, name, index, asc);//toremove?
       case 'taskDtos':
-        console.log('taskDtos');
-        return this.sortNumber(rows, name, index, asc);
+        return this.sortByArrayLength(rows, name, index, asc);
       case 'column':
-        console.log('column');
         return this.sortNumber(rows, name, index, asc);
     }
   }
 
   dateSort(rows: RowContentModel[], asc: boolean, name: string, index: number): RowContentModel[] {
-    console.log(name);
     switch (name) {
       case 'id':
-        console.log(name)
         return this.sortNumber(rows, name, index, asc);
       case 'name':
-        console.log(name)
         return this.sortText(rows, name, index, asc);
       case 'createdBy':
-        console.log(name)
         return this.sortText(rows, name, index, asc);
       case 'createdOn':
-        console.log(name)
         return this.sortDate(rows, name, index, asc);//toremove?
       case 'lastModifiedBy':
-        console.log(name)
         return this.sortText(rows, name, index, asc);
       case 'lastModifiedOn':
-        console.log(name)
         return this.sortDate(rows, name, index, asc);//toremove?
       case 'taskDtos':
-        console.log(name)
         return this.sortByArrayLength(rows, name, index, asc);
       case 'column':
-        console.log(name)
         return this.sortDate(rows, name, index, asc);
     }
   }
 
   sortText(rows: RowContentModel[], field: string, index: number, asc: boolean) {
     if (field !== 'column') {
-      console.log('field', field);
       rows.sort((a, b) => {
         return a[field].localeCompare(b[field]);
       })
@@ -129,20 +106,11 @@ export class SortByPipe implements PipeTransform {
 
   sortNumber(rows: RowContentModel[], field: string, index: number, asc: boolean): RowContentModel[] {
     if (field !== 'column') {
-      if (field == 'taskDtos') {
-        rows.sort((a, b) => {
-          console.log(a[field], b[field]);
-          return a[field].length - b[field].length;
-        })
-      } else {
-        rows.sort((a, b) => {
-          console.log(a[field], b[field]);
-          return a[field].length - b[field].length;
-        })
-      }
+      rows.sort((a, b) => {
+        return a[field] - b[field];
+      })
     } else {
       rows.sort((a, b) => {
-        console.log(a.columnValueDtos[index], field);
         return parseInt(a.columnValueDtos[index][Object.keys(a.columnValueDtos[index])[0]].value) - parseInt(b.columnValueDtos[index][Object.keys(a.columnValueDtos[index])[0]].value);
       })
     }
@@ -163,7 +131,6 @@ export class SortByPipe implements PipeTransform {
       })
     } else {
       rows.sort((a, b) => {
-        console.log(a.columnValueDtos[index], field);
         return Date.parse(a.columnValueDtos[index][Object.keys(a.columnValueDtos[index])[0]].value) - Date.parse(b.columnValueDtos[index][Object.keys(a.columnValueDtos[index])[0]].value);
       })
     }
