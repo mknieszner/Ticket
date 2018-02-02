@@ -12,7 +12,6 @@ export class AuthInterceptor implements HttpInterceptor {
   }
 
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<any> {
-    console.log('INTERCPETED REQ:',req);
     if (!req.url.includes('oauth/token')) {
       if (req.method == 'GET') {
         const headers = new HttpHeaders({'Content-type': 'multipart/form-data', 'Authorization': 'Bearer ' + this.cookie.getAuth()});

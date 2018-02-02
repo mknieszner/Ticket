@@ -26,7 +26,7 @@ import {OauthService} from "./shared/oauth.service";
 import {AuthInterceptor} from "./shared/auth.interceptor";
 import {AuthCookie} from "./shared/auth-cookies-handler";
 import { RowDetailsComponent } from './tables/row-details/row-details.component';
-import {FilterService} from "./shared/filter.service";
+import {FilterService} from "./shared/filter/filter.service";
 import { TaskComponent } from './tables/task/task.component';
 import {tasksReducers} from "./shared/store/task/tasks.reducers";
 import {chatReducers} from "./shared/store/chat/chat.reducers";
@@ -40,7 +40,8 @@ import { ChatComponent } from './chat/chat.component';
 import {StoreResetService} from "./shared/store-reset.service";
 import {ReversePipe} from "./shared/reverse.pipe";
 import {ExtendedFilterModel} from "./shared/table.model";
-import {ExtendedFilterPipe} from "./shared/extended-filter.pipe";
+import {ExtendedFilterPipe} from "./shared/filter/extended-filter.pipe";
+import {SortByPipe} from "./shared/sort/sort-by.pipe";
 
 
 
@@ -75,7 +76,8 @@ const appRoutes: Routes = [
     TaskComponent,
     UserTaskComponent,
     ChatComponent,
-    ExtendedFilterPipe
+    ExtendedFilterPipe,
+    SortByPipe
   ],
   imports: [
     BrowserModule,
@@ -100,9 +102,11 @@ const appRoutes: Routes = [
     // {provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi:true}
     ],
   exports: [
-    ExtendedFilterPipe
+    ExtendedFilterPipe,
+    SortByPipe
   ],
   bootstrap: [AppComponent]
 })
 export class AppModule {
 }
+

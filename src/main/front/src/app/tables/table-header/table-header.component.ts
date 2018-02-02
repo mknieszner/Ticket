@@ -6,6 +6,7 @@ import {Observable} from "rxjs/Observable";
 import * as TablesActions from "../../shared/store/table/tables.actions";
 import {Form, FormArray, FormControl, FormGroup} from "@angular/forms";
 import {Question} from "../row/value-types/question-base.model";
+import {SortModel} from "../../shared/sort/sort.model";
 
 @Component({
   selector: 'app-table-header',
@@ -18,12 +19,16 @@ export class TableHeaderComponent implements OnInit {
   extendedFilterMode: Observable<boolean>;
   filterForm: FormGroup;
   extendedTableView: Observable<boolean>;
-  extendedFilterAction: Observable<boolean>;
+  // extendedFilterAction: Observable<boolean>;
+  sortContent: SortModel;
 
   constructor(private contentStore: Store<fromAppReducers.AppState>) {
   }
 
   ngOnInit() {
+    this.contentStore.select('tables', 'sortContent').subscribe((sortContent: SortModel)=>{
+      this.sortContent = sortContent;
+    })
     this.extendedTableView = this.contentStore.select('tables','extendedTableView');
     this.header = this.contentStore.select('tables', 'tableDefinition');
     this.editRowMode = this.contentStore.select('tables', 'editRowMode');
@@ -40,15 +45,15 @@ export class TableHeaderComponent implements OnInit {
         }
       }
     );
-    this.extendedFilterAction = this.contentStore.select('tables', 'extendedFilterAction');
-    this.extendedFilterAction.subscribe((action: boolean) => { //TODO WTF!!!!!!!!!!
-      console.log(action);
-      if (action) {
-        this.contentStore.dispatch(new TablesActions.SetExtendedFilter(this.getFormValues()));
-      }
-        this.contentStore.dispatch(new TablesActions.RunExtendedFilter());
-
-    })
+    // this.extendedFilterAction = this.contentStore.select('tables', 'extendedFilterAction');
+    // this.extendedFilterAction.subscribe((action: boolean) => {
+    //   console.log(action);
+    //   if (action) {
+    //     this.contentStore.dispatch(new TablesActions.SetExtendedFilter(this.getFormValues()));
+    //   }
+    //     this.contentStore.dispatch(new TablesActions.RunExtendedFilter());
+    //
+    // })
   }
 
   setForm(header: TableDefinitionModel) {
@@ -81,5 +86,9 @@ export class TableHeaderComponent implements OnInit {
 
   onRunExtendedFilter() {
     this.contentStore.dispatch(new TablesActions.SetExtendedFilter(this.getFormValues()));
+  }
+
+  sort(payload: SortModel){
+    this.contentStore.dispatch(new TablesActions.SetSortContent(payload));
   }
 }

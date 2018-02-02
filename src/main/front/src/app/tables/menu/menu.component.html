@@ -21,11 +21,11 @@
             <div class="btn-group btn-group-toggle" data-toggle="buttons"
                  *ngIf="(extendedTableView|async) && (extendedFilterMode | async)"
                  style="margin-left: 20px">
-              <label class="btn btn-secondary active"(click)="setFilterSelectValue(true)">
-                <input type="radio"> Any
-              </label>
-              <label class="btn btn-secondary" (click)="setFilterSelectValue(false)">
+              <label class="btn btn-secondary active"(click)="setFilterSelectValue(false)">
                 <input type="radio"> All
+              </label>
+              <label class="btn btn-secondary" (click)="setFilterSelectValue(true)">
+                <input type="radio"> Any
               </label>
             </div>
             <div class="btn-group" role="group" aria-label="">

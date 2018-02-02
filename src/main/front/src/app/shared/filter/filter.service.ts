@@ -1,7 +1,7 @@
-import {ExtendedFilterModel, RowContentModel} from "./table.model";
+import {ExtendedFilterModel, RowContentModel} from "../table.model";
 import {Injectable} from "@angular/core";
 import {Store} from "@ngrx/store";
-import * as fromAppReducers from "./store/app.reducers";
+import * as fromAppReducers from "../store/app.reducers";
 import {Observable} from "rxjs/Observable";
 
 @Injectable()
@@ -15,12 +15,8 @@ export class FilterService {
       return true;
     } else {
       if (filterSelect) {
-        console.log('if');
-        console.log('row', this.anyFilter(row, filter));
         return this.anyFilter(row, filter)
       } else {
-        console.log('else');
-        console.log('row',this.andFilter(row, filter));
         return this.andFilter(row, filter);
       }
     }

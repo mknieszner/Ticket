@@ -97,16 +97,17 @@ public class UserService implements UserDetailsService {
     return roleMapper.mapRoleToRoleDto(roleRepository.save(new Role(roleName, roleDescription)));
   }
 
-
-  public void removeUser(final String username) { // Iterator ? Stream
-//    User user = userRepository.findByUsername(username);
-//    for (Iterator<Role> roleIt = user.getRoles().iterator(); roleIt.hasNext()) {
-//      Role role = roleIt.next();
-//      removeUserFromRoleByUserName(role.getName(), username);
-//    }
-    userRepository.findByUsername(username).getRoles().stream().forEach((role) -> {
+@Transactional
+  public void removeUser(final String username) { //TODO: Check Iterator ? Stream Concurent error
+    User user = userRepository.findByUsername(username);
+    Set<Role> roles = user.getRoles();
+    for (Iterator<Role> roleIt = roles.iterator(); roleIt.hasNext();) {
+      Role role = roleIt.next();
       removeUserFromRoleByUserName(role.getName(), username);
-    });
+    }
+//    userRepository.findByUsername(username).getRoles().stream().forEach((role) -> {
+//      removeUserFromRoleByUserName(role.getName(), username);
+//    });
     userRepository.deleteByUsername(username);
   }
 

@@ -3,6 +3,7 @@ import {ExtendedFilterModel, RowContentModel, TableDefinitionModel, TaskModel} f
 import {UserModel} from "../../../user/user.model";
 import {RoleModel} from "../../../roles/role.model";
 import {UserState} from "../user/users.reducers";
+import {SortModel} from "../../sort/sort.model";
 
 export interface TableState {
   editRowMode: boolean,
@@ -18,7 +19,8 @@ export interface TableState {
   extendedFilterContent: ExtendedFilterModel,
   filterSelect: boolean,
   extendedTableView: boolean,
-  extendedRowView:boolean
+  extendedRowView: boolean
+  sortContent: SortModel
 }
 
 const initialTableState: TableState = {
@@ -35,7 +37,13 @@ const initialTableState: TableState = {
   extendedFilterContent: null,
   filterSelect: false,
   extendedTableView: false,
-  extendedRowView:false
+  extendedRowView: false,
+  sortContent: {
+    name: '',
+    index: 0,
+    dataType: '',
+    asc: true
+  }
 };
 
 export function tablesReducers(state: TableState = initialTableState, action: TableActions.TableActions) {
@@ -149,6 +157,11 @@ export function tablesReducers(state: TableState = initialTableState, action: Ta
       return {
         ...state,
         extendedRowView: action.payload
+      };
+    case TableActions.SET_SORT_CONTENT:
+      return {
+        ...state,
+        sortContent: action.payload
       };
     default:
       return state;

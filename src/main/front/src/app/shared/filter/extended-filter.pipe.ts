@@ -1,5 +1,5 @@
 import {Pipe, PipeTransform} from "@angular/core";
-import {ExtendedFilterModel, RowContentModel} from "./table.model";
+import {ExtendedFilterModel, RowContentModel} from "../table.model";
 
 import {FilterService} from "./filter.service";
 @Pipe({ name: 'extendedFilter' })

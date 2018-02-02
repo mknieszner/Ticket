@@ -9,7 +9,9 @@ import ticketproject.app.crud.domain.entities.authorization.User;
 import javax.transaction.Transactional;
 import java.util.List;
 
-@Transactional
-@Repository
 public interface TaskRepository extends CrudRepository<Task, Long> {
+  @Override
+  void delete(Long id);
+
+  void deleteById(Long id);
 }

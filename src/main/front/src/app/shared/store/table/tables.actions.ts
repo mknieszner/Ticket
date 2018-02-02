@@ -1,6 +1,7 @@
 import {Action} from '@ngrx/store';
 import {ExtendedFilterModel, RowContentModel, TableDefinitionModel, TaskModel} from '../../table.model';
 import {UserModel} from "../../../user/user.model";
+import {SortModel} from "../../sort/sort.model";
 
 export const RESET_STORE = 'RESET_STORE';
 
@@ -26,6 +27,9 @@ export const SET_EXTENDED_ROW_VIEW = 'SET_EXTENDED_ROW_VIEW';
 export const RUN_EXTENDED_FILTER = 'RUN_EXTENDED_FILTER';
 export const SET_EXTENDED_FILTER = 'SET_EXTENDED_FILTER';
 export const SET_EXTENDED_FILTER_SELECT = 'SET_EXTENDED_FILTER_SELECT';
+
+export const SET_SORT_CONTENT = 'SET_SORT_CONTENT';
+
 export const SWITCH_TABLE_RESET = 'SWITCH_TABLE_RESET';
 
 export const SET_ROW_TASKS = 'SET_ROW_TASKS';
@@ -38,6 +42,13 @@ export class SetNewRowModeAction implements Action {
   readonly type = NEW_ROW_MODE;
 
   constructor(public payload: boolean) {
+  }
+}
+
+export class SetSortContent implements Action {
+  readonly type = SET_SORT_CONTENT;
+
+  constructor(public payload: SortModel) {
   }
 }
 
@@ -218,4 +229,5 @@ export type TableActions =
   UpdateRowsTaskAction |
   DeleteTask |
   SetExtendedTableView |
-  SetExtendedRowView;
+  SetExtendedRowView |
+  SetSortContent;

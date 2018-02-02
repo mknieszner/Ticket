@@ -155,9 +155,7 @@ public class TableService {
     projectTableRepository.deleteByName(tableName);
   }
 
-  public List<String> getTablesNamesListAuthorized(
-      final String username
-  ) {
+  public List<String> getTablesNamesListAuthorized(final String username) {
     List<String> tableNames = Lists.newArrayList(projectTableRepository.findAll()).stream().map(ProjectTable::getName).collect(Collectors.toList());
 
     if (isAdmin(username)) {
@@ -212,8 +210,7 @@ public class TableService {
     String tableName = row.getProjectTable().getName();
     if (userRepository.findByUsername(username).getRoles() //TODO cache roles???
         .stream()                                          // TODO: validator????
-        .map(Role::getName)
-        .anyMatch((roleName) -> roleName.equals(tableName) || roleName.equals("ROLE_ADMIN"))) {
+        .map(Role::getName).anyMatch((roleName) -> roleName.equals(tableName) || roleName.equals("ROLE_ADMIN"))) {
       row.getTasks().add(taskMapper.mapTaskDtoToTask(taskDto));
       return taskMapper.mapTasksToTaskDtos(rowRepository.save(row).getTasks());
     } else {
@@ -226,8 +223,7 @@ public class TableService {
     String tableName = row.getProjectTable().getName();
     if (userRepository.findByUsername(username).getRoles() //TODO cache roles???
         .stream()                                          // TODO: validator????
-        .map(Role::getName)
-        .anyMatch((roleName) -> roleName.equals(tableName) || roleName.equals("ROLE_ADMIN"))) {
+        .map(Role::getName).anyMatch((roleName) -> roleName.equals(tableName) || roleName.equals("ROLE_ADMIN"))) {
       return taskMapper.mapTasksToTaskDtos(row.getTasks());
     } else {
       throw new RuntimeException(String.format("User:%s does not have authority:%s", username, tableName));
@@ -240,8 +236,7 @@ public class TableService {
     final String tableName = row.getProjectTable().getName();
     if (userRepository.findByUsername(username).getRoles() //TODO cache roles???
         .stream()                                          // TODO: validator????
-        .map(Role::getName)
-        .anyMatch((roleName) -> roleName.equals(tableName) || roleName.equals("ROLE_ADMIN"))) {
+        .map(Role::getName).anyMatch((roleName) -> roleName.equals(tableName) || roleName.equals("ROLE_ADMIN"))) {
       final User userToAssign = userRepository.findByUsername(userNameToAssign);
       task.getUsers().add(userToAssign);
       return taskMapper.mapTaskToTaskDto(taskRepository.save(task));
@@ -250,15 +245,20 @@ public class TableService {
     } // TODO: remove tablename and task from exception (tests)
   }
 
+
   public boolean deleteTask(final Long taskId, final String username) {
     Task task = taskRepository.findOne(taskId);
-    String tableName = rowRepository.findByTasks(task).getProjectTable().getName();
+    Row row = rowRepository.findByTasks(task);
+    row.getTasks().remove(task);
+    String tableName = row.getProjectTable().getName();
     if (userRepository.findByUsername(username).getRoles() //TODO cache roles???
         .stream()                                          // TODO: validator????
         .map(Role::getName)
         .anyMatch((roleName) -> roleName.equals(tableName) || roleName.equals("ROLE_ADMIN"))) {
-      taskRepository.delete(taskId);
-    }
+      rowRepository.save(row);
+    } else {
+      throw new RuntimeException(String.format("User:%s does not have authority:%s TaskDto: %s", username, tableName, task.toString()));
+    } // TODO: remove tablename and task from exception (tests)
     return true;
   }
 }

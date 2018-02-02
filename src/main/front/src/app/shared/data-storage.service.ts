@@ -237,7 +237,7 @@ export class DataStorageService {
   }
 
   setTableUsers(tableName: string) {
-    console.log(tableName);
+    // console.log(tableName);
     this.httpClient.get<UserModel[]>(this.basehost + '/v1/users/table/' + tableName)
       .subscribe((users: UserModel[]) => {
           this.store.dispatch(new TablesActions.SetTableUsers(users));
@@ -261,7 +261,7 @@ export class DataStorageService {
   }
 
   deleteTask(taskId: number, rowId: number) {
-    console.log('deleteTask',taskId, rowId)
+    // console.log('deleteTask',taskId, rowId)
     this.httpClient.delete<boolean>(this.basehost + '/v1/projects/tables/rows/tasks/' + taskId)
       .subscribe((response) => {
         if (response) {

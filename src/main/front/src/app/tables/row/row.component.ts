@@ -8,7 +8,7 @@ import {Store} from "@ngrx/store";
 import {DataStorageService} from "../../shared/data-storage.service";
 import * as fromAppReducers from '../../shared/store/app.reducers'
 import * as TablesActions from "../../shared/store/table/tables.actions";
-import {FilterService} from "../../shared/filter.service";
+import {FilterService} from "../../shared/filter/filter.service";
 import {noUndefined} from "@angular/compiler/src/util";
 
 @Component({
@@ -45,14 +45,6 @@ export class RowComponent implements OnInit {
       }
     });
     this.extendedFilterContent = this.store.select('tables', 'extendedFilterContent');
-    // this.extendedFilterContent.subscribe(extendedFilterContent => {
-    //   console.log(extendedFilterContent);
-    //   if (extendedFilterContent !== null && extendedFilterContent !== undefined) {
-    //     this.rowFilterState = this.filterService.runExtendedFilterTable(this.row, extendedFilterContent);
-    //   } else {
-    //     this.rowFilterState = true;
-    //   }
-    // });
   }
 
 

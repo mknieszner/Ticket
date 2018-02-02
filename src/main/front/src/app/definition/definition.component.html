@@ -2,10 +2,9 @@
   <div class="container">
     <div class="row">
       <div class="col-12">
-        <h3>Table Definition</h3>
-        <form [formGroup]="definitionForm">
+        <h3 class="text-center">Table Definition</h3>
+        <form [formGroup]="definitionForm" style="margin-top: 10px">
           <div class="form-group">
-            <label for="table-name">Table Name</label>
             <input type="text"
                    id="table-name"
                    formControlName="name"
@@ -14,29 +13,33 @@
                    required
             >
           </div>
-          <div class="row">
+          <div class="row justify-content-center">
             <div class="col-12" formArrayName="columnDetailDefinitionDtoList">
-              <div class="row" *ngFor="let columnDetailDefinitionDto of definitionForm.get('columnDetailDefinitionDtoList').controls; let i = index;"
+              <div class="row justify-content-center"
+                   *ngFor="let columnDetailDefinitionDto of definitionForm.get('columnDetailDefinitionDtoList').controls; let i = index;"
                    [formGroupName]="i">
-                <div class="col-1">
-                  <label for="type">Type:</label>
-                </div>
-                <div class="col-3">
-                  <select id="type" type="text" class="form-control form-control" formControlName="type">
-                    <option *ngFor="let option of options;" [selected]="option.name" [value]="option.shortcut" required>{{
-                      option.name }}
-                    </option>
-                  </select>
+                <div class="col-12 col-sm-5 col-md-3">
+                  <div class="input-group">
+                    <div class="input-group-prepend">
+                      <label class="btn btn-secondary">Type:</label>
+                    </div>
+                    <select type="text" class="form-control" formControlName="type" required>
+                      <option *ngFor="let option of options;" [selected]="option.name" [value]="option.shortcut">{{
+                        option.name }}
+                      </option>
+                    </select>
+                  </div>
                   <div *ngIf="definitionForm.value.columnDetailDefinitionDtoList[i].type=='EN'">
                     <div class="col-12" formArrayName="optionList">
                       <div *ngFor="let option of columnDetailDefinitionDto.get('optionList').controls;let j = index" class="row">
-                          <input type="text" class="form-control col"
+                        <div class="input-group" style="margin-top: 3px;">
+                          <input type="text" class="form-control"
                                  [value]="definitionForm.value.columnDetailDefinitionDtoList[i].optionList[j]" formControlName="{{j}}"
                                  placeholder="Option..."
-                                 required
-                          style="margin-top: 3px;">
-                        <div class="col">
-                            <button type="button" class="btn btn-default text-danger" (click)="onDeleteOption(i,j)">X</button>
+                                 required>
+                          <div class="input-group-append">
+                            <button type="button" class="btn btn-secondary text-danger" (click)="onDeleteOption(i,j)">X</button>
+                          </div>
                         </div>
                       </div>
                       <div class="row">
@@ -49,23 +52,25 @@
                     </div>
                   </div>
                 </div>
-                <div class="col-1 col-md-4">
-                  <label>Name:</label>
-                </div>
-                <div class="col-6">
-                  <input type="text" class="form-control" formControlName="name" required>
+                <div class="col-11 col-sm-6 col-md-5">
+                  <div class="input-group">
+                    <div class="input-group-prepend">
+                      <label class="btn btn-secondary">Name:</label>
+                    </div>
+                    <input type="text" class="form-control" formControlName="name" required style="height: 38px;">
+                  </div>
                 </div>
                 <div class="col-1">
-                  <button type="button" class="btn btn-default text-danger" (click)="onDeleteColumn(i)">X</button>
+                  <button type="button" class="btn btn-secondary text-danger" (click)="onDeleteColumn(i)">X</button>
                 </div>
               </div>
             </div>
           </div>
           <br>
           <div class="form-group">
-            <button type="button" class="btn btn-default text-primary" (click)="onAddColumn()">Add column</button>
-            <button type="button" class="btn btn-default text-danger" (click)="onResetForm()">Reset form</button>
-            <button type="submit" class="btn btn-default text-success" [disabled]="!definitionForm.valid" (click)="postForm()">Post form</button>
+            <button type="button" class="btn btn-secondary text-primary" (click)="onAddColumn()">Add column</button>
+            <button type="button" class="btn btn-secondary text-danger" (click)="onResetForm()">Reset form</button>
+            <button type="submit" class="btn btn-secondary text-success" [disabled]="!definitionForm.valid" (click)="postForm()">Post form</button>
           </div>
         </form>
       </div>

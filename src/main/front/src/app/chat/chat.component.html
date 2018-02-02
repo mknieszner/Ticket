@@ -1,59 +1,32 @@
-<div class="row">
+<div class="jumbotron">
+  <div class="row">
 
-  <div class="col-4">
-    <ul class="list-group" style="padding: 50px 30px">
-      <li class="list-group-item list-group-item-dark bg-dark text-white">Active Users:</li>
-      <li class="list-group-item list-group-item-action list-group-item-light"
-          (click)="setChat('global')">
-        Global chat
-      </li>
-      <div *ngFor="let activeWsUser of (activeWsUsers | async)">
-        <li  *ngIf="activeWsUser != (currentUser |async)"
-          class="list-group-item list-group-item-action list-group-item-light"
-          (click)="setChat(activeWsUser)"
-        >{{activeWsUser}}
+    <div class="col-4">
+      <ul class="list-group" style="padding: 50px 30px">
+        <li class="list-group-item list-group-item-dark bg-dark text-white">Active Users:</li>
+        <li class="list-group-item list-group-item-action list-group-item-light"
+            (click)="setChat('global')">
+          Global chat
         </li>
-      </div>
-    </ul>
-  </div>
-
-  <div class="col-8" style="padding: 50px 70px 0 0;">
-    <ul class="list-group" [ngClass]="chatName != 'global' ? 'd-none' : ''">
-      <li class="list-group-item bg-dark text-white">Global chat:</li>
-      <li class="list-group-item"
-          style="min-height: 600px; max-height: 600px; overflow-y: scroll;">
-        <div *ngFor="let message of (chatContent | async | reverse)">
-          <div *ngIf="(message.senderName) === 'global' || (message.recipientName) === 'global'">
-            <div *ngIf="(message.senderName) === (currentUser |async)" class="alert alert-info"
-                 style="width: 70%; margin-bottom: 5px;">{{message.senderName}} : {{message.message}}
-            </div>
-            <div *ngIf="(message.senderName) !== (currentUser |async)" class="alert alert-success"
-                 style="width: 70%; margin: 0 0 5px 30%">{{message.senderName}} : {{message.message}}
-            </div>
-          </div>
+        <div *ngFor="let activeWsUser of (activeWsUsers | async)">
+          <li *ngIf="activeWsUser != (currentUser |async)"
+              class="list-group-item list-group-item-action list-group-item-light"
+              (click)="setChat(activeWsUser)"
+          >{{activeWsUser}}
+          </li>
         </div>
-      </li>
-      <li *ngIf="chatName == 'global'" class="list-group-item bg-dark">
-        <div class="input-group">
-          <input class="form-control" type="text" #messageContentGlobal>
-          <div class="input-group-append">
-            <button (click)="postMessage(messageContentGlobal.value)" class="btn btn-default">Post</button>
-          </div>
-        </div>
-      </li>
-    </ul>
+      </ul>
+    </div>
 
-    <div *ngFor="let activeWsUser of (activeWsUsers | async | reverse)">
-      <ul class="list-group" [ngClass]="chatName != activeWsUser ? 'd-none' : ''">
-        <li class="list-group-item bg-dark text-white">{{activeWsUser}} chat:</li>
-        <li class="list-group-item" style="min-height: 600px;max-height: 600px; overflow-y: scroll;">
-          <div *ngFor="let message of (chatContent | async)">
-            <div *ngIf="
-            (message.senderName === activeWsUser || message.recipientName === activeWsUser) &&
-            (message.senderName !== 'global' && message.recipientName !== 'global')
-            ">
+    <div class="col-8" style="padding: 50px 70px 0 0;">
+      <ul class="list-group" [ngClass]="chatName != 'global' ? 'd-none' : ''">
+        <li class="list-group-item bg-dark text-white">Global chat:</li>
+        <li class="list-group-item"
+            style="min-height: 600px; max-height: 600px; overflow-y: scroll;">
+          <div *ngFor="let message of (chatContent | async | reverse)">
+            <div *ngIf="(message.senderName) === 'global' || (message.recipientName) === 'global'">
               <div *ngIf="(message.senderName) === (currentUser |async)" class="alert alert-info"
-                   style="width: 70%; margin-bottom: 5px;">{{message.senderName}} :{{message.message}}
+                   style="width: 70%; margin-bottom: 5px;">{{message.senderName}} : {{message.message}}
               </div>
               <div *ngIf="(message.senderName) !== (currentUser |async)" class="alert alert-success"
                    style="width: 70%; margin: 0 0 5px 30%">{{message.senderName}} : {{message.message}}
@@ -61,15 +34,44 @@
             </div>
           </div>
         </li>
-        <li *ngIf="chatName == activeWsUser" class="list-group-item bg-dark text-white">
+        <li *ngIf="chatName == 'global'" class="list-group-item bg-dark">
           <div class="input-group">
-            <input class="form-control" type="text" #messageContent>
+            <input class="form-control" type="text" #messageContentGlobal>
             <div class="input-group-append">
-              <button (click)="postMessage(messageContent.value)" class="btn btn-default">Post</button>
+              <button (click)="postMessage(messageContentGlobal.value)" class="btn btn-default">Post</button>
             </div>
           </div>
         </li>
       </ul>
+
+      <div *ngFor="let activeWsUser of (activeWsUsers | async | reverse)">
+        <ul class="list-group" [ngClass]="chatName != activeWsUser ? 'd-none' : ''">
+          <li class="list-group-item bg-dark text-white">{{activeWsUser}} chat:</li>
+          <li class="list-group-item" style="min-height: 600px;max-height: 600px; overflow-y: scroll;">
+            <div *ngFor="let message of (chatContent | async)">
+              <div *ngIf="
+            (message.senderName === activeWsUser || message.recipientName === activeWsUser) &&
+            (message.senderName !== 'global' && message.recipientName !== 'global')
+            ">
+                <div *ngIf="(message.senderName) === (currentUser |async)" class="alert alert-info"
+                     style="width: 70%; margin-bottom: 5px;">{{message.senderName}} :{{message.message}}
+                </div>
+                <div *ngIf="(message.senderName) !== (currentUser |async)" class="alert alert-success"
+                     style="width: 70%; margin: 0 0 5px 30%">{{message.senderName}} : {{message.message}}
+                </div>
+              </div>
+            </div>
+          </li>
+          <li *ngIf="chatName == activeWsUser" class="list-group-item bg-dark text-white">
+            <div class="input-group">
+              <input class="form-control" type="text" #messageContent>
+              <div class="input-group-append">
+                <button (click)="postMessage(messageContent.value)" class="btn btn-default">Post</button>
+              </div>
+            </div>
+          </li>
+        </ul>
+      </div>
     </div>
   </div>
 </div>
