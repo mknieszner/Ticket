@@ -1,7 +1,8 @@
 <tr *ngIf="(header| async) && !(extendedFilterMode |async)">
   <!--<td><button type="button" class="btn btn-light" *ngIf="!(newRowMode | async)" (click)="onNewRow()">New Row</button></td>-->
   <td *ngFor="let column of (header| async)[0]?.columnDetailDefinitionDtoList"
-      [ngClass]="column.type== 'DE' ? 'description' : '' ">
+      [ngClass]="column.type== 'DE' ? 'description' : '' "
+  style="border-top: none">
     {{column.name }}
   </td>
   <div *ngIf="extendedTableView | async">
@@ -17,18 +18,26 @@
 <form *ngIf="extendedFilterMode |async" [formGroup]="filterForm">
   <tr>
     <span formArrayName="columnValueDtos">
-      <td *ngFor="let column of (header| async)[0]?.columnDetailDefinitionDtoList; let i = index" formGroupName="{{i}}">
-        <input class="form-control mr-sm-2" type="text" placeholder="{{ column.name }}" formControlName="value">
+      <td *ngFor="let column of (header| async)[0]?.columnDetailDefinitionDtoList; let i = index" formGroupName="{{i}}"
+          [ngClass]="column.type== 'DE' ? 'description' : '' "
+      >
+        <input class="form-control mr-sm-2" type="text" placeholder="{{ column.name }}" formControlName="value"
+               (keyup)="onRunExtendedFilter()">
       </td>
     </span>
-    <div *ngIf="extendedTableView | async">
-      <td><input class="form-control mr-sm-2" type="text" placeholder="ID" formControlName="id"></td>
-      <td><input class="form-control mr-sm-2" type="text" placeholder="NAME" formControlName="name"></td>
-      <td><input class="form-control mr-sm-2" type="text" placeholder="Created by" formControlName="createdBy"></td>
-      <td><input class="form-control mr-sm-2" type="text" placeholder="Created on" formControlName="createdOn"></td>
-      <td><input class="form-control mr-sm-2" type="text" placeholder="Last Modified By" formControlName="lastModifiedBy"></td>
-      <td><input class="form-control mr-sm-2" type="text" placeholder="Last Modified On" formControlName="lastModifiedOn"></td>
-      <td><input class="form-control mr-sm-2" type="text" placeholder="Last Modified On" formControlName="taskDtos"></td>
-    </div>
+      <td><input class="form-control mr-sm-2" type="text" placeholder="ID" formControlName="id"
+                 (keyup)="onRunExtendedFilter()"></td>
+      <td hidden><input class="form-control mr-sm-2" type="text" placeholder="NAME" formControlName="name"
+                 (keyup)="onRunExtendedFilter()"></td>
+      <td><input class="form-control mr-sm-2" type="text" placeholder="Created by" formControlName="createdBy"
+                 (keyup)="onRunExtendedFilter()"></td>
+      <td><input class="form-control mr-sm-2" type="text" placeholder="Created on" formControlName="createdOn"
+                 (keyup)="onRunExtendedFilter()"></td>
+      <td><input class="form-control mr-sm-2" type="text" placeholder="Last Modified By" formControlName="lastModifiedBy"
+                 (keyup)="onRunExtendedFilter()"></td>
+      <td><input class="form-control mr-sm-2" type="text" placeholder="Last Modified On" formControlName="lastModifiedOn"
+                 (keyup)="onRunExtendedFilter()"></td>
+      <td><input class="form-control mr-sm-2" type="text" placeholder="Tasks" formControlName="taskDtos"
+                 (keyup)="onRunExtendedFilter()"></td>
   </tr>
 </form>

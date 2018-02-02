@@ -16,6 +16,7 @@ export interface TableState {
   extendedFilterMode: boolean,
   extendedFilterAction: boolean
   extendedFilterContent: ExtendedFilterModel,
+  filterSelect: boolean,
   extendedTableView: boolean,
   extendedRowView:boolean
 }
@@ -32,6 +33,7 @@ const initialTableState: TableState = {
   extendedFilterMode: false,
   extendedFilterAction: false,
   extendedFilterContent: null,
+  filterSelect: false,
   extendedTableView: false,
   extendedRowView:false
 };
@@ -107,6 +109,11 @@ export function tablesReducers(state: TableState = initialTableState, action: Ta
       return {
         ...state,
         extendedFilterContent: action.payload
+      };
+    case TableActions.SET_EXTENDED_FILTER_SELECT:
+      return {
+        ...state,
+        filterSelect: action.payload
       };
     case TableActions.SWITCH_TABLE_RESET:
       return {

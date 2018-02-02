@@ -1,6 +1,6 @@
 <div class="panel" *ngIf="editRowMode" style="border: solid 2px #343a40; border-radius: 8px">
 
-  <div class="panel-heading bg-dark">
+  <div class="panel-heading bg-dark text-center" style="padding: 10px">
     <div class="btn-group">
       <button type="button" class="btn btn-default" (click)="onToggleRowEditMode()">Close</button>
       <button type="button" class="btn btn-default" (click)="onAddTask()">Add Task</button>
@@ -11,288 +11,288 @@
     </div>
   </div>
 
+  <div class="panel-body" style="padding: 10px">
+    <div *ngIf="!unlockFields && (newRowMode | async)">
+      <div class="col-xs-12 ">
+        <form [formGroup]="newRowForm">
+          <div class="form-group" hidden>
+            <label for="id">ID:</label>
+            <input type="number"
+                   id="id"
+                   formControlName="id"
+                   class="form-control"
+            >
+          </div>
+          <div class="form-group" hidden>
+            <label for="name">Name:</label>
+            <input type="text"
+                   id="name"
+                   formControlName="name"
+                   class="form-control"
+            >
+          </div>
+          <div class="form-group" hidden>
+            <label for="createdBy">Created By:</label>
+            <input type="text"
+                   id="createdBy"
+                   formControlName="createdBy"
+                   class="form-control"
+            >
+          </div>
+          <div class="form-group" hidden>
+            <label for="createdOn">Created On:</label>
+            <input type="datetime-local"
+                   id="createdOn"
+                   formControlName="createdOn"
+                   class="form-control"
+            >
+          </div>
+          <div class="form-group" hidden>
+            <label for="lastModifiedBy">Last modified by:</label>
+            <input type="text"
+                   id="lastModifiedBy"
+                   formControlName="lastModifiedBy"
+                   class="form-control"
+            >
+          </div>
+          <div class="form-group" hidden>
+            <label for="lastModifiedOn">Last modified on:</label>
+            <input type="datetime-local"
+                   id="lastModifiedOn"
+                   formControlName="lastModifiedOn"
+                   class="form-control"
+            >
+          </div>
+          <div formArrayName="columnValueDtos">
+            <div *ngFor="let cell of newRowForm.get('columnValueDtos').controls;let j = index">
 
-  <div *ngIf="!unlockFields && (newRowMode | async)">
-    <div class="col-xs-12 ">
-      <form [formGroup]="newRowForm">
-        <div class="form-group" hidden>
-          <label for="id">ID:</label>
-          <input type="number"
-                 id="id"
-                 formControlName="id"
-                 class="form-control"
-          >
-        </div>
-        <div class="form-group" hidden>
-          <label for="name">Name:</label>
-          <input type="text"
-                 id="name"
-                 formControlName="name"
-                 class="form-control"
-          >
-        </div>
-        <div class="form-group" hidden>
-          <label for="createdBy">Created By:</label>
-          <input type="text"
-                 id="createdBy"
-                 formControlName="createdBy"
-                 class="form-control"
-          >
-        </div>
-        <div class="form-group" hidden>
-          <label for="createdOn">Created On:</label>
-          <input type="datetime-local"
-                 id="createdOn"
-                 formControlName="createdOn"
-                 class="form-control"
-          >
-        </div>
-        <div class="form-group" hidden>
-          <label for="lastModifiedBy">Last modified by:</label>
-          <input type="text"
-                 id="lastModifiedBy"
-                 formControlName="lastModifiedBy"
-                 class="form-control"
-          >
-        </div>
-        <div class="form-group" hidden>
-          <label for="lastModifiedOn">Last modified on:</label>
-          <input type="datetime-local"
-                 id="lastModifiedOn"
-                 formControlName="lastModifiedOn"
-                 class="form-control"
-          >
-        </div>
-        <div formArrayName="columnValueDtos">
-          <div *ngFor="let cell of newRowForm.get('columnValueDtos').controls;let j = index">
+              <div [ngSwitch]="(cell.value | valueOnKey).key" formGroupName="{{j}}">
 
-            <div [ngSwitch]="(cell.value | valueOnKey).key" formGroupName="{{j}}">
-
-              <div *ngSwitchCase="'DT'" class="form-group" style="margin-top: 10px">
-                <label>{{(header | async)[0].columnDetailDefinitionDtoList[j].name}}</label>
-                <input type="datetime-local"
-                       formControlName="DT"
-                       class="form-control"
-                       formControlName="DT">
-              </div>
-              <div *ngSwitchCase="'ST'" class="form-group" style="margin-top: 10px">
-                <label>{{(header | async)[0].columnDetailDefinitionDtoList[j].name}}</label>
-                <input
-                  [type]="'text'"
-                  formControlName="ST"
-                  class="form-control">
-              </div>
-              <div *ngSwitchCase="'DE'" class="form-group" style="margin-top: 10px">
-                <label>{{(header | async)[0].columnDetailDefinitionDtoList[j].name}}</label>
-                <textarea cols="30" rows="10"
-                          class="form-control"
-                          formControlName="DE">
+                <div *ngSwitchCase="'DT'" class="form-group" style="margin-top: 10px">
+                  <label>{{(header | async)[0].columnDetailDefinitionDtoList[j].name}}</label>
+                  <input type="datetime-local"
+                         formControlName="DT"
+                         class="form-control"
+                         formControlName="DT">
+                </div>
+                <div *ngSwitchCase="'ST'" class="form-group" style="margin-top: 10px">
+                  <label>{{(header | async)[0].columnDetailDefinitionDtoList[j].name}}</label>
+                  <input
+                    [type]="'text'"
+                    formControlName="ST"
+                    class="form-control">
+                </div>
+                <div *ngSwitchCase="'DE'" class="form-group" style="margin-top: 10px">
+                  <label>{{(header | async)[0].columnDetailDefinitionDtoList[j].name}}</label>
+                  <textarea cols="30" rows="10"
+                            class="form-control"
+                            formControlName="DE">
                 </textarea>
-              </div>
-              <div *ngSwitchCase="'EN'" class="form-group" style="margin-top: 10px">
-                <label>{{(header | async)[0].columnDetailDefinitionDtoList[j].name}}</label>
-                <select class="form-control-lg" formControlName="EN">
-                  <option selected> -Select value-</option>
-                  <option *ngFor="let option of (header | async)[0].columnDetailDefinitionDtoList[j].optionList">
-                    {{option.value}}
-                  </option>
-                </select>
-              </div>
-              <div *ngSwitchCase="'IN'" class="form-group" style="margin-top: 10px">
-                <label>{{(header | async)[0].columnDetailDefinitionDtoList[j].name}}</label>
-                <input [id]="(cell.value | valueOnKey).key"
-                       [type]="'number'"
-                       class="form-control"
-                       formControlName="IN">
+                </div>
+                <div *ngSwitchCase="'EN'" class="form-group" style="margin-top: 10px">
+                  <label>{{(header | async)[0].columnDetailDefinitionDtoList[j].name}}</label>
+                  <select class="form-control" formControlName="EN">
+                    <option selected> -Select value-</option>
+                    <option *ngFor="let option of (header | async)[0].columnDetailDefinitionDtoList[j].optionList">
+                      {{option.value}}
+                    </option>
+                  </select>
+                </div>
+                <div *ngSwitchCase="'IN'" class="form-group" style="margin-top: 10px">
+                  <label>{{(header | async)[0].columnDetailDefinitionDtoList[j].name}}</label>
+                  <input [id]="(cell.value | valueOnKey).key"
+                         [type]="'number'"
+                         class="form-control"
+                         formControlName="IN">
+                </div>
               </div>
             </div>
           </div>
-        </div>
-      </form>
+        </form>
+      </div>
     </div>
-  </div>
 
-  <form *ngIf="unlockFields && !(newRowMode | async)" [formGroup]="updateRowForm" style="padding-left: 10px" style="padding: 5px">
-    <div formArrayName="columnValueDtos">
-      <div *ngFor="let cell of updateRowForm.get('columnValueDtos').controls;let j = index">
-        <div [ngSwitch]="(cell.value | valueOnKey).key" formGroupName="{{j}}">
-          <div *ngSwitchCase="'DT'" class="form-group" style="margin-top: 10px">
-            <label style="color: #1a1a1a"> {{ (header | async)[0].columnDetailDefinitionDtoList[j]?.name }} </label>
-            <input type="datetime-local"
-                   formControlName="DT"
-                   class="form-control"
-            >
-          </div>
-          <div *ngSwitchCase="'ST'" class="form-group" style="margin-top: 10px">
-            <label style="color: #1a1a1a"> {{ (header | async)[0].columnDetailDefinitionDtoList[j]?.name }} </label>
-            <input formControlName="ST"
-                   [type]="'text'"
-                   class="form-control"
-            >
-          </div>
-          <div *ngSwitchCase="'DE'" class="form-group" style="margin-top: 10px">
-            <label style="color: #1a1a1a"> {{ (header | async)[0].columnDetailDefinitionDtoList[j]?.name }} </label>
-            <textarea cols="30" rows="10"
-                      formControlName="DE"
-                      class="form-control"
+    <form *ngIf="unlockFields && !(newRowMode | async)" [formGroup]="updateRowForm" style="padding-left: 10px" style="padding: 5px">
+      <div formArrayName="columnValueDtos">
+        <div *ngFor="let cell of updateRowForm.get('columnValueDtos').controls;let j = index">
+          <div [ngSwitch]="(cell.value | valueOnKey).key" formGroupName="{{j}}">
+            <div *ngSwitchCase="'DT'" class="form-group" style="margin-top: 10px">
+              <label style="color: #1a1a1a"> {{ (header | async)[0].columnDetailDefinitionDtoList[j]?.name }} </label>
+              <input type="datetime-local"
+                     formControlName="DT"
+                     class="form-control"
+              >
+            </div>
+            <div *ngSwitchCase="'ST'" class="form-group" style="margin-top: 10px">
+              <label style="color: #1a1a1a"> {{ (header | async)[0].columnDetailDefinitionDtoList[j]?.name }} </label>
+              <input formControlName="ST"
+                     [type]="'text'"
+                     class="form-control"
+              >
+            </div>
+            <div *ngSwitchCase="'DE'" class="form-group" style="margin-top: 10px">
+              <label style="color: #1a1a1a"> {{ (header | async)[0].columnDetailDefinitionDtoList[j]?.name }} </label>
+              <textarea cols="30" rows="10"
+                        formControlName="DE"
+                        class="form-control"
 
-            >
+              >
                 </textarea>
-          </div>
-          <div *ngSwitchCase="'IN'" class="form-group" style="margin-top: 10px">
-            <label style="color: #1a1a1a"> {{ (header | async)[0].columnDetailDefinitionDtoList[j]?.name }} </label>
-            <input formControlName="IN"
-                   [type]="'number'"
-                   class="form-control"
+            </div>
+            <div *ngSwitchCase="'IN'" class="form-group" style="margin-top: 10px">
+              <label style="color: #1a1a1a"> {{ (header | async)[0].columnDetailDefinitionDtoList[j]?.name }} </label>
+              <input formControlName="IN"
+                     [type]="'number'"
+                     class="form-control"
 
-            >
-          </div>
-          <div *ngSwitchCase="'EN'" class="form-group" style="margin-top: 10px">
-            <label style="color: #1a1a1a"> {{ (header | async)[0].columnDetailDefinitionDtoList[j]?.name }} </label>
-            <select class="form-control"
-                    formControlName="EN"
-                    style="height: 35px"
+              >
+            </div>
+            <div *ngSwitchCase="'EN'" class="form-group" style="margin-top: 10px">
+              <label style="color: #1a1a1a"> {{ (header | async)[0].columnDetailDefinitionDtoList[j]?.name }} </label>
+              <select class="form-control"
+                      formControlName="EN"
+                      style="height: 35px"
 
-            >
-              <option *ngFor="let option of (header | async)[0].columnDetailDefinitionDtoList[j]?.optionList"
-                      [value]="option.value"
-                      [selected]="(row| async)?.columnValueDtos[j]['EN'].value == option.value"
-              >{{ option.value }}
-            </select>
+              >
+                <option *ngFor="let option of (header | async)[0].columnDetailDefinitionDtoList[j]?.optionList"
+                        [value]="option.value"
+                        [selected]="(row| async)?.columnValueDtos[j]['EN'].value == option.value"
+                >{{ option.value }}
+              </select>
+            </div>
           </div>
         </div>
       </div>
-    </div>
-    <div class="form-group">
-      <label for="id">ID:</label>
-      <input type="number"
-             id="id"
-             formControlName="id"
-             class="form-control"
-             readonly
-             required
-      >
-    </div>
-    <div class="form-group" hidden>
-      <label for="name">Name:</label>
-      <input type="text"
-             id="name"
-             formControlName="name"
-             class="form-control"
-             readonly
-      >
-    </div>
-    <div class="form-group">
-      <label for="createdBy">Created By:</label>
-      <input type="text"
-             id="createdBy"
-             formControlName="createdBy"
-             class="form-control"
-             readonly
-             required
-      >
-    </div>
-    <div class="form-group">
-      <label>Created On:</label>
-      <input type="datetime-local"
-             formControlName="createdOn"
-             class="form-control"
-             readonly
-             required
-      >
-    </div>
-    <div class="form-group">
-      <label for="lastModifiedBy">Last modified by:</label>
-      <input type="text"
-             id="lastModifiedBy"
-             formControlName="lastModifiedBy"
-             class="form-control"
-             readonly
-             required
-      >
-    </div>
-    <div class="form-group" disabled>
-      <label for="lastModifiedOn">Last modified on:</label>
-      <input type="datetime-local"
-             id="lastModifiedOn"
-             formControlName="lastModifiedOn"
-             class="form-control"
-             readonly
-             required
-      >
-    </div>
-  </form>
+      <div class="form-group">
+        <label for="id">ID:</label>
+        <input type="number"
+               id="id"
+               formControlName="id"
+               class="form-control"
+               readonly
+               required
+        >
+      </div>
+      <div class="form-group" hidden>
+        <label for="name">Name:</label>
+        <input type="text"
+               id="name"
+               formControlName="name"
+               class="form-control"
+               readonly
+        >
+      </div>
+      <div class="form-group">
+        <label for="createdBy">Created By:</label>
+        <input type="text"
+               id="createdBy"
+               formControlName="createdBy"
+               class="form-control"
+               readonly
+               required
+        >
+      </div>
+      <div class="form-group">
+        <label>Created On:</label>
+        <input type="datetime-local"
+               formControlName="createdOn"
+               class="form-control"
+               readonly
+               required
+        >
+      </div>
+      <div class="form-group">
+        <label for="lastModifiedBy">Last modified by:</label>
+        <input type="text"
+               id="lastModifiedBy"
+               formControlName="lastModifiedBy"
+               class="form-control"
+               readonly
+               required
+        >
+      </div>
+      <div class="form-group" disabled>
+        <label for="lastModifiedOn">Last modified on:</label>
+        <input type="datetime-local"
+               id="lastModifiedOn"
+               formControlName="lastModifiedOn"
+               class="form-control"
+               readonly
+               required
+        >
+      </div>
+    </form>
 
-  <div *ngIf="!unlockFields && !(newRowMode | async)">
-    <table class="table">
-      <tbody>
-      <tr *ngFor="let cellValue of (row | async)?.columnValueDtos; let i = index;">
-        <td>
-          {{ (header | async)[0].columnDetailDefinitionDtoList[i]?.name }}
-        </td>
-        <td>
-          {{(cellValue | valueOnKey).value.value }}
-        </td>
-      </tr>
-      <tr *ngIf="extendedRowView | async">
-        <td>ID</td>
-        <td>{{ (row | async)?.id }}</td>
-      </tr>
-      <tr *ngIf="extendedRowView | async" hidden>
-        <td>Name</td>
-        <td>{{ (row | async)?.name }}</td>
-      </tr>
-      <tr *ngIf="extendedRowView | async">
-        <td>Created by</td>
-        <td>{{ (row | async)?.createdBy}}</td>
-      </tr>
-      <tr *ngIf="extendedRowView | async">
-        <td>Created on</td>
-        <td>{{ (row | async)?.createdOn }}</td>
-      </tr>
-      <tr *ngIf="extendedRowView | async">
-        <td>Last modified by</td>
-        <td>{{ (row | async)?.lastModifiedBy }}</td>
-      </tr>
-      <tr *ngIf="extendedRowView | async">
-        <td>Last modified on</td>
-        <td>{{ (row | async)?.lastModifiedOn }}</td>
-      </tr>
+    <div *ngIf="!unlockFields && !(newRowMode | async)">
+      <table class="table">
+        <tbody>
+        <tr *ngFor="let cellValue of (row | async)?.columnValueDtos; let i = index;">
+          <td>
+            {{ (header | async)[0].columnDetailDefinitionDtoList[i]?.name }}
+          </td>
+          <td>
+            {{(cellValue | valueOnKey).value.value }}
+          </td>
+        </tr>
+        <tr *ngIf="extendedRowView | async">
+          <td>ID</td>
+          <td>{{ (row | async)?.id }}</td>
+        </tr>
+        <tr *ngIf="extendedRowView | async" hidden>
+          <td>Name</td>
+          <td>{{ (row | async)?.name }}</td>
+        </tr>
+        <tr *ngIf="extendedRowView | async">
+          <td>Created by</td>
+          <td>{{ (row | async)?.createdBy}}</td>
+        </tr>
+        <tr *ngIf="extendedRowView | async">
+          <td>Created on</td>
+          <td>{{ (row | async)?.createdOn }}</td>
+        </tr>
+        <tr *ngIf="extendedRowView | async">
+          <td>Last modified by</td>
+          <td>{{ (row | async)?.lastModifiedBy }}</td>
+        </tr>
+        <tr *ngIf="extendedRowView | async">
+          <td>Last modified on</td>
+          <td>{{ (row | async)?.lastModifiedOn }}</td>
+        </tr>
 
-      </tbody>
-    </table>
+        </tbody>
+      </table>
 
-    <div *ngIf="(row | async)?.taskDtos.length <= 0">
-      <ul class="list-group" style="margin-bottom: 0">
-        <li class="list-group-item bg-dark text-white" style="border: none">
-          <h4>NO TASKS</h4>
-        </li>
-      </ul>
-    </div>
-
-    <div *ngIf="(row | async)?.taskDtos.length > 0">
-      <ul class="list-group" style="margin-bottom: 0">
-        <li class="list-group-item bg-dark text-white" style="border: none">
-          <h4>TASKS</h4>
-        </li>
-        <div *ngFor="let task of (row | async)?.taskDtos; let i = index;">
-          <li class="list-group-item bg-secondary" style="border: 1px darkgray solid; margin-top: 3px">
-            <span class="btn btn-outline-dark bg-white" (click)="task.id == selectedTask?.id ? onShowTask(null) : onShowTask(task)"> {{task.name }} </span>
-            <div class="pull-right">
-              <button class="btn btn btn-outline-dark bg-white" (click)="onShowTaskDetails(task)"> Details</button>
-            </div>
+      <div *ngIf="(row | async)?.taskDtos.length <= 0">
+        <ul class="list-group" style="margin-bottom: 0">
+          <li class="list-group-item bg-dark text-white text-center" style="border: none">
+            <h5>NO TASKS</h5>
           </li>
-          <div *ngIf="task.id == selectedTask?.id">
-            <li class="list-group-item">
-              <button class="btn btn-default text-danger" (click)="onDeleteTask(task.id)"> Delete Task</button>
+        </ul>
+      </div>
+
+      <div *ngIf="(row | async)?.taskDtos.length > 0">
+        <ul class="list-group" style="margin-bottom: 0">
+          <li class="list-group-item bg-dark text-white text-center">
+            <h5>TASKS</h5>
+          </li>
+          <div *ngFor="let task of (row | async)?.taskDtos; let i = index;">
+            <li class="list-group-item d-flex justify-content-between align-items-center bg-secondary" style="border: 1px darkgray solid; margin-top: 3px">
+              <span class="btn btn-secondary text-left"
+                    (click)="task.id == selectedTask?.id ? onShowTask(null) : onShowTask(task)"> {{task.name }} </span>
+              <span class="btn btn-secondary text-right" (click)="onShowTaskDetails(task)"> Details</span>
             </li>
-            <li class="list-group-item"> ID: {{task.id}}</li>
-            <li class="list-group-item"> Name: {{task.name}}</li>
-            <li class="list-group-item"> Description: {{task.description}}</li>
-            <li class="list-group-item"> Status: {{task.status}}</li>
+            <div *ngIf="task.id == selectedTask?.id">
+              <li class="list-group-item">
+                <button class="btn btn-default text-danger" (click)="onDeleteTask(task.id)"> Delete Task</button>
+              </li>
+              <li class="list-group-item"> ID: {{task.id}}</li>
+              <li class="list-group-item"> Name: {{task.name}}</li>
+              <li class="list-group-item"> Description: {{task.description}}</li>
+              <li class="list-group-item"> Status: {{task.status}}</li>
+            </div>
           </div>
-        </div>
-      </ul>
+        </ul>
+      </div>
     </div>
   </div>
 </div>

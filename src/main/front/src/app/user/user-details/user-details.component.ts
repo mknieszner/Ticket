@@ -22,7 +22,7 @@ export class UserDetailsComponent implements OnInit {
   roleForm: FormGroup;
   newUserMode: Observable<boolean>;
   newUserForm: FormGroup;
-  selectedTask: TaskModel;
+  userDisplayedTask: Observable<TaskModel>;
 
   constructor(private store: Store<fromAppReducers.AppState>,
               private dss: DataStorageService) {
@@ -30,6 +30,7 @@ export class UserDetailsComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.userDisplayedTask = this.store.select('users', 'userDisplayedTask');
     this.newUserMode = this.store.select('users', 'newUserMode');
     this.roles = this.store.select('users', 'roles');
     this.dss.getRoles();
@@ -89,6 +90,6 @@ export class UserDetailsComponent implements OnInit {
   }
 
   onSelectTask(taskDto: TaskModel) {
-    this.selectedTask = taskDto;
+    this.store.dispatch(new UsersActions.SetUserDisplayedTask(taskDto));
   }
 }

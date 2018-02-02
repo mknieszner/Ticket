@@ -43,6 +43,6 @@ export interface ExtendedFilterModel { //TODO: Filter do poprawy (własciwe wart
   createdOn: string,
   lastModifiedBy: string,
   lastModifiedOn: string,
-  columnValueDtos: {}
+  columnValueDtos: any[]
   taskDtos: any
 }

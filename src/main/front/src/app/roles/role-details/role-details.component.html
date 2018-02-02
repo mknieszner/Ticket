@@ -25,16 +25,20 @@
   </table>
   <div *ngIf="editUserMode && !(newRoleMode | async)">
     <form [formGroup]="userForm" class="form-group">
-      <select class="form-control-lg" formControlName="user">
-        <option selected>- Select -</option>
-        <option *ngFor="let user of (users|async)"> {{ user.username }}</option>
-      </select>
-      <button class="btn btn-default" (click)="postAddUser()">Add</button>
-      <button class="btn btn-default" (click)="postRemoveUser()">Remove</button>
-      <button class="btn btn-default" (click)="abortAddUser()">Abort</button>
+      <div class="input-group">
+        <select class="form-control" formControlName="user">
+          <option selected>- Select -</option>
+          <option *ngFor="let user of (users|async)"> {{ user.username }}</option>
+        </select>
+        <div class="input-group-append">
+          <button class="btn btn-default" (click)="postAddUser()">Add</button>
+          <button class="btn btn-default" (click)="postRemoveUser()">Remove</button>
+          <button class="btn btn-default" (click)="abortAddUser()">Abort</button>
+        </div>
+      </div>
     </form>
   </div>
-  <div *ngIf="!addUserMode">
+  <div *ngIf="!editUserMode">
     <button class="btn btn-default" (click)="onEditUserMode()">Edit Role</button>
   </div>
 </div>

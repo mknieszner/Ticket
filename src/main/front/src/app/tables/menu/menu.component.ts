@@ -15,19 +15,22 @@ export class MenuComponent implements OnInit {
   choosenName: string;
   @Output() choosenNameChanged = new Subject<string>();
   extendedFilterMode: Observable<boolean>;
-  extendedFilterAction: Observable<boolean>;
   extendedTableView: Observable<boolean>;
-  extendedTableViewValue: boolean
+  extendedTableViewValue: boolean;
 
 
   constructor(private store: Store<fromAppReducers.AppState>) {
   }
 
+  setFilterSelectValue(value: boolean) {
+    console.log('setFilterSelectValue', value);
+    this.store.dispatch(new TablesActions.SetExtendedFilterSelect(value));
+  }
+
   ngOnInit() {
     this.extendedFilterMode = this.store.select('tables', 'extendedFilterMode');
-    this.extendedFilterAction = this.store.select('tables', 'extendedFilterAction')
-    this.extendedTableView = this.store.select('tables','extendedTableView');
-    this.extendedTableView.subscribe((value)=>{
+    this.extendedTableView = this.store.select('tables', 'extendedTableView');
+    this.extendedTableView.subscribe((value) => {
       this.extendedTableViewValue = value;
     })
   }
@@ -37,16 +40,9 @@ export class MenuComponent implements OnInit {
     this.choosenNameChanged.next(tableName);
   }
 
-  onFilter(value: string) {
-    this.store.dispatch(new TablesActions.TableFilter(value))
-  }
-
-  onExtendedFilterMode() {
-    this.store.dispatch(new TablesActions.SetExtendedFilterMode());
-  }
-
-  onRunExtendedFilter() {
-      this.store.dispatch(new TablesActions.RunExtendedFilter());//true
+  onFilter(filter) {
+    console.log(filter);
+    this.store.dispatch(new TablesActions.TableFilter(filter))
   }
 
   onNewRow() {
@@ -56,6 +52,10 @@ export class MenuComponent implements OnInit {
   }
 
   switchExtendedTableView() {
-  this.store.dispatch(new TablesActions.SetExtendedTableView(!this.extendedTableViewValue))
+    this.store.dispatch(new TablesActions.SetExtendedTableView(!this.extendedTableViewValue))
+  }
+
+  onExtendedFilterMode() {
+    this.store.dispatch(new TablesActions.SetExtendedFilterMode());
   }
 }

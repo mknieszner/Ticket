@@ -1,7 +1,7 @@
 <div class="jumbotron">
   <div class="container">
     <div class="row">
-      <div class="col-xs-12">
+      <div class="col-12">
         <h3>Table Definition</h3>
         <form [formGroup]="definitionForm">
           <div class="form-group">
@@ -15,20 +15,20 @@
             >
           </div>
           <div class="row">
-            <div class="col-xs-12" formArrayName="columnDetailDefinitionDtoList">
+            <div class="col-12" formArrayName="columnDetailDefinitionDtoList">
               <div class="row" *ngFor="let columnDetailDefinitionDto of definitionForm.get('columnDetailDefinitionDtoList').controls; let i = index;"
                    [formGroupName]="i">
-                <div class="col-xs-1">
+                <div class="col-1">
                   <label for="type">Type:</label>
                 </div>
-                <div class="col-xs-3">
-                  <select id="type" type="text" class="form-control form-control-lg" formControlName="type">
+                <div class="col-3">
+                  <select id="type" type="text" class="form-control form-control" formControlName="type">
                     <option *ngFor="let option of options;" [selected]="option.name" [value]="option.shortcut" required>{{
                       option.name }}
                     </option>
                   </select>
                   <div *ngIf="definitionForm.value.columnDetailDefinitionDtoList[i].type=='EN'">
-                    <div class="col-xs-12" formArrayName="optionList">
+                    <div class="col-12" formArrayName="optionList">
                       <div *ngFor="let option of columnDetailDefinitionDto.get('optionList').controls;let j = index" class="row">
                           <input type="text" class="form-control col"
                                  [value]="definitionForm.value.columnDetailDefinitionDtoList[i].optionList[j]" formControlName="{{j}}"
@@ -49,13 +49,13 @@
                     </div>
                   </div>
                 </div>
-                <div class="col-xs-1">
+                <div class="col-1 col-md-4">
                   <label>Name:</label>
                 </div>
-                <div class="col-xs-6">
+                <div class="col-6">
                   <input type="text" class="form-control" formControlName="name" required>
                 </div>
-                <div class="col-xs-1">
+                <div class="col-1">
                   <button type="button" class="btn btn-default text-danger" (click)="onDeleteColumn(i)">X</button>
                 </div>
               </div>

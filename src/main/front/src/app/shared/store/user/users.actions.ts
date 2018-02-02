@@ -3,6 +3,7 @@ import {UserModel} from "../../../user/user.model";
 import {RoleModel} from "../../../roles/role.model";
 import {Token} from "../../auth.model";
 import {Client} from 'stompjs/lib/stomp.js';
+import {TaskModel} from "../../table.model";
 
 export const SET_NEW_USER_MODE = 'SET_NEW_USER_MODE';
 export const SET_USERS = 'SET_USERS';
@@ -34,6 +35,8 @@ export const RESET_STORE = 'RESET_STORE';
 
 export const SET_LOGIN_FAILURE_INFO = 'SET_LOGIN_FAILURE_INFO';
 export const SET_LOGOUT_INFO = 'SET_LOGOUT_INFO';
+
+export const SET_USER_DISPLAYED_TASK = 'SET_USER_DISPLAYED_TASK';
 
 
 export class DeleteUserAction implements Action {
@@ -201,6 +204,13 @@ export class ResetStore implements Action {
   }
 }
 
+export class SetUserDisplayedTask implements Action {
+  readonly type = SET_USER_DISPLAYED_TASK;
+
+  constructor(public payload: TaskModel) {
+  }
+}
+
 export type UserActions =
   SetCurrentUserRolenames |
   DeleteUserAction |
@@ -224,5 +234,6 @@ export type UserActions =
   SetTaskInfoAction |
   ResetStore |
   SetLoginFailureInfo |
-  SetLogoutInfo;
+  SetLogoutInfo |
+  SetUserDisplayedTask;
 

@@ -1,98 +1,104 @@
-<div *ngIf="user && !(newUserMode | async)">
-  <table class="table table-bordered table-striped">
-    <tbody>
-    <tr>
-      <td>USERNAME:</td>
-      <td>{{ user.username }}</td>
-    </tr>
-    <tr>
-      <td>EMAIL:</td>
-      <td> {{ user.email }}</td>
-    </tr>
-    <tr>
-      <td>FIRSTNAME:</td>
-      <td>{{ user.firstName }}</td>
-    </tr>
-    <tr>
-      <td>LASTNAME:</td>
-      <td>{{ user.lastName }}</td>
-    </tr>
-    <tr>
-      <td>ENABLED:</td>
-      <td>{{ user.enabled }}</td>
-    </tr>
-    <tr>
-      <td>ROLES:</td>
-      <td>
-        <ul>
-          <li *ngFor="let roleName of user.roleNames">{{roleName}}</li>
-        </ul>
-      </td>
-    </tr>
-    <tr>
-      <td>TASKS:</td>
-      <td>
-        <ul>
-          <li *ngFor="let taskDto of user.taskDtos" (click)="onSelectTask(taskDto)"> {{ taskDto.name }} </li>
-        </ul>
-      </td>
-    </tr>
-    </tbody>
-  </table>
+<div class="row">
+  <div class="col-6">
+    <div *ngIf="user && !(newUserMode | async)">
+      <table class="table table-bordered table-striped table-dark">
+        <tbody>
+        <tr>
+          <td>USERNAME:</td>
+          <td>{{ user.username }}</td>
+        </tr>
+        <tr>
+          <td>EMAIL:</td>
+          <td> {{ user.email }}</td>
+        </tr>
+        <tr>
+          <td>FIRSTNAME:</td>
+          <td>{{ user.firstName }}</td>
+        </tr>
+        <tr>
+          <td>LASTNAME:</td>
+          <td>{{ user.lastName }}</td>
+        </tr>
+        <tr>
+          <td>ENABLED:</td>
+          <td>{{ user.enabled }}</td>
+        </tr>
+        <tr>
+          <td>
+            <p>ROLES:</p>
+            <div *ngIf="editRoleMode && !(newUserMode | async)">
+              <form [formGroup]="roleForm" class="form-group">
+                <select class="form-control" formControlName="role">
+                  <option selected>- Select -</option>
+                  <option *ngFor="let role of (roles|async)"> {{ role.name }}</option>
+                </select>
+                <div class="btn-group" style="margin-top: 5px">
+                  <button class="btn btn-default" (click)="postAddRole()">+</button>
+                  <button class="btn btn-default" (click)="postRemove()">-</button>
+                  <button class="btn btn-default" (click)="abortAddRole()">Abort</button>
+                </div>
+              </form>
+            </div>
+            <div *ngIf="!editRoleMode">
+              <button class="btn btn-default" (click)="onEditRoleMode()">Edit</button>
+            </div>
+          </td>
+          <td>
+            <ul>
+              <li *ngFor="let roleName of user.roleNames">{{roleName}}</li>
+            </ul>
+          </td>
+        </tr>
+        </tbody>
+      </table>
+      <ul class="list-group">
+        <li class="list-group-item bg-secondary">TASKS:</li>
+        <li class="list-group-item list-group-item-action"
+            *ngFor="let taskDto of user.taskDtos" (click)="onSelectTask(taskDto)"
+            [ngClass]="(userDisplayedTask|async)?.id == taskDto.id ? 'bg-light' : ''"
+        > {{ taskDto.name }}</li>
+      </ul>
+    </div>
 
-  <div *ngIf="editRoleMode && !(newUserMode | async)">
-    <form [formGroup]="roleForm" class="form-group">
-      <select class="form-control-lg" formControlName="role">
-        <option selected>- Select -</option>
-        <option *ngFor="let role of (roles|async)"> {{ role.name }}</option>
-      </select>
-      <button class="btn btn-default" (click)="postAddRole()">Add</button>
-      <button class="btn btn-default" (click)="postRemove()">Remove</button>
-      <button class="btn btn-default" (click)="abortAddRole()">Abort</button>
-    </form>
+    <div *ngIf="(newUserMode | async)">
+      <form [formGroup]="newUserForm" #f>
+        <div class="form-group">
+          <label>Username:</label>
+          <input type="text" class="form-control" formControlName="username" required>
+        </div>
+        <div class="form-group">
+          <label>Password</label>
+          <input type="password" class="form-control" formControlName="password" required>
+        </div>
+        <div class="form-group">
+          <label>First name</label>
+          <input type="text" class="form-control" formControlName="firstName" required>
+        </div>
+        <div class="form-group">
+          <label>Last name</label>
+          <input type="text" class="form-control" formControlName="lastName" required>
+        </div>
+        <div class="form-group">
+          <label>Email</label>
+          <input type="text" class="form-control" formControlName="email" required>
+        </div>
+        <div class="form-group">
+          <label>Enabled</label>
+          <select class="form-control" formControlName="enabled" required>
+            <option value="true" [selected]="true">Yes</option>
+            <option value="false">No</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <button (click)="onSubmitUser()" class="btn btn-default" [disabled]="f.valid">Submit</button>
+          <button (click)="onAbortSubmitUser()" class="btn btn-default">Close</button>
+        </div>
+      </form>
+    </div>
   </div>
-  <div *ngIf="!addRoleMode">
-    <button class="btn btn-default" (click)="onEditRoleMode()">Edit Role</button>
+  <div class="col-6">
+    <div *ngIf="(userDisplayedTask | async)">
+      <app-user-task [task]="(userDisplayedTask | async)"></app-user-task>
+    </div>
   </div>
 </div>
-
-<div *ngIf="(newUserMode | async)">
-  <form [formGroup]="newUserForm" #f>
-    <div class="form-group">
-      <label>Username:</label>
-      <input type="text" class="form-control" formControlName="username" required>
-    </div>
-    <div class="form-group">
-      <label>Password</label>
-      <input type="password" class="form-control" formControlName="password" required>
-    </div>
-    <div class="form-group">
-      <label>First name</label>
-      <input type="text" class="form-control" formControlName="firstName" required>
-    </div>
-    <div class="form-group">
-      <label>Last name</label>
-      <input type="text" class="form-control" formControlName="lastName" required>
-    </div>
-    <div class="form-group">
-      <label>Email</label>
-      <input type="text" class="form-control" formControlName="email" required>
-    </div>
-    <div class="form-group">
-      <label>Enabled</label>
-      <select class="form-control-lg" formControlName="enabled" required>
-        <option value="true" [selected]="true">Yes</option>
-        <option value="false">No</option>
-      </select>
-    </div>
-    <div class="form-group">
-      <button (click)="onSubmitUser()" class="btn btn-default" [disabled]="f.valid">Submit</button>
-      <button (click)="onAbortSubmitUser()" class="btn btn-default">Close</button>
-    </div>
-  </form>
-</div>
-
-<div *ngIf="selectedTask">
-  <app-user-task [task]="selectedTask"></app-user-task>
-</div>
-

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {FormControl, FormGroup} from "@angular/forms";
 import {OauthService} from "../shared/oauth.service";
 import {AuthCookie} from "../shared/auth-cookies-handler";
@@ -28,21 +28,21 @@ export class SigninComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.logoutInfo = this.store.select('users','logoutInfo');
-    this.loginFailureInfo = this.store.select('users','loginFailureInfo');
+    this.logoutInfo = this.store.select('users', 'logoutInfo');
+    this.loginFailureInfo = this.store.select('users', 'loginFailureInfo');
+
     this.cookie.deleteAuth();
     this.signinForm = new FormGroup({
-      'username' : new FormControl(),
-      'password' : new FormControl()
+      'username': new FormControl(),
+      'password': new FormControl()
     })
   }
 
 
-  onSignin(){
+  onSignin() {
     this.oauthservice.obtainAccessToken({
       username: this.signinForm.value.username,
       password: this.signinForm.value.password
     });
-    this.router.navigate(["/"]);
   }
 }

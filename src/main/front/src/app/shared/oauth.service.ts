@@ -60,6 +60,7 @@ export class OauthService {
       .subscribe(
         (data: Token) => {
           this.saveToken(data, loginData.username);
+          this.router.navigate(["/home"]);
         },
         err => {
           console.log(err.message);
@@ -76,6 +77,7 @@ export class OauthService {
                 return;
             }
           }
+          return false;
         }
       )
   }

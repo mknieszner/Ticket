@@ -1,5 +1,5 @@
 import * as UserActions from './users.actions';
-import {ExtendedFilterModel, RowContentModel, TableDefinitionModel} from "../../table.model";
+import {ExtendedFilterModel, RowContentModel, TableDefinitionModel, TaskModel} from "../../table.model";
 import {UserModel} from "../../../user/user.model";
 import {RoleModel} from "../../../roles/role.model";
 import {TableState} from "../table/tables.reducers";
@@ -19,6 +19,7 @@ export interface UserState {
   newRoleMode: boolean,
   loginFailureInfo: string,
   logoutInfo: string
+  userDisplayedTask: TaskModel
 }
 
 const initialUserState: UserState = {
@@ -31,8 +32,9 @@ const initialUserState: UserState = {
   newUserMode: false,
   roles: [],
   newRoleMode: false,
-  loginFailureInfo:'',
-  logoutInfo: ''
+  loginFailureInfo: '',
+  logoutInfo: '',
+  userDisplayedTask: null
 };
 
 export function usersReducers(state: UserState = initialUserState, action: UserActions.UserActions) {
@@ -146,6 +148,11 @@ export function usersReducers(state: UserState = initialUserState, action: UserA
         ...state,
         loginFailureInfo: initialUserState.loginFailureInfo,
         logoutInfo: action.payload
+      };
+    case UserActions.SET_USER_DISPLAYED_TASK:
+      return {
+        ...state,
+        userDisplayedTask: action.payload
       };
     case UserActions.RESET_STORE:
       return {

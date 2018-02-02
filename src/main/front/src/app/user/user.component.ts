@@ -26,17 +26,20 @@ export class UserComponent implements OnInit {
 
   onSelectUser(user: UserModel) {
     this.selectedUser = user;
+    this.contentStore.dispatch(new UsersActions.SetUserDisplayedTask(null));
   }
 
   onNewUser() {
     console.log('onNewUser');
     this.contentStore.dispatch(new UsersActions.SetNewUserModeAction(true))
+    this.contentStore.dispatch(new UsersActions.SetUserDisplayedTask(null));
   }
 
   onRemoveUser(username: string) {
     this.dss.deleteUser(username);
     this.contentStore.dispatch(new UsersActions.SetNewUserModeAction(false))
     this.selectedUser = null;
+    this.contentStore.dispatch(new UsersActions.SetUserDisplayedTask(null));
   }
 
   // // onNewRole() {

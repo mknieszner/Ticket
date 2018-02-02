@@ -17,15 +17,14 @@ export class TableHeaderComponent implements OnInit {
   editRowMode: Observable<boolean>;
   extendedFilterMode: Observable<boolean>;
   filterForm: FormGroup;
+  extendedTableView: Observable<boolean>;
   extendedFilterAction: Observable<boolean>;
-  extendedTableView: Observable<boolean>
 
   constructor(private contentStore: Store<fromAppReducers.AppState>) {
   }
 
   ngOnInit() {
     this.extendedTableView = this.contentStore.select('tables','extendedTableView');
-    this.extendedFilterAction = this.contentStore.select('tables', 'extendedFilterAction');
     this.header = this.contentStore.select('tables', 'tableDefinition');
     this.editRowMode = this.contentStore.select('tables', 'editRowMode');
     this.extendedFilterMode = this.contentStore.select('tables', 'extendedFilterMode');
@@ -41,12 +40,14 @@ export class TableHeaderComponent implements OnInit {
         }
       }
     );
-    this.extendedFilterAction.subscribe((action: boolean) => {
+    this.extendedFilterAction = this.contentStore.select('tables', 'extendedFilterAction');
+    this.extendedFilterAction.subscribe((action: boolean) => { //TODO WTF!!!!!!!!!!
+      console.log(action);
       if (action) {
         this.contentStore.dispatch(new TablesActions.SetExtendedFilter(this.getFormValues()));
-      } else {
-        this.contentStore.dispatch(new TablesActions.SetExtendedFilter(null));
       }
+        this.contentStore.dispatch(new TablesActions.RunExtendedFilter());
+
     })
   }
 
@@ -75,6 +76,10 @@ export class TableHeaderComponent implements OnInit {
   }
 
   getFormValues(): ExtendedFilterModel {
-    return this.filterForm.value;
+    return this.filterForm['value'];
+  }
+
+  onRunExtendedFilter() {
+    this.contentStore.dispatch(new TablesActions.SetExtendedFilter(this.getFormValues()));
   }
 }

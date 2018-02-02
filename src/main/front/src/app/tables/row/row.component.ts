@@ -8,7 +8,8 @@ import {Store} from "@ngrx/store";
 import {DataStorageService} from "../../shared/data-storage.service";
 import * as fromAppReducers from '../../shared/store/app.reducers'
 import * as TablesActions from "../../shared/store/table/tables.actions";
-import {FilterService} from "./filter.service";
+import {FilterService} from "../../shared/filter.service";
+import {noUndefined} from "@angular/compiler/src/util";
 
 @Component({
   selector: 'app-row',
@@ -19,7 +20,6 @@ export class RowComponent implements OnInit {
   @Input() row: RowContentModel;
   @Input() header: TableDefinitionModel;
   rowForm: FormGroup;
-  // editMode: Observable<boolean>;
   filter: Observable<string>;
   rowFilterState: boolean = true;
   extendedFilterContent: Observable<ExtendedFilterModel>;
@@ -30,11 +30,11 @@ export class RowComponent implements OnInit {
               private store: Store<fromAppReducers.AppState>,
               private dss: DataStorageService,
               private filterService: FilterService) {
-    this.filter = this.store.select('tables', 'tableFilter');
   }
 
   ngOnInit() {
     this.initForm();
+    this.filter = this.store.select('tables', 'tableFilter');
     // this.editMode = this.store.select('tables', 'editRowMode');
     this.extendedTableView = this.store.select('tables','extendedTableView');
     this.filter.subscribe(filter => {
@@ -45,13 +45,14 @@ export class RowComponent implements OnInit {
       }
     });
     this.extendedFilterContent = this.store.select('tables', 'extendedFilterContent');
-    this.extendedFilterContent.subscribe(extendedFilterContent => {
-      if (extendedFilterContent !== null) {
-        this.rowFilterState = this.filterService.runExtendedFilterTable(this.row,extendedFilterContent);
-      } else {
-        this.rowFilterState = true;
-      }
-    });
+    // this.extendedFilterContent.subscribe(extendedFilterContent => {
+    //   console.log(extendedFilterContent);
+    //   if (extendedFilterContent !== null && extendedFilterContent !== undefined) {
+    //     this.rowFilterState = this.filterService.runExtendedFilterTable(this.row, extendedFilterContent);
+    //   } else {
+    //     this.rowFilterState = true;
+    //   }
+    // });
   }
 
 

@@ -26,7 +26,7 @@ import {OauthService} from "./shared/oauth.service";
 import {AuthInterceptor} from "./shared/auth.interceptor";
 import {AuthCookie} from "./shared/auth-cookies-handler";
 import { RowDetailsComponent } from './tables/row-details/row-details.component';
-import {FilterService} from "./tables/row/filter.service";
+import {FilterService} from "./shared/filter.service";
 import { TaskComponent } from './tables/task/task.component';
 import {tasksReducers} from "./shared/store/task/tasks.reducers";
 import {chatReducers} from "./shared/store/chat/chat.reducers";
@@ -39,11 +39,13 @@ import {WebSocketService} from "./shared/socket/web-socket.service";
 import { ChatComponent } from './chat/chat.component';
 import {StoreResetService} from "./shared/store-reset.service";
 import {ReversePipe} from "./shared/reverse.pipe";
+import {ExtendedFilterModel} from "./shared/table.model";
+import {ExtendedFilterPipe} from "./shared/extended-filter.pipe";
 
 
 
 const appRoutes: Routes = [
-  {path: '', component: HomeComponent},
+  {path: 'home', component: HomeComponent},
   {path: 'roles', component: RolesComponent},
   {path: 'users', component: UserComponent},
   {path: 'tables', component: TablesComponent},
@@ -72,7 +74,8 @@ const appRoutes: Routes = [
     RowDetailsComponent,
     TaskComponent,
     UserTaskComponent,
-    ChatComponent
+    ChatComponent,
+    ExtendedFilterPipe
   ],
   imports: [
     BrowserModule,
@@ -96,6 +99,9 @@ const appRoutes: Routes = [
     {provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi:true}
     // {provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi:true}
     ],
+  exports: [
+    ExtendedFilterPipe
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule {

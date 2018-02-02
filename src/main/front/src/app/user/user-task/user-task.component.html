@@ -1,18 +1,12 @@
 <div *ngIf="task">
+  <li class="list-group-item bg-dark text-white"> Name: {{task.name}}</li>
   <li class="list-group-item"> ID: {{task.id}}</li>
-  <li class="list-group-item"> Name: {{task.name}}</li>
   <li class="list-group-item"> Description: {{task.description}}</li>
   <li class="list-group-item"> Status: {{task.status}}</li>
-  <ul class="list-group" style="margin-bottom: 0">
-    <li class="list-group-item border border-dark">{{task.userNames.length <= 0 ? 'No users' : 'Assigned Users:'}}</li>
-    <div  *ngFor=" let username of task.userNames">
-      <li class="list-group-item"> {{username}} </li>
-    </div>
-  </ul>
-  <ul class="list-group" style="margin-bottom: 0">
-    <li class="list-group-item border border-dark" style="border: none"> {{ task.taskDtos.length <= 0 ? 'No tasks' : 'Assigned Tasks:' }} </li>
-    <li class="list-group-item" *ngFor="let taskDto of task.taskDtos">
-      <app-user-task [task]="taskDto"></app-user-task>
-    </li>
-  </ul>
+  <li class="list-group-item bg-dark text-white">{{task.userNames.length <= 0 ? 'No users' : 'Assigned Users:'}}</li>
+  <li *ngFor=" let username of task.userNames" class="list-group-item"> {{username}}</li>
+  <li class="list-group-item bg-dark text-white" style="border: none"> {{ task.taskDtos.length <= 0 ? 'No tasks' : 'Assigned Tasks:' }}</li>
+  <li class="list-group-item " *ngFor="let taskDto of task.taskDtos">
+    <app-user-task [task]="taskDto"></app-user-task>
+  </li>
 </div>

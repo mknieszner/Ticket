@@ -1,4 +1,4 @@
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top" style="margin-bottom: 0">
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark" style="margin-bottom: 0">
   <!--*ngIf="(token | async)"-->
   <a class="navbar-brand" href="/">Report Manager</a>
   <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown"
@@ -6,21 +6,24 @@
     <span class="navbar-toggler-icon"></span>
   </button>
   <div class="collapse navbar-collapse" id="navbarNavDropdown">
-    <ul class="navbar-nav navbar-sidenav" *ngIf="(token | async)">
-      <li class="nav-item" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}"><a class="nav-link" routerLink="/">Home</a></li>
+    <ul class="navbar-nav mr-auto" *ngIf="(token | async)">
+      <li class="nav-item" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}"><a class="nav-link" routerLink="/home">Home</a></li>
       <li class="nav-item" routerLinkActive="active"><a class="nav-link" routerLink="/tables">Tables</a></li>
       <li class="nav-item" routerLinkActive="active"><a class="nav-link" routerLink="/users">Users</a></li>
       <li *ngIf="(isAdmin | async)" class="nav-item" routerLinkActive="active"><a class="nav-link" routerLink="/definitions">Definition</a></li>
       <li *ngIf="(isAdmin | async)" class="nav-item" routerLinkActive="active"><a class="nav-link" routerLink="/roles">Roles</a></li>
       <li class="nav-item" routerLinkActive="active"><a class="nav-link" routerLink="/chat">Chat</a></li>
     </ul>
+
+    <span class="nav navbar-text font-weight-bold" *ngIf="(token | async)">
+      <a>Welcome : {{ username | async }}</a>
+    </span>
+    <span *ngIf="(newTaskState | async)" (click)="onNewTasksSeen()" class="nav navbar-text text-danger">!Check Tasks!</span>
+    <span class="navbar-text">
+      <a class="nav-link" routerLink="/signin" *ngIf="!(token | async)">Login</a>
+    </span>
+    <span class="navbar-text">
+      <a class="nav-link" (click)="onLogout()" *ngIf="(token | async)" routerLink="/">Logout</a>
+    </span>
   </div>
-  <p class="nav navbar-text font-weight-bold" *ngIf="(token | async)"> Welcome : {{ username | async }}</p>
-  <p *ngIf="(newTaskState | async)" (click)="onNewTasksSeen()" class="nav navbar-text text-danger">!Check Tasks!</p>
-  <p class="navbar-text navbar-right">
-    <a class="nav-link" routerLink="/signin" *ngIf="!(token | async)">Login</a>
-  </p>
-  <p class="navbar-text navbar-right">
-    <a class="nav-link" (click)="onLogout()" *ngIf="(token | async)" routerLink="/">Logout</a>
-  </p>
 </nav>

@@ -20,7 +20,7 @@ export class ChatComponent implements OnInit {
   currentUser: Observable<string>;
   activeWsUsers: Observable<string[]>
   username: string;
-  chatName: string;
+  chatName: string = 'global';
 
 
   constructor(private store: Store<fromAppReducers.AppState>,
@@ -39,6 +39,7 @@ export class ChatComponent implements OnInit {
   }
 
   postMessage(messageContent: string) {
+    console.log(messageContent);
     if(this.chatName == 'global'){
       console.log('postMessage'+ this.chatName);
       this.ws.stompClient.send('/app/chat',{}, messageContent);

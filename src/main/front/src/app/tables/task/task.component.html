@@ -1,38 +1,34 @@
 <div *ngIf="(showedTask | async)">
   <ul class="list-group">
-    <li class="list-group-item">
-      <button class="btn btn-dark" (click)="onHideTaskDetails()">Hide Details</button>
+    <li class="list-group-item bg-dark text-white text-center">
+      <button class="btn btn-default" (click)="onHideTaskDetails()">Hide Details</button>
     </li>
     <li class="list-group-item"> ID: {{(showedTask | async)?.id}}</li>
     <li class="list-group-item"> Name: {{ (showedTask | async)?.name}}</li>
     <li class="list-group-item"> Description: {{ (showedTask | async)?.description }}</li>
     <li class="list-group-item"> Status: {{(showedTask | async)?.status}}</li>
-    <ul class="list-group" style="margin-bottom: 0">
-      <li class="list-group-item border border-dark" style="border: none">
-        {{ (showedTask | async)?.userNames.length <= 0 ? 'No users' : 'Assigned Users:'}}
-        <form class="form-group" *ngIf="(tableUsers| async).length != 0">
-          <div class="form-group">
-            <select #userContol class="form-control-lg">
+    <li class="list-group-item bg-dark text-white text-center">
+      <span style="margin-bottom: 3px">{{ (showedTask | async)?.userNames.length <= 0 ? 'No users' : 'Assigned Users:'}}</span>
+      <form class="form-group" *ngIf="(tableUsers| async).length != 0">
+        <div class="form-group d-flex justify-content-between align-items-center" style="margin-top: 5px">
+          <div class="input-group">
+            <select #userContol class="form-control">
               <option>-Select user-</option>
               <option *ngFor="let tableUser of (tableUsers| async)"> {{ tableUser }}</option>
             </select>
-            <button class="btn btn-dark-sm" (click)="onAssignUserToTask(userContol.value)">+</button>
-            <button class="btn btn-dark-sm" (click)="onRemoveUserFromTask(userContol.value)">-</button>
+            <div class="input-group-append">
+              <button class="btn btn-secondary" (click)="onAssignUserToTask(userContol.value)">+</button>
+              <button class="btn btn-secondary" (click)="onRemoveUserFromTask(userContol.value)">-</button>
+            </div>
           </div>
-        </form>
-      </li>
-      <div  *ngFor=" let username of (showedTask | async)?.userNames">
-        <li class="list-group-item">{{username}}</li>
-      </div>
-    </ul>
-    <ul class="list-group" style="margin-bottom: 0">
-      <li class="list-group-item border border-dark"> {{ (showedTask | async)?.taskDtos.length <= 0 ? 'No tasks' : 'Assigned Tasks:'}}</li>
-      <div  *ngFor="let taskDto of (showedTask | async)?.taskDtos">
-        <li class="list-group-item">
-          <!--<app-task></app-task>-->
-        </li>
-      </div>
-    </ul>
+        </div>
+      </form>
+    </li>
+    <li class="list-group-item" *ngFor=" let username of (showedTask | async)?.userNames">{{username}}</li>
+    <li class="list-group-item bg-dark text-white text-center"> {{ (showedTask | async)?.taskDtos.length <= 0 ? 'No tasks' : 'Assigned Tasks:'}}</li>
+    <li class="list-group-item" *ngFor="let taskDto of (showedTask | async)?.taskDtos">
+      <!--<app-task></app-task>-->
+    </li>
   </ul>
 </div>
 
@@ -48,7 +44,7 @@
     </div>
     <div class="form-group">
       <label>Status:</label>
-      <select class="form-control-lg" #statusEl>
+      <select class="form-control" #statusEl>
         <option> {{status[0]}}</option>
         <option> {{status[1]}}</option>
         <option> {{status[2]}}</option>

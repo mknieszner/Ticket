@@ -1,6 +1,6 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {Store} from '@ngrx/store';
-import {RowContentModel, TableDefinitionModel} from '../shared/table.model';
+import {ExtendedFilterModel, RowContentModel, TableDefinitionModel} from '../shared/table.model';
 import {Observable} from 'rxjs/Observable';
 import {DataStorageService} from "../shared/data-storage.service";
 import * as fromAppReducers from '../shared/store/app.reducers'
@@ -17,6 +17,9 @@ export class TablesComponent implements OnInit {
   tableState: Observable<fromTableReducers.TableState>;
   tableChosen: boolean;
   taskDetailsMode: Observable<boolean>;
+  extendedFilterContentState: Observable<ExtendedFilterModel>;
+  extendedFilterContent: ExtendedFilterModel;
+  filterSelect: boolean;
 
 
   constructor(private contentStore: Store<fromAppReducers.AppState>,
@@ -27,6 +30,12 @@ export class TablesComponent implements OnInit {
     this.dss.getTableNames();
     this.tableState = this.contentStore.select('tables');
     this.taskDetailsMode = this.contentStore.select('tasks','taskDetailsMode');
+    this.contentStore.select('tables', 'extendedFilterContent').subscribe((extendedFilterContent: ExtendedFilterModel) => {
+      this.extendedFilterContent = extendedFilterContent;
+    });
+    this.contentStore.select('tables', 'filterSelect').subscribe((filterSelect: boolean) => {
+      this.filterSelect = filterSelect;
+    });
   }
 
   onToggleRowEditMode() {
