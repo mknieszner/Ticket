@@ -14,7 +14,7 @@
               <div class="col-12 d-flex justify-content-center">
                 <div class="card border-info bg-transparent" style="width: 10rem;">
                   <div class="bg-info align-middle">
-                    <h3 class="text-white text-center">{{ rowsInfo.rows.length }} </h3>
+                    <h3 class="text-white text-center">{{ tableInfo?.rows.length }} </h3>
                   </div>
                   <div class="card-body">
                     <h5 class="card-title text-center text-white">Rows</h5>
@@ -24,9 +24,10 @@
             </div>
             <div class="row d-flex justify-content-center" style="margin-top: 20px">
               <div class="col-3">
+
                 <div class="card border-success bg-transparent" style="width: 10rem;">
                   <div class="bg-success align-middle">
-                    <h3 class="text-white text-center">{{ rowsInfo.doneRows.length }} </h3>
+                    <h3 class="text-white text-center">{{ tableInfo?.doneRows.length }} </h3>
                   </div>
                   <div class="card-body" style="min-height: 100px">
                     <h5 class="card-title text-center text-white">Done Rows</h5>
@@ -36,7 +37,7 @@
               <div class="col-3">
                 <div class="card border-danger bg-transparent" style="width: 10rem;">
                   <div class="bg-danger align-middle">
-                    <h3 class="text-white text-center">{{ rowsInfo.undoneRows.length }} </h3>
+                    <h3 class="text-white text-center">{{ tableInfo?.undoneRows.length }} </h3>
                   </div>
                   <div class="card-body">
                     <h5 class="card-title text-center text-white">Undone Rows</h5>
@@ -48,20 +49,63 @@
             <div *ngIf="rowsInfo" class="progress bg-transparent" style="margin-top: 20px">
               <div class="progress-bar bg-success border-success"
                    role="progressbar"
-                   [style.width]=" (rowsInfo.doneRows.length / rowsInfo.rows.length * 100 | number : '1.0-0') + '%'"
-                   attr.aria-valuenow="{{ rowsInfo.doneRows.length / rowsInfo.rows.length * 100 | number : '1.0-0' }}"
+                   [style.width]=" (tableInfo?.doneRows.length / tableInfo?.rows.length * 100 | number : '1.0-0') + '%'"
+                   attr.aria-valuenow="{{ tableInfo?.doneRows.length / tableInfo?.rows.length * 100 | number : '1.0-0' }}"
                    attr.aria-valuemin="0"
                    attr.aria-valuemax="100">
               </div>
               <div class="progress-bar border-danger bg-danger"
                    role="progressbar"
-                   [style.width]="(rowsInfo.undoneRows.length / rowsInfo.rows.length * 100 | number : '1.0-0') + '%'"
+                   [style.width]="(tableInfo?.undoneRows.length / tableInfo?.rows.length * 100 | number : '1.0-0') + '%'"
                    [style.border]="'1px solid'"
-                   attr.aria-valuenow="{{ rowsInfo.undoneRows.length / rowsInfo.rows.length * 100 | number : '1.0-0' }}"
+                   attr.aria-valuenow="{{ tableInfo?.undoneRows.length / tableInfo?.rows.length * 100 | number : '1.0-0' }}"
                    attr.aria-valuemin="0"
                    attr.aria-valuemax="100">
               </div>
             </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-header">Columns info:</div>
+          <div class="card-body">
+
+            <p *ngFor="let dateInfo of tableInfo.columnInfo.dateInfo">
+              {{ dateInfo.columnNumber }}, MIN: {{ dateInfo.min | date:'fullDate' }}, MAX: {{ dateInfo.max | date:'fullDate' }}
+            </p>
+
+            <div *ngIf="enumChartData.length > 0 && enumChartLabels.length > 0" style="display: block">
+              <canvas baseChart
+                      [datasets]="enumChartData"
+                      [labels]="enumChartLabels"
+                      [legend]="enumChartLegend"
+                      [chartType]="barChartType"
+                      [options]="barChartOptions"
+                      (chartHover)="chartHovered($event)"
+                      (chartClick)="chartClicked($event)">
+
+              </canvas>
+            </div>
+
+            <div *ngFor="let enumInfoArray of tableInfo.columnInfo.enumInfo">
+              <div *ngFor="let enumInfo of enumInfoArray">
+                <p *ngIf="enumInfo"> {{ enumInfo.columnNumber }}, TYPE : {{ enumInfo.name }}, SUM: {{ enumInfo.sum }} </p>
+              </div>
+            </div>
+
+            <p *ngFor="let numberInfo of tableInfo.columnInfo.numberInfo">
+              {{ numberInfo.columnNumber }}, SUM: {{ numberInfo.sum }}, AVG: {{ numberInfo.avg / tableInfo?.rows.length }}, MIN:{{ numberInfo.min }}, MAX: {{
+              numberInfo.max }}
+            </p>
+
+            <p *ngFor="let descriptionInfo of tableInfo.columnInfo.descriptionInfo">
+              {{ descriptionInfo.columnNumber }}, AVG: {{ descriptionInfo.avgLength / tableInfo?.rows.length }}
+            </p>
+
+            <p *ngFor="let shortTextInfo of tableInfo.columnInfo.shortTextInfo">
+              {{ shortTextInfo.columnNumber }}, AVG: {{ shortTextInfo.avgLength / tableInfo?.rows.length}}
+            </p>
+
           </div>
         </div>
 

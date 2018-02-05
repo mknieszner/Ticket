@@ -1,12 +1,15 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnChanges, OnDestroy, OnInit, SimpleChanges, ViewChild} from '@angular/core';
 import {Store} from "@ngrx/store";
+import {Observable} from "rxjs/Observable";
 
 import * as fromAppReducers from '../../shared/store/app.reducers';
 import {TableState} from "../../shared/store/table/tables.reducers";
-import {Observable} from "rxjs/Observable";
-import {RowContentModel, Status, TaskModel} from "../../shared/table.model";
-import {UserModel} from "../../user/user.model";
+import {TaskModel} from "../../shared/table.model";
 import {DataStorageService} from "../../shared/data-storage.service";
+import {EnumInfoModel, TableInfoModel} from "../../shared/statistics/table-info.model";
+import {StatisticsService} from "../../shared/statistics/statistics.service";
+import {TasksInfoModel} from "../../shared/statistics/tasks-info.model";
+
 
 @Component({
   selector: 'app-table-stats',
@@ -14,23 +17,24 @@ import {DataStorageService} from "../../shared/data-storage.service";
   styleUrls: ['./table-stats.component.css']
 })
 export class TableStatsComponent implements OnInit {
+
   tableState: Observable<TableState>;
   selectedTableName: Observable<string>;
-  rowsInfo: {
-    rows: RowContentModel[]
-    doneRows: RowContentModel[];
-    undoneRows: RowContentModel[];
-  } = null;
-  tasksInfo: {
-    tasks: TaskModel[];
-    unassignedTasks: TaskModel[];
-    assignedTasks: TaskModel[];
-    inProgressTasks: TaskModel[];
-    doneTasks: TaskModel[];
-  } = null;
+  tableInfo: TableInfoModel = null;
+  tasksInfo: TasksInfoModel = null;
+  enumChartData: { data: any[], label: string }[] = [];
+  enumChartLabels: any[] = [];
+  barChartType:string = 'doughnut';
+  enumChartLegend:boolean = true;
+  barChartOptions:any = {
+    scaleShowVerticalLines: false,
+    responsive: true
+  };
+
 
   constructor(private store: Store<fromAppReducers.AppState>,
-              private dss: DataStorageService) {
+              private dss: DataStorageService,
+              private statistics: StatisticsService) {
   }
 
   ngOnInit() {
@@ -41,71 +45,31 @@ export class TableStatsComponent implements OnInit {
     });
     this.tableState.subscribe((tableState: TableState) => {
       if (tableState) {
-        this.tasksInfo = mapToTaskInfo(tableState.tableContent)
-        this.rowsInfo = mapToRowsInfo(tableState.tableContent);
+        this.tasksInfo = this.statistics.mapToTaskInfo(tableState.tableContent);
+        this.tableInfo = this.statistics.mapToRowsInfo(tableState.tableContent);
+        this.tableInfo.columnInfo.enumInfo.forEach((enumInfo: EnumInfoModel[],i) => {
+          this.enumChartData = [];
+          this.enumChartLabels = [];
+          let enumValues = [];
+          let columnNumber = null;
+          enumInfo.forEach((enumInfo: EnumInfoModel) => {
+            enumValues.push(enumInfo.sum);
+            columnNumber = enumInfo.columnNumber;
+            this.enumChartLabels.push(enumInfo.name);
+          });
+          this.enumChartData.push({data: enumValues,label: 'ENUM' + columnNumber})
+
+        });
       }
     })
   }
+
+  public chartClicked(e:any):void {
+    console.log(e);
+  }
+
+  public chartHovered(e:any):void {
+    console.log(e);
+  }
 }
 
-
-function mapToRowsInfo(rowList: RowContentModel[]): { rows, doneRows, undoneRows } {
-  let rows: RowContentModel[] = [];
-  let doneRows: RowContentModel[] = [];
-  let undoneRows: RowContentModel[] = [];
-
-  rowList.forEach((row: RowContentModel) => {
-    rows.push(row);
-    if (containsUndoneTasks(row)) {
-      doneRows.push(row)
-    } else {
-      undoneRows.push(row);
-    }
-  });
-  return {rows: rows, doneRows: doneRows, undoneRows: undoneRows}
-}
-
-function containsUndoneTasks(row: RowContentModel) {
-  let rowStatus = true;
-  row.taskDtos.forEach((task: TaskModel) => {
-    if (task.status.toString() != 'DONE') {
-      rowStatus = false;
-    }
-  });
-  return rowStatus;
-}
-
-function mapToTaskInfo(rows: RowContentModel[]): { tasks, unassignedTasks, assignedTasks, inProgressTasks, doneTasks } {
-  let tasks: TaskModel[] = [];
-  let unassignedTasks: TaskModel[] = [];
-  let assignedTasks: TaskModel[] = [];
-  let inProgressTasks: TaskModel[] = [];
-  let doneTasks: TaskModel[] = [];
-
-  rows.forEach((row) => {
-    row.taskDtos.forEach((task: TaskModel) => {
-      switch (task.status.toString()) {
-        case ('UNASSIGNED'):
-          tasks.push(task);
-          unassignedTasks.push(task);
-          return;
-        case ('ASSIGNED'):
-          tasks.push(task);
-          assignedTasks.push(task);
-          return;
-        case ('IN_PROGRESS'):
-          tasks.push(task);
-          inProgressTasks.push(task);
-          return;
-        case ('DONE'):
-          tasks.push(task);
-          doneTasks.push(task);
-          return;
-        default:
-          throw new Error('Unknown task status: ' + task.status.toString());
-      }
-    })
-  });
-  console.log({tasks: tasks, unassignedTasks: unassignedTasks, assignedTasks: assignedTasks, inProgressTasks: inProgressTasks, doneTasks: doneTasks})
-  return {tasks: tasks, unassignedTasks: unassignedTasks, assignedTasks: assignedTasks, inProgressTasks: inProgressTasks, doneTasks: doneTasks};
-}

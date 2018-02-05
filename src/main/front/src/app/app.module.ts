@@ -48,6 +48,8 @@ import {SortByPipe} from "./shared/sort/sort-by.pipe";
 import { StatisticsComponent } from './statistics/statistics.component';
 import { TableStatsComponent } from './statistics/table-stats/table-stats.component';
 import { UserInfoComponent } from './user-info/user-info.component';
+import {StatisticsService} from "./shared/statistics/statistics.service";
+import {ChartsModule} from "ng4-charts";
 
 
 
@@ -91,6 +93,7 @@ const appRoutes: Routes = [
     UserInfoComponent
   ],
   imports: [
+    ChartsModule,
     BrowserModule,
     FormsModule,
     ReactiveFormsModule,
@@ -109,6 +112,7 @@ const appRoutes: Routes = [
     TaskInfoService,
     WebSocketService,
     StoreResetService,
+    StatisticsService,
     {provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi:true}
     // {provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi:true}
     ],
