@@ -48,3 +48,12 @@
 ::-webkit-scrollbar-thumb:hover {
   background: darkgrey;
 }
+
+tbody {
+  max-height: 700px;
+  height: auto;
+}
+
+table {
+  margin-top: 10px;
+}

@@ -1,0 +1,35 @@
+li {
+  border: 1px solid #32383e;
+  background-color: rgba(200, 200, 200, 0.05);
+  color: gray !important;
+}
+
+li:hover {
+  background-color: rgba(200, 200, 200, 0.2);
+}
+
+input, select, textarea {
+  background-color: rgba(0, 0, 0, 0.05) !important;
+}
+
+.jumbotron {
+  background: none;
+}
+
+/* width */
+::-webkit-scrollbar {
+  width: 20px;
+}
+/* Track */
+::-webkit-scrollbar-track {
+  border-radius: 10px;
+}
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: grey;
+  border-radius: 10px;
+}
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: darkgrey;
+}

@@ -10,6 +10,7 @@ export const SHOW_ROW = 'SHOW_ROW';
 export const UPDATE_ROW = 'UPDATE_ROW';
 export const EDIT_ROW_MODE = 'EDIT_ROW_MODE';
 export const EDITED_ROW = 'EDITED_ROW';
+export const DELETE_ROW = 'DELETE_ROW';
 
 export const SET_ROWS = 'SET_ROWS';
 
@@ -35,6 +36,7 @@ export const SWITCH_TABLE_RESET = 'SWITCH_TABLE_RESET';
 export const SET_ROW_TASKS = 'SET_ROW_TASKS';
 export const SET_TABLE_USERS = 'SET_TABLE_USERS';
 export const UPDATE_ROWS_TASK = 'UPDATE_ROWS_TASK';
+export const UPDATE_TASK = 'UPDATE_TASK';
 export const DELETE_ROWS_TASK = 'DELETE_ROWS_TASK';
 
 
@@ -185,6 +187,13 @@ export class UpdateRowsTaskAction implements Action {
   }
 }
 
+export class UpdateTaskAction implements Action {
+  readonly type = UPDATE_TASK;
+
+  constructor(public payload: TaskModel ) {
+  }
+}
+
 export class DeleteTask implements Action {
   readonly type = DELETE_ROWS_TASK;
 
@@ -203,6 +212,13 @@ export class SetExtendedRowView implements Action {
   readonly type = SET_EXTENDED_ROW_VIEW;
 
   constructor(public payload: boolean) {
+  }
+}
+
+export class DeleteRow implements Action {
+  readonly type = DELETE_ROW;
+
+  constructor(public payload: number) {
   }
 }
 
@@ -227,7 +243,9 @@ export type TableActions =
   SetRowsTasksAction |
   SetTableUsers |
   UpdateRowsTaskAction |
+  UpdateTaskAction |
   DeleteTask |
   SetExtendedTableView |
   SetExtendedRowView |
-  SetSortContent;
+  SetSortContent |
+  DeleteRow;

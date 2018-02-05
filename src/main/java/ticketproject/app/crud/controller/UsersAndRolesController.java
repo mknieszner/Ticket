@@ -3,7 +3,9 @@ package ticketproject.app.crud.controller;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.oauth2.common.exceptions.UnauthorizedUserException;
 import org.springframework.web.bind.annotation.*;
+import ticketproject.app.crud.domain.dto.authorization.PasswordResetData;
 import ticketproject.app.crud.domain.dto.authorization.RoleDto;
 import ticketproject.app.crud.domain.dto.authorization.UserDto;
 import ticketproject.app.crud.service.UserService;
@@ -66,6 +68,20 @@ public class UsersAndRolesController {
   @GetMapping(value = "users/{username}")
   public UserDto getUserByUsername(@PathVariable final String username, final Principal principal) {
     return userService.getSingleUserByUsername(username);
+  }
+
+  @PutMapping(value = "users/{username}")
+  public UserDto updateUserDetails(@PathVariable final String username,@RequestBody UserDto userDto, final Principal principal) {
+    return userService.updateUserDetails(userDto);
+  }
+
+  @PutMapping(value = "users/{username}/pass")
+  public boolean updateUserPassword(@PathVariable final String username, @RequestBody PasswordResetData passwordResetData, final Principal principal) {
+    if (username.equals(principal.getName())) {
+      return userService.updateUserPassword(passwordResetData, principal.getName());
+    } else {
+      throw new UnauthorizedUserException("");
+    }
   }
 
   @PostMapping(value = "users/{username}/roles/{roleName}")

@@ -1,45 +1,41 @@
-  <div class="row" style="margin: 0 10px;padding: 0;">
-    <div [ngClass]="(tableState | async).editRowMode ? ((taskDetailsMode | async) ? 'col-12 col-md-6 col-lg-4' : 'col-12 col-md-6 col-lg-4') : 'd-none'"
-         style="margin: 41px 0px">
-      <app-row-details *ngIf="(tableState | async).editRowMode"></app-row-details>
-    </div>
-    <div [ngClass]="(taskDetailsMode | async) ? 'col-12 col-md-6 col-lg-4' : 'd-none'" style="margin: 41px 0px">
-      <app-task></app-task>
-    </div>
-    <div [ngClass]="(tableState | async).editRowMode ?
+<div class="row" style="margin: 0 10px;padding: 0;">
+  <div [ngClass]="(tableState | async).editRowMode ? ((taskDetailsMode | async) ? 'col-12 col-md-6 col-lg-4' : 'col-12 col-md-6 col-lg-4') : 'd-none'"
+       style="margin: 41px 0px">
+    <app-row-details *ngIf="(tableState | async).editRowMode"></app-row-details>
+  </div>
+  <div [ngClass]="(taskDetailsMode | async) ? 'col-12 col-md-6 col-lg-4' : 'd-none'" style="margin: 41px 0px">
+    <app-task></app-task>
+  </div>
+  <div [ngClass]="(tableState | async).editRowMode ?
                         ((taskDetailsMode | async) ? 'col-lg-4' : 'col-md-6 col-lg-8')
                         : ('col-12')" style="padding: 0"
-    >
-      <div class="panel panel-dark">
+  >
+    <div class="panel">
 
-        <app-menu *ngIf="(tableState | async).tablesNames.length != 0"
-                  [tableNames]="(tableState | async).tablesNames"
-                  (choosenNameChanged)="setTable($event)"></app-menu>
+      <app-menu *ngIf="(tableState | async).tablesNames.length != 0"
+                [tableNames]="(tableState | async).tablesNames"
+                (choosenNameChanged)="setTable($event)"></app-menu>
 
-        <div class="panel-body" style="padding: 0">
-          <div *ngIf="tableChosen">
-            <div class="table-responsive" style="border-radius: 10px">
-              <table
-                class="table table-hover table-dark header-fixed table-striped table-sortable"
-                style="background-color: #343a40; margin-bottom: 0"
-              >
-                <thead>
+      <div class="panel-body" style="padding: 0">
+        <div *ngIf="tableChosen">
+          <div class="table-responsive" style="border-radius: 10px">
+            <table
+              class="table table-hover header-fixed table-striped"
+              style="margin-bottom: 0"
+            >
+              <thead>
                 <app-table-header></app-table-header>
-                </thead>
-                <tbody id="search-table">
-                <!--<app-row *ngFor="let row of -->
-                <!--((tableState | async).tableContent) | extendedFilter: extendedFilterContent : filterSelect""-->
-                         <!--[row]="row"-->
-                         <!--[header]="(tableState|async).tableDefinition"></app-row>-->
+              </thead>
+              <tbody style="max-height: 700px; height: auto; background-color: transparent">
                 <app-row *ngFor="let row of
                 ((tableState | async).tableContent)  | extendedFilter: extendedFilterContent : filterSelect | orderBy : sortContentValue"
                          [row]="row"
                          [header]="(tableState|async).tableDefinition"></app-row>
-                </tbody>
-              </table>
-            </div>
+              </tbody>
+            </table>
           </div>
         </div>
       </div>
     </div>
   </div>
+</div>

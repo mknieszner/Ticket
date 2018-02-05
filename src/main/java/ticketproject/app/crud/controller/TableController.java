@@ -38,6 +38,16 @@ public class TableController {
     return tableService.assignUserToTaskIfAuthorized(taskId,username,principal.getName());
   }
 
+  @DeleteMapping(value = "projects/tables/rows/tasks/{taskId}/user/{username}")
+  public TaskDto removeUserfromToTask(@PathVariable final Long taskId, @PathVariable final String username, final Principal principal) {
+    return tableService.removeUserFromTaskIfAuthorized(taskId,username,principal.getName());
+  }
+
+  @PutMapping(value = "projects/tables/rows/tasks/")
+  public TaskDto updateTask(@RequestBody final TaskDto taskDto, final Principal principal) {
+    return tableService.updateTaskIfAuthorized(taskDto,principal.getName());
+  }
+
   @PostMapping(value = "projects/tables/rows/{rowId}/tasks")
   public List<TaskDto> addTaskToRow(@PathVariable final Long rowId, @RequestBody final TaskDto taskDto, final Principal principal) {
     return tableService.addTaskToRowIfAuthorized(rowId,principal.getName(),taskDto);
@@ -124,8 +134,9 @@ public class TableController {
   }
 
   @DeleteMapping(value = "projects/tables/rows/{rowId}")//TODO: DO ZAMIANY NA TABLE NAME I ROWID Z REQUEST BODY
-  public void deleteRowById(@PathVariable final Long rowId) {
+  public @ResponseBody boolean deleteRowById(@PathVariable final Long rowId) {
     tableService.deleteRowById(rowId);
+    return true;
   }
 
 

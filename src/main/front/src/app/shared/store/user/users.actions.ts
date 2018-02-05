@@ -4,6 +4,7 @@ import {RoleModel} from "../../../roles/role.model";
 import {Token} from "../../auth.model";
 import {Client} from 'stompjs/lib/stomp.js';
 import {TaskModel} from "../../table.model";
+import {Task} from "protractor/built/taskScheduler";
 
 export const SET_NEW_USER_MODE = 'SET_NEW_USER_MODE';
 export const SET_USERS = 'SET_USERS';
@@ -26,6 +27,7 @@ export const DELETE_TOKEN = 'DELETE_TOKEN';
 
 export const DELETE_CURRENT_USER = 'DELETE_CURRENT_USER';
 export const SET_CURRENT_USER = 'SET_CURRENT_USER';
+export const SET_CURRENT_USER_DETAILS = 'SET_CURRENT_USER_DETAILS';
 export const SWITCH_TABLE_RESET = 'SWITCH_TABLE_RESET';
 
 export const SET_NEW_WEB_SOCKET_CLIENT = 'SET_NEW_WEB_SOCKET_CLIENT';
@@ -37,6 +39,9 @@ export const SET_LOGIN_FAILURE_INFO = 'SET_LOGIN_FAILURE_INFO';
 export const SET_LOGOUT_INFO = 'SET_LOGOUT_INFO';
 
 export const SET_USER_DISPLAYED_TASK = 'SET_USER_DISPLAYED_TASK';
+export const SET_SELECTED_USER = 'SET_SELECTED_USER';
+
+export const UPDATE_TASK = 'UPDATE_TASK';
 
 
 export class DeleteUserAction implements Action {
@@ -211,6 +216,28 @@ export class SetUserDisplayedTask implements Action {
   }
 }
 
+export class SetSelectedUser implements Action {
+  readonly type = SET_SELECTED_USER;
+
+  constructor(public payload: UserModel) {
+  }
+}
+
+export class UpdateTaskAction implements Action {
+  readonly type = UPDATE_TASK;
+
+  constructor(public payload: TaskModel) {
+  }
+}
+
+export class SetCurrntUserDetails implements Action {
+  readonly type = SET_CURRENT_USER_DETAILS;
+
+  constructor(public payload: UserModel) {
+  }
+}
+
+
 export type UserActions =
   SetCurrentUserRolenames |
   DeleteUserAction |
@@ -235,5 +262,8 @@ export type UserActions =
   ResetStore |
   SetLoginFailureInfo |
   SetLogoutInfo |
-  SetUserDisplayedTask;
+  SetUserDisplayedTask |
+  SetSelectedUser |
+  UpdateTaskAction |
+  SetCurrntUserDetails;
 

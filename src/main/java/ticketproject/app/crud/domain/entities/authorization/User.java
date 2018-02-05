@@ -32,11 +32,10 @@ public class User implements Serializable {
   private String email;
   private String password;
   private boolean enabled;
-  @ManyToMany(
-      mappedBy = "users",
-      fetch = FetchType.EAGER
-  )
+  @ManyToMany(mappedBy = "users", fetch = FetchType.EAGER)
   Set<Role> roles = new HashSet<>();
+  @ManyToMany(mappedBy = "users", fetch = FetchType.EAGER)
+  List<Task> tasks = new ArrayList<>();
 
   public User(final String username,
               final String firstName,
@@ -77,12 +76,6 @@ public class User implements Serializable {
 
     return username.equals(user.username);
   }
-
-  @ManyToMany(
-      mappedBy = "users",
-      fetch = FetchType.EAGER
-  )
-  List<Task> tasks = new ArrayList<>();
 
   @Override
   public int hashCode() {

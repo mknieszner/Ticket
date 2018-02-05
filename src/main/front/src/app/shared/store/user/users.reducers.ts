@@ -11,6 +11,7 @@ export interface UserState {
   newTaskInfo: boolean
   currentSocketClient: Client
   currentUser: string,
+  currentUserDetails: UserModel,
   currentUserRoles: string[],
   token: Token,
   users: UserModel[],
@@ -19,6 +20,7 @@ export interface UserState {
   newRoleMode: boolean,
   loginFailureInfo: string,
   logoutInfo: string
+  selectedUser: UserModel,
   userDisplayedTask: TaskModel
 }
 
@@ -26,6 +28,7 @@ const initialUserState: UserState = {
   newTaskInfo: false,
   currentSocketClient: null,
   currentUser: '',
+  currentUserDetails: null,
   currentUserRoles: [],
   token: null,
   users: [],
@@ -34,6 +37,7 @@ const initialUserState: UserState = {
   newRoleMode: false,
   loginFailureInfo: '',
   logoutInfo: '',
+  selectedUser: null,
   userDisplayedTask: null
 };
 
@@ -120,6 +124,11 @@ export function usersReducers(state: UserState = initialUserState, action: UserA
         ...state,
         currentUser: action.payload
       };
+    case UserActions.SET_CURRENT_USER_DETAILS:
+      return {
+        ...state,
+        currentUserDetails: action.payload
+      };
     case UserActions.SWITCH_TABLE_RESET:
       return {
         ...initialUserState,
@@ -149,6 +158,18 @@ export function usersReducers(state: UserState = initialUserState, action: UserA
         loginFailureInfo: initialUserState.loginFailureInfo,
         logoutInfo: action.payload
       };
+    case UserActions.SET_SELECTED_USER:
+      return {
+        ...state,
+        selectedUser: action.payload
+      };
+    case UserActions.UPDATE_TASK:
+      return {
+        ...state,
+        users: [...updateUsersTask(state.users, action.payload)],
+        selectedUser: updateUserTask(state.selectedUser, action.payload),
+        userDisplayedTask: null
+      };
     case UserActions.SET_USER_DISPLAYED_TASK:
       return {
         ...state,
@@ -161,6 +182,25 @@ export function usersReducers(state: UserState = initialUserState, action: UserA
     default:
       return state;
   }
+}
+
+
+function updateUsersTask(usersToUpdate: UserModel[], task: TaskModel): UserModel[] {
+  let users = usersToUpdate;
+  users.forEach((user: UserModel, i) => {
+    users[i] = updateUserTask(user, task);
+  });
+  return users;
+}
+
+function updateUserTask(userToUpdate: UserModel, task: TaskModel): UserModel {
+  let user = userToUpdate;
+  user.taskDtos.forEach((taskToUpdate: TaskModel, i) => {
+    if (taskToUpdate.id == task.id) {
+      user.taskDtos[i] = task;
+    }
+  });
+  return user;
 }
 
 function deleteItemByName(array: NameModel[], itemName: string): Array<NameModel> {//TODO GENERIC TYPE FUNCTION???  r.216/255

@@ -261,4 +261,41 @@ public class TableService {
     } // TODO: remove tablename and task from exception (tests)
     return true;
   }
+
+  @Transactional
+  public TaskDto updateTaskIfAuthorized(final TaskDto taskDto, final String username) {
+    Task taskToUpdate = taskRepository.findOne(taskDto.getId());
+    Row row = rowRepository.findByTasks(taskToUpdate);
+    String tableName = row.getProjectTable().getName();
+    if (userRepository.findByUsername(username).getRoles() //TODO cache roles???
+        .stream()                                          // TODO: validator????
+        .map(Role::getName)
+        .anyMatch((roleName) -> roleName.equals(tableName) || roleName.equals("ROLE_ADMIN"))) {
+      row.setTasks(row.getTasks().stream().map((task) -> {
+        if (task.getId().equals(taskDto.getId())) {
+          task = taskMapper.mapTaskDtoToTask(taskDto);
+        }
+        return task;
+      }).collect(Collectors.toList()));
+      rowRepository.save(row);
+      return taskMapper.mapTaskToTaskDto(taskRepository.findOne(taskDto.getId()));
+    } else {
+      throw new RuntimeException(String.format("User:%s does not have authority:%s TaskDto: %s", username, tableName, taskDto.toString()));
+    } // TODO: remove tablename and task from exception (tests)
+  }
+
+  public TaskDto removeUserFromTaskIfAuthorized(final Long taskId, final String userNameToAssign, final String username) {
+    Task task = taskRepository.findOne(taskId);
+    final Row row = rowRepository.findByTasksIsContaining(Collections.singletonList(task));
+    final String tableName = row.getProjectTable().getName();
+    if (userRepository.findByUsername(username).getRoles() //TODO cache roles???
+        .stream()                                          // TODO: validator????
+        .map(Role::getName).anyMatch((roleName) -> roleName.equals(tableName) || roleName.equals("ROLE_ADMIN"))) {
+      final User userToAssign = userRepository.findByUsername(userNameToAssign);
+      task.getUsers().remove(userToAssign);
+      return taskMapper.mapTaskToTaskDto(taskRepository.save(task));
+    } else {
+      throw new RuntimeException(String.format("User:%s does not have authority:%s TaskDto: %s", username, tableName, task.toString()));
+    } // TODO: remove tablename and task from exception (tests)
+  }
 }

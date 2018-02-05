@@ -7,9 +7,10 @@ import lombok.Setter;
 import ticketproject.app.crud.domain.entities.authorization.User;
 
 import javax.persistence.*;
-import java.sql.Blob;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Getter
@@ -38,7 +39,7 @@ public class Task {
       joinColumns = { @JoinColumn(name = "USER_id") },
       inverseJoinColumns = { @JoinColumn(name = "TASK_id") }
   )
-  private List<User> users = new ArrayList<>();
+  private Set<User> users = new HashSet<>();
 
   @OneToMany(
       fetch = FetchType.EAGER

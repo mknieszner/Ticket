@@ -5,7 +5,9 @@ import ticketproject.app.crud.domain.entities.Task;
 import ticketproject.app.crud.domain.entities.authorization.User;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Getter
 @Setter
@@ -25,7 +27,7 @@ public class TaskDto {
   //TODO: adding attachments
   //List<Blob> artifacts;
 
-  private List<String> userNames = new ArrayList<>();
+  private Set<String> userNames = new HashSet<>();
 
   private List<TaskDto> taskDtos = new ArrayList<>();
 }

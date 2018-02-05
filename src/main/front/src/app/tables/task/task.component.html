@@ -1,13 +1,33 @@
 <div *ngIf="(showedTask | async)">
   <ul class="list-group">
-    <li class="list-group-item bg-dark text-white text-center">
-      <button class="btn btn-default" (click)="onHideTaskDetails()">Hide Details</button>
+    <li class="list-group-item text-white text-center" style="background-color: rgba(0,0,0,0.05);">
+      <button class="btn btn-outline-secondary" (click)="onHideTaskDetails()">Hide Details</button>
     </li>
-    <li class="list-group-item"> ID: {{(showedTask | async)?.id}}</li>
-    <li class="list-group-item"> Name: {{ (showedTask | async)?.name}}</li>
-    <li class="list-group-item"> Description: {{ (showedTask | async)?.description }}</li>
-    <li class="list-group-item"> Status: {{(showedTask | async)?.status}}</li>
-    <li class="list-group-item bg-dark text-white text-center">
+    <li class="list-group-item">
+      <div class="list-group-item d-flex justify-content-between">
+        <span class="text-info">ID: </span>
+        <span>{{(showedTask | async)?.id}}</span>
+      </div>
+    </li>
+    <li class="list-group-item">
+      <div class="list-group-item d-flex justify-content-between">
+        <span class="text-info">Name:</span>
+        <span>{{ (showedTask | async)?.name}}</span>
+      </div>
+    </li>
+    <li class="list-group-item">
+      <div class="list-group-item d-flex justify-content-between">
+        <span class="text-info">Description:</span>
+        <span>{{ (showedTask | async)?.description }}</span>
+      </div>
+    </li>
+    <li class="list-group-item">
+      <div class="list-group-item d-flex justify-content-between">
+        <span class="text-info">Status:</span>
+        <span>{{(showedTask | async)?.status}}</span>
+      </div>
+    </li>
+    <li class="list-group-item text-white text-center" style="background-color: rgba(0,0,0,0.05);">
       <span style="margin-bottom: 3px">{{ (showedTask | async)?.userNames.length <= 0 ? 'No users' : 'Assigned Users:'}}</span>
       <form class="form-group" *ngIf="(tableUsers| async).length != 0">
         <div class="form-group d-flex justify-content-between align-items-center" style="margin-top: 5px">
@@ -17,15 +37,19 @@
               <option *ngFor="let tableUser of (tableUsers| async)"> {{ tableUser }}</option>
             </select>
             <div class="input-group-append">
-              <button class="btn btn-secondary" (click)="onAssignUserToTask(userContol.value)">+</button>
-              <button class="btn btn-secondary" (click)="onRemoveUserFromTask(userContol.value)">-</button>
+              <button class="btn btn-outline-secondary" (click)="onAssignUserToTask(userContol.value)">+</button>
+              <button class="btn btn-outline-secondary" (click)="onRemoveUserFromTask(userContol.value)">-</button>
             </div>
           </div>
         </div>
       </form>
     </li>
-    <li class="list-group-item" *ngFor=" let username of (showedTask | async)?.userNames">{{username}}</li>
-    <li class="list-group-item bg-dark text-white text-center"> {{ (showedTask | async)?.taskDtos.length <= 0 ? 'No tasks' : 'Assigned Tasks:'}}</li>
+    <li class="list-group-item" *ngFor=" let username of (showedTask | async)?.userNames">
+      <span class="text-info">{{username}}</span>
+    </li>
+    <li class="list-group-item text-white text-center" style="background-color: rgba(0,0,0,0.05);">
+      {{ (showedTask | async)?.taskDtos.length <= 0 ? 'No tasks' : 'Assigned Tasks:'}}
+    </li>
     <li class="list-group-item" *ngFor="let taskDto of (showedTask | async)?.taskDtos">
       <!--<app-task></app-task>-->
     </li>
@@ -35,15 +59,15 @@
 <div *ngIf="(showedTask | async) == null">
   <form>
     <div class="form-group">
-      <label>Name:</label>
+      <label class="text-info">Name:</label>
       <input class="form-control" type="text" #nameEl>
     </div>
     <div class="form-group">
-      <label>Description:</label>
+      <label class="text-info">Description:</label>
       <textarea rows="20" class="form-control" #descriptionEl></textarea>
     </div>
     <div class="form-group">
-      <label>Status:</label>
+      <label class="text-info">Status:</label>
       <select class="form-control" #statusEl>
         <option> {{status[0]}}</option>
         <option> {{status[1]}}</option>

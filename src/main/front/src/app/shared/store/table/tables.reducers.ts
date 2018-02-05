@@ -143,6 +143,11 @@ export function tablesReducers(state: TableState = initialTableState, action: Ta
         ...state,
         tableContent: [...updateTaskUsers(state.tableContent, action.payload)]
       };
+    case TableActions.UPDATE_TASK:
+      return {
+        ...state,
+        tableContent: [...updateTask(state.tableContent, action.payload)]
+      };
     case TableActions.DELETE_ROWS_TASK:
       return {
         ...state,
@@ -163,9 +168,37 @@ export function tablesReducers(state: TableState = initialTableState, action: Ta
         ...state,
         sortContent: action.payload
       };
+    case TableActions.DELETE_ROW:
+      return {
+        ...state,
+        tableContent: [...deleteRow(state.tableContent, action.payload)],
+        editRowMode: initialTableState.editRowMode,
+        editedRow: initialTableState.editedRow,
+      };
     default:
       return state;
   }
+}
+
+function updateTask(tableContent: RowContentModel[], payload: TaskModel) {
+  tableContent.forEach((row: RowContentModel, i) => {
+      row.taskDtos.forEach((taskDto: TaskModel, j) => {
+        if (taskDto.id == payload.id) {
+          tableContent[i].taskDtos[j] = payload;
+        }
+      })
+  });
+  return tableContent;
+}
+
+
+function deleteRow(tableContent: RowContentModel[], rowId: number) {
+  tableContent.forEach((row: RowContentModel, i) => {
+    if (row.id == rowId) {
+      tableContent.splice(i, 1);
+    }
+  });
+  return tableContent;
 }
 
 function deleteRowsTask(tableContent: RowContentModel[], payload: { rowId: number, taskId: number }): RowContentModel[] {

@@ -172,7 +172,6 @@ export class RowDetailsComponent implements OnInit, OnDestroy {
       mapedNewRow.columnValueDtos.push(newValue);
     });
 
-    console.log(mapedNewRow);
     return mapedNewRow;
   }
 
@@ -197,8 +196,11 @@ export class RowDetailsComponent implements OnInit, OnDestroy {
     this.store.dispatch(new TaskActions.SetShowedTaskAction(task));
   }
 
+  onDeleteRow() {
+    this.dss.deleteRow(this.selesctedRow.id);
+  }
+
   onDeleteTask(taskId: number) {
-    console.log('onDeleteTask', taskId, this.selesctedRow.id)
     this.dss.deleteTask(taskId, this.selesctedRow.id);
   }
 

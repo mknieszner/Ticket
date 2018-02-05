@@ -13,7 +13,7 @@ import * as UsersActions from "../shared/store/user/users.actions";
 })
 export class UserComponent implements OnInit {
   users: Observable<UserModel[]>;
-  selectedUser: UserModel;
+  selectedUser: Observable<UserModel>;
 
   constructor(private contentStore: Store<fromAppReducers.AppState>,
               private dss: DataStorageService) {
@@ -21,27 +21,19 @@ export class UserComponent implements OnInit {
 
   ngOnInit() {
     this.users = this.contentStore.select('users', 'users');
+    this.contentStore.select('users', 'selectedUser');
     this.dss.getUsers();
   }
 
   onSelectUser(user: UserModel) {
-    this.selectedUser = user;
+    this.contentStore.dispatch(new UsersActions.SetSelectedUser(user));
     this.contentStore.dispatch(new UsersActions.SetUserDisplayedTask(null));
   }
 
   onNewUser() {
-    console.log('onNewUser');
     this.contentStore.dispatch(new UsersActions.SetNewUserModeAction(true))
     this.contentStore.dispatch(new UsersActions.SetUserDisplayedTask(null));
   }
-
-  onRemoveUser(username: string) {
-    this.dss.deleteUser(username);
-    this.contentStore.dispatch(new UsersActions.SetNewUserModeAction(false))
-    this.selectedUser = null;
-    this.contentStore.dispatch(new UsersActions.SetUserDisplayedTask(null));
-  }
-
   // // onNewRole() {
   // //   this.roleStore.dispatch(new TablesActions.SetNewRoleModeAction(true));
   // // }

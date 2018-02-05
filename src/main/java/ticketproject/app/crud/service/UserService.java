@@ -10,10 +10,12 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import ticketproject.app.crud.dao.ActiveWebSocketUserRepository;
 import ticketproject.app.crud.dao.RoleRepository;
 import ticketproject.app.crud.dao.UserRepository;
+import ticketproject.app.crud.domain.dto.authorization.PasswordResetData;
 import ticketproject.app.crud.domain.dto.authorization.RoleDto;
 import ticketproject.app.crud.domain.dto.authorization.UserDto;
 
@@ -41,6 +43,7 @@ public class UserService implements UserDetailsService {
   private final UserMapper userMapper;
   private final TableService tableService;
   private final ActiveWebSocketUserRepository activeWebSocketUserRepository;
+  private final PasswordEncoder passwordEncoder;
 
 
   @Transactional
@@ -197,5 +200,38 @@ public class UserService implements UserDetailsService {
         .map(ActiveWebSocketUser::getName)
         .distinct()
         .collect(Collectors.toList());
+  }
+
+  public UserDto updateUserDetails(final UserDto userDto) {
+    User user = userRepository.findByUsername(userDto.getUsername());
+    User updatedUser = new User(
+        user.getId(),
+        user.getUsername(),
+        userDto.getFirstName(),
+        userDto.getLastName(),
+        userDto.getEmail(),
+        user.getPassword(),
+        user.isEnabled(),
+        user.getRoles(),
+        user.getTasks()
+    );
+    return userMapper.mapUserToUserDto(userRepository.save(updatedUser));
+  }
+
+  public boolean updateUserPassword(final PasswordResetData passwordResetData, final String username) {
+    User user = userRepository.findByUsername(username);
+    checkArgument(passwordEncoder.matches(passwordResetData.getOldPassword(),user.getPassword()), new RuntimeException("Wrong password"));
+    userRepository.save(new User(
+        user.getId(),
+        user.getUsername(),
+        user.getFirstName(),
+        user.getLastName(),
+        user.getEmail(),
+        passwordEncoder.encode(passwordResetData.getNewPassword()),
+        user.isEnabled(),
+        user.getRoles(),
+        user.getTasks()
+    ));
+    return true;
   }
 }

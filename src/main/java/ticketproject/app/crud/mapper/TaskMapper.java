@@ -26,7 +26,7 @@ public class TaskMapper {
         task.getName(),
         task.getDescription(),
         task.getStatus(),
-        task.getUsers().stream().map(User::getUsername).collect(Collectors.toList()),
+        task.getUsers().stream().map(User::getUsername).collect(Collectors.toSet()),
         mapTasksToTaskDtos(task.getTasks())
     );
   }
@@ -38,7 +38,7 @@ public class TaskMapper {
       taskDto.getName(),
       taskDto.getDescription(),
       taskDto.getStatus(),
-      taskDto.getUserNames().stream().map(userRepository::findByUsername).collect(Collectors.toList()),
+      taskDto.getUserNames().stream().map(userRepository::findByUsername).collect(Collectors.toSet()),
         mapTaskDtosToTasks(taskDto.getTaskDtos())
     );
   }

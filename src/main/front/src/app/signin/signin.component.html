@@ -1,14 +1,16 @@
-<div class="container" style="margin-top: 10%">
+<div class="container">
   <div class="row justify-content-center">
     <div class="col-sm-12 col-md-6">
       <div class="card">
-        <div class="card-header bg-dark text-white">
-          <h3>Report Manager</h3>
+        <div class="card-header text-white text-center">
+
+          <h3 class="text-info">Report Manager</h3>
+
         </div>
         <div class="card-body">
           <div class="form-group">
             <form [formGroup]="signinForm">
-              <div class="form-group" style="margin: 0 auto">
+              <div class="form-group">
                 <input type="text" aria-describedby="usernameHelpInline" name="username" placeholder="username" class="form-control" formControlName="username">
                 <small id="usernameHelpInline" class="text-muted">
                   Must be 8-20 characters long.
@@ -21,8 +23,8 @@
                   Must be 8-20 characters long.
                 </small>
               </div>
-              <div class="form-group">
-                <button value="Sign In" class="btn btn-default bg-secondary" (click)="onSignin()">Sign In</button>
+              <div class="btn-group">
+                <button value="Sign In" class="btn btn-outline-info" (click)="onSignin()">Sign In</button>
               </div>
               <div class="alert alert-danger" *ngIf="loginFailureInfo | async">
                 <span> {{ loginFailureInfo | async }} </span>

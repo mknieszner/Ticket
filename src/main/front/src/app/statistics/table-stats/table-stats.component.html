@@ -1,0 +1,160 @@
+<div *ngIf="selectedTableName | async">
+
+  <div *ngIf="tableState | async">
+
+    <div class="card">
+      <div class="card-header">
+        <h5 class="text-info text-center">{{ selectedTableName | async }}</h5>
+      </div>
+      <div class="card-body" style="background-color: transparent !important; padding: 20px">
+        <div class="card">
+          <div class="card-header">Rows info:</div>
+          <div class="card-body">
+            <div class="row" style="margin-top: 20px">
+              <div class="col-12 d-flex justify-content-center">
+                <div class="card border-info bg-transparent" style="width: 10rem;">
+                  <div class="bg-info align-middle">
+                    <h3 class="text-white text-center">{{ rowsInfo.rows.length }} </h3>
+                  </div>
+                  <div class="card-body">
+                    <h5 class="card-title text-center text-white">Rows</h5>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="row d-flex justify-content-center" style="margin-top: 20px">
+              <div class="col-3">
+                <div class="card border-success bg-transparent" style="width: 10rem;">
+                  <div class="bg-success align-middle">
+                    <h3 class="text-white text-center">{{ rowsInfo.doneRows.length }} </h3>
+                  </div>
+                  <div class="card-body" style="min-height: 100px">
+                    <h5 class="card-title text-center text-white">Done Rows</h5>
+                  </div>
+                </div>
+              </div>
+              <div class="col-3">
+                <div class="card border-danger bg-transparent" style="width: 10rem;">
+                  <div class="bg-danger align-middle">
+                    <h3 class="text-white text-center">{{ rowsInfo.undoneRows.length }} </h3>
+                  </div>
+                  <div class="card-body">
+                    <h5 class="card-title text-center text-white">Undone Rows</h5>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div *ngIf="rowsInfo" class="progress bg-transparent" style="margin-top: 20px">
+              <div class="progress-bar bg-success border-success"
+                   role="progressbar"
+                   [style.width]=" (rowsInfo.doneRows.length / rowsInfo.rows.length * 100 | number : '1.0-0') + '%'"
+                   attr.aria-valuenow="{{ rowsInfo.doneRows.length / rowsInfo.rows.length * 100 | number : '1.0-0' }}"
+                   attr.aria-valuemin="0"
+                   attr.aria-valuemax="100">
+              </div>
+              <div class="progress-bar border-danger bg-danger"
+                   role="progressbar"
+                   [style.width]="(rowsInfo.undoneRows.length / rowsInfo.rows.length * 100 | number : '1.0-0') + '%'"
+                   [style.border]="'1px solid'"
+                   attr.aria-valuenow="{{ rowsInfo.undoneRows.length / rowsInfo.rows.length * 100 | number : '1.0-0' }}"
+                   attr.aria-valuemin="0"
+                   attr.aria-valuemax="100">
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-header">Tasks info:</div>
+          <div class="card-body">
+            <div class="row" style="margin-top: 20px">
+              <div class="col-12 d-flex justify-content-center">
+                <div class="card border-info bg-transparent" style="width: 10rem;">
+                  <div class="bg-info align-middle">
+                    <h3 class="text-white text-center">{{ tasksInfo.tasks.length }} </h3>
+                  </div>
+                  <div class="card-body">
+                    <h5 class="card-title text-center text-white">Tasks</h5>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="row" style="margin-top: 20px">
+              <div class="col-3">
+                <div class="card border-danger bg-transparent" style="width: 10rem;">
+                  <div class="bg-danger align-middle">
+                    <h3 class="text-white text-center">{{ tasksInfo.unassignedTasks.length }} </h3>
+                  </div>
+                  <div class="card-body">
+                    <h5 class="card-title text-center text-white">Unassigned Tasks</h5>
+                  </div>
+                </div>
+              </div>
+              <div class="col-3">
+                <div class="card border-warning bg-transparent" style="width: 10rem;">
+                  <div class="bg-warning align-middle">
+                    <h3 class="text-white text-center">{{ tasksInfo.assignedTasks.length }} </h3>
+                  </div>
+                  <div class="card-body">
+                    <h5 class="card-title text-center text-white">Assigned Tasks</h5>
+                  </div>
+                </div>
+              </div>
+              <div class="col-3">
+                <div class="card border-primary bg-transparent" style="width: 10rem;">
+                  <div class="bg-primary align-middle">
+                    <h3 class="text-white text-center">{{ tasksInfo.inProgressTasks.length }} </h3>
+                  </div>
+                  <div class="card-body">
+                    <h5 class="card-title text-center text-white">In progress Tasks</h5>
+                  </div>
+                </div>
+              </div>
+              <div class="col-3">
+                <div class="card border-success bg-transparent" style="width: 10rem;">
+                  <div class="bg-success align-middle">
+                    <h3 class="text-white text-center">{{ tasksInfo.doneTasks.length }} </h3>
+                  </div>
+                  <div class="card-body" style="min-height: 100px">
+                    <h5 class="card-title text-center text-white">Done Tasks</h5>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="progress" *ngIf="tasksInfo.tasks.length > 0" style="margin-top: 20px">
+              <div class="progress-bar bg-danger"
+                   role="progressbar"
+                   [style.width]=" (tasksInfo.unassignedTasks.length / tasksInfo.tasks.length * 100 | number : '1.0-0') + '%'"
+                   attr.aria-valuenow="{{ tasksInfo.unassignedTasks.length / tasksInfo.tasks.length * 100 | number : '1.0-0' }}"
+                   attr.aria-valuemin="0"
+                   attr.aria-valuemax="100">
+              </div>
+              <div class="progress-bar bg-warning"
+                   role="progressbar"
+                   [style.width]="(tasksInfo.assignedTasks.length / tasksInfo.tasks.length * 100 | number : '1.0-0') + '%'"
+                   attr.aria-valuenow="{{ tasksInfo.assignedTasks.length / tasksInfo.tasks.length * 100 | number : '1.0-0' }}"
+                   attr.aria-valuemin="0"
+                   attr.aria-valuemax="100">
+              </div>
+              <div class="progress-bar bg-primary"
+                   role="progressbar"
+                   [style.width]="(tasksInfo.inProgressTasks.length / tasksInfo.tasks.length * 100 | number : '1.0-0') + '%'"
+                   attr.aria-valuenow="{{ tasksInfo.inProgressTasks.length / tasksInfo.tasks.length * 100 | number : '1.0-0' }}"
+                   attr.aria-valuemin="0"
+                   attr.aria-valuemax="100">
+              </div>
+              <div class="progress-bar bg-success"
+                   role="progressbar"
+                   [style.width]="(tasksInfo.doneTasks.length / tasksInfo.tasks.length * 100 | number : '1.0-0') + '%'"
+                   attr.aria-valuenow="{{ tasksInfo.doneTasks.length / tasksInfo.tasks.length * 100 | number : '1.0-0' }}"
+                   attr.aria-valuemin="0"
+                   attr.aria-valuemax="100">
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

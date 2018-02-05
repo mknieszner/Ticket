@@ -16,7 +16,8 @@ import {TaskModel} from "../../shared/table.model";
   styleUrls: ['./user-details.component.css']
 })
 export class UserDetailsComponent implements OnInit {
-  @Input() user: UserModel;
+  userState: Observable<UserModel>;
+  user: UserModel;
   editRoleMode = false;
   roles: Observable<RoleModel[]>;
   roleForm: FormGroup;
@@ -30,6 +31,10 @@ export class UserDetailsComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.userState = this.store.select('users', 'selectedUser');
+    this.userState.subscribe((user: UserModel)=> {
+      this.user = user;
+    });
     this.userDisplayedTask = this.store.select('users', 'userDisplayedTask');
     this.newUserMode = this.store.select('users', 'newUserMode');
     this.roles = this.store.select('users', 'roles');
@@ -77,6 +82,13 @@ export class UserDetailsComponent implements OnInit {
         'roleNames': new FormArray([]),
         'taskDtos': new FormArray([])
       })
+  }
+
+  onRemoveUser(username: string) {
+    console.log(username);
+    this.dss.deleteUser(username);
+    this.store.dispatch(new UsersActions.SetNewUserModeAction(false))
+    this.store.dispatch(new UsersActions.SetUserDisplayedTask(null));
   }
 
 

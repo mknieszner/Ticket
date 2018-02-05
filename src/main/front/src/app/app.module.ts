@@ -13,8 +13,6 @@ import {RouterModule, Routes} from '@angular/router';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {RowComponent} from './tables/row/row.component';
 import {StoreModule} from '@ngrx/store';
-import { tablesReducers } from './shared/store/table/tables.reducers';
-import { usersReducers } from './shared/store/user/users.reducers';
 import {KeyPipe} from './tables/key.pipe';
 import {QuestionControlService} from './tables/row/question-control.service';
 import {TableHeaderComponent} from './tables/table-header/table-header.component';
@@ -28,20 +26,28 @@ import {AuthCookie} from "./shared/auth-cookies-handler";
 import { RowDetailsComponent } from './tables/row-details/row-details.component';
 import {FilterService} from "./shared/filter/filter.service";
 import { TaskComponent } from './tables/task/task.component';
+
+import { tablesReducers } from './shared/store/table/tables.reducers';
+import { usersReducers } from './shared/store/user/users.reducers';
 import {tasksReducers} from "./shared/store/task/tasks.reducers";
 import {chatReducers} from "./shared/store/chat/chat.reducers";
+import {statisticsReducers} from "./shared/store/statistics/statistics.reducers";
+
 import {StoreRouterConnectingModule} from "@ngrx/router-store";
 import {StoreDevtools, StoreDevtoolsModule} from "@ngrx/store-devtools";
 import { environment } from '../environments/environment';
 import {UserTaskComponent} from "./user/user-task/user-task.component";
 import {TaskInfoService} from "./shared/socket/task-info.service";
 import {WebSocketService} from "./shared/socket/web-socket.service";
-import { ChatComponent } from './chat/chat.component';
+import {ChatComponent } from './chat/chat.component';
 import {StoreResetService} from "./shared/store-reset.service";
 import {ReversePipe} from "./shared/reverse.pipe";
 import {ExtendedFilterModel} from "./shared/table.model";
 import {ExtendedFilterPipe} from "./shared/filter/extended-filter.pipe";
 import {SortByPipe} from "./shared/sort/sort-by.pipe";
+import { StatisticsComponent } from './statistics/statistics.component';
+import { TableStatsComponent } from './statistics/table-stats/table-stats.component';
+import { UserInfoComponent } from './user-info/user-info.component';
 
 
 
@@ -52,7 +58,9 @@ const appRoutes: Routes = [
   {path: 'tables', component: TablesComponent},
   {path: 'signin', component: SigninComponent},
   {path: 'definitions', component: DefinitionComponent},
+  {path: 'statistics', component: StatisticsComponent},
   {path: 'chat', component: ChatComponent},
+  {path: 'user-info', component: UserInfoComponent},
 ];
 
 @NgModule({
@@ -77,7 +85,10 @@ const appRoutes: Routes = [
     UserTaskComponent,
     ChatComponent,
     ExtendedFilterPipe,
-    SortByPipe
+    SortByPipe,
+    StatisticsComponent,
+    TableStatsComponent,
+    UserInfoComponent
   ],
   imports: [
     BrowserModule,
@@ -85,7 +96,7 @@ const appRoutes: Routes = [
     ReactiveFormsModule,
     HttpClientModule,
     RouterModule.forRoot(appRoutes),
-    StoreModule.forRoot({tables: tablesReducers, users: usersReducers, tasks: tasksReducers, chat: chatReducers}),
+    StoreModule.forRoot({tables: tablesReducers, users: usersReducers, tasks: tasksReducers, chat: chatReducers, statistics: statisticsReducers}),
     StoreRouterConnectingModule,
     !environment.production ? StoreDevtoolsModule.instrument() : []
   ],

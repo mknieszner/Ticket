@@ -74,6 +74,6 @@ export class TaskComponent implements OnInit {
   }
 
   onRemoveUserFromTask(username: string) {
-    alert('TODO onRemoveUserFromTask');
+    this.dss.onRemoveUserFromTask(this.row.id, this.task.id ,username)
   }
 }

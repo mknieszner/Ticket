@@ -1,97 +1,109 @@
 <div class="row">
   <div class="col-6">
     <div *ngIf="user && !(newUserMode | async)">
-      <table class="table table-bordered table-striped table-dark">
+      <table class="table table-bordered table-striped">
         <tbody>
         <tr>
-          <td>USERNAME:</td>
-          <td>{{ user.username }}</td>
+          <td><span class="text-info">USERNAME:</span></td>
+          <td>
+            <div class="d-flex justify-content-between">
+              <span> {{ user.username }} </span>
+              <button class="btn btn-outline-secondary text-danger" data-toggle="modal" data-target="#deleteConfirmModal"> Delete User</button>
+            </div>
+          </td>
         </tr>
         <tr>
-          <td>EMAIL:</td>
+          <td><span class="text-info">EMAIL:</span></td>
           <td> {{ user.email }}</td>
         </tr>
         <tr>
-          <td>FIRSTNAME:</td>
+          <td><span class="text-info">FIRSTNAME:</span></td>
           <td>{{ user.firstName }}</td>
         </tr>
         <tr>
-          <td>LASTNAME:</td>
+          <td><span class="text-info">LASTNAME:</span></td>
           <td>{{ user.lastName }}</td>
         </tr>
         <tr>
-          <td>ENABLED:</td>
+          <td><span class="text-info">ENABLED:</span></td>
           <td>{{ user.enabled }}</td>
         </tr>
         <tr>
           <td>
-            <p>ROLES:</p>
+            <p class="text-info">ROLES:</p>
             <div *ngIf="editRoleMode && !(newUserMode | async)">
               <form [formGroup]="roleForm" class="form-group">
-                <select class="form-control" formControlName="role">
+                <select class="form-control border-secondary" formControlName="role">
                   <option selected>- Select -</option>
                   <option *ngFor="let role of (roles|async)"> {{ role.name }}</option>
                 </select>
                 <div class="btn-group" style="margin-top: 5px">
-                  <button class="btn btn-default" (click)="postAddRole()">+</button>
-                  <button class="btn btn-default" (click)="postRemove()">-</button>
-                  <button class="btn btn-default" (click)="abortAddRole()">Abort</button>
+                  <button class="btn btn-outline-secondary" (click)="postAddRole()">+</button>
+                  <button class="btn btn-outline-secondary" (click)="postRemove()">-</button>
+                  <button class="btn btn-outline-secondary" (click)="abortAddRole()">Abort</button>
                 </div>
               </form>
             </div>
             <div *ngIf="!editRoleMode">
-              <button class="btn btn-default" (click)="onEditRoleMode()">Edit</button>
+              <button class="btn btn-outline-secondary" (click)="onEditRoleMode()">Edit</button>
             </div>
           </td>
           <td>
-            <ul>
-              <li *ngFor="let roleName of user.roleNames">{{roleName}}</li>
+            <ul class="list-group">
+              <li class="list-group-item"
+                  *ngFor="let roleName of user.roleNames"
+                  style="background-color: rgba(0, 0, 0, 0.05) !important">
+                {{roleName}}
+              </li>
             </ul>
           </td>
         </tr>
         </tbody>
       </table>
       <ul class="list-group">
-        <li class="list-group-item bg-secondary">TASKS:</li>
+        <li class="list-group-item" style="background-color: rgba(0,0,0,0.05);">
+          <span class="text-info">{{user.taskDtos.length > 0 ? 'TASKS' : 'NO TASKS'}}</span>
+        </li>
         <li class="list-group-item list-group-item-action"
             *ngFor="let taskDto of user.taskDtos" (click)="onSelectTask(taskDto)"
             [ngClass]="(userDisplayedTask|async)?.id == taskDto.id ? 'bg-light' : ''"
-        > {{ taskDto.name }}</li>
+        > {{ taskDto.name }}
+        </li>
       </ul>
     </div>
 
     <div *ngIf="(newUserMode | async)">
       <form [formGroup]="newUserForm" #f>
         <div class="form-group">
-          <label>Username:</label>
-          <input type="text" class="form-control" formControlName="username" required>
+          <label class="text-info">Username:</label>
+          <input type="text" class="form-control border-secondary" formControlName="username" required>
         </div>
         <div class="form-group">
-          <label>Password</label>
-          <input type="password" class="form-control" formControlName="password" required>
+          <label class="text-info">Password</label>
+          <input type="password" class="form-control border-secondary" formControlName="password" required>
         </div>
         <div class="form-group">
-          <label>First name</label>
-          <input type="text" class="form-control" formControlName="firstName" required>
+          <label class="text-info">First name</label>
+          <input type="text" class="form-control border-secondary" formControlName="firstName" required>
         </div>
         <div class="form-group">
-          <label>Last name</label>
-          <input type="text" class="form-control" formControlName="lastName" required>
+          <label class="text-info">Last name</label>
+          <input type="text" class="form-control border-secondary" formControlName="lastName" required>
         </div>
         <div class="form-group">
-          <label>Email</label>
-          <input type="text" class="form-control" formControlName="email" required>
+          <label class="text-info">Email</label>
+          <input type="text" class="form-control border-secondary" formControlName="email" required>
         </div>
         <div class="form-group">
-          <label>Enabled</label>
-          <select class="form-control" formControlName="enabled" required>
+          <label class="text-info">Enabled</label>
+          <select class="form-control border-secondary" formControlName="enabled" required>
             <option value="true" [selected]="true">Yes</option>
             <option value="false">No</option>
           </select>
         </div>
         <div class="form-group">
-          <button (click)="onSubmitUser()" class="btn btn-default" [disabled]="f.valid">Submit</button>
-          <button (click)="onAbortSubmitUser()" class="btn btn-default">Close</button>
+          <button (click)="onSubmitUser()" class="btn btn-outline-secondary" [disabled]="f.valid">Submit</button>
+          <button (click)="onAbortSubmitUser()" class="btn btn-outline-secondary">Close</button>
         </div>
       </form>
     </div>
@@ -99,6 +111,28 @@
   <div class="col-6">
     <div *ngIf="(userDisplayedTask | async)">
       <app-user-task [task]="(userDisplayedTask | async)"></app-user-task>
+    </div>
+  </div>
+</div>
+
+
+<!-- Modal -->
+<div class="modal fade" id="deleteConfirmModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">User removal</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        Whhaaaaaatt??!!
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-outline-secondary" (click)="onRemoveUser(user.username)">Confirm</button>
+      </div>
     </div>
   </div>
 </div>
