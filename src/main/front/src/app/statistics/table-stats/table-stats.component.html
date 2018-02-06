@@ -130,7 +130,7 @@
 
             <table class="table table-striped bg-transparent "
                    *ngFor="let enumInfoArray of tableInfo.columnInfo.enumInfo,let i = index"
-            style="padding-top: 30px">
+            style="margin-top: 30px">
               <thead class="border-secondary" *ngIf="i == 0">
               <tr>
                 <th>
@@ -168,7 +168,7 @@
             <p *ngFor="let numberInfo of tableInfo.columnInfo.numberInfo">
               {{ numberInfo.columnNumber }},
               SUM: {{ numberInfo.sum }},
-              AVG: {{ numberInfo.avg / tableInfo?.rows.length }},
+              AVG: {{ numberInfo.avg }},
               MIN:{{ numberInfo.min }},
               MAX: {{numberInfo.max }}
             </p>
@@ -181,7 +181,7 @@
           <div class="card-body" *ngIf="(tableHeaderState | async)">
             <p *ngFor="let descriptionInfo of tableInfo.columnInfo.descriptionInfo">
               {{ descriptionInfo.columnNumber }},
-              AVG: {{ descriptionInfo.avgLength / tableInfo?.rows.length }}
+              AVG: {{ descriptionInfo.avgLength }}
             </p>
           </div>
         </div><!--                                                                                         DESCRIPTION COLUMNS INFO END -->
@@ -191,7 +191,7 @@
           <div class="card-body" *ngIf="(tableHeaderState | async)">
             <p *ngFor="let shortTextInfo of tableInfo.columnInfo.shortTextInfo">
               {{ shortTextInfo.columnNumber }},
-              AVG: {{ shortTextInfo.avgLength / tableInfo?.rows.length}}
+              AVG: {{ shortTextInfo.avgLength}}
             </p>
           </div>
         </div><!--                                                                                           SHORT TEXT COLUMNS INFO END -->

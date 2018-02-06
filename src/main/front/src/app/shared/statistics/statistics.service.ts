@@ -1,6 +1,6 @@
 import {RowContentModel, TaskModel} from "../table.model";
 import {
-  ColumnInfoModel, DescriptionInfoModel, NumberInfoModel, ShortTextInfoModel,
+  ColumnInfoModel, DescriptionInfoModel, EnumInfoModel, NumberInfoModel, ShortTextInfoModel,
   TableInfoModel
 } from "./table-info.model";
 
@@ -9,16 +9,17 @@ export class StatisticsService {
     let rows: RowContentModel[] = [];
     let doneRows: RowContentModel[] = [];
     let undoneRows: RowContentModel[] = [];
-    let columnInfo = {};
-    columnInfo['numberInfo'] = [];
+    let columnInfo: ColumnInfoModel = {
+      numberInfo: [],
+      enumInfo: [],
+      dateInfo: [],
+      shortTextInfo: [],
+      descriptionInfo: []
+    };
     let numberInfoIndex: number = 0;
-    columnInfo['enumInfo'] = [];
     let enumInfoIndex: number = 0;
-    columnInfo['dateInfo'] = [];
     let dateInfoIndex: number = 0;
-    columnInfo['shortTextInfo'] = [];
     let shortTextIndex: number = 0;
-    columnInfo['descriptionInfo'] = [];
     let descriptionInfoIndex: number = 0;
 
     rowList.forEach((row: RowContentModel, i) => {
@@ -28,88 +29,88 @@ export class StatisticsService {
       } else {
         undoneRows.push(row);
       }
-      row.columnValueDtos.forEach((value, j) => {// TODO ZASTĄPIć J ARRAY_LENGTH+1
+      row.columnValueDtos.forEach((value, j) => {// TODO ZASTĄPIć J ARRAY_LENGTH+1  => USUNAC CLEAN ARRAY
         switch (Object.keys(value)[0]) {
           case 'IN': //TODO if index==0 podstaw do obu (min i max) i zamien <=, >= na <,>
-            if (typeof columnInfo['numberInfo'][j] == "undefined") {
-              columnInfo['numberInfo'][j] = {columnNumber: j, sum: 0, avg: 0, min: Number.POSITIVE_INFINITY, max: Number.NEGATIVE_INFINITY};
+            if (typeof columnInfo.numberInfo[j] == "undefined") {
+              columnInfo.numberInfo[j] = {columnNumber: j, sum: 0, avg: 0, min: Number.POSITIVE_INFINITY, max: Number.NEGATIVE_INFINITY};
             }
-            columnInfo['numberInfo'][j]['sum'] += value[Object.keys(value)[0]].value;
-            columnInfo['numberInfo'][j]['avg'] += value[Object.keys(value)[0]].value;
-            if (columnInfo['numberInfo'][j]['min'] >= value[Object.keys(value)[0]].value) {
-              columnInfo['numberInfo'][j]['min'] = value[Object.keys(value)[0]].value;
+            columnInfo.numberInfo[j].sum += parseFloat(value[Object.keys(value)[0]].value);
+            columnInfo.numberInfo[j].avg += parseFloat(value[Object.keys(value)[0]].value);
+            if (columnInfo.numberInfo[j].min >= parseFloat(value[Object.keys(value)[0]].value)) {
+              columnInfo.numberInfo[j].min = parseFloat(value[Object.keys(value)[0]].value);
             }
-            if (columnInfo['numberInfo'][j]['max'] <= value[Object.keys(value)[0]].value) {
-              columnInfo['numberInfo'][j]['max'] = value[Object.keys(value)[0]].value;
+            if (columnInfo.numberInfo[j].max <= parseFloat(value[Object.keys(value)[0]].value)) {
+              columnInfo.numberInfo[j].max = parseFloat(value[Object.keys(value)[0]].value);
             }
             numberInfoIndex++;
             return;
 
           case 'EN':
-            if (typeof columnInfo['enumInfo'][j] == "undefined") {
-              columnInfo['enumInfo'][j] = [];
+            if (typeof columnInfo.enumInfo[j] == "undefined") {
+              columnInfo.enumInfo[j] = [];
             }
             let exist = false;
 
-            columnInfo['enumInfo'][j].forEach((columnStats: { name: string, sum: number, }, i) => {
+            columnInfo.enumInfo[j].forEach((columnStats: EnumInfoModel, i) => {
               if (columnStats.name == value[Object.keys(value)[0]].value) {
-                columnInfo['enumInfo'][j][i].sum++;
+                columnInfo.enumInfo[j][i].sum++;
                 exist = true;
               }
             });
 
             if (!exist) {
-              columnInfo['enumInfo'][j][i] = {columnNumber: j, name: value[Object.keys(value)[0]].value, sum: 1,}
+              columnInfo.enumInfo[j][i] = {columnNumber: j, name: value[Object.keys(value)[0]].value, sum: 1,}
             }
 
             enumInfoIndex++;
             return;
 
           case 'DT':
-            if (typeof columnInfo['dateInfo'][j] == "undefined") {
-              columnInfo['dateInfo'][j] = {columnNumber: j, min: Date.parse('1/1/2100'), max: Date.parse('1/01/1970')};
+            if (typeof columnInfo.dateInfo[j] == "undefined") {
+              columnInfo.dateInfo[j] = {columnNumber: j, min: Date.parse('1/1/2100'), max: Date.parse('1/01/1970')};
             }
 
-            if (columnInfo['dateInfo'][j]['min'] >= Date.parse(value[Object.keys(value)[0]].value)) {
-              columnInfo['dateInfo'][j]['min'] = Date.parse(value[Object.keys(value)[0]].value)
+            if (columnInfo.dateInfo[j].min >= Date.parse(value[Object.keys(value)[0]].value)) {
+              columnInfo.dateInfo[j].min = Date.parse(value[Object.keys(value)[0]].value)
             }
 
-            if (columnInfo['dateInfo'][j]['max'] <= Date.parse(value[Object.keys(value)[0]].value)) {
-              columnInfo['dateInfo'][j]['max'] = Date.parse(value[Object.keys(value)[0]].value)
+            if (columnInfo.dateInfo[j].max <= Date.parse(value[Object.keys(value)[0]].value)) {
+              columnInfo.dateInfo[j].max = Date.parse(value[Object.keys(value)[0]].value)
             }
             dateInfoIndex++;
             return;
 
           case 'ST':
-            if (typeof columnInfo['shortTextInfo'][j] == "undefined") {
-              columnInfo['shortTextInfo'][j] = {columnNumber: j, avgLength: 0};
+            if (typeof columnInfo.shortTextInfo[j] == "undefined") {
+              columnInfo.shortTextInfo[j] = {columnNumber: j, avgLength: 0};
             }
 
-            columnInfo['shortTextInfo'][j]['avgLength'] += value[Object.keys(value)[0]].value.length;
+            columnInfo.shortTextInfo[j].avgLength += value[Object.keys(value)[0]].value.length;
             shortTextIndex++;
             return;
 
           case 'DE':
-            if (typeof columnInfo['descriptionInfo'][j] == "undefined") {
-              columnInfo['descriptionInfo'][j] = {columnNumber: j, avgLength: 0};
+            if (typeof columnInfo.descriptionInfo[j] == "undefined") {
+              columnInfo.descriptionInfo[j] = {columnNumber: j, avgLength: 0};
             }
-            columnInfo['descriptionInfo'][j]['avgLength'] += value[Object.keys(value)[0]].value.length;
+            columnInfo.descriptionInfo[j].avgLength += value[Object.keys(value)[0]].value.length;
             descriptionInfoIndex++;
             return;
         }
       })
     });
 
-    columnInfo['numberInfo'].forEach((value: NumberInfoModel,i) => {
-      columnInfo['numberInfo'][i]['avg'] = value.avg / rows.length;
+    columnInfo.numberInfo.forEach((value: NumberInfoModel,i) => {
+      columnInfo.numberInfo[i]['avg'] = value.avg / rows.length;
     });
 
-    columnInfo['shortTextInfo'].forEach((value: ShortTextInfoModel,i) => {
-      columnInfo['shortTextInfo'][i]['avgLength'] = value.avgLength / rows.length;
+    columnInfo.shortTextInfo.forEach((value: ShortTextInfoModel,i) => {
+      columnInfo.shortTextInfo[i].avgLength = value.avgLength / rows.length;
     });
 
-    columnInfo['descriptionInfo'].forEach((value: DescriptionInfoModel,i) => {
-      columnInfo['descriptionInfo'][i]['avgLength'] = value.avgLength / rows.length;
+    columnInfo.descriptionInfo.forEach((value: DescriptionInfoModel,i) => {
+      columnInfo.descriptionInfo[i].avgLength = value.avgLength / rows.length;
     });
 
     return {rows: rows, doneRows: doneRows, undoneRows: undoneRows, columnInfo: this.cleanColumnInfo(columnInfo)}
@@ -123,11 +124,11 @@ export class StatisticsService {
       numberInfo: [],
       descriptionInfo: []
     };
-    cleanColumnInfo['dateInfo'] = this.cleanArray(columnInfo.dateInfo);
-    cleanColumnInfo['shortTextInfo'] = this.cleanArray(columnInfo.shortTextInfo);
-    cleanColumnInfo['enumInfo'] = this.cleanArray(columnInfo.enumInfo);
-    cleanColumnInfo['numberInfo'] = this.cleanArray(columnInfo.numberInfo);
-    cleanColumnInfo['descriptionInfo'] = this.cleanArray(columnInfo.descriptionInfo);
+    cleanColumnInfo.dateInfo = this.cleanArray(columnInfo.dateInfo);
+    cleanColumnInfo.shortTextInfo = this.cleanArray(columnInfo.shortTextInfo);
+    cleanColumnInfo.enumInfo = this.cleanArray(columnInfo.enumInfo);
+    cleanColumnInfo.numberInfo = this.cleanArray(columnInfo.numberInfo);
+    cleanColumnInfo.descriptionInfo = this.cleanArray(columnInfo.descriptionInfo);
     return cleanColumnInfo;
   }
 
