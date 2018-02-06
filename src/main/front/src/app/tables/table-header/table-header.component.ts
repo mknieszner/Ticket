@@ -19,7 +19,6 @@ export class TableHeaderComponent implements OnInit {
   extendedFilterMode: Observable<boolean>;
   filterForm: FormGroup;
   extendedTableView: Observable<boolean>;
-  // extendedFilterAction: Observable<boolean>;
   sortContent: SortModel;
 
   constructor(private contentStore: Store<fromAppReducers.AppState>) {
@@ -45,15 +44,6 @@ export class TableHeaderComponent implements OnInit {
         }
       }
     );
-    // this.extendedFilterAction = this.contentStore.select('tables', 'extendedFilterAction');
-    // this.extendedFilterAction.subscribe((action: boolean) => {
-    //   console.log(action);
-    //   if (action) {
-    //     this.contentStore.dispatch(new TablesActions.SetExtendedFilter(this.getFormValues()));
-    //   }
-    //     this.contentStore.dispatch(new TablesActions.RunExtendedFilter());
-    //
-    // })
   }
 
   setForm(header: TableDefinitionModel) {

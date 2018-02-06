@@ -1,6 +1,6 @@
 import {RowContentModel, TaskModel} from "../table.model";
 import {
-  ColumnInfoModel,
+  ColumnInfoModel, DescriptionInfoModel, NumberInfoModel, ShortTextInfoModel,
   TableInfoModel
 } from "./table-info.model";
 
@@ -35,6 +35,7 @@ export class StatisticsService {
               columnInfo['numberInfo'][j] = {columnNumber: j, sum: 0, avg: 0, min: Number.POSITIVE_INFINITY, max: Number.NEGATIVE_INFINITY};
             }
             columnInfo['numberInfo'][j]['sum'] += value[Object.keys(value)[0]].value;
+            columnInfo['numberInfo'][j]['avg'] += value[Object.keys(value)[0]].value;
             if (columnInfo['numberInfo'][j]['min'] >= value[Object.keys(value)[0]].value) {
               columnInfo['numberInfo'][j]['min'] = value[Object.keys(value)[0]].value;
             }
@@ -98,6 +99,19 @@ export class StatisticsService {
         }
       })
     });
+
+    columnInfo['numberInfo'].forEach((value: NumberInfoModel,i) => {
+      columnInfo['numberInfo'][i]['avg'] = value.avg / rows.length;
+    });
+
+    columnInfo['shortTextInfo'].forEach((value: ShortTextInfoModel,i) => {
+      columnInfo['shortTextInfo'][i]['avgLength'] = value.avgLength / rows.length;
+    });
+
+    columnInfo['descriptionInfo'].forEach((value: DescriptionInfoModel,i) => {
+      columnInfo['descriptionInfo'][i]['avgLength'] = value.avgLength / rows.length;
+    });
+
     return {rows: rows, doneRows: doneRows, undoneRows: undoneRows, columnInfo: this.cleanColumnInfo(columnInfo)}
   }
 
