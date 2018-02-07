@@ -19,7 +19,7 @@ public class CacheConfig {
     final SimpleCacheManager cacheManager = new SimpleCacheManager();
     cacheManager.setCaches(Arrays.asList(
         new ConcurrentMapCache("users"),
-        new ConcurrentMapCache("isAdmin"))
+        new ConcurrentMapCache("active-users"))
     );
     return cacheManager;
   }

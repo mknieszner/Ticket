@@ -13,6 +13,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import ticketproject.app.crud.dao.ActiveWebSocketUserRepository;
 import ticketproject.app.crud.dao.RoleRepository;
+import ticketproject.app.crud.service.dao.RoleRepositoryService;
 import ticketproject.app.crud.service.dao.UserRepositoryService;
 import ticketproject.app.crud.domain.dto.authorization.PasswordResetData;
 import ticketproject.app.crud.domain.dto.authorization.RoleDto;
@@ -35,7 +36,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
 @Service
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
 public class UserService implements UserDetailsService {
-  private final RoleRepository roleRepository;
+  private final RoleRepositoryService roleRepository;
   private final RoleMapper roleMapper;
   private final UserRepositoryService userRepository;
   private final UserMapper userMapper;

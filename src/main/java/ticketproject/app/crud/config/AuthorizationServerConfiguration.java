@@ -1,5 +1,6 @@
 package ticketproject.app.crud.config;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -22,22 +23,19 @@ import org.springframework.security.oauth2.provider.token.store.InMemoryTokenSto
 import org.springframework.security.oauth2.provider.token.store.JwtAccessTokenConverter;
 import org.springframework.security.oauth2.provider.token.store.JwtTokenStore;
 
+import javax.validation.constraints.NotNull;
+
 @Configuration
 @EnableAuthorizationServer
+@RequiredArgsConstructor(onConstructor = @__(@Autowired))
 public class AuthorizationServerConfiguration extends AuthorizationServerConfigurerAdapter {
+  private final AuthenticationManager authenticationManager;
+  private final UserDetailsService userDetailsService;
 
   @Value("signing-key:ABCDEFGH")
   private String signingKey;
 
-  public AuthorizationServerConfiguration() {
-    super();
-  }
 
-  @Autowired
-  private AuthenticationManager authenticationManager;
-
-  @Autowired
-  private UserDetailsService userDetailsService;
 
   @Bean //shared between Servers!
   JwtAccessTokenConverter accessTokenConverter() {

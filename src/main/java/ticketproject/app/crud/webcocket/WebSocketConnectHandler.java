@@ -9,6 +9,7 @@ import org.springframework.web.socket.messaging.SessionConnectEvent;
 import ticketproject.app.crud.dao.ActiveWebSocketUserRepository;
 import ticketproject.app.crud.domain.entities.chat.ActiveWebSocketUser;
 import ticketproject.app.crud.service.UserService;
+import ticketproject.app.crud.service.dao.ActiveWebSocketUserRepositoryService;
 
 import java.security.Principal;
 import java.util.Arrays;
@@ -16,14 +17,14 @@ import java.util.Calendar;
 import java.util.Collections;
 
 public class WebSocketConnectHandler<S> implements ApplicationListener<SessionConnectEvent> {
-  private ActiveWebSocketUserRepository repository;
+  private ActiveWebSocketUserRepositoryService repository;
   private SimpMessageSendingOperations messagingTemplate;
   @Autowired
   private UserService userService;
 
   public WebSocketConnectHandler(
       SimpMessageSendingOperations messagingTemplate,
-      ActiveWebSocketUserRepository repository) {
+      ActiveWebSocketUserRepositoryService repository) {
     super();
     this.messagingTemplate = messagingTemplate;
     this.repository = repository;

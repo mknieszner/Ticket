@@ -5,13 +5,14 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.servlet.configuration.EnableWebMvcSecurity;
 import org.springframework.web.servlet.config.annotation.*;
 
 import javax.sql.DataSource;
 
 @Configuration
-@EnableWebMvcSecurity
+@EnableWebSecurity
 //@ComponentScan( {"ticketproject.app.*" })
 public class MvcConfig extends WebMvcConfigurerAdapter {
 

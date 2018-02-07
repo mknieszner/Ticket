@@ -23,6 +23,7 @@ import org.springframework.security.oauth2.config.annotation.web.configuration.R
 @EnableWebSecurity
 @ComponentScan("ticketproject.app.crud")
 @EnableGlobalMethodSecurity(prePostEnabled = true,securedEnabled = true)
+
 public class ResourceServerConfiguration extends ResourceServerConfigurerAdapter {
 
   @Autowired

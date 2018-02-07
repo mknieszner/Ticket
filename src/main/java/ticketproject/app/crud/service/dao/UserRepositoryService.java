@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
@@ -17,35 +18,32 @@ import java.util.Set;
 
 @Service
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
+@CacheConfig(cacheNames = "users")
 public class UserRepositoryService {
   private final UserRepository userRepository;
-  Logger logger = LoggerFactory.getLogger("UserRepository");
+  private final Logger logger = LoggerFactory.getLogger(UserRepositoryService.class);
 
-  @Cacheable(value = "users", key = "#username")
+  @Cacheable(key = "#username")
   public User findByUsername(final String username) {
-    System.out.println("cached missed for findByUsername" + username);
     logger.info("cached missed for findByUsername" + username);
 
     return userRepository.findByUsername(username);
   }
 
-  @CachePut(value = "users", key = "#users.username")
+  @CachePut(key = "#user.username")
   public User save(final User user) {
-    System.out.println("cached save" + user);
     logger.info("cached save" + user);
     return userRepository.save(user);
   }
 
-  @CacheEvict(value = "users", key = "#username")
+  @CacheEvict(key = "#username")
   public void deleteByUsername(final String username) {
-    System.out.println("cache deleteByUsername" + username);
     logger.info("cache deleteByUsername" + username);
     userRepository.deleteByUsername(username);
   }
 
-  @Cacheable(value = "users")
+  @Cacheable
   public Iterable<User> findAll() {
-    System.out.println("cached missed for findAll");
     logger.info("cached missed for findAll");
     return userRepository.findAll();
   }

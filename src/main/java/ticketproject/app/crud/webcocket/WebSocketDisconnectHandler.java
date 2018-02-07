@@ -8,6 +8,7 @@ import org.springframework.web.socket.messaging.SessionDisconnectEvent;
 import ticketproject.app.crud.dao.ActiveWebSocketUserRepository;
 import ticketproject.app.crud.domain.entities.chat.ActiveWebSocketUser;
 import ticketproject.app.crud.service.UserService;
+import ticketproject.app.crud.service.dao.ActiveWebSocketUserRepositoryService;
 
 import javax.transaction.Transactional;
 import java.util.Arrays;
@@ -15,16 +16,15 @@ import java.util.Collections;
 import java.util.List;
 
 @Component
-
 public class WebSocketDisconnectHandler<S> implements ApplicationListener<SessionDisconnectEvent> {
-  private ActiveWebSocketUserRepository repository;
+  private ActiveWebSocketUserRepositoryService repository;
   private SimpMessageSendingOperations messagingTemplate;
   @Autowired
   private UserService userService;
 
   public WebSocketDisconnectHandler(
       SimpMessageSendingOperations messagingTemplate,
-      ActiveWebSocketUserRepository repository) {
+      ActiveWebSocketUserRepositoryService repository) {
     super();
     this.messagingTemplate = messagingTemplate;
     this.repository = repository;
