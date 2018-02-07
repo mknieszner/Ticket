@@ -2,6 +2,7 @@ package ticketproject.app.crud.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.oauth2.common.exceptions.UnauthorizedUserException;
 import org.springframework.web.bind.annotation.*;
@@ -59,6 +60,8 @@ public class UsersAndRolesController {
     return userService.getRoleByRoleName(roleName);
   }
 
+
+  @CacheEvict(value = "roles", allEntries = true)
   @DeleteMapping(value = "roles/{roleName}")
   public boolean deleteRoleByRoleName(@PathVariable final String roleName) {
     userService.deleteRoleByRoleName(roleName);
@@ -71,7 +74,7 @@ public class UsersAndRolesController {
   }
 
   @PutMapping(value = "users/{username}")
-  public UserDto updateUserDetails(@PathVariable final String username,@RequestBody UserDto userDto, final Principal principal) {
+  public UserDto updateUserDetails(@PathVariable final String username, @RequestBody UserDto userDto, final Principal principal) {
     return userService.updateUserDetails(userDto);
   }
 

@@ -33,7 +33,13 @@ export class StatisticsService {
         switch (Object.keys(value)[0]) {
           case 'IN': //TODO if index==0 podstaw do obu (min i max) i zamien <=, >= na <,>
             if (typeof columnInfo.numberInfo[j] == "undefined") {
-              columnInfo.numberInfo[j] = {columnNumber: j, sum: 0, avg: 0, min: Number.POSITIVE_INFINITY, max: Number.NEGATIVE_INFINITY};
+              columnInfo.numberInfo[j] = {
+                columnNumber: j,
+                sum: 0,
+                avg: 0,
+                min: Number.POSITIVE_INFINITY,
+                max: Number.NEGATIVE_INFINITY
+              };
             }
             columnInfo.numberInfo[j].sum += parseFloat(value[Object.keys(value)[0]].value);
             columnInfo.numberInfo[j].avg += parseFloat(value[Object.keys(value)[0]].value);
@@ -68,7 +74,10 @@ export class StatisticsService {
 
           case 'DT':
             if (typeof columnInfo.dateInfo[j] == "undefined") {
-              columnInfo.dateInfo[j] = {columnNumber: j, min: Date.parse('1/1/2100'), max: Date.parse('1/01/1970')};
+              columnInfo.dateInfo[j] = {
+                columnNumber: j,
+                min: Date.parse(new Date(8640000000000000).toString()),
+                max: Date.parse(new Date(-8640000000000000).toString())};
             }
 
             if (columnInfo.dateInfo[j].min >= Date.parse(value[Object.keys(value)[0]].value)) {

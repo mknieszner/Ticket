@@ -11,9 +11,9 @@ import ticketproject.app.crud.mapper.TaskMapper;
 @Service
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
 public class TaskInfoService {
-  private final UserRepository userRepository;
+  private final UserRepository userRepositoryService;
   private final TaskMapper taskMapper;
   public List<TaskDto> getUserTasks(final String username) {
-    return taskMapper.mapTasksToTaskDtos(userRepository.findByUsername(username).getTasks());
+    return taskMapper.mapTasksToTaskDtos(userRepositoryService.findByUsername(username).getTasks());
   }
 }

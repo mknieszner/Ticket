@@ -1,5 +1,6 @@
 package ticketproject.app.crud.controller;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -17,16 +18,12 @@ import static com.google.common.base.Preconditions.checkArgument;
 @RestController
 @RequestMapping("/v1/")
 @PreAuthorize("hasAnyAuthority('ROLE_USER','ROLE_ADMIN')")
+@RequiredArgsConstructor(onConstructor = @__(@Autowired))
 public class TableController {
-
-  @Autowired
-  private TableService tableService;
-  @Autowired
-  private UserService userService;
-  @Autowired
-  private RowValidator rowValidator;
-  @Autowired
-  private TableValidator tableValidator;
+  private final TableService tableService;
+  private final UserService userService;
+  private final RowValidator rowValidator;
+  private final TableValidator tableValidator;
 
   @DeleteMapping(value = "projects/tables/rows/tasks/{taskId}")
   public boolean deleteTask(@PathVariable final Long taskId, final Principal principal) {
@@ -178,17 +175,6 @@ public class TableController {
   public ProjectDefinitionDto getAllProjectHeaders(@PathVariable final Long projectId) {
     return tableService.getAllProjectHeaders(projectId);
   }
-//
-//  @GetMapping(value = "projects/tables/definition/{tableId}")
-//  public TableDefinitionDto getTableHeaders(@PathVariable final Long tableId) {
-//    return tableService.getTableHeaders(tableId);
-//  }
-
-//  @GetMapping(value = "projects/tables/{tableId}/rows")
-//  public List<RowDto> getTableRowsByTableId(@PathVariable final Long tableId) {
-//    List<RowDto> rowDtos = tableService.getTableRowsByTableId(tableId);
-//    return rowDtos;
-//  }
 
   @DeleteMapping(value = "projects/tables/{tableId}")
   public void deleteTablebyId(@PathVariable final Long tableId) {

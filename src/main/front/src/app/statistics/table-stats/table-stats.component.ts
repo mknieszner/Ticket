@@ -23,16 +23,7 @@ export class TableStatsComponent implements OnInit {
   selectedTableName: Observable<string>;
   tableInfo: TableInfoModel = null;
   tasksInfo: TasksInfoModel = null;
-  enumChart: EnumChart = {
-    data: [],
-    labels: [],
-    chartType: 'doughnut',
-    legend: true,
-    options: {
-      scaleShowVerticalLines: false,
-      responsive: true
-    }
-  };
+  enumCharts: EnumChart[] = [];
 
   constructor(private store: Store<fromAppReducers.AppState>,
               private dss: DataStorageService,
@@ -47,34 +38,54 @@ export class TableStatsComponent implements OnInit {
     this.tableState = this.store.select('tables');
     this.selectedTableName = this.store.select('statistics', 'selectedTableName');
     this.selectedTableName.subscribe((tableName: string) => {
-      if(tableName) {
+      if (tableName) {
         this.dss.getTableRowsByName(tableName);
         this.dss.getTableHeaderByName(tableName);
       }
     });
     this.tableState.subscribe((tableState: TableState) => {
+
       if (tableState) {
         this.tasksInfo = this.statistics.mapToTaskInfo(tableState.tableContent);
         this.tableInfo = this.statistics.mapToRowsInfo(tableState.tableContent);
         console.log(this.tableInfo);
         this.tableInfo.columnInfo.enumInfo.forEach((enumInfo: EnumInfoModel[], i) => {
-          this.setEnumChart(enumInfo);
-      });
+          console.log('enumCharts',this.enumCharts);
+          this.setEnumChart(enumInfo, i);
+        });
       }
     })
   }
 
-  setEnumChart(enumInfo: EnumInfoModel[]){
-    this.enumChart.data = [];
-    this.enumChart.labels = [];
+  show(array){
+    console.log(array);
+  }
+
+  setEnumChart(enumInfo: EnumInfoModel[], i: number) {
+    this.enumCharts[i] = {
+      data: [],
+      labels: [],
+      chartType: (i % 2 == 0) ? 'doughnut' : 'bar',
+      legend: true,
+      options: {
+        scaleShowVerticalLines: false,
+        responsive: true,
+        legend: false,
+        elements: {
+          arc: {
+            borderWidth: 0
+          }
+        }
+      }
+    };
     let enumValues = [];
     let columnNumber = null;
     enumInfo.forEach((enumInfo: EnumInfoModel) => {
       enumValues.push(enumInfo.sum);
       columnNumber = enumInfo.columnNumber;
-      this.enumChart.labels.push(enumInfo.name);
+      this.enumCharts[i].labels.push(enumInfo.name);
     });
-    this.enumChart.data.push({data: enumValues, label: 'ENUM' + columnNumber})
+    this.enumCharts[i].data.push({data: enumValues, label: 'ENUM ' + columnNumber})
   }
 
   public chartClicked(e: any): void {

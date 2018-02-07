@@ -50,6 +50,7 @@ import { TableStatsComponent } from './statistics/table-stats/table-stats.compon
 import { UserInfoComponent } from './user-info/user-info.component';
 import {StatisticsService} from "./shared/statistics/statistics.service";
 import {ChartsModule} from "ng4-charts";
+import {ClearArrayPipe} from "./shared/clear-array-pipe";
 
 
 
@@ -78,6 +79,7 @@ const appRoutes: Routes = [
     HomeComponent,
     KeyPipe,
     ReversePipe,
+    ClearArrayPipe,
     TableHeaderComponent,
     UserDetailsComponent,
     RoleDetailsComponent,

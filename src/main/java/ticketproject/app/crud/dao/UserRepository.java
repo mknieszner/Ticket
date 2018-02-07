@@ -9,8 +9,6 @@ import javax.transaction.Transactional;
 import java.util.List;
 import java.util.Set;
 
-@Transactional
-@Repository
 public interface UserRepository extends CrudRepository<User, Long> {
   void deleteById(Long id);
   boolean findAllByUsernameAndRoles(String username, Role role);

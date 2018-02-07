@@ -3,7 +3,6 @@ package ticketproject.app.crud.service;
 import com.google.common.collect.Lists;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.oauth2.common.exceptions.UnauthorizedUserException;
 import org.springframework.stereotype.Service;
 import ticketproject.app.crud.dao.*;
 import ticketproject.app.crud.domain.dto.definition.ProjectDefinitionDto;
@@ -13,9 +12,9 @@ import ticketproject.app.crud.domain.entities.*;
 import ticketproject.app.crud.domain.entities.authorization.Role;
 import ticketproject.app.crud.domain.entities.authorization.User;
 import ticketproject.app.crud.mapper.*;
+import ticketproject.app.crud.service.dao.UserRepositoryService;
 
 import javax.transaction.Transactional;
-import java.security.Principal;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
@@ -36,7 +35,7 @@ public class TableService {
   private final RowRepository rowRepository;
   private final ProjectTableMapper projectTableMapper;
   private final RoleRepository roleRepository;
-  private final UserRepository userRepository;
+  private final UserRepositoryService userRepository;
   private final TaskMapper taskMapper;
   private final TaskRepository taskRepository;
 

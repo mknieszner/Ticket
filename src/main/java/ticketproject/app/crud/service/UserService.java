@@ -3,7 +3,6 @@ package ticketproject.app.crud.service;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 import lombok.RequiredArgsConstructor;
-import lombok.ToString;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -14,7 +13,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import ticketproject.app.crud.dao.ActiveWebSocketUserRepository;
 import ticketproject.app.crud.dao.RoleRepository;
-import ticketproject.app.crud.dao.UserRepository;
+import ticketproject.app.crud.service.dao.UserRepositoryService;
 import ticketproject.app.crud.domain.dto.authorization.PasswordResetData;
 import ticketproject.app.crud.domain.dto.authorization.RoleDto;
 import ticketproject.app.crud.domain.dto.authorization.UserDto;
@@ -34,12 +33,11 @@ import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkNotNull;
 
 @Service
-@ToString
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
 public class UserService implements UserDetailsService {
   private final RoleRepository roleRepository;
   private final RoleMapper roleMapper;
-  private final UserRepository userRepository;
+  private final UserRepositoryService userRepository;
   private final UserMapper userMapper;
   private final TableService tableService;
   private final ActiveWebSocketUserRepository activeWebSocketUserRepository;
@@ -100,7 +98,7 @@ public class UserService implements UserDetailsService {
     return roleMapper.mapRoleToRoleDto(roleRepository.save(new Role(roleName, roleDescription)));
   }
 
-@Transactional
+  @Transactional
   public void removeUser(final String username) { //TODO: Check Iterator ? Stream Concurent error
     User user = userRepository.findByUsername(username);
     Set<Role> roles = user.getRoles();
@@ -122,6 +120,7 @@ public class UserService implements UserDetailsService {
       return getUserByUsername(username);
     }
   }
+
 
 
   public boolean isAdmin(final String username) {
@@ -155,6 +154,7 @@ public class UserService implements UserDetailsService {
   public UserDto getSingleUserByUsername(final String username) {
     return userMapper.mapUserToUserDto(userRepository.findByUsername(username));
   }
+
 
   public List<String> getAllRoleNamesAuthorized(final String username) {
     if (isAdmin(username)) {
