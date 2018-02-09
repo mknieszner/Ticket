@@ -24,6 +24,4 @@ public class TableAccessManager {
   public boolean hasTableAccessAuthorityByTaskId(final Long taskId) {
     return accessTableChecker.checkUserPermissionByTaskId(taskId);
   }
-
-
 }

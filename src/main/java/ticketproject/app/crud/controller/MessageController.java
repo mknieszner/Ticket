@@ -37,7 +37,6 @@ public class MessageController {
   @MessageMapping("/chat")
   @SendTo("/topic/chat")
   public ChatMessage sendChatMessage(final String messageContent, final Principal principal) throws Exception {
-    System.out.println("sendChatMessage" +  messageContent);
     return new ChatMessage(principal.getName(),messageContent,"global");
   }
 
@@ -45,14 +44,12 @@ public class MessageController {
   @SendTo("/topic/chat/{username}")
   public ChatMessage sendDirectUserChatMessage(@PathVariable @DestinationVariable("username") final String username, final String messageContent, final
   Principal principal) throws Exception {
-    System.out.println("sendChatMessage" +  messageContent);
     return new ChatMessage(principal.getName(),messageContent,username);
   }
 
   @MessageMapping("/people/chat")
   @SendTo("/topic/people/chat")
   public List<String> getLoggedUsers() throws Exception {
-    System.out.println("getLoggedUsers");
     messagingTemplate.convertAndSend("/topic/people/chat",userService.getLoggedUsers());
     return userService.getLoggedUsers();
   }

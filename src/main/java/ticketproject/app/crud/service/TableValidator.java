@@ -1,5 +1,6 @@
 package ticketproject.app.crud.service;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import ticketproject.app.crud.dao.ProjectRepository;
@@ -13,11 +14,10 @@ import java.util.stream.Collectors;
 import static com.google.common.base.Preconditions.checkArgument;
 
 @Component
+@RequiredArgsConstructor(onConstructor = @__(@Autowired))
 public class TableValidator {
-  @Autowired
-  private ProjectRepository projectRepository;
-  @Autowired
-  private RowValidator rowValidator;
+  private final ProjectRepository projectRepository;
+  private final RowValidator rowValidator;
 
   public void validateTableBeforeUpdate(final Long projectId, final ProjectTableDto projectTableDto) {
     Project project = projectRepository.findOne(projectId);

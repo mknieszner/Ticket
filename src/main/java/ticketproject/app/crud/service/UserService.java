@@ -4,6 +4,7 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -49,6 +50,7 @@ public class UserService implements UserDetailsService {
 
 
   @Transactional
+  @PreAuthorize("hasAuthority('ROLE_ADMIN')")
   public UserDto registerNewUserAccount(final UserDto userDto) {
     return userMapper.mapUserToUserDto(userRepository.save(userMapper.mapUserDtoToUser(userDto)));
   }
@@ -59,7 +61,14 @@ public class UserService implements UserDetailsService {
     final boolean accountNonExpired = true;
     final boolean credentialsNonExpired = true;
     final boolean accountNonLocked = true;
-    return new org.springframework.security.core.userdetails.User(user.getUsername(), user.getPassword(), user.isEnabled(), accountNonExpired, credentialsNonExpired, accountNonLocked, getAuthorities(new ArrayList<>(user.getRoles())));
+    return new org.springframework.security.core.userdetails.User(
+        user.getUsername(),
+        user.getPassword(),
+        user.isEnabled(),
+        accountNonExpired,
+        credentialsNonExpired,
+        accountNonLocked,
+        getAuthorities(new ArrayList<>(user.getRoles())));
   }
 
   private static List<GrantedAuthority> getAuthorities(List<Role> roles) {
@@ -68,26 +77,36 @@ public class UserService implements UserDetailsService {
       authorities.add(new SimpleGrantedAuthority(role.getName()));
     }
     return authorities;
-  }
+}
 
+  @PreAuthorize("hasAnyAuthority('ROLE_ADMIN')")
   public List<RoleDto> getAllRoles() {
     return Lists.newArrayList(roleMapper.mapRoleSetToRoleDtoSet(Sets.newHashSet(roleRepository.findAll())));
   }
 
+
+  @PreAuthorize("hasAnyAuthority('ROLE_ADMIN',#roleName)")
   public RoleDto getRoleByRoleName(final String roleName) {
     return roleMapper.mapRoleToRoleDto(roleRepository.findByName(roleName));
   }
 
-  public UserDto addRoleToUserByUserName(final String username, final String roleName) {
-    Role role = roleRepository.findByName(roleName);
-    checkArgument(roleName.equals(role.getName()), new IllegalArgumentException("ROLE NOT FOUND"));
+  @PreAuthorize("hasAnyAuthority('ROLE_ADMIN')")
+  public UserDto addRoleToUser(final String username, final String roleName) {
+    Role role = checkNotNull(roleRepository.findByName(roleName), new IllegalArgumentException("ROLE NOT FOUND"));
     User user = checkNotNull(userRepository.findByUsername(username), new IllegalArgumentException("USER NOT FOUND"));
     user.addRole(role);
-    userRepository.save(user);
-    return userMapper.mapUserToUserDto(user);
+    return userMapper.mapUserToUserDto(userRepository.save(user));
   }
 
+  @PreAuthorize("hasAnyAuthority('ROLE_ADMIN')")
+  public UserDto addUserToRole(final String username, final String roleName) {
+    Role role = checkNotNull(roleRepository.findByName(roleName), new IllegalArgumentException("ROLE NOT FOUND"));
+    User user = checkNotNull(userRepository.findByUsername(username), new IllegalArgumentException("USER NOT FOUND"));
+    role.addUser(user);
+    return userMapper.mapUserToUserDto(userRepository.save(user));
+  }
 
+  @PreAuthorize("hasAnyAuthority('ROLE_ADMIN')")
   public UserDto removeRoleFromUserByUserName(final String username, final String roleName) {
     Role role = roleRepository.findByName(roleName);
     checkArgument(roleName.equals(role.getName()), new IllegalArgumentException("ROLE NOT FOUND"));
@@ -97,11 +116,13 @@ public class UserService implements UserDetailsService {
     return userMapper.mapUserToUserDto(user);
   }
 
+  @PreAuthorize("hasAuthority('ROLE_ADMIN')")
   public RoleDto createRole(final String roleName, final String roleDescription) {
     return roleMapper.mapRoleToRoleDto(roleRepository.save(new Role(roleName, roleDescription)));
   }
 
   @Transactional
+  @PreAuthorize("hasAuthority('ROLE_ADMIN')")
   public void removeUser(final String username) { //TODO: Check Iterator ? Stream Concurent error
     User user = userRepository.findByUsername(username);
     Set<Role> roles = user.getRoles();
@@ -109,9 +130,6 @@ public class UserService implements UserDetailsService {
       Role role = roleIt.next();
       removeUserFromRoleByUserName(role.getName(), username);
     }
-//    userRepository.findByUsername(username).getRoles().stream().forEach((role) -> {
-//      removeUserFromRoleByUserName(role.getName(), username);
-//    });
     userRepository.deleteByUsername(username);
   }
 
@@ -130,26 +148,34 @@ public class UserService implements UserDetailsService {
     return roleRepository.findAllByUsers_Username(username).contains(new Role("ROLE_ADMIN", null));
   }
 
+  @PreAuthorize("hasAuthority('ROLE_ADMIN')")
   private List<UserDto> getAllUsers() {
     return Lists.newArrayList(userMapper.mapUserSetToUserDtoSet(Sets.newHashSet(userRepository.findAll())));
   }
 
+  @PreAuthorize("principal.username == #username")
   public List<UserDto> getUserByUsername(final String username) {
     return Collections.singletonList(userMapper.mapUserToUserDto(userRepository.findByUsername(username)));
   }
 
   public void saveRuleNames(final List<TableDefinitionDto> tableDefinitionDtoList) {
-    tableDefinitionDtoList.forEach(tableDefinitionDto -> roleRepository.save(new Role(tableDefinitionDto.getName(), String.format("Table: %s access role.", tableDefinitionDto.getName()))));
+    tableDefinitionDtoList.forEach(
+        tableDefinitionDto -> roleRepository.save(
+            new Role(tableDefinitionDto.getName(), String.format("Table: %s access role.", tableDefinitionDto.getName()))));
   }
 
+  @PreAuthorize("hasAnyAuthority('ROLE_ADMIN',#roleName)")
   public void deleteRoleByRoleName(final String roleName) {
     roleRepository.deleteByName(roleName);
   }
 
-  public void saveRuleNames(final TableDefinitionDto tableDefinitionDto) {
-    roleRepository.save(new Role(tableDefinitionDto.getName(), String.format("Table: %s access role.", tableDefinitionDto.getName())));
+  @PreAuthorize("hasAnyAuthority('ROLE_ADMIN')")
+  public void saveRoleName(final String roleName) {
+    if (roleRepository.findByName(roleName) == null) {
+      roleRepository.save(new Role(roleName, String.format("Table: %s access role.", roleName)));
+    }
   }
-
+  @PreAuthorize("principal.username == #username || hasAnyAuthority('ROLE_ADMIN')")
   public UserDto getSingleUserByUsername(final String username) {
     return userMapper.mapUserToUserDto(userRepository.findByUsername(username));
   }
@@ -157,21 +183,28 @@ public class UserService implements UserDetailsService {
 
   public List<String> getAllRoleNamesAuthorized(final String username) {
     if (isAdmin(username)) {
-      return getAllRoles().stream().map(RoleDto::getName).collect(Collectors.toList());
+      return getAllRoles()
+          .stream()
+          .map(RoleDto::getName)
+          .collect(Collectors.toList());
     } else {
-      return userRepository.findByUsername(username).getRoles().stream().map(Role::getName).collect(Collectors.toList());
+      return userRepository.findByUsername(username)
+          .getRoles()
+          .stream()
+          .map(Role::getName)
+          .collect(Collectors.toList());
     }
   }
 
+  @PreAuthorize("hasAuthority('ROLE_ADMIN')")
   public RoleDto removeUserFromRoleByUserName(final String roleName, final String username) {
-    Role role = roleRepository.findByName(roleName);
-    checkArgument(roleName.equals(role.getName()), new IllegalArgumentException("ROLE NOT FOUND"));
+    Role role = checkNotNull(roleRepository.findByName(roleName), new IllegalArgumentException("ROLE NOT FOUND"));
     User user = checkNotNull(userRepository.findByUsername(username), new IllegalArgumentException("USER NOT FOUND"));
     role.removeUserWARN(user);
-    roleRepository.save(role);
-    return roleMapper.mapRoleToRoleDto(role);
+    return roleMapper.mapRoleToRoleDto(roleRepository.save(role));
   }
 
+  @PreAuthorize("hasAnyAuthority('ROLE_ADMIN') || principal.username == #username")
   public List<String> getRolesByUsername(final String username) {
     return this.userRepository.findByUsername(username).getRoles().stream().map(Role::getName).collect(Collectors.toList());
   }
@@ -184,12 +217,14 @@ public class UserService implements UserDetailsService {
     }
   }
 
+  @PreAuthorize("hasAnyAuthority('ROLE_ADMIN','#tablename')")
   public List<String> getTableUsers(final String tableName) {
-    return userMapper.mapUserSetToUserDtoSet(userRepository.findAllByRolesEquals(
-        roleRepository.findByName(tableName)))
-        .stream()
-        .map(UserDto::getUsername)
-        .collect(Collectors.toList());
+    return userMapper.mapUserSetToUserDtoSet(
+        userRepository.findAllByRolesEquals(
+          roleRepository.findByName(tableName)))
+            .stream()
+            .map(UserDto::getUsername)
+            .collect(Collectors.toList());
   }
 
   public List<String> getLoggedUsers() {
@@ -200,6 +235,7 @@ public class UserService implements UserDetailsService {
         .collect(Collectors.toList());
   }
 
+  @PreAuthorize("hasAnyAuthority('ROLE_ADMIN') || principal.username == #userDto.username")
   public UserDto updateUserDetails(final UserDto userDto) {
     User user = userRepository.findByUsername(userDto.getUsername());
     User updatedUser = new User(

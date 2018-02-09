@@ -1,5 +1,6 @@
 package ticketproject.app.crud.service;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Component;
@@ -17,9 +18,9 @@ import java.util.stream.Collectors;
 import static com.google.common.base.Preconditions.checkArgument;
 
 @Component
+@RequiredArgsConstructor(onConstructor = @__(@Autowired))
 public class RowValidator {
-  @Autowired
-  ProjectTableRepository projectTableRepository;
+  private final ProjectTableRepository projectTableRepository;
 
   public void validateRows(final Long tableId, final List<RowDto> rowDtos) {
     rowDtos.forEach(rowDto -> validateRow(tableId, rowDto));
@@ -43,7 +44,6 @@ public class RowValidator {
 
   //AVAILABLE VALUES : "IN" "EN" "DE" "DT" "ST"
   private boolean validateValue(final ColumnDetail columnDetail, final ColumnValueDto columnValueDto) {
-//    System.out.println(" compare: type " +columnDetail.getType()+"\nname: " +columnDetail.getName()+"\nclass: "+ columnValueDto.getClass());
     switch (columnDetail.getType()) {
       case ("IN"): {
         System.out.println("wewn: IN" + columnValueDto.getClass());
@@ -51,7 +51,6 @@ public class RowValidator {
         return true;
       }
       case ("EN"): {
-//        System.out.println("wewn: EN"+columnValueDto.getClass());
         checkArgument(columnValueDto instanceof EnumValueDto);
         checkArgument(columnDetail.getOptionList()
               .stream()
@@ -61,17 +60,14 @@ public class RowValidator {
         return true;
       }
       case ("DE"): {
-//        System.out.println("wewn: DE"+columnValueDto.getClass());
         checkArgument(columnValueDto instanceof DescriptionValueDto,"This value should be DE");
         return true;
       }
       case ("DT"): {
-//        System.out.println("wewn: DT"+columnValueDto.getClass());
         checkArgument(columnValueDto instanceof DateValueDto,"This value should be DT");
         return true;
       }
       case ("ST"): {
-//        System.out.println("wewn: ST"+columnValueDto.getClass());
         checkArgument(columnValueDto instanceof ShortTextValueDto, "This value should be ST");
         return true;
       }

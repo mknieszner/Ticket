@@ -16,6 +16,7 @@ import ticketproject.app.crud.mapper.*;
 import ticketproject.app.crud.service.dao.UserRepositoryService;
 
 import javax.transaction.Transactional;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
@@ -39,6 +40,9 @@ public class TableService {
   private final UserRepositoryService userRepository;
   private final TaskMapper taskMapper;
   private final TaskRepository taskRepository;
+  private final RowValidator rowValidator;
+
+  private final ColumnValueMapper columnValueMapper;
 
 //  public ProjectDto saveProjectDto(final ProjectDto projectDto) {
 //    System.out.println("DBSer " + projectDto);
@@ -60,15 +64,20 @@ public class TableService {
     return projectMapper.mapToProjectDto(projectRepository.findOne(projectId));
   }
 
-  public RowDto addRowByTableId(final RowDto rowDto, final Long tableId, final String username) {
-    ProjectTable projectTable = projectTableRepository.findOne(tableId);
-    Row row = rowMapper.mapToRow(rowDto);
-    row.setProjectTable(projectTable);
-    row.setCreatedBy(username);
-    row.setCreatedOn(new Date());
-    row.setLastModifiedBy(username);
-    row.setLastModifiedOn(new Date());
-    return rowMapper.mapToRowDto(rowRepository.save(row));
+
+  @PreAuthorize("hasAnyAuthority('ROLE_ADMIN') && @tableAccessManager.hasTableAccessAuthorityByTaskId(#tableName)")
+  public RowDto addRow(final RowDto rowDto, final String tableName, final String username) {
+    rowValidator.validateRow(getTableIdByName(tableName), rowDto);
+    return rowMapper.mapToRowDto(rowRepository.save(new Row(
+        null,
+        "",
+        username,
+        new Date(),
+        username,
+        new Date(),
+        columnValueMapper.mapToTableColumnList(rowDto.getColumnValueDtos()),
+        projectTableRepository.findByName(tableName),
+        taskMapper.mapTaskDtosToTasks(rowDto.getTaskDtos()))));
   }
 
   public RowDto getRowByTableIdAndRowId(final Long tableId, final Long rowId) {
@@ -86,16 +95,21 @@ public class TableService {
     return rowMapper.mapToRowDtos(rows);
   }
 
-  public List<RowDto> addRowsToTableByTableId(final List<RowDto> rowDtos, final Long tableId, final String username) {
-    System.out.println("USERNAME:" + username);
-    ProjectTable projectTable = projectTableRepository.findOne(tableId);
-    return rowMapper.mapToRowDtos(Lists.newArrayList(rowRepository.save(rowDtos.stream().map(rowMapper::mapToRow).peek(row -> {
-      row.setProjectTable(projectTable);
-      row.setCreatedBy(username);
-      row.setCreatedOn(new Date());
-      row.setLastModifiedBy(username);
-      row.setLastModifiedOn(new Date());
-    }).collect(Collectors.toList()))));
+  @PreAuthorize("hasAnyAuthority('ROLE_ADMIN') || @tableAccessManager.hasTableAccessAuthorityByTableName(#tableName)")
+  public List<RowDto> addRowsToTableByTableId(final List<RowDto> rowDtos, final String tableName, final String username) {
+    rowValidator.validateRows(getTableIdByName(tableName), rowDtos);
+    ProjectTable projectTable = projectTableRepository.findByName(tableName);
+    return rowMapper.mapToRowDtos(Lists.newArrayList(
+        rowRepository.save(rowDtos
+            .stream()
+            .map(rowMapper::mapToRow)
+            .peek(row -> {
+              row.setProjectTable(projectTable);
+              row.setCreatedBy(username);
+              row.setCreatedOn(new Date());
+              row.setLastModifiedBy(username);
+              row.setLastModifiedOn(new Date());
+            }).collect(Collectors.toList()))));
   }
 
   public RowDto getRowById(final Long rowId) {
@@ -110,7 +124,10 @@ public class TableService {
     return projectTableMapper.mapToProjectTableDto(projectTableRepository.save(projectTable));
   }
 
-  public RowDto updateRowByTableId(final RowDto rowDto, final Long tableId, final String username) { // TODO: DO USUNIĘCIA tableID - table z row repo
+
+  @PreAuthorize("hasAnyAuthority('ROLE_ADMIN') || @tableAccessManager.hasTableAccessAuthorityByTableName(#tableName)")
+  public RowDto updateRowByTableId(final RowDto rowDto, final String tableName,final  String username) {
+    rowValidator.validateRow(getTableIdByName(tableName), rowDto);
     Row oldRow = rowRepository.findOne(rowDto.getId());
     return rowMapper.mapToRowDto(rowRepository.save(rowMapper.updateRow(oldRow, rowDto, username)));
   }
@@ -131,22 +148,26 @@ public class TableService {
     return definitionMapper.mapProjectTableToTableDefinitionDto(projectTableRepository.findOne(tableId));
   }
 
-  public ProjectDefinitionDto defineSinleTableProject(final TableDefinitionDto tableDefinition) {
-    ProjectDefinitionDto projectDefinitionDto = new ProjectDefinitionDto();
-    projectDefinitionDto.setName(tableDefinition.getName());
-    projectDefinitionDto.getTableDefinitionDtoList().add(tableDefinition);
-    Project project = projectRepository.save(definitionMapper.mapProjectDefinitionToProject(projectDefinitionDto));
-    System.out.println("przed zmapowaniem do dto" + project);
-    return definitionMapper.mapProjectToProjectDefinitionDto(project);
+  @PreAuthorize("hasAnyAuthority('ROLE_ADMIN') || @tableAccessManager.hasTableAccessAuthorityByTableName(#tableDefinitionDto.name)")
+  public ProjectDefinitionDto defineSingleTableProject(final TableDefinitionDto tableDefinitionDto) {
+    return definitionMapper.mapProjectToProjectDefinitionDto(
+        projectRepository.save(
+            definitionMapper.mapProjectDefinitionToProject(new ProjectDefinitionDto(
+                null,
+                tableDefinitionDto.getName(),
+                Lists.newArrayList(tableDefinitionDto)
+            ))));
   }
 
+
+  @PreAuthorize("hasAnyAuthority('ROLE_ADMIN') || @tableAccessManager.hasTableAccessAuthorityByRowId(#rowId)")
   public void deleteRowById(final Long rowId) {
     rowRepository.delete(rowId);
   }
 
   @Transactional
   public void deleteTablebyId(final Long tableId) { //TODO:TRANSACTION?
-    roleRepository.deleteByName(findTableNameByTableId(tableId));
+    roleRepository.deleteByName(getTableNameById(tableId));
     projectTableRepository.delete(tableId);
   }
 
@@ -158,7 +179,6 @@ public class TableService {
 
   public List<String> getTablesNamesListAuthorized(final String username) {
     List<String> tableNames = Lists.newArrayList(projectTableRepository.findAll()).stream().map(ProjectTable::getName).collect(Collectors.toList());
-
     if (isAdmin(username)) {
       return tableNames;
     } else {
@@ -169,24 +189,15 @@ public class TableService {
   }
 
 
+  @PreAuthorize("hasAnyAuthority('ROLE_ADMIN') || @tableAccessManager.hasTableAccessAuthorityByTableName(#tableName)")
   public TableDefinitionDto getTableHeadersByName(final String tableName) {
     return definitionMapper.mapProjectTableToTableDefinitionDto(projectTableRepository.findByName(tableName));
   }
 
 
+  @PreAuthorize("hasAnyAuthority('ROLE_ADMIN') || @tableAccessManager.hasTableAccessAuthorityByTableName(#tableName)")
   public List<RowDto> getTableRowsByTableName(final String tableName) {
-    System.out.println(tableName);
-    List<Row> rows = rowRepository.findAllByProjectTable_Name(tableName);
-    System.out.println(rows);
-    return rowMapper.mapToRowDtos(rows);
-  }
-
-  public Long getTableIdByName(final String tableName) {
-    return projectTableRepository.findByName(tableName).getId();
-  }
-
-  public String findTableNameByTableId(final Long tableId) {
-    return projectTableRepository.findOne(tableId).getName();
+    return rowMapper.mapToRowDtos(rowRepository.findAllByProjectTable_Name(tableName));
   }
 
   private boolean isAdmin(final String username) {
@@ -197,26 +208,16 @@ public class TableService {
     return userRepository.findByUsername(username).getRoles().stream().map(Role::getName).collect(Collectors.toList());
   }
 
-  public RowInfoDto getRowDetailsByRowIdAuthorized(final Long rowId, final String tableName) {
-    Row row = rowRepository.findOne(rowId);
-    if (row.getProjectTable().getName().equals(tableName)) {
-      return rowMapper.mapRowToRowInfoDto(row);
-    } else {
-      throw new IllegalArgumentException(String.format("Table: %s, does not contains row with ID: %d.", tableName, rowId));
-    }
+  @PreAuthorize("hasAnyAuthority('ROLE_ADMIN') || @tableAccessManager.hasTableAccessAuthorityByRowId(#rowId)")
+  public RowInfoDto getRowDetails(final Long rowId) {
+    return rowMapper.mapRowToRowInfoDto(rowRepository.findOne(rowId));
   }
 
-  public List<TaskDto> addTaskToRowIfAuthorized(final Long rowId, final String username, TaskDto taskDto) {
+  @PreAuthorize("hasAnyAuthority('ROLE_ADMIN') || @tableAccessManager.hasTableAccessAuthorityByRowId(#rowId)")
+  public List<TaskDto> addTaskToRow(final Long rowId, TaskDto taskDto) {
     Row row = rowRepository.findOne(rowId);
-    String tableName = row.getProjectTable().getName();
-    if (userRepository.findByUsername(username).getRoles() //TODO cache roles???
-        .stream()                                          // TODO: validator????
-        .map(Role::getName).anyMatch((roleName) -> roleName.equals(tableName) || roleName.equals("ROLE_ADMIN"))) {
-      row.getTasks().add(taskMapper.mapTaskDtoToTask(taskDto));
-      return taskMapper.mapTasksToTaskDtos(rowRepository.save(row).getTasks());
-    } else {
-      throw new RuntimeException(String.format("User:%s does not have authority:%s TaskDto: %s", username, tableName, taskDto.toString()));
-    } // TODO: remove table name from exception (tests)
+    row.getTasks().add(taskMapper.mapTaskDtoToTask(taskDto));
+    return taskMapper.mapTasksToTaskDtos(rowRepository.save(row).getTasks());
   }
 
 
@@ -225,22 +226,15 @@ public class TableService {
     return taskMapper.mapTasksToTaskDtos(rowRepository.findOne(rowId).getTasks());
   }
 
-  public TaskDto assignUserToTaskIfAuthorized(final Long taskId, final String userNameToAssign, final String username) {
+  @PreAuthorize("hasAnyAuthority('ROLE_ADMIN') || @tableAccessManager.hasTableAccessAuthorityByTaskId(#taskId)")
+  public TaskDto assignUserToTask(final Long taskId, final String userNameToAssign) {
     Task task = taskRepository.findOne(taskId);
-    final Row row = rowRepository.findByTasksIsContaining(Collections.singletonList(task));
-    final String tableName = row.getProjectTable().getName();
-    if (userRepository.findByUsername(username).getRoles() //TODO cache roles???
-        .stream()                                          // TODO: validator????
-        .map(Role::getName).anyMatch((roleName) -> roleName.equals(tableName) || roleName.equals("ROLE_ADMIN"))) {
-      final User userToAssign = userRepository.findByUsername(userNameToAssign);
-      task.getUsers().add(userToAssign);
-      return taskMapper.mapTaskToTaskDto(taskRepository.save(task));
-    } else {
-      throw new RuntimeException(String.format("User:%s does not have authority:%s TaskDto: %s", username, tableName, task.toString()));
-    } // TODO: remove tablename and task from exception (tests)
+    final User userToAssign = userRepository.findByUsername(userNameToAssign);
+    task.getUsers().add(userToAssign);
+    return taskMapper.mapTaskToTaskDto(taskRepository.save(task));
   }
 
-
+  @PreAuthorize("hasAnyAuthority('ROLE_ADMIN') || @tableAccessManager.hasTableAccessAuthorityByTaskId(#taskId)")
   public boolean deleteTask(final Long taskId, final String username) {
     Task task = taskRepository.findOne(taskId);
     Row row = rowRepository.findByTasks(task);
@@ -258,39 +252,41 @@ public class TableService {
   }
 
   @Transactional
-  public TaskDto updateTaskIfAuthorized(final TaskDto taskDto, final String username) {
-    Task taskToUpdate = taskRepository.findOne(taskDto.getId());
-    Row row = rowRepository.findByTasks(taskToUpdate);
-    String tableName = row.getProjectTable().getName();
-    if (userRepository.findByUsername(username).getRoles() //TODO cache roles???
-        .stream()                                          // TODO: validator????
-        .map(Role::getName)
-        .anyMatch((roleName) -> roleName.equals(tableName) || roleName.equals("ROLE_ADMIN"))) {
-      row.setTasks(row.getTasks().stream().map((task) -> {
-        if (task.getId().equals(taskDto.getId())) {
-          task = taskMapper.mapTaskDtoToTask(taskDto);
-        }
-        return task;
-      }).collect(Collectors.toList()));
-      rowRepository.save(row);
-      return taskMapper.mapTaskToTaskDto(taskRepository.findOne(taskDto.getId()));
-    } else {
-      throw new RuntimeException(String.format("User:%s does not have authority:%s TaskDto: %s", username, tableName, taskDto.toString()));
-    } // TODO: remove tablename and task from exception (tests)
+  @PreAuthorize("hasAnyAuthority('ROLE_ADMIN') || @tableAccessManager.hasTableAccessAuthorityByTaskId(#taskDto.id)")
+  public TaskDto updateTask(final TaskDto taskDto, final String username) {
+    rowRepository.save(updateRowTask(rowRepository.findByTasks(taskRepository.findOne(taskDto.getId())), taskDto));
+    //return taskMapper.mapTaskToTaskDto(taskRepository.findOne(taskDto.getId()));
+    return taskDto;// TODO return whatttt???
   }
 
-  public TaskDto removeUserFromTaskIfAuthorized(final Long taskId, final String userNameToAssign, final String username) {
+  @PreAuthorize("hasAnyAuthority('ROLE_ADMIN') || @tableAccessManager.hasTableAccessAuthorityByRowId(#taskId)")
+  public TaskDto removeUserFromTask(final Long taskId, final String userNameToAssign) {
     Task task = taskRepository.findOne(taskId);
-    final Row row = rowRepository.findByTasksIsContaining(Collections.singletonList(task));
-    final String tableName = row.getProjectTable().getName();
-    if (userRepository.findByUsername(username).getRoles() //TODO cache roles???
-        .stream()                                          // TODO: validator????
-        .map(Role::getName).anyMatch((roleName) -> roleName.equals(tableName) || roleName.equals("ROLE_ADMIN"))) {
-      final User userToAssign = userRepository.findByUsername(userNameToAssign);
-      task.getUsers().remove(userToAssign);
-      return taskMapper.mapTaskToTaskDto(taskRepository.save(task));
-    } else {
-      throw new RuntimeException(String.format("User:%s does not have authority:%s TaskDto: %s", username, tableName, task.toString()));
-    } // TODO: remove tablename and task from exception (tests)
+    final User userToAssign = userRepository.findByUsername(userNameToAssign);
+    task.getUsers().remove(userToAssign);
+    return taskMapper.mapTaskToTaskDto(taskRepository.save(task));
   }
+
+  private Row updateRowTask(final Row row, final TaskDto newTask) {
+    row.setTasks(row.getTasks()
+        .stream()
+        .map(
+            (task) -> {
+              if (task.getId().equals(newTask.getId())) {
+                task = taskMapper.mapTaskDtoToTask(newTask);
+              }
+              return task;
+            })
+        .collect(Collectors.toList()));
+    return row;
+  }
+
+  private Long getTableIdByName(final String tableName) {
+    return projectTableRepository.findByName(tableName).getId();
+  }
+
+  private String getTableNameById(final Long tableId) {
+    return projectTableRepository.findOne(tableId).getName();
+  }
+
 }

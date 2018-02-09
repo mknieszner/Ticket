@@ -26,33 +26,28 @@ public class TableController {
   private final TableValidator tableValidator;
 
   @DeleteMapping(value = "projects/tables/rows/tasks/{taskId}")
-  @PreAuthorize("hasAnyAuthority('ROLE_ADMIN') || @tableAccessManager.hasTableAccessAuthorityByTaskId(#taskId)")
   public boolean deleteTask(@PathVariable final Long taskId, final Principal principal) {
     return tableService.deleteTask(taskId,principal.getName());
   }
 
   @PostMapping(value = "projects/tables/rows/tasks/{taskId}")
-  @PreAuthorize("hasAnyAuthority('ROLE_ADMIN') || @tableAccessManager.hasTableAccessAuthorityByTaskId(#taskId)")
-  public TaskDto assignUserToTask(@PathVariable final Long taskId, @RequestBody final String username, final Principal principal) {
-    return tableService.assignUserToTaskIfAuthorized(taskId,username,principal.getName());
+  public TaskDto assignUserToTask(@PathVariable final Long taskId, @RequestBody final String username) {
+    return tableService.assignUserToTask(taskId,username);
   }
 
   @DeleteMapping(value = "projects/tables/rows/tasks/{taskId}/user/{username}")
-  @PreAuthorize("hasAnyAuthority('ROLE_ADMIN') || @tableAccessManager.hasTableAccessAuthorityByRowId(#taskId)")
-  public TaskDto removeUserFromToTask(@PathVariable final Long taskId, @PathVariable final String username, final Principal principal) {
-    return tableService.removeUserFromTaskIfAuthorized(taskId,username,principal.getName());
+  public TaskDto removeUserFromToTask(@PathVariable final Long taskId, @PathVariable final String username) {
+    return tableService.removeUserFromTask(taskId,username);
   }
 
   @PutMapping(value = "projects/tables/rows/tasks/")
-  @PreAuthorize("hasAnyAuthority('ROLE_ADMIN') || @tableAccessManager.hasTableAccessAuthorityByTaskId(#taskDto.id)")
   public TaskDto updateTask(@RequestBody final TaskDto taskDto, final Principal principal) {
-    return tableService.updateTaskIfAuthorized(taskDto,principal.getName());
+    return tableService.updateTask(taskDto,principal.getName());
   }
 
   @PostMapping(value = "projects/tables/rows/{rowId}/tasks")
-  @PreAuthorize("hasAnyAuthority('ROLE_ADMIN') || @tableAccessManager.hasTableAccessAuthorityByRowId(#rowId)")
-  public List<TaskDto> addTaskToRow(@PathVariable final Long rowId, @RequestBody final TaskDto taskDto, final Principal principal) {
-    return tableService.addTaskToRowIfAuthorized(rowId,principal.getName(),taskDto);
+  public List<TaskDto> addTaskToRow(@PathVariable final Long rowId, @RequestBody final TaskDto taskDto) {
+    return tableService.addTaskToRow(rowId,taskDto);
   }
 
   @GetMapping(value = "projects/tables/rows/{rowId}/tasks/")
@@ -66,39 +61,29 @@ public class TableController {
   }
 
   @PostMapping(value = "projects/tables/{tableName}/row")
-  @PreAuthorize("hasAnyAuthority('ROLE_ADMIN') && @tableAccessManager.hasTableAccessAuthorityByTaskId(#tableName)")
   public RowDto addRowByTableName(@PathVariable final String tableName, @RequestBody final RowDto rowDto, final Principal principal) {
-    Long tableId = tableService.getTableIdByName(tableName);
-    rowValidator.validateRow(tableId, rowDto);
-    return tableService.addRowByTableId(rowDto, tableId, principal.getName());
+    return tableService.addRow(rowDto, tableName, principal.getName());
   }
 
 
   @PutMapping(value = "projects/tables/{tableName}/row")
-  @PreAuthorize("hasAnyAuthority('ROLE_ADMIN') || @tableAccessManager.hasTableAccessAuthorityByTableName(#tableName)")
   public RowDto updateRow(@PathVariable final String tableName, @RequestBody final RowDto rowDto, Principal principal) {
-
-    Long tableId = tableService.getTableIdByName(tableName);
-    rowValidator.validateRow(tableId, rowDto);
-    return tableService.updateRowByTableId(rowDto, tableId, principal.getName());
+    return tableService.updateRowByTableId(rowDto, tableName, principal.getName());
   }
 
 
-  @GetMapping(value = "projects/tables/{tableName}/row/{taskId}/details")
-  @PreAuthorize("hasAnyAuthority('ROLE_ADMIN') || @tableAccessManager.hasTableAccessAuthorityByTableName(#tableName)")
-  public RowInfoDto getRowDetails(@PathVariable Long taskId, @PathVariable String tableName, final  Principal principal) {
-    return tableService.getRowDetailsByRowIdAuthorized(taskId, tableName);
+  @GetMapping(value = "projects/tables/{tableName}/row/{rowId}/details")// TODO REMOVE tableName
+  public RowInfoDto getRowDetails(@PathVariable Long rowId, @PathVariable String tableName, final  Principal principal) {
+    return tableService.getRowDetails(rowId);
   }
 
   @PostMapping(value = "projects/tables/definition")
-  @PreAuthorize("hasAnyAuthority('ROLE_ADMIN') || @tableAccessManager.hasTableAccessAuthorityByTableName(#tableDefinitionDto.name)")
-  public ProjectDefinitionDto defineProject(@RequestBody final TableDefinitionDto tableDefinitionDto) { // TODO dbService.saveRuleNames(projectDefinitionDto.getTableDefinitionDtoList());
-    userService.saveRuleNames(tableDefinitionDto);
-    return tableService.defineSinleTableProject(tableDefinitionDto);
+  public ProjectDefinitionDto defineProject(@RequestBody final TableDefinitionDto tableDefinitionDto) {
+    userService.saveRoleName(tableDefinitionDto.getName());
+    return tableService.defineSingleTableProject(tableDefinitionDto);
   }
 
   @GetMapping(value = "projects/tables/definition/{tableName}")
-  @PreAuthorize("hasAnyAuthority('ROLE_ADMIN') || @tableAccessManager.hasTableAccessAuthorityByTableName(#tableName)")
   public TableDefinitionDto getTableHeadersByName(@PathVariable final String tableName) {
     return tableService.getTableHeadersByName(tableName);
   }
@@ -106,26 +91,20 @@ public class TableController {
 
   @GetMapping(value = "projects/tables/names")
   public List<String> getTablesNamesList(final Principal principal) {
-    System.out.println(principal.getName());
     return tableService.getTablesNamesListAuthorized(principal.getName());
   }
 
   @GetMapping(value = "projects/tables/{tableName}/rows")
-  @PreAuthorize("hasAnyAuthority('ROLE_ADMIN') || @tableAccessManager.hasTableAccessAuthorityByTableName(#tableName)")
   public List<RowDto> getTableRowsByTableName(@PathVariable final String tableName) {
     return tableService.getTableRowsByTableName(tableName);
   }
 
   @PostMapping(value = "projects/tables/{tableName}/rows")
-  @PreAuthorize("hasAnyAuthority('ROLE_ADMIN') || @tableAccessManager.hasTableAccessAuthorityByTableName(#tableName)")
   public List<RowDto> addRowsToTableByTableId(@RequestBody final List<RowDto> rowDtos, @PathVariable final String tableName, final Principal principal) {
-    Long tableId = tableService.getTableIdByName(tableName);
-    rowValidator.validateRows(tableId, rowDtos);
-    return tableService.addRowsToTableByTableId(rowDtos, tableId, principal.getName());
+    return tableService.addRowsToTableByTableId(rowDtos, tableName, principal.getName());
   }
 
-  @DeleteMapping(value = "projects/tables/rows/{rowId}") // TODO: DO ZAMIANY NA TABLE NAME I ROWID Z REQUEST BODY
-  @PreAuthorize("hasAnyAuthority('ROLE_ADMIN') || @tableAccessManager.hasTableAccessAuthorityByRowId(#rowId)")
+  @DeleteMapping(value = "projects/tables/rows/{rowId}")
   public @ResponseBody boolean deleteRowById(@PathVariable final Long rowId) {
     tableService.deleteRowById(rowId);
     return true;

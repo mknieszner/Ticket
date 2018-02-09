@@ -17,9 +17,4 @@ public class ColumnDetailDefinitionDto {
   //"IN" "EN" "DE" "DT" "ST"
   String type;
   List<Option> optionList = new ArrayList<>();
-
-  public ColumnDetailDefinitionDto(final String name, final String type) {
-    this.name = name;
-    this.type = type;
-  }
 }
