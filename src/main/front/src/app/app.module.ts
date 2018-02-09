@@ -51,6 +51,7 @@ import { UserInfoComponent } from './user-info/user-info.component';
 import {StatisticsService} from "./shared/statistics/statistics.service";
 import {ChartsModule} from "ng4-charts";
 import {ClearArrayPipe} from "./shared/clear-array-pipe";
+import { SpinnerComponent } from './spinner/spinner.component';
 
 
 
@@ -92,7 +93,8 @@ const appRoutes: Routes = [
     SortByPipe,
     StatisticsComponent,
     TableStatsComponent,
-    UserInfoComponent
+    UserInfoComponent,
+    SpinnerComponent
   ],
   imports: [
     ChartsModule,

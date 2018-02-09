@@ -38,6 +38,10 @@ public class Role {
     this.description = description;
   }
 
+  public Role(final String name) {
+    this.name = name;
+  }
+
   public void addUser(User user) {
     user.getRoles().add(this);
     users.add(user);

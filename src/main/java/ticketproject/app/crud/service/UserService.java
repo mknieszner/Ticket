@@ -13,6 +13,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import ticketproject.app.crud.dao.ActiveWebSocketUserRepository;
 import ticketproject.app.crud.dao.RoleRepository;
+import ticketproject.app.crud.service.authorization.AccessTableChecker;
 import ticketproject.app.crud.service.dao.RoleRepositoryService;
 import ticketproject.app.crud.service.dao.UserRepositoryService;
 import ticketproject.app.crud.domain.dto.authorization.PasswordResetData;
@@ -27,6 +28,7 @@ import ticketproject.app.crud.mapper.RoleMapper;
 import ticketproject.app.crud.mapper.UserMapper;
 
 import javax.transaction.Transactional;
+import java.security.Principal;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -45,6 +47,7 @@ public class UserService implements UserDetailsService {
   private final PasswordEncoder passwordEncoder;
 
 
+
   @Transactional
   public UserDto registerNewUserAccount(final UserDto userDto) {
     return userMapper.mapUserToUserDto(userRepository.save(userMapper.mapUserDtoToUser(userDto)));
@@ -56,7 +59,6 @@ public class UserService implements UserDetailsService {
     final boolean accountNonExpired = true;
     final boolean credentialsNonExpired = true;
     final boolean accountNonLocked = true;
-
     return new org.springframework.security.core.userdetails.User(user.getUsername(), user.getPassword(), user.isEnabled(), accountNonExpired, credentialsNonExpired, accountNonLocked, getAuthorities(new ArrayList<>(user.getRoles())));
   }
 
@@ -148,10 +150,6 @@ public class UserService implements UserDetailsService {
     roleRepository.save(new Role(tableDefinitionDto.getName(), String.format("Table: %s access role.", tableDefinitionDto.getName())));
   }
 
-//  public void deleteByName(final String tableName) {
-//    roleRepository.deleteByName(tableName);
-//  }
-
   public UserDto getSingleUserByUsername(final String username) {
     return userMapper.mapUserToUserDto(userRepository.findByUsername(username));
   }
@@ -167,7 +165,6 @@ public class UserService implements UserDetailsService {
 
   public RoleDto removeUserFromRoleByUserName(final String roleName, final String username) {
     Role role = roleRepository.findByName(roleName);
-    System.out.println(role.getName() + "  " + roleName + "   " + username);
     checkArgument(roleName.equals(role.getName()), new IllegalArgumentException("ROLE NOT FOUND"));
     User user = checkNotNull(userRepository.findByUsername(username), new IllegalArgumentException("USER NOT FOUND"));
     role.removeUserWARN(user);

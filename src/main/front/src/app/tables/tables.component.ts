@@ -8,6 +8,7 @@ import * as fromTableReducers from '../shared/store/table/tables.reducers'
 import * as TablesActions from "../shared/store/table/tables.actions";
 import * as UsersAction from "../shared/store/user/users.actions";
 import {SortModel} from "../shared/sort/sort.model";
+import {TableState} from "../shared/store/table/tables.reducers";
 
 @Component({
   selector: 'app-tables',
@@ -16,7 +17,7 @@ import {SortModel} from "../shared/sort/sort.model";
 })
 export class TablesComponent implements OnInit {
   tableState: Observable<fromTableReducers.TableState>;
-  tableChosen: boolean;
+  tableChosen: boolean = false;
   taskDetailsMode: Observable<boolean>;
   extendedFilterContentState: Observable<ExtendedFilterModel>;
   extendedFilterContent: ExtendedFilterModel;
@@ -24,6 +25,7 @@ export class TablesComponent implements OnInit {
   sortContent: Observable<SortModel>;
   sortContentValue: SortModel;
 
+  showSpinner:boolean = true;
 
 
   constructor(private contentStore: Store<fromAppReducers.AppState>,
@@ -33,6 +35,15 @@ export class TablesComponent implements OnInit {
   ngOnInit() {
     this.dss.getTableNames();
     this.tableState = this.contentStore.select('tables');
+    this.tableState.subscribe((table: TableState) => {
+      if( table.tableContent.length > 0 && table.tableDefinition ){
+        this.showSpinner = false;
+        console.log(this.showSpinner, table.tableContent, table.tableDefinition);
+      } else {
+        this.showSpinner = true;
+        console.log(this.showSpinner, table.tableContent, table.tableDefinition);
+      }
+    });
     this.taskDetailsMode = this.contentStore.select('tasks', 'taskDetailsMode');
     this.contentStore.select('tables', 'extendedFilterContent').subscribe((extendedFilterContent: ExtendedFilterModel) => {
       this.extendedFilterContent = extendedFilterContent;
@@ -51,6 +62,7 @@ export class TablesComponent implements OnInit {
   }
 
   setTable(tableName) {//TODO: RESET STANU PO ZMIANIE STOLU
+    this.showSpinner = true;
     this.contentStore.dispatch(new TablesActions.SwitchTableReset());
     this.contentStore.dispatch(new UsersAction.SwitchTableReset());
     this.dss.getTableHeaderByName(tableName);

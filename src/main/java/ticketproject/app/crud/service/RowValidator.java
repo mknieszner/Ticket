@@ -25,7 +25,6 @@ public class RowValidator {
     rowDtos.forEach(rowDto -> validateRow(tableId, rowDto));
   }
 
-  @Cacheable
   public void validateRow(final Long tableId, final RowDto rowDto) {
     ProjectTable projectTable = projectTableRepository.findOne(tableId);
 

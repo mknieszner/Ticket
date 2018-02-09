@@ -3,6 +3,7 @@ package ticketproject.app.crud.service;
 import com.google.common.collect.Lists;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import ticketproject.app.crud.dao.*;
 import ticketproject.app.crud.domain.dto.definition.ProjectDefinitionDto;
@@ -149,6 +150,7 @@ public class TableService {
     projectTableRepository.delete(tableId);
   }
 
+  @PreAuthorize("hasAnyAuthority('ROLE_ADMIN')")
   public void deleteTablebyName(final String tableName) { //TODO:TRANSACTION?
     roleRepository.deleteByName(tableName);
     projectTableRepository.deleteByName(tableName);
@@ -217,16 +219,10 @@ public class TableService {
     } // TODO: remove table name from exception (tests)
   }
 
-  public List<TaskDto> getRowsTasksIfAuthirized(final Long rowId, final String username) {
-    Row row = rowRepository.findOne(rowId);
-    String tableName = row.getProjectTable().getName();
-    if (userRepository.findByUsername(username).getRoles() //TODO cache roles???
-        .stream()                                          // TODO: validator????
-        .map(Role::getName).anyMatch((roleName) -> roleName.equals(tableName) || roleName.equals("ROLE_ADMIN"))) {
-      return taskMapper.mapTasksToTaskDtos(row.getTasks());
-    } else {
-      throw new RuntimeException(String.format("User:%s does not have authority:%s", username, tableName));
-    } // TODO: remove table name from exception (tests)
+
+  @PreAuthorize("hasAnyAuthority('ROLE_ADMIN') || @tableAccessManager.hasTableAccessAuthorityByRowId(#rowId)")
+  public List<TaskDto> getRowsTasks(final Long rowId) {
+    return taskMapper.mapTasksToTaskDtos(rowRepository.findOne(rowId).getTasks());
   }
 
   public TaskDto assignUserToTaskIfAuthorized(final Long taskId, final String userNameToAssign, final String username) {
