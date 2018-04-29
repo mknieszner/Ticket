@@ -1,15 +1,15 @@
-import {Component, OnChanges, OnDestroy, OnInit, SimpleChanges, ViewChild} from '@angular/core';
-import {Store} from "@ngrx/store";
-import {Observable} from "rxjs/Observable";
+import {Component, OnInit} from '@angular/core';
+import {Store} from '@ngrx/store';
+import {Observable} from 'rxjs/Observable';
 
 import * as fromAppReducers from '../../shared/store/app.reducers';
-import {TableState} from "../../shared/store/table/tables.reducers";
-import {TableDefinitionModel, TaskModel} from "../../shared/table.model";
-import {DataStorageService} from "../../shared/data-storage.service";
-import {EnumInfoModel, TableInfoModel} from "../../shared/statistics/table-info.model";
-import {StatisticsService} from "../../shared/statistics/statistics.service";
-import {TasksInfoModel} from "../../shared/statistics/tasks-info.model";
-import {EnumChart} from "./charts.model";
+import {TableState} from '../../shared/store/table/tables.reducers';
+import {TableDefinitionModel} from '../../shared/table.model';
+import {DataStorageService} from '../../shared/data-storage.service';
+import {EnumInfoModel, TableInfoModel} from '../../shared/statistics/table-info.model';
+import {StatisticsService} from '../../shared/statistics/statistics.service';
+import {TasksInfoModel} from '../../shared/statistics/tasks-info.model';
+import {EnumChart} from './charts.model';
 
 
 @Component({
@@ -18,7 +18,7 @@ import {EnumChart} from "./charts.model";
   styleUrls: ['./table-stats.component.css']
 })
 export class TableStatsComponent implements OnInit {
-  tableHeaderState: Observable<TableDefinitionModel>
+  tableHeaderState: Observable<TableDefinitionModel>;
   tableState: Observable<TableState>;
   selectedTableName: Observable<string>;
   tableInfo: TableInfoModel = null;
@@ -50,22 +50,22 @@ export class TableStatsComponent implements OnInit {
         this.tableInfo = this.statistics.mapToRowsInfo(tableState.tableContent);
         console.log(this.tableInfo);
         this.tableInfo.columnInfo.enumInfo.forEach((enumInfo: EnumInfoModel[], i) => {
-          console.log('enumCharts',this.enumCharts);
+          console.log('enumCharts', this.enumCharts);
           this.setEnumChart(enumInfo, i);
         });
       }
-    })
+    });
   }
 
-  show(array){
+  static show(array) {
     console.log(array);
   }
 
-  setEnumChart(enumInfo: EnumInfoModel[], i: number) {
+  setEnumChart(enumInfos: EnumInfoModel[], i: number) {
     this.enumCharts[i] = {
       data: [],
       labels: [],
-      chartType: (i % 2 == 0) ? 'doughnut' : 'bar',
+      chartType: (i % 2 === 0) ? 'doughnut' : 'bar',
       legend: true,
       options: {
         scaleShowVerticalLines: false,
@@ -78,22 +78,14 @@ export class TableStatsComponent implements OnInit {
         }
       }
     };
-    let enumValues = [];
+    const  enumValues = [];
     let columnNumber = null;
-    enumInfo.forEach((enumInfo: EnumInfoModel) => {
+    enumInfos.forEach((enumInfo: EnumInfoModel) => {
       enumValues.push(enumInfo.sum);
       columnNumber = enumInfo.columnNumber;
       this.enumCharts[i].labels.push(enumInfo.name);
     });
-    this.enumCharts[i].data.push({data: enumValues, label: 'ENUM ' + columnNumber})
-  }
-
-  public chartClicked(e: any): void {
-    console.log(e);
-  }
-
-  public chartHovered(e: any): void {
-    console.log(e);
+    this.enumCharts[i].data.push({data: enumValues, label: 'ENUM ' + columnNumber});
   }
 }
 

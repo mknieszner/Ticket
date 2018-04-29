@@ -65,7 +65,7 @@ public class TableService {
   }
 
 
-  @PreAuthorize("hasAnyAuthority('ROLE_ADMIN') && @tableAccessManager.hasTableAccessAuthorityByTaskId(#tableName)")
+  @PreAuthorize("hasAnyAuthority('ROLE_ADMIN') || @tableAccessManager.hasTableAccessAuthorityByTaskId(#tableName)")
   public RowDto addRow(final RowDto rowDto, final String tableName, final String username) {
     rowValidator.validateRow(getTableIdByName(tableName), rowDto);
     return rowMapper.mapToRowDto(rowRepository.save(new Row(

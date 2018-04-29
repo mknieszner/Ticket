@@ -13,21 +13,21 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
-@CacheConfig(cacheNames = "active-users")
+//@CacheConfig(cacheNames = "active-users")
 public class ActiveWebSocketUserRepositoryService {
   private final ActiveWebSocketUserRepository activeWebSocketUserRepository;
 
-  @Cacheable
+  //@Cacheable
   public void save(final ActiveWebSocketUser activeWebSocketUser) {
     activeWebSocketUserRepository.save(activeWebSocketUser);
   }
 
-  @Cacheable
+  //@Cacheable
   public List<ActiveWebSocketUser> findAllById(final String id) {
     return activeWebSocketUserRepository.findAllById(id);
   }
 
-  @CacheEvict
+  //@CacheEvict
   public void deleteAllById(final String id) {
     activeWebSocketUserRepository.deleteAllById(id);
   }

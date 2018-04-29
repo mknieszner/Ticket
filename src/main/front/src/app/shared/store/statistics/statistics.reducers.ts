@@ -1,7 +1,7 @@
-import * as StatisticsActions from "./statistics.actions";
+import * as StatisticsActions from './statistics.actions';
 
 export interface StatisticsState {
-  selectedTableName: string
+  selectedTableName: string;
 }
 
 const initialStatisticState: StatisticsState = {

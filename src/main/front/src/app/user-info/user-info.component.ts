@@ -1,10 +1,9 @@
 import {Component, OnInit} from '@angular/core';
-import {Observable} from "rxjs/Observable";
-import {Store} from "@ngrx/store";
-import * as fromAppReducers from '../shared/store/app.reducers'
-import {DataStorageService} from "../shared/data-storage.service";
-import {UserModel} from "../user/user.model";
-import {NgForm} from "@angular/forms";
+import {Observable} from 'rxjs/Observable';
+import {Store} from '@ngrx/store';
+import * as fromAppReducers from '../shared/store/app.reducers';
+import {DataStorageService} from '../shared/data-storage.service';
+import {UserModel} from '../user/user.model';
 
 @Component({
   selector: 'app-user-info',
@@ -15,8 +14,8 @@ export class UserInfoComponent implements OnInit {
   usernameState: Observable<string>;
   usernDetailsState: Observable<UserModel>;
   userDetails: UserModel;
-  editMode: boolean = false;
-  resetPasswordMode: boolean = false;
+  editMode = false;
+  resetPasswordMode = false;
 
   constructor(private store: Store<fromAppReducers.AppState>,
               private dss: DataStorageService) {
@@ -27,7 +26,7 @@ export class UserInfoComponent implements OnInit {
     this.usernDetailsState = this.store.select('users', 'currentUserDetails');
     this.usernDetailsState.subscribe((user: UserModel) => {
       console.log('user', user);
-      this.userDetails = user
+      this.userDetails = user;
     });
     this.usernameState.subscribe((username: string) => {
       this.dss.getCurrentUser(username);
@@ -57,10 +56,10 @@ export class UserInfoComponent implements OnInit {
   }
 
   updatePassword(formValue: { oldPassword, newPassword, confirmPassword }) {
-    if (formValue.newPassword == formValue.confirmPassword && formValue.newPassword.length >1) {
-      this.dss.updatePassword(formValue.oldPassword,formValue.newPassword, this.userDetails.username);
+    if (formValue.newPassword === formValue.confirmPassword && formValue.newPassword.length > 1) {
+      this.dss.updatePassword(formValue.oldPassword, formValue.newPassword, this.userDetails.username);
     } else {
-      console.log("Passwords do not match!")
+      console.log('Passwords do not match!');
     }
   }
 }

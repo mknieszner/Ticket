@@ -1,15 +1,14 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
-import {RowContentModel, TableDefinitionModel, TaskModel} from "../../shared/table.model";
-import {Observable} from "rxjs/Observable";
-import {DataStorageService} from "../../shared/data-storage.service";
-import {Store} from "@ngrx/store";
-import * as fromAppReducers from '../../shared/store/app.reducers'
-import * as TablesActions from "../../shared/store/table/tables.actions";
-import {FormArray, FormControl, FormGroup} from "@angular/forms";
-import {Question} from "../row/value-types/question-base.model";
-import {QuestionControlService} from "../row/question-control.service";
-import {Task} from "protractor/built/taskScheduler";
-import * as TaskActions from "../../shared/store/task/tasks.actions";
+import {RowContentModel, TableDefinitionModel, TaskModel} from '../../shared/table.model';
+import {Observable} from 'rxjs/Observable';
+import {DataStorageService} from '../../shared/data-storage.service';
+import {Store} from '@ngrx/store';
+import * as fromAppReducers from '../../shared/store/app.reducers';
+import * as TablesActions from '../../shared/store/table/tables.actions';
+import {FormArray, FormControl, FormGroup} from '@angular/forms';
+import {Question} from '../row/value-types/question-base.model';
+import {QuestionControlService} from '../row/question-control.service';
+import * as TaskActions from '../../shared/store/task/tasks.actions';
 
 @Component({
   selector: 'app-row-details',
@@ -36,21 +35,21 @@ export class RowDetailsComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.unlockFields = false;
-    this.extendedRowView = this.store.select('tables','extendedRowView');
-    this.extendedRowView.subscribe((value: boolean)=> {
+    this.extendedRowView = this.store.select('tables', 'extendedRowView');
+    this.extendedRowView.subscribe((value: boolean) => {
       this.extendedRowViewValue = value;
-    })
+    });
     this.editRowMode = this.store.select('tables', 'editRowMode');
     this.row = this.store.select('tables', 'editedRow');
     this.header = this.store.select('tables', 'tableDefinition');
     this.row.subscribe(row => {
-      this.createUpdateRowForm(row)
+      this.createUpdateRowForm(row);
       this.selesctedRow = row;
     });
     this.newRowMode = this.store.select('tables', 'newRowMode');
-    this.newRowMode.subscribe((action: boolean) => {
+    this.newRowMode.subscribe(() => {
       this.createNewRowForm();
-    })
+    });
   }
 
   createNewRowForm() {
@@ -97,7 +96,7 @@ export class RowDetailsComponent implements OnInit, OnDestroy {
           this.qcs.toFormGroup([new Question({key: Object.keys(cell), value: cell[Object.keys(cell)[0]].value})])
         );
       });
-      row.taskDtos.forEach((task) => {
+      row.taskDtos.forEach(() => {
         (<FormArray>this.updateRowForm.get('taskDtos')).push(
           new FormGroup({
             'id': new FormControl(),
@@ -112,9 +111,9 @@ export class RowDetailsComponent implements OnInit, OnDestroy {
     }
   }
 
-  show() {
-    this.row.subscribe(this.updateRowForm.value);
-  }
+  // show() { TODO remove
+  //   this.row.subscribe(this.updateRowForm.value);
+  // }
 
   onToggleRowEditMode() { // TODO reset all details state
     this.store.dispatch(new TablesActions.SetEditRowMode(false));
@@ -127,35 +126,34 @@ export class RowDetailsComponent implements OnInit, OnDestroy {
 
   onSubmit() {
     if (this.unlockFields) {
-      const mappedFormValue = mapForm(this.updateRowForm.value);
       this.header.forEach(header => {
         this.dss.updateRow(header[0].name, this.updateRowForm.value);
       });
       this.onToggleRowEditMode();
     }
 
-    function mapForm(formValue) {
-      formValue.columnValueDtos.forEach((value, i) => {
-        if (Object.keys(value[Object.keys(value)[0]])[0] !== 'value') {
-          let mappedcolumnValue = {};
-          mappedcolumnValue[Object.keys(value)[0]] = {value: value[Object.keys(value)[0]]};
-          formValue.columnValueDtos[i] = mappedcolumnValue;
-        }
-      });
-      return formValue;
-    }
+    // function mapForm(formValue) { TODO remove?
+    //   formValue.columnValueDtos.forEach((value, i) => {
+    //     if (Object.keys(value[Object.keys(value)[0]])[0] !== 'value') {
+    //       const mappedcolumnValue = {};
+    //       mappedcolumnValue[Object.keys(value)[0]] = {value: value[Object.keys(value)[0]]};
+    //       formValue.columnValueDtos[i] = mappedcolumnValue;
+    //     }
+    //   });
+    //   return formValue;
+    // }
   }
 
   onSaveNewRow() {
-    let newRow = this.mapNewRow();
+    const newRow = this.mapNewRow();
     this.header.forEach(header => {
       this.dss.addNewRow(header[0].name, newRow);
     });
   }
 
   mapNewRow() {
-    let newRow = this.newRowForm.value;
-    let mapedNewRow = {
+    const newRow = this.newRowForm.value;
+    const mapedNewRow = {
       id: this.newRowForm.value.id,
       name: this.newRowForm.value.name,
       createdBy: this.newRowForm.value.createdBy,
@@ -204,7 +202,7 @@ export class RowDetailsComponent implements OnInit, OnDestroy {
     this.dss.deleteTask(taskId, this.selesctedRow.id);
   }
 
-  switchExtendedRowView(){
+  switchExtendedRowView() {
     this.store.dispatch(new TablesActions.SetExtendedRowView(!this.extendedRowViewValue));
   }
 }

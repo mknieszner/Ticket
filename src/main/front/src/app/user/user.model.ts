@@ -1,4 +1,4 @@
-import {TaskModel} from "../shared/table.model";
+import {TaskModel} from '../shared/table.model';
 
 export class UserModel {
   public username: string;

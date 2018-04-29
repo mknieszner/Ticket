@@ -14,7 +14,7 @@ export class RowContentModel {
   public createdOn: string; // TODO date?
   public lastModifiedBy: string;
   public lastModifiedOn: string; // TODO date?
-  public taskDtos: TaskModel[]
+  public taskDtos: TaskModel[];
 }
 
 export class TaskModel {
@@ -22,7 +22,7 @@ export class TaskModel {
   public name: string;
   public description: string;
   public status: Status;
-  public userNames: string[]
+  public userNames: string[];
   public taskDtos: TaskModel[];
 }
 
@@ -36,13 +36,13 @@ export class TableDefinitionModel {
   public columnDetailDefinitionDtoList: any[];
 }
 
-export interface ExtendedFilterModel { //TODO: Filter do poprawy (własciwe wartości)
-  id: any,
-  name: string,
-  createdBy: string,
-  createdOn: string,
-  lastModifiedBy: string,
-  lastModifiedOn: string,
-  columnValueDtos: any[]
-  taskDtos: any
+export interface ExtendedFilterModel { // TODO: Filter do poprawy (własciwe wartości)
+  id: any;
+  name: string;
+  createdBy: string;
+  createdOn: string;
+  lastModifiedBy: string;
+  lastModifiedOn: string;
+  columnValueDtos: any[];
+  taskDtos: any;
 }

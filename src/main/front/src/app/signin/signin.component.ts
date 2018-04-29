@@ -1,11 +1,10 @@
 import {Component, OnInit} from '@angular/core';
-import {FormControl, FormGroup} from "@angular/forms";
-import {OauthService} from "../shared/oauth.service";
-import {AuthCookie} from "../shared/auth-cookies-handler";
-import {ActivatedRoute, Router} from "@angular/router";
-import {Store} from "@ngrx/store";
-import * as fromAppReducers from "../shared/store/app.reducers";
-import {Observable} from "rxjs/Observable";
+import {FormControl, FormGroup} from '@angular/forms';
+import {OauthService} from '../shared/oauth.service';
+import {AuthCookie} from '../shared/auth-cookies-handler';
+import {Store} from '@ngrx/store';
+import * as fromAppReducers from '../shared/store/app.reducers';
+import {Observable} from 'rxjs/Observable';
 
 
 @Component({
@@ -22,8 +21,7 @@ export class SigninComponent implements OnInit {
 
   constructor(private oauthservice: OauthService,
               private cookie: AuthCookie,
-              private store: Store<fromAppReducers.AppState>,
-              private router: Router) {
+              private store: Store<fromAppReducers.AppState>) {
 
   }
 
@@ -31,11 +29,11 @@ export class SigninComponent implements OnInit {
     this.logoutInfo = this.store.select('users', 'logoutInfo');
     this.loginFailureInfo = this.store.select('users', 'loginFailureInfo');
 
-    this.cookie.deleteAuth();
+    AuthCookie.deleteAuth();
     this.signinForm = new FormGroup({
       'username': new FormControl(),
       'password': new FormControl()
-    })
+    });
   }
 
 

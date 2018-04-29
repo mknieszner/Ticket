@@ -1,5 +1,5 @@
 import * as ChatActions from './chat.actions';
-import {ChatMessageModel} from "../../chat-message.model";
+import {ChatMessageModel} from '../../chat-message.model';
 
 export interface ChatState {
   chatContent: ChatMessageModel[];

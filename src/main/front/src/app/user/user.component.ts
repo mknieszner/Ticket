@@ -2,9 +2,9 @@ import {Component, OnInit} from '@angular/core';
 import {Observable} from 'rxjs/Observable';
 import {UserModel} from './user.model';
 import {Store} from '@ngrx/store';
-import {DataStorageService} from "../shared/data-storage.service";
-import * as fromAppReducers from '../shared/store/app.reducers'
-import * as UsersActions from "../shared/store/user/users.actions";
+import {DataStorageService} from '../shared/data-storage.service';
+import * as fromAppReducers from '../shared/store/app.reducers';
+import * as UsersActions from '../shared/store/user/users.actions';
 
 @Component({
   selector: 'app-user',
@@ -31,7 +31,7 @@ export class UserComponent implements OnInit {
   }
 
   onNewUser() {
-    this.contentStore.dispatch(new UsersActions.SetNewUserModeAction(true))
+    this.contentStore.dispatch(new UsersActions.SetNewUserModeAction(true));
     this.contentStore.dispatch(new UsersActions.SetUserDisplayedTask(null));
   }
   // // onNewRole() {

@@ -1,26 +1,24 @@
 import * as TableActions from './tables.actions';
-import {ExtendedFilterModel, RowContentModel, TableDefinitionModel, TaskModel} from "../../table.model";
-import {UserModel} from "../../../user/user.model";
-import {RoleModel} from "../../../roles/role.model";
-import {UserState} from "../user/users.reducers";
-import {SortModel} from "../../sort/sort.model";
+import {ExtendedFilterModel, RowContentModel, TableDefinitionModel, TaskModel} from '../../table.model';
+import {UserModel} from '../../../user/user.model';
+import {SortModel} from '../../sort/sort.model';
 
 export interface TableState {
-  editRowMode: boolean,
-  newRowMode: boolean,
-  editedRow: RowContentModel,
-  tableDefinition: TableDefinitionModel,
-  tableContent: RowContentModel[],
-  tableUsers: UserModel[],
-  tablesNames: string[],
-  tableFilter: string,
-  extendedFilterMode: boolean,
-  extendedFilterAction: boolean
-  extendedFilterContent: ExtendedFilterModel,
-  filterSelect: boolean,
-  extendedTableView: boolean,
-  extendedRowView: boolean
-  sortContent: SortModel
+  editRowMode: boolean;
+  newRowMode: boolean;
+  editedRow: RowContentModel;
+  tableDefinition: TableDefinitionModel;
+  tableContent: RowContentModel[];
+  tableUsers: UserModel[];
+  tablesNames: string[];
+  tableFilter: string;
+  extendedFilterMode: boolean;
+  extendedFilterAction: boolean;
+  extendedFilterContent: ExtendedFilterModel;
+  filterSelect: boolean;
+  extendedTableView: boolean;
+  extendedRowView: boolean;
+  sortContent: SortModel;
 }
 
 const initialTableState: TableState = {
@@ -182,11 +180,11 @@ export function tablesReducers(state: TableState = initialTableState, action: Ta
 
 function updateTask(tableContent: RowContentModel[], payload: TaskModel) {
   tableContent.forEach((row: RowContentModel, i) => {
-      row.taskDtos.forEach((taskDto: TaskModel, j) => {
-        if (taskDto.id == payload.id) {
-          tableContent[i].taskDtos[j] = payload;
-        }
-      })
+    row.taskDtos.forEach((taskDto: TaskModel, j) => {
+      if (taskDto.id === payload.id) {
+        tableContent[i].taskDtos[j] = payload;
+      }
+    });
   });
   return tableContent;
 }
@@ -194,7 +192,7 @@ function updateTask(tableContent: RowContentModel[], payload: TaskModel) {
 
 function deleteRow(tableContent: RowContentModel[], rowId: number) {
   tableContent.forEach((row: RowContentModel, i) => {
-    if (row.id == rowId) {
+    if (row.id === rowId) {
       tableContent.splice(i, 1);
     }
   });
@@ -203,12 +201,12 @@ function deleteRow(tableContent: RowContentModel[], rowId: number) {
 
 function deleteRowsTask(tableContent: RowContentModel[], payload: { rowId: number, taskId: number }): RowContentModel[] {
   tableContent.forEach((row: RowContentModel, i) => {
-    if (row.id == payload.rowId) {
+    if (row.id === payload.rowId) {
       row.taskDtos.forEach((taskDto: TaskModel, j) => {
-        if (taskDto.id == payload.taskId) {
+        if (taskDto.id === payload.taskId) {
           tableContent[i].taskDtos.splice(j, 1);
         }
-      })
+      });
     }
   });
   return tableContent;
@@ -216,12 +214,12 @@ function deleteRowsTask(tableContent: RowContentModel[], payload: { rowId: numbe
 
 function updateTaskUsers(tableContent: RowContentModel[], payload: { rowId: number, task: TaskModel }): RowContentModel[] {
   tableContent.forEach((row: RowContentModel, i) => {
-    if (row.id == payload.rowId) {
+    if (row.id === payload.rowId) {
       row.taskDtos.forEach((taskDto: TaskModel, j) => {
-        if (taskDto.id == payload.task.id) {
+        if (taskDto.id === payload.task.id) {
           tableContent[i].taskDtos[j].userNames = payload.task.userNames;
         }
-      })
+      });
     }
   });
   return tableContent;
@@ -229,64 +227,64 @@ function updateTaskUsers(tableContent: RowContentModel[], payload: { rowId: numb
 
 
 function setRowTasks(rows: RowContentModel[], data: { tasks: TaskModel[], rowId }): RowContentModel[] {
-  rows.forEach((row, i) => {
-    if (row.id == data.rowId) {
+  rows.forEach((row) => {
+    if (row.id === data.rowId) {
       row.taskDtos = data.tasks;
     }
   });
   return rows;
 }
 
-function deleteItemByName(array: NameModel[], itemName: string): Array<NameModel> {//TODO GENERIC TYPE FUNCTION???  r.216/255
-  array.forEach((arrayItem, i) => {
-    if (arrayItem.name === itemName) {
-      array.splice(i, 1);
-    }
-  });
-  return array;
-}
-
-function deleteItemByUsername(array: UsernameModel[], itemName: string) {
-  array.forEach((arrayItem, i) => {
-    if (arrayItem.username === itemName) {
-      array.splice(i, 1);
-    }
-  });
-  return array;
-}
+// function deleteItemByName(array: NameModel[], itemName: string): Array<NameModel> {// TODO GENERIC TYPE FUNCTION???  r.216/255 REMOVE?
+//   array.forEach((arrayItem, i) => {
+//     if (arrayItem.name === itemName) {
+//       array.splice(i, 1);
+//     }
+//   });
+//   return array;
+// }
+//
+// function deleteItemByUsername(array: UsernameModel[], itemName: string) { // TODO REMOVE?
+//   array.forEach((arrayItem, i) => {
+//     if (arrayItem.username === itemName) {
+//       array.splice(i, 1);
+//     }
+//   });
+//   return array;
+// }
 
 
 function updateRow(rows: RowContentModel[], updatedRow: RowContentModel): RowContentModel[] {
   rows.forEach((row, i) => {
-    if (row.id == updatedRow.id) {
+    if (row.id === updatedRow.id) {
       rows[i] = updatedRow;
     }
   });
   return rows;
 }
 
-function updateRoleUsers(roles: RoleModel[], newRole: RoleModel): RoleModel[] {
-  roles.forEach((role) => {
-    if (role.name == newRole.name) {
-      role.userDtos = newRole.userDtos;
-    }
-  });
-  return roles;
-}
-
-function updateUsersRoles(users: UserModel[], newUser: UserModel): UserModel[] {
-  users.forEach((user, i) => {
-    if (user.username == newUser.username) {
-      users[i].roleNames = newUser.roleNames;
-    }
-  });
-  return users;
-}
-
-interface NameModel {
-  name: string;
-}
-
-interface UsernameModel {
-  username: string;
-}
+// function updateRoleUsers(roles: RoleModel[], newRole: RoleModel): RoleModel[] { // TODO remove?
+//   roles.forEach((role) => {
+//     if (role.name === newRole.name) {
+//       role.userDtos = newRole.userDtos;
+//     }
+//   });
+//   return roles;
+// }
+//
+// function updateUsersRoles(users: UserModel[], newUser: UserModel): UserModel[] {// TODO remove?
+//   users.forEach((user, i) => {
+//     if (user.username === newUser.username) {
+//       users[i].roleNames = newUser.roleNames;
+//     }
+//   });
+//   return users;
+// }
+//
+// interface NameModel { // TODO remove?
+//   name: string;
+// }
+//
+// interface UsernameModel { // TODO remove?
+//   username: string;
+// }

@@ -1,25 +1,23 @@
-import {Injectable, OnInit} from "@angular/core";
-import {HttpClient} from "@angular/common/http";
+import {Injectable} from '@angular/core';
+import {HttpClient} from '@angular/common/http';
 import 'rxjs/add/operator/map';
-import {RowContentModel, TableDefinitionModel, TaskModel} from "./table.model";
-import {Store} from "@ngrx/store";
-import * as UsersActions from "./store/user/users.actions";
-import * as TablesActions from "./store/table/tables.actions";
-import * as fromAppReducers from './store/app.reducers'
-import * as fromServerModel from './server.model'
-import {UserModel} from "../user/user.model";
-import {RoleModel} from "../roles/role.model";
-import {OauthService} from "./oauth.service";
-import * as TaskActions from "./store/task/tasks.actions";
-import {Observable} from "rxjs/Observable";
+import {RowContentModel, TableDefinitionModel, TaskModel} from './table.model';
+import {Store} from '@ngrx/store';
+import * as UsersActions from './store/user/users.actions';
+import * as TablesActions from './store/table/tables.actions';
+import * as fromAppReducers from './store/app.reducers';
+import * as fromServerModel from './server.model';
+import {UserModel} from '../user/user.model';
+import {RoleModel} from '../roles/role.model';
+import * as TaskActions from './store/task/tasks.actions';
 import {Client} from 'stompjs/lib/stomp.js';
-import {TaskInfoService} from "./socket/task-info.service";
-import * as ChatActions from "./store/chat/chat.actions";
+import {TaskInfoService} from './socket/task-info.service';
+import * as ChatActions from './store/chat/chat.actions';
 
 @Injectable()
 export class DataStorageService {
-  stompClientState: Observable<Client>;
-  stompClient: Client;
+  // stompClientState: Observable<Client>;
+  // stompClient: Client;
   basehost = fromServerModel.baseUrl;
 
   constructor(private httpClient: HttpClient,
@@ -30,7 +28,7 @@ export class DataStorageService {
   getCurrentUser(username: string) {
     this.httpClient.get<UserModel>(this.basehost + '/v1/users/' + username)
       .subscribe((user: UserModel) => {
-        this.store.dispatch(new UsersActions.SetCurrntUserDetails(user))
+        this.store.dispatch(new UsersActions.SetCurrntUserDetails(user));
       }, (err) => {
         console.log('getCurrentUser dss err: ', err);
       });
@@ -40,21 +38,24 @@ export class DataStorageService {
     this.httpClient.put<UserModel>(this.basehost + '/v1/users/' + user.username, user)
       .subscribe(
         (updatedUser: UserModel) => {
-          console.log("updateUser dss OK: ", updatedUser);
+          console.log('updateUser dss OK: ', updatedUser);
           this.store.dispatch(new UsersActions.SetCurrntUserDetails(updatedUser));
         }, err => {
-          console.log("updateUser dss ERR: ", err)
+          console.log('updateUser dss ERR: ', err);
         }
       );
   }
 
   updatePassword(oldPassword, newPassword, username) {
-    this.httpClient.put<boolean>(this.basehost + '/v1/users/' + username + '/pass',{oldPassword: oldPassword, newPassword: newPassword})
+    this.httpClient.put<boolean>(this.basehost + '/v1/users/' + username + '/pass', {
+      oldPassword: oldPassword,
+      newPassword: newPassword
+    })
       .subscribe(
         (done: boolean) => {
-          console.log("updatePassword dss OK: ", done);
+          console.log('updatePassword dss OK: ', done);
         }, err => {
-          console.log("updatePassword dss ERR: ", err)
+          console.log('updatePassword dss ERR: ', err);
         }
       );
   }
@@ -62,10 +63,10 @@ export class DataStorageService {
   getActiveWsUsers() {
     this.httpClient.get<string[]>(this.basehost + '/v1/users/ws-active')
       .subscribe((activeUsers: string[]) => {
-        this.store.dispatch(new ChatActions.SetActiveWsUsers(activeUsers))
+        this.store.dispatch(new ChatActions.SetActiveWsUsers(activeUsers));
       }, (err) => {
-        console.log('getActiveWsUsers dss err: ', err)
-      })
+        console.log('getActiveWsUsers dss err: ', err);
+      });
   }
 
   getTableHeaderByName(tableName: string) {
@@ -73,28 +74,28 @@ export class DataStorageService {
       .map((definition) => {
         return definition;
       }).subscribe((definition: TableDefinitionModel) => {
-        this.store.dispatch(new TablesActions.SetTableDefinitionAction(definition))
+        this.store.dispatch(new TablesActions.SetTableDefinitionAction(definition));
       }, (err) => {
-        console.log('getTableHeaderByName dss err: ', err)
-      })
+        console.log('getTableHeaderByName dss err: ', err);
+      });
   }
 
   getTableRowsByName(tableName: string) {
     return this.httpClient.get<RowContentModel[]>(this.basehost + '/v1/projects/tables/' + tableName + '/rows')
       .subscribe((rows: RowContentModel[]) => {
-        this.store.dispatch(new TablesActions.SetRowsAction(rows))
-      }), (err) => {
-      console.log('getTableRowsByName dss err: ', err)
-    }
+        this.store.dispatch(new TablesActions.SetRowsAction(rows));
+      }, (err) => {
+      console.log('getTableRowsByName dss err: ', err);
+    });
   }
 
   getTableNames() {
     this.httpClient.get<string[]>(this.basehost + '/v1/projects/tables/names')
       .subscribe(
         (names) => {
-          this.store.dispatch(new TablesActions.SetNamesAction(names))
+          this.store.dispatch(new TablesActions.SetNamesAction(names));
         }, (err) => {
-          console.log('getTableNames dss err: ', err)
+          console.log('getTableNames dss err: ', err);
         }
       );
   }
@@ -104,7 +105,7 @@ export class DataStorageService {
       .subscribe(() => {
 
         }, (err) => {
-          console.log('postTableDefinition dss err: ', err)
+          console.log('postTableDefinition dss err: ', err);
         }
       );
   }
@@ -114,7 +115,7 @@ export class DataStorageService {
       .subscribe((users: UserModel[]) => {
         this.store.dispatch(new UsersActions.SetUsersAction(users));
       }, (err) => {
-        console.log('getUsers dss err: ', err)
+        console.log('getUsers dss err: ', err);
       });
   }
 
@@ -123,7 +124,7 @@ export class DataStorageService {
       .subscribe((roles: RoleModel[]) => {
         this.store.dispatch(new UsersActions.SetRolesAction(roles));
       }, (err) => {
-        console.log('getRoles dss err: ', err)
+        console.log('getRoles dss err: ', err);
       });
   }
 
@@ -133,7 +134,7 @@ export class DataStorageService {
         this.store.dispatch(new UsersActions.AddRoleToUser(user));
         return true;
       }, (err) => {
-        console.log('addRoleToUser dss err: ', err)
+        console.log('addRoleToUser dss err: ', err);
       });
   }
 
@@ -145,31 +146,31 @@ export class DataStorageService {
           this.store.dispatch(new UsersActions.RemoveRoleFromUser(data.user));
         }
       }, (err) => {
-        console.log('removeRoleFromUser dss err: ', err)
+        console.log('removeRoleFromUser dss err: ', err);
       });
   }
 
-  addUserToRole(data: { rolename: string, username: string }) {
-    return this.httpClient.post(this.basehost + '/v1/roles/' + data.rolename + '/users/' + data.username, null)
-      .subscribe((role: RoleModel) => {
-        this.store.dispatch(new UsersActions.AddUserToRole(role));
-        return true;
-      }, (err) => {
-        console.log('addUserToRole dss err: ', err)
-      });
-  }
+  // addUserToRole(data: { rolename: string, username: string }) { TODO addUserToRole
+  //   return this.httpClient.post(this.basehost + '/v1/roles/' + data.rolename + '/users/' + data.username, null)
+  //     .subscribe((role: RoleModel) => {
+  //       this.store.dispatch(new UsersActions.AddUserToRole(role));
+  //       return true;
+  //     }, (err) => {
+  //       console.log('addUserToRole dss err: ', err);
+  //     });
+  // }
 
-  removeUserFromRole(data: { role: RoleModel, username: string }) {
+  removeUserFromRole(data: { role: RoleModel, username: string }) { // TODO removeUserFromRole
     this.httpClient.delete<boolean>(this.basehost + '/v1/roles/' + data.role.name + '/users/' + data.username)
       .subscribe((response) => {
         if (response) {
-          let usertoRemove
+          let usertoRemove;
           data.role.userDtos.forEach(user => {
-            if (user.username == data.username) {
+            if (user.username === data.username) {
               usertoRemove = user;
             }
           });
-          data.role.userDtos.splice(data.role.userDtos.indexOf(usertoRemove), 1);
+          // data.role.userDtos.splice(data.role.userDtos.indexOf(usertoRemove), 1); // TODO removeUserFromRole param?
           this.store.dispatch(new UsersActions.RemoveUserFromRole(data.role));
         }
       });
@@ -182,7 +183,7 @@ export class DataStorageService {
           this.store.dispatch(new TablesActions.AddRowAction(savedRow));
         },
         err => {
-          console.log('addNewRow dss err: ', err)
+          console.log('addNewRow dss err: ', err);
         });
   }
 
@@ -193,7 +194,7 @@ export class DataStorageService {
           // console.log("updateRow dss OK: ", savedRow);
           this.store.dispatch(new TablesActions.UpdateRowAction(savedRow));
         }, err => {
-          console.log("updateRow dss ERR: ", err)
+          console.log('updateRow dss ERR: ', err);
         }
       );
   }
@@ -204,7 +205,7 @@ export class DataStorageService {
           this.store.dispatch(new UsersActions.SetCurrentUserRolenames(roles));
         },
         (err) => {
-          console.log('getUserRoles dss ERR: ', err)
+          console.log('getUserRoles dss ERR: ', err);
         }
       );
   }
@@ -216,22 +217,21 @@ export class DataStorageService {
           this.store.dispatch(new UsersActions.AddRoleAction(savedRole));
         },
         err => {
-          console.log('saveNewRole dss err: ', err)
+          console.log('saveNewRole dss err: ', err);
         });
   }
 
-  deleteRole(roleName: string) {
-    this.httpClient.delete<boolean>(this.basehost + '/v1/roles/' + roleName)
-      .subscribe((status: boolean) => {
-          // console.log('deleteRole dss OK: ', status)
-          if (status) {
-            this.store.dispatch(new UsersActions.DeleteRoleAction(roleName));
-          }
-        },
-        err => {
-          console.log('deleteRole dss err: ', err)
-        });
-  }
+  // deleteRole(roleName: string) { todo remove?
+  //   this.httpClient.delete<boolean>(this.basehost + '/v1/roles/' + roleName)
+  //     .subscribe((status: boolean) => {
+  //         if (status) {
+  //           this.store.dispatch(new UsersActions.DeleteRoleAction(roleName));
+  //         }
+  //       },
+  //       err => {
+  //         console.log('deleteRole dss err: ', err);
+  //       });
+  // }
 
   deleteUser(username: string) {
     this.httpClient.delete<boolean>(this.basehost + '/v1/users/' + username)
@@ -242,7 +242,7 @@ export class DataStorageService {
           }
         },
         err => {
-          console.log('deleteUser dss err: ', err)
+          console.log('deleteUser dss err: ', err);
         });
   }
 
@@ -253,7 +253,7 @@ export class DataStorageService {
           this.store.dispatch(new UsersActions.AddUserAction(savedUser));
         },
         err => {
-          console.log('saveNewUser dss err: ', err)
+          console.log('saveNewUser dss err: ', err);
         });
   }
 
@@ -264,7 +264,7 @@ export class DataStorageService {
           this.store.dispatch(new TablesActions.SetRowsTasksAction({tasks: tasks, rowId: rowId}));
         },
         err => {
-          console.log('saveNewTask dss err: ', err)
+          console.log('saveNewTask dss err: ', err);
         });
   }
 
@@ -275,7 +275,7 @@ export class DataStorageService {
           this.store.dispatch(new TablesActions.SetTableUsers(users));
         },
         (err) => {
-          console.log('setTableUsers dss ERR: ', err)
+          console.log('setTableUsers dss ERR: ', err);
         }
       );
   }
@@ -288,7 +288,7 @@ export class DataStorageService {
           this.taskInfoService.stompClient.send('/app/newTasks/' + username, {});
         },
         err => {
-          console.log('onAssignUserToTask dss err: ', err)
+          console.log('onAssignUserToTask dss err: ', err);
         });
   }
 
@@ -300,7 +300,7 @@ export class DataStorageService {
           this.taskInfoService.stompClient.send('/app/newTasks/' + username, {});
         },
         err => {
-          console.log('onRemoveUserFromTask dss err: ', err)
+          console.log('onRemoveUserFromTask dss err: ', err);
         });
   }
 
@@ -308,11 +308,11 @@ export class DataStorageService {
     this.httpClient.put<TaskModel>(this.basehost + '/v1/projects/tables/rows/tasks/', task)
       .subscribe(
         (updatedTask: TaskModel) => {
-          console.log("updateTask dss OK: ", updatedTask);
+          console.log('updateTask dss OK: ', updatedTask);
           this.store.dispatch(new TablesActions.UpdateTaskAction(updatedTask));
           this.store.dispatch(new UsersActions.UpdateTaskAction(updatedTask));
         }, err => {
-          console.log("updateTask dss ERR: ", err)
+          console.log('updateTask dss ERR: ', err);
         }
       );
   }
@@ -326,8 +326,7 @@ export class DataStorageService {
           this.store.dispatch(new TablesActions.DeleteTask({rowId: rowId, taskId: taskId}));
         }
       }, err => {
-        console.log('deleteTask dss err: ', err)
-
+        console.log('deleteTask dss err: ', err);
       });
   }
 
@@ -338,8 +337,7 @@ export class DataStorageService {
           this.store.dispatch(new TablesActions.DeleteRow(rowId));
         }
       }, err => {
-        console.log('deleteRow dss err: ', err)
-
+        console.log('deleteRow dss err: ', err);
       });
   }
 }

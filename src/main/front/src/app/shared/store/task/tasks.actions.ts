@@ -1,5 +1,5 @@
-import {Action} from "@ngrx/store";
-import {TaskModel} from "../../table.model";
+import {Action} from '@ngrx/store';
+import {TaskModel} from '../../table.model';
 
 export const SET_TASK_DETAILS_MODE = 'SET_TASK_DETAILS_MODE';
 export const SET_SHOWED_TASK = 'SET_SHOWED_TASK';

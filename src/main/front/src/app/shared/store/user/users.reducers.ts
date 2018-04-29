@@ -1,27 +1,26 @@
 import * as UserActions from './users.actions';
-import {ExtendedFilterModel, RowContentModel, TableDefinitionModel, TaskModel} from "../../table.model";
-import {UserModel} from "../../../user/user.model";
-import {RoleModel} from "../../../roles/role.model";
-import {TableState} from "../table/tables.reducers";
-import {Token} from "../../auth.model";
+import {TaskModel} from '../../table.model';
+import {UserModel} from '../../../user/user.model';
+import {RoleModel} from '../../../roles/role.model';
+import {Token} from '../../auth.model';
 import {Client} from 'stompjs/lib/stomp.js';
 
 
 export interface UserState {
-  newTaskInfo: boolean
-  currentSocketClient: Client
-  currentUser: string,
-  currentUserDetails: UserModel,
-  currentUserRoles: string[],
-  token: Token,
-  users: UserModel[],
-  newUserMode: boolean,
-  roles: RoleModel[],
-  newRoleMode: boolean,
-  loginFailureInfo: string,
-  logoutInfo: string
-  selectedUser: UserModel,
-  userDisplayedTask: TaskModel
+  newTaskInfo: boolean;
+  currentSocketClient: Client;
+  currentUser: string;
+  currentUserDetails: UserModel;
+  currentUserRoles: string[];
+  token: Token;
+  users: UserModel[];
+  newUserMode: boolean;
+  roles: RoleModel[];
+  newRoleMode: boolean;
+  loginFailureInfo: string;
+  logoutInfo: string;
+  selectedUser: UserModel;
+  userDisplayedTask: TaskModel;
 }
 
 const initialUserState: UserState = {
@@ -186,7 +185,7 @@ export function usersReducers(state: UserState = initialUserState, action: UserA
 
 
 function updateUsersTask(usersToUpdate: UserModel[], task: TaskModel): UserModel[] {
-  let users = usersToUpdate;
+  const users = usersToUpdate;
   users.forEach((user: UserModel, i) => {
     users[i] = updateUserTask(user, task);
   });
@@ -194,16 +193,16 @@ function updateUsersTask(usersToUpdate: UserModel[], task: TaskModel): UserModel
 }
 
 function updateUserTask(userToUpdate: UserModel, task: TaskModel): UserModel {
-  let user = userToUpdate;
+  const user = userToUpdate;
   user.taskDtos.forEach((taskToUpdate: TaskModel, i) => {
-    if (taskToUpdate.id == task.id) {
+    if (taskToUpdate.id === task.id) {
       user.taskDtos[i] = task;
     }
   });
   return user;
 }
 
-function deleteItemByName(array: NameModel[], itemName: string): Array<NameModel> {//TODO GENERIC TYPE FUNCTION???  r.216/255
+function deleteItemByName(array: NameModel[], itemName: string): Array<NameModel> {// TODO GENERIC TYPE FUNCTION???  r.216/255
   array.forEach((arrayItem, i) => {
     if (arrayItem.name === itemName) {
       array.splice(i, 1);
@@ -222,18 +221,18 @@ function deleteItemByUsername(array: UsernameModel[], itemName: string) {
 }
 
 
-function updateRow(rows: RowContentModel[], updatedRow: RowContentModel): RowContentModel[] {
-  rows.forEach((row, i) => {
-    if (row.id == updatedRow.id) {
-      rows[i] = updatedRow;
-    }
-  });
-  return rows;
-}
+// function updateRow(rows: RowContentModel[], updatedRow: RowContentModel): RowContentModel[] { TODO remove?
+//   rows.forEach((row, i) => {
+//     if (row.id === updatedRow.id) {
+//       rows[i] = updatedRow;
+//     }
+//   });
+//   return rows;
+// }
 
 function updateRoleUsers(roles: RoleModel[], newRole: RoleModel): RoleModel[] {
   roles.forEach((role) => {
-    if (role.name == newRole.name) {
+    if (role.name === newRole.name) {
       role.userDtos = newRole.userDtos;
     }
   });
@@ -242,7 +241,7 @@ function updateRoleUsers(roles: RoleModel[], newRole: RoleModel): RoleModel[] {
 
 function updateUsersRoles(users: UserModel[], newUser: UserModel): UserModel[] {
   users.forEach((user, i) => {
-    if (user.username == newUser.username) {
+    if (user.username === newUser.username) {
       users[i].roleNames = newUser.roleNames;
     }
   });

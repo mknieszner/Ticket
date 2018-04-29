@@ -2,9 +2,9 @@ import {Component, OnInit} from '@angular/core';
 import {Observable} from 'rxjs/Observable';
 import {Store} from '@ngrx/store';
 import {RoleModel} from './role.model';
-import * as fromAppReducers from "../shared/store/app.reducers";
-import {DataStorageService} from "../shared/data-storage.service";
-import * as UsersActions from "../shared/store/user/users.actions";
+import * as fromAppReducers from '../shared/store/app.reducers';
+import {DataStorageService} from '../shared/data-storage.service';
+import * as UsersActions from '../shared/store/user/users.actions';
 
 @Component({
   selector: 'app-roles',
@@ -33,9 +33,9 @@ export class RolesComponent implements OnInit {
     this.roleStore.dispatch(new UsersActions.SetNewRoleModeAction(true));
   }
 
-  onRemoveRole(name: string) {
-    this.dss.deleteRole(name);
-    this.roleStore.dispatch(new UsersActions.SetNewRoleModeAction(false))
-    this.selectedRole = null;
-  }
+  // onRemoveRole(name: string) { TODO remove?
+  //   this.dss.deleteRole(name);
+  //   this.roleStore.dispatch(new UsersActions.SetNewRoleModeAction(false));
+  //   this.selectedRole = null;
+  // }
 }

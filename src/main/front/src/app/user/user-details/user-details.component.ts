@@ -1,14 +1,13 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {UserModel} from '../user.model';
-import {DataStorageService} from "../../shared/data-storage.service";
-import {RoleModel} from "../../roles/role.model";
-import {Store} from "@ngrx/store";
-import * as fromAppReducers from '../../shared/store/app.reducers'
-import {Observable} from "rxjs/Observable";
-import {Form, FormArray, FormControl, FormGroup} from "@angular/forms";
-import * as UsersActions from "../../shared/store/user/users.actions";
-import {el} from "@angular/platform-browser/testing/src/browser_util";
-import {TaskModel} from "../../shared/table.model";
+import {DataStorageService} from '../../shared/data-storage.service';
+import {RoleModel} from '../../roles/role.model';
+import {Store} from '@ngrx/store';
+import * as fromAppReducers from '../../shared/store/app.reducers';
+import {Observable} from 'rxjs/Observable';
+import {FormArray, FormControl, FormGroup} from '@angular/forms';
+import * as UsersActions from '../../shared/store/user/users.actions';
+import {TaskModel} from '../../shared/table.model';
 
 @Component({
   selector: 'app-user-details',
@@ -32,7 +31,7 @@ export class UserDetailsComponent implements OnInit {
 
   ngOnInit() {
     this.userState = this.store.select('users', 'selectedUser');
-    this.userState.subscribe((user: UserModel)=> {
+    this.userState.subscribe((user: UserModel) => {
       this.user = user;
     });
     this.userDisplayedTask = this.store.select('users', 'userDisplayedTask');
@@ -45,11 +44,11 @@ export class UserDetailsComponent implements OnInit {
       });
     this.newUserMode.subscribe(() => {
       this.newUserForm.reset();
-    })
+    });
   }
 
   postRemove() {
-    this.dss.removeRoleFromUser({user: this.user, rolename: <string>this.roleForm.value.role})
+    this.dss.removeRoleFromUser({user: this.user, rolename: <string>this.roleForm.value.role});
   }
 
   onEditRoleMode() {
@@ -81,13 +80,13 @@ export class UserDetailsComponent implements OnInit {
         'enabled': new FormControl(true),
         'roleNames': new FormArray([]),
         'taskDtos': new FormArray([])
-      })
+      });
   }
 
   onRemoveUser(username: string) {
     console.log(username);
     this.dss.deleteUser(username);
-    this.store.dispatch(new UsersActions.SetNewUserModeAction(false))
+    this.store.dispatch(new UsersActions.SetNewUserModeAction(false));
     this.store.dispatch(new UsersActions.SetUserDisplayedTask(null));
   }
 
@@ -96,7 +95,8 @@ export class UserDetailsComponent implements OnInit {
 //   console.log(name, description);
 //   this.dss.saveNewRole({name: name, description: description});
 // }
-  onSubmitUser(elements: HTMLFormControlsCollection, length: number) {
+
+  onSubmitUser() {
     console.log(this.newUserForm.value);
     this.dss.saveNewUser(this.newUserForm.value);
   }

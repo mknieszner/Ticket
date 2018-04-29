@@ -1,17 +1,14 @@
 import {Component, OnInit} from '@angular/core';
-import {Store} from "@ngrx/store";
-import {Observable} from "rxjs/Observable";
-import * as fromAppReducers from '../shared/store/app.reducers'
-import * as TablesActions from "../shared/store/table/tables.actions";
-import {OauthService} from "../shared/oauth.service";
-import {AuthCookie} from "../shared/auth-cookies-handler";
-import {DataStorageService} from "../shared/data-storage.service";
-import {Token} from "../shared/auth.model";
-import {TaskInfoService} from "../shared/socket/task-info.service";
+import {Store} from '@ngrx/store';
+import {Observable} from 'rxjs/Observable';
+import * as fromAppReducers from '../shared/store/app.reducers';
+import {OauthService} from '../shared/oauth.service';
+import {DataStorageService} from '../shared/data-storage.service';
+import {Token} from '../shared/auth.model';
 import {Client} from 'stompjs/lib/stomp.js';
-import * as UserActions from "../shared/store/user/users.actions";
-import {StoreResetService} from "../shared/store-reset.service";
-import {Router} from "@angular/router";
+import * as UserActions from '../shared/store/user/users.actions';
+import {StoreResetService} from '../shared/store-reset.service';
+import {Router} from '@angular/router';
 
 @Component({
   selector: 'app-header',
@@ -44,9 +41,9 @@ export class HeaderComponent implements OnInit {
     });
     this.currentUserRoles = this.store.select('users', 'currentUserRoles');
     this.isAdmin = this.currentUserRoles.map(roles => {
-      let condition: boolean = false;
+      let condition = false;
       roles.forEach(role => {
-        if (role == 'ROLE_ADMIN') {
+        if (role === 'ROLE_ADMIN') {
           condition = true;
         }
       });
@@ -56,11 +53,11 @@ export class HeaderComponent implements OnInit {
 
   onLogout() {
     this.resetService.resetStore();
-    this.router.navigate(['/signin'])
+    this.router.navigate(['/signin']);
     this.store.dispatch(new UserActions.SetLogoutInfo('You have been successfully logged out!'));
   }
 
   onNewTasksSeen() {
-    this.store.dispatch(new UserActions.SetTaskInfoAction(false))
+    this.store.dispatch(new UserActions.SetTaskInfoAction(false));
   }
 }

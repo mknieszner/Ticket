@@ -1,4 +1,4 @@
-import {Action} from "@ngrx/store";
+import {Action} from '@ngrx/store';
 
 export const SET_SELECTED_TABLE_NAME = 'SET_SELECTED_TABLE_NAME';
 

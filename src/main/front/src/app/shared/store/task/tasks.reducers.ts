@@ -1,9 +1,9 @@
 import * as TaskActions from './tasks.actions';
-import {TaskModel} from "../../table.model";
+import {TaskModel} from '../../table.model';
 
 export interface TaskState {
-  taskDetailsMode: boolean,
-  showedTask: TaskModel
+  taskDetailsMode: boolean;
+  showedTask: TaskModel;
 }
 
 const initialTaskState: TaskState = {

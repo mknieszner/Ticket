@@ -1,6 +1,5 @@
-import {Action} from "@ngrx/store";
-import {TaskModel} from "../../table.model";
-import {ChatMessageModel} from "../../chat-message.model";
+import {Action} from '@ngrx/store';
+import {ChatMessageModel} from '../../chat-message.model';
 
 export const APPEND_CHAT_WITH_MESSAGE = 'APPEND_CHAT_WITH_MESSAGE';
 export const SET_ACTIVE_USERS = 'SET_ACTIVE_USERS';

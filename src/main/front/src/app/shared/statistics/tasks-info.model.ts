@@ -1,4 +1,4 @@
-import {TaskModel} from "../table.model";
+import {TaskModel} from '../table.model';
 
 export class TasksInfoModel {
   tasks: TaskModel[];

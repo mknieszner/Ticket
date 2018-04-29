@@ -1,6 +1,6 @@
-import {Pipe, PipeTransform} from "@angular/core";
-import {RowContentModel} from "../table.model";
-import {SortModel} from "./sort.model";
+import {Pipe, PipeTransform} from '@angular/core';
+import {RowContentModel} from '../table.model';
+import {SortModel} from './sort.model';
 
 @Pipe({name: 'orderBy'})
 export class SortByPipe implements PipeTransform {
@@ -15,9 +15,9 @@ export class SortByPipe implements PipeTransform {
         case 'EN':
           return this.textSort(rows, sortContent.asc, sortContent.name, sortContent.index);
         case 'IN':
-          return this.numberSort(rows, sortContent.asc, sortContent.name, sortContent.index)
+          return this.numberSort(rows, sortContent.asc, sortContent.name, sortContent.index);
         case 'DT':
-          return this.dateSort(rows, sortContent.asc, sortContent.name, sortContent.index)
+          return this.dateSort(rows, sortContent.asc, sortContent.name, sortContent.index);
         default:
           return rows;
       }
@@ -27,19 +27,19 @@ export class SortByPipe implements PipeTransform {
   textSort(rows: RowContentModel[], asc: boolean, name: string, index: number): RowContentModel[] {
     switch (name) {
       case 'id':
-        return this.sortNumber(rows, name, index, asc);//toremove?
+        return this.sortNumber(rows, name, index, asc); // TODO toremove?
       case 'name':
         return this.sortText(rows, name, index, asc);
       case 'createdBy':
         return this.sortText(rows, name, index, asc);
       case 'createdOn':
-        return this.sortDate(rows, name, index, asc);//toremove?
+        return this.sortDate(rows, name, index, asc); // TODO toremove?
       case 'lastModifiedBy':
         return this.sortText(rows, name, index, asc);
       case 'lastModifiedOn':
-        return this.sortDate(rows, name, index, asc);//toremove?
+        return this.sortDate(rows, name, index, asc); // todo toremove?
       case 'taskDtos':
-        return this.sortByArrayLength(rows, name, index, asc);//toremove?
+        return this.sortByArrayLength(rows, name, index, asc); // todo toremove?
       case 'column':
         return this.sortText(rows, name, index, asc);
     }
@@ -50,15 +50,15 @@ export class SortByPipe implements PipeTransform {
       case 'id':
         return this.sortNumber(rows, name, index, asc);
       case 'name':
-        return this.sortText(rows, name, index, asc);//toremove?
+        return this.sortText(rows, name, index, asc); // todo toremove?
       case 'createdBy':
-        return this.sortText(rows, name, index, asc);//toremove?
+        return this.sortText(rows, name, index, asc); // todo toremove?
       case 'createdOn':
-        return this.sortDate(rows, name, index, asc);//toremove?
+        return this.sortDate(rows, name, index, asc); // todo toremove?
       case 'lastModifiedBy':
-        return this.sortText(rows, name, index, asc);//toremove?
+        return this.sortText(rows, name, index, asc); // todo toremove?
       case 'lastModifiedOn':
-        return this.sortDate(rows, name, index, asc);//toremove?
+        return this.sortDate(rows, name, index, asc); // todo toremove?
       case 'taskDtos':
         return this.sortByArrayLength(rows, name, index, asc);
       case 'column':
@@ -75,11 +75,11 @@ export class SortByPipe implements PipeTransform {
       case 'createdBy':
         return this.sortText(rows, name, index, asc);
       case 'createdOn':
-        return this.sortDate(rows, name, index, asc);//toremove?
+        return this.sortDate(rows, name, index, asc); // todo toremove?
       case 'lastModifiedBy':
         return this.sortText(rows, name, index, asc);
       case 'lastModifiedOn':
-        return this.sortDate(rows, name, index, asc);//toremove?
+        return this.sortDate(rows, name, index, asc); // todo toremove?
       case 'taskDtos':
         return this.sortByArrayLength(rows, name, index, asc);
       case 'column':
@@ -91,11 +91,12 @@ export class SortByPipe implements PipeTransform {
     if (field !== 'column') {
       rows.sort((a, b) => {
         return a[field].localeCompare(b[field]);
-      })
+      });
     } else {
       rows.sort((a, b) => {
-        return a.columnValueDtos[index][Object.keys(a.columnValueDtos[index])[0]].value.localeCompare(b.columnValueDtos[index][Object.keys(a.columnValueDtos[index])[0]].value);
-      })
+        return a.columnValueDtos[index][Object.keys(a.columnValueDtos[index])[0]].value
+          .localeCompare(b.columnValueDtos[index][Object.keys(a.columnValueDtos[index])[0]].value);
+      });
     }
     if (!asc) {
       return rows;
@@ -108,11 +109,12 @@ export class SortByPipe implements PipeTransform {
     if (field !== 'column') {
       rows.sort((a, b) => {
         return a[field] - b[field];
-      })
+      });
     } else {
       rows.sort((a, b) => {
-        return parseInt(a.columnValueDtos[index][Object.keys(a.columnValueDtos[index])[0]].value) - parseInt(b.columnValueDtos[index][Object.keys(a.columnValueDtos[index])[0]].value);
-      })
+        return parseInt(a.columnValueDtos[index][Object.keys(a.columnValueDtos[index])[0]].value, 0)
+          - parseInt(b.columnValueDtos[index][Object.keys(a.columnValueDtos[index])[0]].value, 0);
+      });
     }
     return asc ? rows : rows.reverse();
   }
@@ -120,7 +122,7 @@ export class SortByPipe implements PipeTransform {
   sortByArrayLength(rows: RowContentModel[], field: string, index: number, asc: boolean): RowContentModel[] {
     rows.sort((a, b) => {
       return a[field].length - b[field].length;
-    })
+    });
     return asc ? rows : rows.reverse();
   }
 
@@ -128,11 +130,12 @@ export class SortByPipe implements PipeTransform {
     if (field !== 'column') {
       rows.sort((a, b) => {
         return Date.parse(a[field]) - Date.parse(b[field]);
-      })
+      });
     } else {
       rows.sort((a, b) => {
-        return Date.parse(a.columnValueDtos[index][Object.keys(a.columnValueDtos[index])[0]].value) - Date.parse(b.columnValueDtos[index][Object.keys(a.columnValueDtos[index])[0]].value);
-      })
+        return Date.parse(a.columnValueDtos[index][Object.keys(a.columnValueDtos[index])[0]].value)
+          - Date.parse(b.columnValueDtos[index][Object.keys(a.columnValueDtos[index])[0]].value);
+      });
     }
     return asc ? rows : rows.reverse();
   }

@@ -1,7 +1,7 @@
 import {Action} from '@ngrx/store';
 import {ExtendedFilterModel, RowContentModel, TableDefinitionModel, TaskModel} from '../../table.model';
-import {UserModel} from "../../../user/user.model";
-import {SortModel} from "../../sort/sort.model";
+import {UserModel} from '../../../user/user.model';
+import {SortModel} from '../../sort/sort.model';
 
 export const RESET_STORE = 'RESET_STORE';
 

@@ -1,12 +1,11 @@
-import {Component, Input, OnDestroy, OnInit} from '@angular/core';
-import {ExtendedFilterModel, RowContentModel, TableDefinitionModel} from '../../shared/table.model';
-import {Store} from "@ngrx/store";
+import {Component, OnInit} from '@angular/core';
+import {ExtendedFilterModel, TableDefinitionModel} from '../../shared/table.model';
+import {Store} from '@ngrx/store';
 import * as fromAppReducers from '../../shared/store/app.reducers';
-import {Observable} from "rxjs/Observable";
-import * as TablesActions from "../../shared/store/table/tables.actions";
-import {Form, FormArray, FormControl, FormGroup} from "@angular/forms";
-import {Question} from "../row/value-types/question-base.model";
-import {SortModel} from "../../shared/sort/sort.model";
+import {Observable} from 'rxjs/Observable';
+import * as TablesActions from '../../shared/store/table/tables.actions';
+import {FormArray, FormControl, FormGroup} from '@angular/forms';
+import {SortModel} from '../../shared/sort/sort.model';
 
 @Component({
   selector: 'app-table-header',
@@ -25,20 +24,20 @@ export class TableHeaderComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.contentStore.select('tables', 'sortContent').subscribe((sortContent: SortModel)=>{
+    this.contentStore.select('tables', 'sortContent').subscribe((sortContent: SortModel) => {
       this.sortContent = sortContent;
-    })
-    this.extendedTableView = this.contentStore.select('tables','extendedTableView');
+    });
+    this.extendedTableView = this.contentStore.select('tables', 'extendedTableView');
     this.header = this.contentStore.select('tables', 'tableDefinition');
     this.editRowMode = this.contentStore.select('tables', 'editRowMode');
     this.extendedFilterMode = this.contentStore.select('tables', 'extendedFilterMode');
     this.extendedFilterMode.subscribe((mode) => {
         if (mode) {
           this.header.forEach((header) => {
-            if(header){
-              this.setForm(header)
+            if (header) {
+              this.setForm(header);
             }
-          })
+          });
         } else {
           this.filterForm = null;
         }
@@ -58,17 +57,16 @@ export class TableHeaderComponent implements OnInit {
       'taskDtos': new FormControl()
     });
 
-    header[0].columnDetailDefinitionDtoList.forEach((cell, i) => {
-      const columnName: string = 'columnValueDtos' + i;
+    header[0].columnDetailDefinitionDtoList.forEach(() => { // (cell, i) => {
       (<FormArray>this.filterForm.get('columnValueDtos')).push(new FormGroup({
         'value': new FormControl()
       }));
-    })
+    });
   }
 
-  onNewRow() {
-    this.contentStore.dispatch(new TablesActions.SetEditRowMode(true));
-  }
+  // onNewRow() { // TODO remove?
+  //   this.contentStore.dispatch(new TablesActions.SetEditRowMode(true));
+  // }
 
   getFormValues(): ExtendedFilterModel {
     return this.filterForm['value'];
@@ -78,7 +76,7 @@ export class TableHeaderComponent implements OnInit {
     this.contentStore.dispatch(new TablesActions.SetExtendedFilter(this.getFormValues()));
   }
 
-  sort(payload: SortModel){
+  sort(payload: SortModel) {
     this.contentStore.dispatch(new TablesActions.SetSortContent(payload));
   }
 }

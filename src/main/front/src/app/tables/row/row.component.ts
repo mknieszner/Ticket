@@ -3,13 +3,12 @@ import {FormArray, FormControl, FormGroup} from '@angular/forms';
 import {QuestionControlService} from './question-control.service';
 import {ExtendedFilterModel, RowContentModel, TableDefinitionModel} from '../../shared/table.model';
 import {Question} from './value-types/question-base.model';
-import {Observable} from "rxjs/Observable";
-import {Store} from "@ngrx/store";
-import {DataStorageService} from "../../shared/data-storage.service";
-import * as fromAppReducers from '../../shared/store/app.reducers'
-import * as TablesActions from "../../shared/store/table/tables.actions";
-import {FilterService} from "../../shared/filter/filter.service";
-import {noUndefined} from "@angular/compiler/src/util";
+import {Observable} from 'rxjs/Observable';
+import {Store} from '@ngrx/store';
+import {DataStorageService} from '../../shared/data-storage.service';
+import * as fromAppReducers from '../../shared/store/app.reducers';
+import * as TablesActions from '../../shared/store/table/tables.actions';
+import {FilterService} from '../../shared/filter/filter.service';
 
 @Component({
   selector: 'app-row',
@@ -21,9 +20,9 @@ export class RowComponent implements OnInit {
   @Input() header: TableDefinitionModel;
   rowForm: FormGroup;
   filter: Observable<string>;
-  rowFilterState: boolean = true;
+  rowFilterState = true;
   extendedFilterContent: Observable<ExtendedFilterModel>;
-  extendedTableView: Observable<boolean>
+  extendedTableView: Observable<boolean>;
 
 
   constructor(private qcs: QuestionControlService,
@@ -36,7 +35,7 @@ export class RowComponent implements OnInit {
     this.initForm();
     this.filter = this.store.select('tables', 'tableFilter');
     // this.editMode = this.store.select('tables', 'editRowMode');
-    this.extendedTableView = this.store.select('tables','extendedTableView');
+    this.extendedTableView = this.store.select('tables', 'extendedTableView');
     this.filter.subscribe(filter => {
       if (filter !== '') {
         this.rowFilterState = this.filterService.runFilterTable(this.row, filter);
@@ -62,7 +61,7 @@ export class RowComponent implements OnInit {
 
     this.row.columnValueDtos.forEach((cell) => {
       (<FormArray>this.rowForm.get('columnValueDtos')).push(
-        this.qcs.toFormGroup([new Question({key: Object.keys(cell), value: this.getMappedValue(cell)})])
+        this.qcs.toFormGroup([new Question({key: Object.keys(cell), value: RowComponent.getMappedValue(cell)})])
       );
     });
   }
@@ -73,7 +72,7 @@ export class RowComponent implements OnInit {
     this.store.dispatch(new TablesActions.SetEditedRow(this.row));
   }
 
-  getMappedValue(object): string {
+  static getMappedValue(object): string {
     return object[Object.keys(object)[0]].value.toString();
   }
 }

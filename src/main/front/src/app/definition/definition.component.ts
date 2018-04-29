@@ -1,7 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {FormArray, FormControl, FormGroup} from '@angular/forms';
 import * as fromDefinitionModel from '../shared/table.model';
-import {DataStorageService} from "../shared/data-storage.service";
+import {DataStorageService} from '../shared/data-storage.service';
 
 
 @Component({
@@ -47,7 +47,10 @@ export class DefinitionComponent implements OnInit {
   }
 
   onDeleteOption(typeIndex: number, optionNumber: number) {
-    (<FormArray>(<FormArray>this.definitionForm.get('columnDetailDefinitionDtoList')).at(typeIndex).get('optionList')).removeAt(optionNumber);
+    (<FormArray>(<FormArray>this.definitionForm.get('columnDetailDefinitionDtoList'))
+      .at(typeIndex)
+      .get('optionList'))
+      .removeAt(optionNumber);
   }
 
   onDeleteColumn(i) {
@@ -59,8 +62,12 @@ export class DefinitionComponent implements OnInit {
   }
 
   postForm() {
-    let formValue = this.definitionForm.value
+    const formValue = this.definitionForm.value;
     formValue['id'] = null;
     this.dss.postTableDefinition(formValue);
+  }
+
+  getData() {
+    return <FormArray>this.definitionForm.get('columnDetailDefinitionDtoList');
   }
 }

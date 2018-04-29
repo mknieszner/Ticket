@@ -16,7 +16,7 @@
           <div class="row justify-content-center">
             <div class="col-12" formArrayName="columnDetailDefinitionDtoList">
               <div class="row justify-content-center"
-                   *ngFor="let columnDetailDefinitionDto of definitionForm.get('columnDetailDefinitionDtoList').controls; let i = index;"
+                   *ngFor="let columnDetailDefinitionDto of getData().controls; let i = index;"
                    [formGroupName]="i">
                 <div class="col-12 col-sm-5 col-md-3">
                   <div class="input-group">

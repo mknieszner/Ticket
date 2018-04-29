@@ -32,7 +32,7 @@ public class MvcConfig extends WebMvcConfigurerAdapter {
         + "&useSSL=False");
     driverManagerDataSource.setUsername("ticket_admin");
     driverManagerDataSource.setPassword("ticket_password");
-    return (DataSource) driverManagerDataSource;
+    return driverManagerDataSource;
   }
 
   @Override
@@ -48,7 +48,7 @@ public class MvcConfig extends WebMvcConfigurerAdapter {
     return new WebMvcConfigurerAdapter() {
       @Override
       public void addCorsMappings(CorsRegistry registry) {
-        registry.addMapping("/**").allowedOrigins("http://localhost:4200");
+        registry.addMapping("/**").allowedOrigins("http://localhost:4200");//
       }
     };
   }

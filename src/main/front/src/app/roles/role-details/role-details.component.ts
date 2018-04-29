@@ -1,12 +1,12 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {RoleModel} from '../role.model';
-import {FormControl, FormGroup} from "@angular/forms";
-import {Observable} from "rxjs/Observable";
-import {UserModel} from "../../user/user.model";
-import {Store} from "@ngrx/store";
-import {DataStorageService} from "../../shared/data-storage.service";
-import * as fromAppReducers from '../../shared/store/app.reducers'
-import * as UsersActions from "../../shared/store/user/users.actions";
+import {FormControl, FormGroup} from '@angular/forms';
+import {Observable} from 'rxjs/Observable';
+import {UserModel} from '../../user/user.model';
+import {Store} from '@ngrx/store';
+import {DataStorageService} from '../../shared/data-storage.service';
+import * as fromAppReducers from '../../shared/store/app.reducers';
+import * as UsersActions from '../../shared/store/user/users.actions';
 
 @Component({
   selector: 'app-role-details',
@@ -35,7 +35,7 @@ export class RoleDetailsComponent implements OnInit {
   }
 
   postRemoveUser() {
-    this.dss.removeUserFromRole({role: this.role, username: <string>this.userForm.value.user})
+    this.dss.removeUserFromRole({role: this.role, username: <string>this.userForm.value.user});
   }
 
   onEditUserMode() {
@@ -49,7 +49,7 @@ export class RoleDetailsComponent implements OnInit {
             if (user.username === this.userForm.value.user) {
               this.role.userDtos.push(user);
             }
-        })
+        });
       }).unsubscribe();
     }
   }

@@ -1,7 +1,7 @@
 import {Component, Input, OnInit} from '@angular/core';
-import {Status, TaskModel} from "../../shared/table.model";
-import {FormControl, FormGroup} from "@angular/forms";
-import {DataStorageService} from "../../shared/data-storage.service";
+import {Status, TaskModel} from '../../shared/table.model';
+import {FormControl, FormGroup} from '@angular/forms';
+import {DataStorageService} from '../../shared/data-storage.service';
 
 @Component({
   selector: 'app-user-task',
@@ -11,7 +11,7 @@ import {DataStorageService} from "../../shared/data-storage.service";
 export class UserTaskComponent implements OnInit {
   @Input() task: TaskModel;
   editedTaskForm: FormGroup;
-  editTaskMode: boolean = false;
+  editTaskMode = false;
   status = Status;
 
   constructor(private dss: DataStorageService) {
@@ -22,7 +22,7 @@ export class UserTaskComponent implements OnInit {
 
   onEditTaskMode(mode: boolean) {
     this.editTaskMode = mode;
-    if(this.task){
+    if (this.task) {
       this.editedTaskForm = new FormGroup({
         name: new FormControl(this.task.name),
         description: new FormControl(this.task.description),
@@ -31,16 +31,15 @@ export class UserTaskComponent implements OnInit {
     }
   }
 
-  onSaveEditedTask(payload: { name: string, description: string, status: Status }) {
-    let task:TaskModel = {
+  onSaveEditedTask() { //(payload: { name: string, description: string, status: Status }) {
+    const task: TaskModel = {
       id: this.task.id,
       name: this.editedTaskForm.value.name,
       description: this.editedTaskForm.value.description,
       status: this.editedTaskForm.value.status,
       userNames: this.task.userNames,
       taskDtos: this.task.taskDtos
-    }
-    console.log(task);
+    };
     this.dss.updateTask(task);
   }
 }

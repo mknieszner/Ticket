@@ -15,7 +15,7 @@ import java.util.List;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-@Table(name = "ROWS")
+@Table(name = "TABLE_ROWS")
 public class Row {
 
   @Id

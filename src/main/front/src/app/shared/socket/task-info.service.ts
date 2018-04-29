@@ -1,6 +1,5 @@
-import {Injectable} from "@angular/core";
-import {Subject} from "rxjs/Subject";
-import {WebSocketService} from "./web-socket.service";
+import {Injectable} from '@angular/core';
+import {WebSocketService} from './web-socket.service';
 import {Client} from 'stompjs/lib/stomp.js';
 
 

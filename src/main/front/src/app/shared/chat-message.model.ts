@@ -8,6 +8,6 @@ export class ChatMessageModel {
               recipientName: string) {
     this.senderName = senderName;
     this.message = message;
-    this.recipientName = recipientName
+    this.recipientName = recipientName;
   }
 }

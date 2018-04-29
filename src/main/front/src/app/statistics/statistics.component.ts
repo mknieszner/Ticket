@@ -1,11 +1,11 @@
 import { Component, OnInit } from '@angular/core';
-import {Store} from "@ngrx/store";
+import {Store} from '@ngrx/store';
 
 import * as fromAppReducers from '../shared/store/app.reducers';
-import {Observable} from "rxjs/Observable";
-import {TableState} from "../shared/store/table/tables.reducers";
-import {DataStorageService} from "../shared/data-storage.service";
-import * as StatisticsActions from "../shared/store/statistics/statistics.actions";
+import {Observable} from 'rxjs/Observable';
+import {TableState} from '../shared/store/table/tables.reducers';
+import {DataStorageService} from '../shared/data-storage.service';
+import * as StatisticsActions from '../shared/store/statistics/statistics.actions';
 
 @Component({
   selector: 'app-statistics',
@@ -26,6 +26,6 @@ export class StatisticsComponent implements OnInit {
   }
 
   onSelectTableName(tableName: string) {
-    this.store.dispatch(new StatisticsActions.SetSelectedTableName(tableName))
+    this.store.dispatch(new StatisticsActions.SetSelectedTableName(tableName));
   }
 }
