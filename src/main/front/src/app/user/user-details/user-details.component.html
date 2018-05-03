@@ -8,7 +8,9 @@
           <td>
             <div class="d-flex justify-content-between">
               <span> {{ user.username }} </span>
-              <button class="btn btn-outline-secondary text-danger" data-toggle="modal" data-target="#deleteConfirmModal"> Delete User</button>
+              <button class="btn btn-outline-secondary text-danger" data-toggle="modal"
+                      data-target="#deleteConfirmModal"> Delete User
+              </button>
             </div>
           </td>
         </tr>
@@ -97,12 +99,12 @@
         <div class="form-group">
           <label class="text-info">Enabled</label>
           <select class="form-control border-secondary" formControlName="enabled" required>
-            <option value="true" [selected]="true">Yes</option>
-            <option value="false">No</option>
+            <option [value]="true"  [selected]="true" >Yes</option>
+            <option [value]="false" >No</option>
           </select>
         </div>
         <div class="form-group">
-          <button (click)="onSubmitUser()" class="btn btn-outline-secondary" [disabled]="f.valid">Submit</button>
+          <button (click)="onSubmitUser()" class="btn btn-outline-secondary" [disabled]="!newUserForm.valid">Submit</button>
           <button (click)="onAbortSubmitUser()" class="btn btn-outline-secondary">Close</button>
         </div>
       </form>
@@ -117,7 +119,8 @@
 
 
 <!-- Modal -->
-<div class="modal fade" id="deleteConfirmModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal fade" id="deleteConfirmModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+     aria-hidden="true">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">

@@ -5,7 +5,7 @@ import {RoleModel} from '../../roles/role.model';
 import {Store} from '@ngrx/store';
 import * as fromAppReducers from '../../shared/store/app.reducers';
 import {Observable} from 'rxjs/Observable';
-import {FormArray, FormControl, FormGroup} from '@angular/forms';
+import {FormArray, FormControl, FormGroup, Validators} from '@angular/forms';
 import * as UsersActions from '../../shared/store/user/users.actions';
 import {TaskModel} from '../../shared/table.model';
 
@@ -26,7 +26,6 @@ export class UserDetailsComponent implements OnInit {
 
   constructor(private store: Store<fromAppReducers.AppState>,
               private dss: DataStorageService) {
-    this.createForm();
   }
 
   ngOnInit() {
@@ -43,7 +42,7 @@ export class UserDetailsComponent implements OnInit {
         'role': new FormControl('Select option')
       });
     this.newUserMode.subscribe(() => {
-      this.newUserForm.reset();
+      this.createForm();
     });
   }
 
@@ -72,22 +71,19 @@ export class UserDetailsComponent implements OnInit {
   createForm() {
     this.newUserForm =
       new FormGroup({
-        'username': new FormControl(''),
-        'firstName': new FormControl(''),
-        'lastName': new FormControl(''),
-        'password': new FormControl(''),
-        'email': new FormControl(''),
-        'enabled': new FormControl(true),
+        'username': new FormControl(null, [Validators.required]),
+        'firstName': new FormControl(null, [Validators.required]),
+        'lastName': new FormControl(null, [Validators.required]),
+        'password': new FormControl(null, [Validators.required]),
+        'email': new FormControl(null, [Validators.required]),
+        'enabled': new FormControl(true, [Validators.required]),
         'roleNames': new FormArray([]),
         'taskDtos': new FormArray([])
       });
   }
 
   onRemoveUser(username: string) {
-    console.log(username);
     this.dss.deleteUser(username);
-    this.store.dispatch(new UsersActions.SetNewUserModeAction(false));
-    this.store.dispatch(new UsersActions.SetUserDisplayedTask(null));
   }
 
 
@@ -97,8 +93,8 @@ export class UserDetailsComponent implements OnInit {
 // }
 
   onSubmitUser() {
-    console.log(this.newUserForm.value);
-    this.dss.saveNewUser(this.newUserForm.value);
+    alert("this.newUserForm" + this.newUserForm.value);
+    // this.dss.saveNewUser(this.newUserForm.value);
   }
 
   onSelectTask(taskDto: TaskModel) {

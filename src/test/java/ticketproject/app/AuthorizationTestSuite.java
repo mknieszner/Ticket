@@ -18,21 +18,21 @@ import static org.junit.Assert.assertNotNull;
 @RunWith(SpringRunner.class)
 @SpringBootTest
 public class AuthorizationTestSuite {
-    @Autowired
-    UserRepository userRepository;
+//    @Autowired
+//    UserRepository userRepository;
     @Autowired
     RoleRepository roleRepository;
     @Autowired
     private PasswordEncoder passwordEncoder;
 
-    @Test
-    public void saveUser() {
-        Role role = new Role("USERS");
-        User user = new User("m", "m", "k", "m@k.pl", passwordEncoder.encode("m"), true, new ArrayList<>());
-        user.addRole(role);
-        User savedUser = userRepository.save(user);
-        assertNotNull(savedUser);
-    }
+//    @Test
+//    public void saveUser() {
+//        Role role = new Role("USERS");
+//        User user = new User("m", "m", "k", "m@k.pl", passwordEncoder.encode("m"), true, new ArrayList<>());
+//        user.addRole(role);
+//        User savedUser = userRepository.save(user);
+//        assertNotNull(savedUser);
+//    }
 //
     @Test
     public void showPassword() {

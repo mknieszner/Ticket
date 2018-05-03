@@ -160,17 +160,17 @@ export class DataStorageService {
   //     });
   // }
 
-  removeUserFromRole(data: { role: RoleModel, username: string }) { // TODO removeUserFromRole
+  removeUserFromRole(data: { role: RoleModel, username: string }) { // TODO removeUserFromRole ERR!!
     this.httpClient.delete<boolean>(this.basehost + '/v1/roles/' + data.role.name + '/users/' + data.username)
       .subscribe((response) => {
         if (response) {
-          let usertoRemove;
+          let usertoRemove = null;
           data.role.userDtos.forEach(user => {
             if (user.username === data.username) {
               usertoRemove = user;
             }
           });
-          // data.role.userDtos.splice(data.role.userDtos.indexOf(usertoRemove), 1); // TODO removeUserFromRole param?
+          data.role.userDtos.splice(data.role.userDtos.indexOf(usertoRemove), 1);
           this.store.dispatch(new UsersActions.RemoveUserFromRole(data.role));
         }
       });
@@ -236,9 +236,10 @@ export class DataStorageService {
   deleteUser(username: string) {
     this.httpClient.delete<boolean>(this.basehost + '/v1/users/' + username)
       .subscribe((status: boolean) => {
-          // console.log('deleteUser dss OK: ', status)
           if (status) {
             this.store.dispatch(new UsersActions.DeleteUserAction(username));
+            this.store.dispatch(new UsersActions.SetNewUserModeAction(false));
+            this.store.dispatch(new UsersActions.SetUserDisplayedTask(null));
           }
         },
         err => {

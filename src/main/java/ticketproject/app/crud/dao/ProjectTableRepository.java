@@ -1,6 +1,5 @@
 package ticketproject.app.crud.dao;
 
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
 import ticketproject.app.crud.domain.entities.ProjectTable;

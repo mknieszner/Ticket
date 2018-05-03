@@ -14,10 +14,10 @@ import {EnumChart} from './charts.model';
 
 @Component({
   selector: 'app-table-stats',
-  templateUrl: './table-stats.component.html',
-  styleUrls: ['./table-stats.component.css']
+  templateUrl: './table-statistics.component.html',
+  styleUrls: ['./table-statistics.component.css']
 })
-export class TableStatsComponent implements OnInit {
+export class TableStatisticsComponent implements OnInit {
   tableHeaderState: Observable<TableDefinitionModel>;
   tableState: Observable<TableState>;
   selectedTableName: Observable<string>;
@@ -55,10 +55,6 @@ export class TableStatsComponent implements OnInit {
         });
       }
     });
-  }
-
-  static show(array) {
-    console.log(array);
   }
 
   setEnumChart(enumInfos: EnumInfoModel[], i: number) {

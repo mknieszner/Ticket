@@ -6,6 +6,7 @@ import {Client} from 'stompjs/lib/stomp.js';
 import {Observable} from 'rxjs/Observable';
 import {ChatMessageModel} from '../shared/chat-message.model';
 import {DataStorageService} from '../shared/data-storage.service';
+import * as ChatActions from "../shared/store/chat/chat.actions";
 
 
 @Component({
@@ -36,16 +37,16 @@ export class ChatComponent implements OnInit {
     this.dss.getActiveWsUsers();
   }
 
-  // postMessage(messageContent: string) { // TODO remove?
-  //   console.log(messageContent);
-  //   if (this.chatName === 'global') {
-  //     console.log('postMessage' + this.chatName);
-  //     this.ws.stompClient.send('/app/chat', {}, messageContent);
-  //   } else {
-  //     this.store.dispatch(new ChatActions.AppendChatWithMessage(new ChatMessageModel(this.username, messageContent, this.chatName)));
-  //     this.ws.stompClient.send('/app/chat/' + this.chatName, {}, messageContent);
-  //   }
-  // }
+  postMessage(messageContent: string) {
+    console.log(messageContent);
+    if (this.chatName === 'global') {
+      console.log('postMessage' + this.chatName);
+      this.ws.stompClient.send('/app/chat', {}, messageContent);
+    } else {
+      this.store.dispatch(new ChatActions.AppendChatWithMessage(new ChatMessageModel(this.username, messageContent, this.chatName)));
+      this.ws.stompClient.send('/app/chat/' + this.chatName, {}, messageContent);
+    }
+  }
 
   setChat(chatName: string) {
     console.log('chatName' + chatName);

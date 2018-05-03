@@ -111,6 +111,9 @@ public class UserService implements UserDetailsService {
     Role role = roleRepository.findByName(roleName);
     checkArgument(roleName.equals(role.getName()), new IllegalArgumentException("ROLE NOT FOUND"));
     User user = checkNotNull(userRepository.findByUsername(username), new IllegalArgumentException("USER NOT FOUND"));
+    checkArgument(user.getRoles()
+            .stream()
+            .anyMatch(r -> r.getName().equals(roleName)),new IllegalArgumentException("USER DOES NOT HAVE ROLE"));
     user.removeRoleWARN(role);
     userRepository.save(user);
     return userMapper.mapUserToUserDto(user);
@@ -220,7 +223,7 @@ public class UserService implements UserDetailsService {
   @PreAuthorize("hasAnyAuthority('ROLE_ADMIN','#tablename')")
   public List<String> getTableUsers(final String tableName) {
     return userMapper.mapUserSetToUserDtoSet(
-        userRepository.findAllByRolesEquals(
+        userRepository.findAllByRolesContaining(
           roleRepository.findByName(tableName)))
             .stream()
             .map(UserDto::getUsername)

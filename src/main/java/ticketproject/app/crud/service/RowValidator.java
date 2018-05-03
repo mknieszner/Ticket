@@ -2,7 +2,6 @@ package ticketproject.app.crud.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Component;
 import ticketproject.app.crud.dao.ProjectTableRepository;
 import ticketproject.app.crud.domain.dto.values.RowDto;

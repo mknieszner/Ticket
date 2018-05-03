@@ -2,9 +2,7 @@ package ticketproject.app.crud.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.oauth2.common.exceptions.UnauthorizedUserException;
 import org.springframework.web.bind.annotation.*;
 import ticketproject.app.crud.domain.dto.authorization.PasswordResetData;
 import ticketproject.app.crud.domain.dto.authorization.RoleDto;

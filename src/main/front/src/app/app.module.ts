@@ -45,12 +45,12 @@ import {ReversePipe} from './shared/reverse.pipe';
 import {ExtendedFilterPipe} from './shared/filter/extended-filter.pipe';
 import {SortByPipe} from './shared/sort/sort-by.pipe';
 import {StatisticsComponent} from './statistics/statistics.component';
-import {TableStatsComponent} from './statistics/table-stats/table-stats.component';
 import {UserInfoComponent} from './user-info/user-info.component';
 import {StatisticsService} from './shared/statistics/statistics.service';
 import {ChartsModule} from 'ng4-charts';
 import {ClearArrayPipe} from './shared/clear-array-pipe';
 import {SpinnerComponent} from './spinner/spinner.component';
+import {TableStatisticsComponent} from "./statistics/table-stats/table-statistics.component";
 
 
 const appRoutes: Routes = [
@@ -68,6 +68,7 @@ const appRoutes: Routes = [
 @NgModule({
   declarations: [
     AppComponent,
+    TableStatisticsComponent,
     HeaderComponent,
     SigninComponent,
     DefinitionComponent,
@@ -90,7 +91,6 @@ const appRoutes: Routes = [
     ExtendedFilterPipe,
     SortByPipe,
     StatisticsComponent,
-    TableStatsComponent,
     UserInfoComponent,
     SpinnerComponent
   ],
