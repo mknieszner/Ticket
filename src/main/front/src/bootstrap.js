@@ -1126,7 +1126,7 @@ var Collapse = function ($$$1) {
       }
     };
 
-    TableStatsComponent.show = function show() {
+    _proto.show = function show() {
       var _this = this;
 
       if (this._isTransitioning || $$$1(this._element).hasClass(ClassName.SHOW)) {
@@ -1953,7 +1953,7 @@ var Modal = function ($$$1) {
       return this._isShown ? this.hide() : this.show(relatedTarget);
     };
 
-    TableStatsComponent.show = function show(relatedTarget) {
+    _proto.show = function show(relatedTarget) {
       var _this = this;
 
       if (this._isTransitioning || this._isShown) {
@@ -2629,7 +2629,7 @@ var Tooltip = function ($$$1) {
       this.tip = null;
     };
 
-    TableStatsComponent.show = function show() {
+    _proto.show = function show() {
       var _this = this;
 
       if ($$$1(this.element).css('display') === 'none') {
@@ -3666,7 +3666,7 @@ var Tab = function ($$$1) {
     var _proto = Tab.prototype;
 
     // Public
-    TableStatsComponent.show = function show() {
+    _proto.show = function show() {
       var _this = this;
 
       if (this._element.parentNode && this._element.parentNode.nodeType === Node.ELEMENT_NODE && $$$1(this._element).hasClass(ClassName.ACTIVE) || $$$1(this._element).hasClass(ClassName.DISABLED)) {
