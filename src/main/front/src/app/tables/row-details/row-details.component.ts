@@ -27,6 +27,7 @@ export class RowDetailsComponent implements OnInit, OnDestroy {
   selesctedRow: RowContentModel;
   extendedRowView: Observable<boolean>;
   extendedRowViewValue: boolean;
+  private selectedTableName: string;
 
   constructor(private qcs: QuestionControlService,
               private store: Store<fromAppReducers.AppState>,
@@ -42,6 +43,9 @@ export class RowDetailsComponent implements OnInit, OnDestroy {
     this.editRowMode = this.store.select('tables', 'editRowMode');
     this.row = this.store.select('tables', 'editedRow');
     this.header = this.store.select('tables', 'tableDefinition');
+    this.header.subscribe((header: TableDefinitionModel) => {
+      this.selectedTableName = header[0].name;
+    });
     this.row.subscribe(row => {
       this.createUpdateRowForm(row);
       this.selesctedRow = row;
@@ -127,21 +131,21 @@ export class RowDetailsComponent implements OnInit, OnDestroy {
   onSubmit() {
     if (this.unlockFields) {
       this.header.forEach(header => {
-        this.dss.updateRow(header[0].name, this.updateRowForm.value);
+        this.dss.updateRow(header[0].name, mapForm(this.updateRowForm.value));
       });
       this.onToggleRowEditMode();
     }
 
-    // function mapForm(formValue) { TODO remove?
-    //   formValue.columnValueDtos.forEach((value, i) => {
-    //     if (Object.keys(value[Object.keys(value)[0]])[0] !== 'value') {
-    //       const mappedcolumnValue = {};
-    //       mappedcolumnValue[Object.keys(value)[0]] = {value: value[Object.keys(value)[0]]};
-    //       formValue.columnValueDtos[i] = mappedcolumnValue;
-    //     }
-    //   });
-    //   return formValue;
-    // }
+    function mapForm(formValue) { //TODO remove?
+      formValue.columnValueDtos.forEach((value, i) => {
+        if (Object.keys(value[Object.keys(value)[0]])[0] !== 'value') {
+          const mappedColumnValue = {};
+          mappedColumnValue[Object.keys(value)[0]] = {value: value[Object.keys(value)[0]]};
+          formValue.columnValueDtos[i] = mappedColumnValue;
+        }
+      });
+      return formValue;
+    }
   }
 
   onSaveNewRow() {
@@ -195,7 +199,8 @@ export class RowDetailsComponent implements OnInit, OnDestroy {
   }
 
   onDeleteRow() {
-    this.dss.deleteRow(this.selesctedRow.id);
+    console.log(this.selesctedRow);
+    this.dss.deleteRow(this.selectedTableName, this.selesctedRow.id);
   }
 
   onDeleteTask(taskId: number) {

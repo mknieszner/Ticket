@@ -331,8 +331,8 @@ export class DataStorageService {
       });
   }
 
-  deleteRow(rowId: number) {
-    this.httpClient.delete<boolean>(this.basehost + '/v1/projects/tables/rows/' + rowId)
+  deleteRow(tableName: string, rowId: number) {
+    this.httpClient.delete<boolean>(this.basehost + '/v1/projects/tables/' + tableName +'/rows/' + rowId)
       .subscribe((response) => {
         if (response) {
           this.store.dispatch(new TablesActions.DeleteRow(rowId));

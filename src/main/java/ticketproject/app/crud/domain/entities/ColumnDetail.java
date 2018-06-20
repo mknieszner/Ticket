@@ -3,6 +3,7 @@ package ticketproject.app.crud.domain.entities;
 import lombok.*;
 import org.hibernate.annotations.Cascade;
 import ticketproject.app.crud.domain.entities.types.Option;
+import ticketproject.app.crud.service.helper.ColumnType;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -22,15 +23,15 @@ public class ColumnDetail {
 
   private String name;
 
-  //"IN" "EN" "DE" "DT" "ST"
-  private String type;
+  @Enumerated(EnumType.STRING)
+  private ColumnType.Types type;
 
   @OneToMany
   @Cascade(org.hibernate.annotations.CascadeType.ALL)
   @OrderColumn
   List<Option> optionList = new ArrayList<>();
 
-  public ColumnDetail(final String name, final String type, final List<Option> optionList) {
+  public ColumnDetail(final String name, final ColumnType.Types type, final List<Option> optionList) {
     this.name = name;
     this.type = type;
     this.optionList.addAll(optionList);

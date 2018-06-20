@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import ticketproject.app.crud.domain.dto.values.column.ColumnValueDto;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -20,9 +21,10 @@ import java.util.List;
 @DiscriminatorColumn(name = "COLUMN_VALUE_SGINATURE")
 public abstract class ColumnValue {
 
-  @Id
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
-  @Column(name = "ID")
-  private Long id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "ID")
+    private Long id;
 
+    public abstract ColumnValueDto mapThisToColumnValueDto();
 }

@@ -13,7 +13,7 @@ import {EnumChart} from './charts.model';
 
 
 @Component({
-  selector: 'app-table-stats',
+  selector: 'app-table-statistics',
   templateUrl: './table-statistics.component.html',
   styleUrls: ['./table-statistics.component.css']
 })

@@ -1,6 +1,8 @@
 package ticketproject.app.crud.domain.entities.types;
 
 import lombok.*;
+import ticketproject.app.crud.domain.dto.values.column.ShortTextValueDto;
+import ticketproject.app.crud.service.helper.ColumnType;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -11,21 +13,15 @@ import javax.validation.constraints.NotNull;
 @Getter
 @Setter
 @ToString
-//@AttributeOverride(
-//    name = "SHORT_TEXT_NAME",
-//    column = @Column(name = "COLUMN_NAME", nullable = false)
-//)
-@DiscriminatorValue("ST")
+@DiscriminatorValue(ColumnType.ST)
 public class ShortTextValue extends ColumnValue {
 
   @NotNull
   @Column(name = "SHORTTEXT_VALUE")
   String value;
 
-//  public ShortTextValue(
-//   //   final String typeName,
-//      final String value) {
-//   // super(typeName);
-//    this.value = value;
-//  }
+  @Override
+  public ShortTextValueDto mapThisToColumnValueDto(){
+    return new ShortTextValueDto(value);
+  }
 }

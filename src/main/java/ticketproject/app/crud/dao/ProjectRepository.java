@@ -7,4 +7,6 @@ public interface ProjectRepository extends CrudRepository<Project, Long> {
 
   @Override
   Project findOne(Long Id);
+
+  Project findByName(String name);
 }

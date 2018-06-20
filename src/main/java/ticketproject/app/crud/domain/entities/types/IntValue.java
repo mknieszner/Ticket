@@ -1,8 +1,9 @@
 package ticketproject.app.crud.domain.entities.types;
 
 import lombok.*;
+import ticketproject.app.crud.domain.dto.values.column.IntValueDto;
+import ticketproject.app.crud.service.helper.ColumnType;
 
-import javax.persistence.AttributeOverride;
 import javax.persistence.Column;
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
@@ -14,21 +15,15 @@ import javax.validation.constraints.NotNull;
 @Getter
 @Setter
 @ToString
-//@AttributeOverride(
-//    name = "INT_NAME",
-//    column = @Column(name = "COLUMN_NAME", nullable = false)
-//)
-@DiscriminatorValue("IN")
+@DiscriminatorValue(ColumnType.IN)
 public class IntValue extends ColumnValue {
 
-  @NotNull
-  @Column(name = "INT_VALUE")
-  private Integer value;
+    @NotNull
+    @Column(name = "INT_VALUE")
+    private Integer value;
 
-//  public IntValue(
-//   //   final String typeName,
-//      final Integer value) {
-//   // super(typeName);
-//    this.value = value;
-//  }
+    @Override
+    public IntValueDto mapThisToColumnValueDto(){
+        return new IntValueDto(value);
+    }
 }

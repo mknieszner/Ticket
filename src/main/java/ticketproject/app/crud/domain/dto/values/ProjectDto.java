@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
+import ticketproject.app.crud.service.DatabaseEnviroment;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,5 +16,6 @@ import java.util.List;
 public class ProjectDto {
   private Long id;
   private String name;
-  List<ProjectTableDto> projectTableDtos = new ArrayList<>();
+  private List<ProjectTableDto> projectTableDtos = new ArrayList<>();
+  private DatabaseEnviroment databaseEnviroment;
 }

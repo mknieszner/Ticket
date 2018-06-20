@@ -51,19 +51,15 @@ import {ChartsModule} from 'ng4-charts';
 import {ClearArrayPipe} from './shared/clear-array-pipe';
 import {SpinnerComponent} from './spinner/spinner.component';
 import {TableStatisticsComponent} from "./statistics/table-stats/table-statistics.component";
-
-
-const appRoutes: Routes = [
-  {path: 'home', component: HomeComponent},
-  {path: 'roles', component: RolesComponent},
-  {path: 'users', component: UserComponent},
-  {path: 'tables', component: TablesComponent},
-  {path: 'signin', component: SigninComponent},
-  {path: 'definitions', component: DefinitionComponent},
-  {path: 'statistics', component: StatisticsComponent},
-  {path: 'chat', component: ChatComponent},
-  {path: 'user-info', component: UserInfoComponent},
-];
+import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
+import {AppMaterialModule} from "./shared/modules/material/app-material.module";
+import {TrainingComponent} from './training/training.component';
+import {AppRoutingModule} from "./shared/modules/routing/app-routing-module";
+import {FlexLayoutModule} from "@angular/flex-layout";
+import { DialogComponent } from './training/dialog/dialog.component';
+import { TableComponent } from './training/table/table.component';
+import {OverlayContainer} from "@angular/cdk/overlay";
+import {SnackBarComponent} from "./training/snack-bar/snack-bar.component";
 
 @NgModule({
   declarations: [
@@ -92,15 +88,22 @@ const appRoutes: Routes = [
     SortByPipe,
     StatisticsComponent,
     UserInfoComponent,
-    SpinnerComponent
+    SpinnerComponent,
+    TrainingComponent,
+    DialogComponent,
+    TableComponent,
+    SnackBarComponent
   ],
   imports: [
     ChartsModule,
     BrowserModule,
+    BrowserAnimationsModule,
     FormsModule,
     ReactiveFormsModule,
     HttpClientModule,
-    RouterModule.forRoot(appRoutes),
+    FlexLayoutModule,
+    AppMaterialModule,
+    AppRoutingModule,
     StoreModule.forRoot({
       tables: tablesReducers,
       users: usersReducers,
@@ -128,8 +131,13 @@ const appRoutes: Routes = [
     ExtendedFilterPipe,
     SortByPipe
   ],
+  entryComponents: [DialogComponent, SnackBarComponent],
   bootstrap: [AppComponent]
 })
 export class AppModule {
+  constructor(overlayContainer: OverlayContainer) {
+    overlayContainer.getContainerElement().classList.add('candy-themed');
+    overlayContainer.getContainerElement().classList.add('my-themed');
+  }
 }
 

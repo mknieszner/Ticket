@@ -5,26 +5,32 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
+import ticketproject.app.crud.domain.entities.types.ColumnValue;
+import ticketproject.app.crud.domain.entities.types.EnumValue;
+import ticketproject.app.crud.service.helper.ColumnType;
 
 import javax.validation.constraints.NotNull;
 
 @Getter
 @Setter
 @ToString
-@JsonTypeName("EN")
-@NoArgsConstructor
+@JsonTypeName(ColumnType.EN)
 public class EnumValueDto extends ColumnValueDto {
-  @NotNull
-  private String value;
-  //private List<Option> optionList = new ArrayList<>();
+    @NotNull
+    private String value;
 
-  public EnumValueDto(
-      //final String typeName,
-      final String value
-  //  ,final List<Option> optionList
-      ) {
-  //  super(typeName);
-    this.value = value;
-//    this.optionList.addAll(new ArrayList<>(optionList));
-  }
+    public EnumValueDto(final String value) {
+        super(ColumnType.Types.EN);
+        this.value = value;
+
+    }
+
+    public EnumValueDto() {
+        super(ColumnType.Types.EN);
+    }
+
+    @Override
+    public ColumnValue mapThisToColumnValue() {
+        return new EnumValue(value);
+    }
 }

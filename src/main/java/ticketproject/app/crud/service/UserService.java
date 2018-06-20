@@ -7,14 +7,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import ticketproject.app.crud.dao.ActiveWebSocketUserRepository;
-import ticketproject.app.crud.dao.RoleRepository;
-import ticketproject.app.crud.service.authorization.AccessTableChecker;
 import ticketproject.app.crud.service.dao.RoleRepositoryService;
 import ticketproject.app.crud.service.dao.UserRepositoryService;
 import ticketproject.app.crud.domain.dto.authorization.PasswordResetData;
@@ -29,7 +28,6 @@ import ticketproject.app.crud.mapper.RoleMapper;
 import ticketproject.app.crud.mapper.UserMapper;
 
 import javax.transaction.Transactional;
-import java.security.Principal;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -270,5 +268,10 @@ public class UserService implements UserDetailsService {
         user.getTasks()
     ));
     return true;
+  }
+
+  public static String getCurrentUserUsername(){
+    return (String) SecurityContextHolder.getContext()
+            .getAuthentication().getPrincipal();
   }
 }

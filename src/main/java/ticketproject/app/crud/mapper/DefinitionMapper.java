@@ -7,6 +7,7 @@ import ticketproject.app.crud.domain.dto.definition.TableDefinitionDto;
 import ticketproject.app.crud.domain.entities.ColumnDetail;
 import ticketproject.app.crud.domain.entities.Project;
 import ticketproject.app.crud.domain.entities.ProjectTable;
+import ticketproject.app.crud.service.DatabaseEnviroment;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -59,11 +60,13 @@ public class DefinitionMapper {
     );
   }
 
-  public Project mapProjectDefinitionToProject(final ProjectDefinitionDto projectDefinitionDto) {
+  public Project mapProjectDefinitionToProject(final ProjectDefinitionDto projectDefinitionDto,
+                                               DatabaseEnviroment databaseEnviroment) {
     return new Project(
         projectDefinitionDto.getId(),
         projectDefinitionDto.getName(),
-        mapProjectDefinitionToProjectTables(projectDefinitionDto)
+        mapProjectDefinitionToProjectTables(projectDefinitionDto),
+        databaseEnviroment
     );
   }
 }

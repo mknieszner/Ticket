@@ -1,12 +1,9 @@
 package ticketproject.app;
 
-import org.springframework.stereotype.Component;
-
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.Properties;
-
 
 public enum DbManager {
   INSTANCE;
@@ -20,7 +17,7 @@ public enum DbManager {
       conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/ticket_system?serverTimezone=Europe/Warsaw"
           + "&useSSL=False",connectionProps);
     } catch (SQLException e) {
-      throw new RuntimeException("SQLException" + e.toString());
+      throw new RuntimeException(e);
     }
   }
 

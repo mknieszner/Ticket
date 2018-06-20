@@ -1,9 +1,9 @@
 package ticketproject.app.crud.domain.entities;
 
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
+import ticketproject.app.crud.service.DatabaseEnviroment;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -33,11 +33,20 @@ public class Project {
   @Column(nullable = false)
   List<ProjectTable> projectTables = new ArrayList<>();
 
-  public Project(final Long id, final String name, final List<ProjectTable> projectTables) {
+  @Column
+  @Enumerated(value = EnumType.STRING)
+  @NotNull
+  private DatabaseEnviroment databaseEnviroment;
+
+  public Project(final Long id,
+                 final String name,
+                 final List<ProjectTable> projectTables,
+                 DatabaseEnviroment databaseEnviroment) {
     this.id = id;
     this.name = name;
     projectTables.forEach(projectTable -> projectTable.setProject(this));
     this.projectTables.addAll(projectTables);
+    this.databaseEnviroment = databaseEnviroment;
   }
 
   //  public Project(final String name) {
@@ -49,10 +58,10 @@ public class Project {
 //    this.projectTables.addAll(projectTables);
 //  }
 //
-  public void addProjectTable(final ProjectTable projectTable) {
-    this.projectTables.add(projectTable);
-    projectTable.setProject(this);
-  }
+//  public void addProjectTable(final ProjectTable projectTable) {
+//    this.projectTables.add(projectTable);
+//    projectTable.setProject(this);
+//  }
 //
 //  public void addProjectTables(final List<ProjectTable> projectTables) {
 //    this.projectTables.addAll(projectTables);

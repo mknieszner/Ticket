@@ -1,32 +1,33 @@
 package ticketproject.app.crud.domain.entities.types;
 
 import lombok.*;
+import ticketproject.app.crud.domain.dto.values.column.ColumnValueDto;
+import ticketproject.app.crud.domain.dto.values.column.DateValueDto;
+import ticketproject.app.crud.service.helper.ColumnType;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
-import java.util.Date;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Entity
-//@AllArgsConstructor
 @NoArgsConstructor
 @Getter
 @Setter
 @ToString
-//@AttributeOverride(
-//    name = "DATE_NAME",
-//    column = @Column(name = "COLUMN_NAME", nullable = false)
-//)
-@DiscriminatorValue("DT")
+@DiscriminatorValue(ColumnType.DT)
 public class DateValue extends ColumnValue {
 
-  @NotNull
-  @Column(name = "DATE_VALUE")
-  Date value;
+    @NotNull
+    @Column(name = "DATE_VALUE")
+    LocalDateTime value;
 
-  public DateValue(
-      //final String typeName,
-      final Date value) {
-    //super(typeName);
-    this.value = value;
-  }
+    public DateValue(final LocalDateTime value) {
+        this.value = value;
+    }
+
+    @Override
+    public ColumnValueDto mapThisToColumnValueDto() {
+        return new DateValueDto(value);
+    }
 }

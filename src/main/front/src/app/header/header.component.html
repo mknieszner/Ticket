@@ -14,6 +14,7 @@
       <li *ngIf="(isAdmin | async)" class="nav-item" routerLinkActive="active"><a class="nav-link text-info" routerLink="/roles">Roles</a></li>
       <li *ngIf="(isAdmin | async)" class="nav-item" routerLinkActive="active"><a class="nav-link text-info" routerLink="/statistics">Statistics</a></li>
       <li class="nav-item" routerLinkActive="active"><a class="nav-link text-info" routerLink="/chat">Chat</a></li>
+      <li class="nav-item" routerLinkActive="active"><a class="nav-link text-info" routerLink="/training">Training</a></li>
     </ul>
 
     <span class="nav navbar-text font-weight-bold" *ngIf="(token | async)">
