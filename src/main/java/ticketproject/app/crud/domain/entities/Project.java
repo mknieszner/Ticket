@@ -3,7 +3,7 @@ package ticketproject.app.crud.domain.entities;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
-import ticketproject.app.crud.service.DatabaseEnviroment;
+import ticketproject.app.crud.service.DatabaseEnvironment;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -36,17 +36,17 @@ public class Project {
   @Column
   @Enumerated(value = EnumType.STRING)
   @NotNull
-  private DatabaseEnviroment databaseEnviroment;
+  private DatabaseEnvironment.Environments databaseEnvironment;
 
   public Project(final Long id,
                  final String name,
                  final List<ProjectTable> projectTables,
-                 DatabaseEnviroment databaseEnviroment) {
+                 DatabaseEnvironment.Environments databaseEnvironment) {
     this.id = id;
     this.name = name;
     projectTables.forEach(projectTable -> projectTable.setProject(this));
     this.projectTables.addAll(projectTables);
-    this.databaseEnviroment = databaseEnviroment;
+    this.databaseEnvironment = databaseEnvironment;
   }
 
   //  public Project(final String name) {

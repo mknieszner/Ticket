@@ -1,12 +1,15 @@
 package ticketproject.app.crud.domain.dto.values;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import lombok.*;
+import ticketproject.app.crud.domain.dto.serializer.LocalDateDeserializer;
+import ticketproject.app.crud.domain.dto.serializer.LocalDateSerializer;
 import ticketproject.app.crud.domain.dto.values.column.ColumnValueDto;
 
 import javax.validation.constraints.NotNull;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 @Getter
@@ -14,30 +17,56 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @ToString
+@Builder
 public class RowDto {
-  @NotNull
-  private Long id;
-  @NotNull
-  private String name;
-  @NotNull
-  private List<ColumnValueDto> columnValueDtos = new ArrayList<>();
-  @NotNull
-  private List<TaskDto> taskDtos = new ArrayList<>();
-  @NotNull
-  private String createdBy;
-  @NotNull
-  @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm")
-  private Date createdOn;
-  @NotNull
-  private String lastModifiedBy;
-  @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm")
-  @NotNull
-  private Date lastModifiedOn;
+    @NotNull
+    private Long id;
+    @NotNull
+    private String name;
+    @NotNull
+    @Singular
+    private List<ColumnValueDto> columnValueDtos = new ArrayList<>();
+    @NotNull
+    @Singular
+    private List<TaskDto> taskDtos = new ArrayList<>();
+    @NotNull
+    private String createdBy;
+    @NotNull
+    @JsonDeserialize(using = LocalDateDeserializer.class)
+    @JsonSerialize(using = LocalDateSerializer.class)
+    private LocalDateTime createdOn;
+    @NotNull
+    private String lastModifiedBy;
+    @JsonDeserialize(using = LocalDateDeserializer.class)
+    @JsonSerialize(using = LocalDateSerializer.class)
+    @NotNull
+    private LocalDateTime lastModifiedOn;
 
-  public void addColumnValue(final ColumnValueDto columnValueDto) {
-    this.columnValueDtos.add(columnValueDto);
-  }
-  public void addTask(final TaskDto taskDto) {
-    this.taskDtos.add(taskDto);
-  }
+    public void addColumnValue(final ColumnValueDto columnValueDto) {
+        this.columnValueDtos.add(columnValueDto);
+    }
+
+    public RowDtoBuilder updateWithfModificationInfo(RowDto rowDto) {
+        return RowDto.builder()
+                .id(rowDto.getId())
+                .name(rowDto.getName())
+                .columnValueDtos(rowDto.getColumnValueDtos())
+                .taskDtos(rowDto.getTaskDtos())
+                .createdOn(rowDto.getCreatedOn())
+                .createdBy(rowDto.getCreatedBy());
+
+    }
+
+    public RowDtoBuilder updateWithCreationAnfModificationInfo(RowDto rowDto) {
+        return RowDto.builder()
+                .id(rowDto.getId())
+                .name(rowDto.getName())
+                .columnValueDtos(rowDto.getColumnValueDtos())
+                .taskDtos(rowDto.getTaskDtos());
+
+    }
+
+    public void addTask(final TaskDto taskDto) {
+        this.taskDtos.add(taskDto);
+    }
 }

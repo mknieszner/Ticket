@@ -16,6 +16,7 @@ import ticketproject.app.crud.mapper.*;
 import ticketproject.app.crud.service.dao.UserRepositoryService;
 
 import javax.transaction.Transactional;
+import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -68,9 +69,9 @@ public class TableService {
                 null,
                 "",
                 getCurrentUserUsername(),
-                new Date(),
+                LocalDateTime.now(),
                 getCurrentUserUsername(),
-                new Date(),
+                LocalDateTime.now(),
                 columnValueMapper.mapToTableColumnList(rowDto.getColumnValueDtos()),
                 projectTableRepository.findByName(tableName),
                 taskMapper.mapTaskDtosToTasks(rowDto.getTaskDtos()))));
@@ -102,9 +103,9 @@ public class TableService {
                         .peek(row -> {
                             row.setProjectTable(projectTable);
                             row.setCreatedBy(username);
-                            row.setCreatedOn(new Date());
+                            row.setCreatedOn(LocalDateTime.now());
                             row.setLastModifiedBy(username);
-                            row.setLastModifiedOn(new Date());
+                            row.setLastModifiedOn(LocalDateTime.now());
                         }).collect(Collectors.toList()))));
     }
 
@@ -146,7 +147,7 @@ public class TableService {
 
     @PreAuthorize("hasAnyAuthority('ROLE_ADMIN') || @tableAccessManager.hasTableAccessAuthorityByTableName(#tableDefinitionDto.name)")
     public ProjectDefinitionDto defineSingleTableProject(final TableDefinitionDto tableDefinitionDto,
-                                                         final DatabaseEnviroment databaseEnviroment) {
+                                                         final DatabaseEnvironment.Environments databaseEnvironment) {
         return definitionMapper.mapProjectToProjectDefinitionDto(
                 projectRepository.save(
                         definitionMapper.mapProjectDefinitionToProject(
@@ -155,7 +156,7 @@ public class TableService {
                                         tableDefinitionDto.getName(),
                                         Lists.newArrayList(tableDefinitionDto)
                                 ),
-                                databaseEnviroment)
+                                databaseEnvironment)
                 )
         );
     }

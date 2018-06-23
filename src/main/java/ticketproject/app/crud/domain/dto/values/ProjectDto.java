@@ -4,7 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
-import ticketproject.app.crud.service.DatabaseEnviroment;
+import ticketproject.app.crud.service.DatabaseEnvironment;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,5 +17,5 @@ public class ProjectDto {
   private Long id;
   private String name;
   private List<ProjectTableDto> projectTableDtos = new ArrayList<>();
-  private DatabaseEnviroment databaseEnviroment;
+  private DatabaseEnvironment.Environments databaseEnvironment;
 }

@@ -11,6 +11,7 @@ import java.util.function.BiFunction;
 
 @Getter
 @Setter
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class ColumnType {
     private Types type;
     public static final String IN = "IN";

@@ -8,13 +8,12 @@ import ticketproject.app.crud.domain.dto.definition.ProjectDefinitionDto;
 import ticketproject.app.crud.domain.dto.definition.TableDefinitionDto;
 import ticketproject.app.crud.domain.dto.values.*;
 import ticketproject.app.crud.service.*;
-import ticketproject.app.crud.service.handler.TableRequestHandler;
 
 import java.security.Principal;
 import java.util.List;
 
 import static java.util.Optional.ofNullable;
-import static ticketproject.app.crud.service.DatabaseEnviroment.SEPARATE_TABLE_ENVIRONMENT;
+import static ticketproject.app.crud.service.DatabaseEnvironment.Environments.SEPARATE_TABLE_ENVIRONMENT;
 
 @CrossOrigin("*")
 @RestController
@@ -25,7 +24,8 @@ public class TableController {
     private final TableService tableService;
     private final RowValidator rowValidator;
     private final TableValidator tableValidator;
-    private final TableRequestHandler tableRequestHandler;
+    private final DatabaseEnvironment databaseEnvironment;
+
 
     @DeleteMapping(value = "projects/tables/rows/tasks/{taskId}")
     public boolean deleteTask(@PathVariable final Long taskId, final Principal principal) {
@@ -65,13 +65,13 @@ public class TableController {
 
     @PostMapping(value = "projects/tables/{tableName}/row")
     public RowDto addRowByTableName(@PathVariable final String tableName, @RequestBody final RowDto rowDto) {
-        return tableRequestHandler.handleAddRowRequest(tableName, rowDto);
+        return databaseEnvironment.getHandler(tableName).handleAddRowRequest(tableName, rowDto);
     }
 
 
     @PutMapping(value = "projects/tables/{tableName}/row")
     public RowDto updateRow(@PathVariable final String tableName, @RequestBody final RowDto rowDto, Principal principal) {
-        return tableService.updateRowByTableId(rowDto, tableName, principal.getName());
+        return databaseEnvironment.getHandler(tableName).updateRowByTableId(rowDto, tableName);
     }
 
 
@@ -82,11 +82,9 @@ public class TableController {
 
     @PostMapping(value = "projects/tables/definition")
     public ProjectDefinitionDto defineProject(@RequestBody final TableDefinitionDto tableDefinitionDto,
-                                              @RequestParam(required = false) final DatabaseEnviroment dbEenviroment) {
-        return tableRequestHandler.handleTableDefinitionRequest(
-                tableDefinitionDto,
-                ofNullable(dbEenviroment).orElse(SEPARATE_TABLE_ENVIRONMENT)
-        );
+                                              @RequestParam(required = false) DatabaseEnvironment.Environments dbEnvironment) {
+        dbEnvironment = ofNullable(dbEnvironment).orElse(SEPARATE_TABLE_ENVIRONMENT);
+        return databaseEnvironment.getHandler(dbEnvironment).handleTableDefinitionRequest(tableDefinitionDto, dbEnvironment);
     }
 
     @GetMapping(value = "projects/tables/definition/{tableName}")
@@ -102,7 +100,7 @@ public class TableController {
 
     @GetMapping(value = "projects/tables/{tableName}/rows")
     public List<RowDto> getTableRowsByTableName(@PathVariable final String tableName) {
-        return tableRequestHandler.getTableRowsByTableName(tableName);
+        return databaseEnvironment.getHandler(tableName).getTableRowsByTableName(tableName);
     }
 
     @PostMapping(value = "projects/tables/{tableName}/rows")
@@ -112,7 +110,7 @@ public class TableController {
 
     @DeleteMapping(value = "projects/tables/{tableName}/rows/{rowId}")
     public @ResponseBody boolean deleteRowById(@PathVariable final String tableName, @PathVariable final Long rowId ) {
-        return tableRequestHandler.handleDeleteRowRequest(tableName, rowId);
+        return databaseEnvironment.getHandler(tableName).handleDeleteRowRequest(tableName, rowId);
     }
 
 

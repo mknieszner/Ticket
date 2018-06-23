@@ -6,8 +6,8 @@ import ticketproject.app.crud.domain.entities.types.ColumnValue;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 @Entity
@@ -27,11 +27,11 @@ public class Row {
 
   private String createdBy;
 
-  private Date createdOn;
+  private LocalDateTime createdOn;
 
   private String lastModifiedBy;
 
-  private Date lastModifiedOn;
+  private LocalDateTime lastModifiedOn;
 
   public Row(final String name) {
     this.name = name;

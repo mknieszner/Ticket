@@ -5,7 +5,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import ticketproject.app.crud.domain.dto.values.ProjectDto;
 import ticketproject.app.crud.domain.entities.Project;
-import ticketproject.app.crud.service.DatabaseEnviroment;
 
 @Component
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
@@ -17,7 +16,7 @@ public class ProjectMapper {
                 projectDto.getId(),
                 projectDto.getName(),
                 projectTableMapper.mapToProjectTables(projectDto.getProjectTableDtos()),
-                projectDto.getDatabaseEnviroment()
+                projectDto.getDatabaseEnvironment()
         );
         return project;
     }
@@ -27,7 +26,7 @@ public class ProjectMapper {
                 project.getId(),
                 project.getName(),
                 projectTableMapper.mapToProjectTableDtos(project.getProjectTables()),
-                project.getDatabaseEnviroment()
+                project.getDatabaseEnvironment()
         );
     }
 }
