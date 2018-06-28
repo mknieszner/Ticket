@@ -25,7 +25,7 @@ public enum DbManager {
 
     DbManager() {
         try {
-            conn = DriverManager.getConnection("jdbc:" + database + url, username, password);
+            conn = DriverManager.getConnection("jdbc:" + url, username, password);
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
