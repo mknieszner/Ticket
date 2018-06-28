@@ -12,8 +12,8 @@ import java.util.Properties;
 public enum DbManager {
     INSTANCE;
 
-    @Value("${spring.jpa.database}")
-    private String database;
+//    @Value("${spring.jpa.database}")
+//    private String database;
     @Value("${spring.datasource.url}")
     private String url;
     @Value("${spring.datasource.username}")
