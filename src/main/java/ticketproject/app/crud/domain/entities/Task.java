@@ -1,9 +1,6 @@
 package ticketproject.app.crud.domain.entities;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import ticketproject.app.crud.domain.entities.authorization.User;
 
 import javax.persistence.*;
@@ -18,6 +15,7 @@ import java.util.Set;
 @AllArgsConstructor
 @NoArgsConstructor
 @Table(name = "TASK")
+@ToString
 public class Task {
 
   @Id

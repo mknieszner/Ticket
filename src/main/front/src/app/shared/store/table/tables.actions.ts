@@ -6,6 +6,7 @@ import {SortModel} from '../../sort/sort.model';
 export const RESET_STORE = 'RESET_STORE';
 
 export const ADD_ROW = 'ADD_ROW';
+export const ADD_TASK = 'ADD_TASK';
 export const SHOW_ROW = 'SHOW_ROW';
 export const UPDATE_ROW = 'UPDATE_ROW';
 export const EDIT_ROW_MODE = 'EDIT_ROW_MODE';
@@ -222,6 +223,13 @@ export class DeleteRow implements Action {
   }
 }
 
+export class AddTaskAction implements Action {
+  readonly type = ADD_TASK;
+
+  constructor(public payload: {task: TaskModel, rowId: number}) {
+  }
+}
+
 export type TableActions =
   AddRowAction |
   SetNamesAction |
@@ -248,4 +256,5 @@ export type TableActions =
   SetExtendedTableView |
   SetExtendedRowView |
   SetSortContent |
-  DeleteRow;
+  DeleteRow |
+  AddTaskAction;

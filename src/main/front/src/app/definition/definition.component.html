@@ -71,7 +71,8 @@
             <div class="form-group">
               <button type="button" class="btn btn-outline-secondary text-primary" (click)="onAddColumn()">Add column</button>
               <button type="button" class="btn btn-outline-secondary text-danger" (click)="onResetForm()">Reset form</button>
-              <button type="submit" class="btn btn-outline-secondary text-success" [disabled]="!definitionForm.valid" (click)="postForm()">Post form</button>
+              <button type="submit" class="btn btn-outline-secondary text-success" [disabled]="!definitionForm.valid" (click)="postCommonTableForm()">Define in common table</button>
+              <button type="submit" class="btn btn-outline-secondary text-success" [disabled]="!definitionForm.valid" (click)="postSepareteTableForm()">Define in separate table</button>
             </div>
           </div>
         </form>

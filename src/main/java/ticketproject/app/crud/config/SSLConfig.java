@@ -32,14 +32,14 @@ public class SSLConfig {
       }
     };
 
-    factory.addAdditionalTomcatConnectors(initiateHttpConnector());
+//    factory.addAdditionalTomcatConnectors(initiateHttpConnector());
     return factory;
   }
 
-  private Connector initiateHttpConnector() {
-    Connector connector = new Connector();
-    connector.setPort(8080);
-    connector.setRedirectPort(8443);
-    return connector;
-  }
+//  private Connector initiateHttpConnector() {
+//    Connector connector = new Connector();
+//    connector.setPort(8080);
+//    connector.setRedirectPort(8443);
+//    return connector;
+//  }
 }

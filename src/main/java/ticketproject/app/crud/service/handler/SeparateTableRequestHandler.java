@@ -6,6 +6,7 @@ import ticketproject.app.crud.dao.ProjectTableRepository;
 import ticketproject.app.crud.domain.dto.definition.ProjectDefinitionDto;
 import ticketproject.app.crud.domain.dto.definition.TableDefinitionDto;
 import ticketproject.app.crud.domain.dto.values.RowDto;
+import ticketproject.app.crud.domain.dto.values.TaskDto;
 import ticketproject.app.crud.domain.entities.ColumnDetail;
 import ticketproject.app.crud.service.DatabaseEnvironment;
 import ticketproject.app.crud.service.RowValidator;
@@ -66,6 +67,27 @@ public class SeparateTableRequestHandler implements TableRequestHandler {
         rowValidator.validateRow(getTableIdByName(tableName), rowDto);
         savedRowDto = tableQueryService.updateRow(rowDto, tableName);
         return savedRowDto;
+    }
+
+    @Override
+    @Transactional
+    public TaskDto addTaskToRow(String tableName, Long rowId, TaskDto taskDto) {
+        return this.tableQueryService.addTaskToRow(tableName, rowId, taskDto);
+    }
+
+    @Override
+    public boolean deleteTask(Long taskId, String tableName) {
+        return this.tableQueryService.deleteTask(taskId, tableName);
+    }
+
+    @Override
+    public TaskDto assignUserToTask(String tableName, Long taskId, String username) {
+        return tableQueryService.assignUserToTask(tableName,taskId,username);
+    }
+
+    @Override
+    public TaskDto removeUserFromTask(String tableName, Long taskId, String username) {
+        return tableQueryService.removeUserFromTask(tableName, taskId, username);
     }
 
     private List<ColumnDetail> getColumnsDetails(final String name) {

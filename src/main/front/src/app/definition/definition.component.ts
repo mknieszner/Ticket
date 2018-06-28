@@ -3,6 +3,8 @@ import {FormArray, FormControl, FormGroup} from '@angular/forms';
 import * as fromDefinitionModel from '../shared/table.model';
 import {DataStorageService} from '../shared/data-storage.service';
 
+const COMMON_TABLE_ENVIRONMENT = "COMMON_TABLE_ENVIRONMENT";
+const SEPARATE_TABLE_ENVIRONMENT = "SEPARATE_TABLE_ENVIRONMENT";
 
 @Component({
   selector: 'app-definition',
@@ -61,10 +63,18 @@ export class DefinitionComponent implements OnInit {
     this.initForm();
   }
 
-  postForm() {
+  postSepareteTableForm() {
+    this.postTableForm(SEPARATE_TABLE_ENVIRONMENT);
+  }
+
+  postCommonTableForm() {
+    this.postTableForm(COMMON_TABLE_ENVIRONMENT);
+  }
+
+  private postTableForm(databaseEnviroment: string){
     const formValue = this.definitionForm.value;
     formValue['id'] = null;
-    this.dss.postTableDefinition(formValue);
+    this.dss.postTableDefinition(formValue, databaseEnviroment);
   }
 
   getData() {

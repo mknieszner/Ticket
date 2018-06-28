@@ -1,13 +1,13 @@
 buildscript {
-	ext {
-		springBootVersion = '1.5.7.RELEASE'
-	}
-	repositories {
-		mavenCentral()
-	}
-	dependencies {
-		classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
-	}
+    ext {
+        springBootVersion = '1.5.7.RELEASE'
+    }
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
+    }
 }
 
 apply plugin: 'java'
@@ -19,32 +19,33 @@ version = '0.0.1-SNAPSHOT'
 sourceCompatibility = 1.8
 
 repositories {
-	mavenCentral()
+    mavenCentral()
 }
 
 
 dependencies {
-	compile group: 'com.google.guava', name: 'guava', version: '25.0-jre'
-	compile('org.springframework.boot:spring-boot-starter-web')
-	compileOnly(group: 'org.projectlombok', name: 'lombok', version: '1.16.18')
-	testCompile('org.springframework.boot:spring-boot-starter-test')
+    compile group: 'com.google.guava', name: 'guava', version: '25.0-jre'
+    compile('org.springframework.boot:spring-boot-starter-web')
+    compileOnly(group: 'org.projectlombok', name: 'lombok', version: '1.18.0')
+    testCompile('org.springframework.boot:spring-boot-starter-test')
     compile("org.springframework.boot:spring-boot-starter-data-jpa")
-	compile("org.springframework.boot:spring-boot-starter-security")
-	compile group: 'org.springframework.security.oauth', name: 'spring-security-oauth2', version: '2.2.1.RELEASE'
-	compile group: 'org.springframework.security', name: 'spring-security-jwt', version: '1.0.9.RELEASE'
+    compile("org.springframework.boot:spring-boot-starter-security")
+    compile group: 'org.springframework.security.oauth', name: 'spring-security-oauth2', version: '2.2.1.RELEASE'
+    compile group: 'org.springframework.security', name: 'spring-security-jwt', version: '1.0.9.RELEASE'
     compile("com.h2database:h2")
-	compile("org.springframework:spring-jdbc")
-	compile group: 'mysql', name: 'mysql-connector-java'
+    compile("org.springframework:spring-jdbc")
+    compile group: 'mysql', name: 'mysql-connector-java'
     testCompile("junit:junit")
-	compile 'org.springframework:spring-webmvc'
-	compile group: 'org.springframework', name: 'spring-websocket'
-	compile group: 'org.springframework', name: 'spring-messaging'
-	compile group: 'org.springframework.security', name: 'spring-security-messaging'
-	compile group: 'com.fasterxml.jackson.core', name: 'jackson-core'
+    compile 'org.springframework:spring-webmvc'
+    compile group: 'org.springframework', name: 'spring-websocket'
+    compile group: 'org.springframework', name: 'spring-messaging'
+    compile group: 'org.springframework.security', name: 'spring-security-messaging'
+    compile group: 'com.fasterxml.jackson.core', name: 'jackson-core'
     compile group: 'com.fasterxml.jackson.core', name: 'jackson-databind'
-	compile group: 'org.springframework.session', name: 'spring-session'
-	testCompile group: 'org.springframework.security', name: 'spring-security-test'
-	compile("org.springframework.boot:spring-boot-starter-thymeleaf")
-	compile group: 'org.springframework', name: 'spring-context-support', version: '4.1.0.RELEASE'
-
+    compile group: 'org.springframework.session', name: 'spring-session'
+    testCompile group: 'org.springframework.security', name: 'spring-security-test'
+    compile("org.springframework.boot:spring-boot-starter-thymeleaf")
+    compile group: 'org.springframework', name: 'spring-context-support', version: '4.1.0.RELEASE'
+    compile group: 'org.hibernate', name: 'hibernate-core', version: '5.3.1.Final'
+    compile group: 'org.hibernate', name: 'hibernate-entitymanager', version: '5.3.1.Final'
 }

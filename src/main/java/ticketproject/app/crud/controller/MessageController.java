@@ -9,6 +9,7 @@ import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.messaging.simp.annotation.SubscribeMapping;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PathVariable;
 import ticketproject.app.crud.domain.dto.chat.ChatMessage;
 import ticketproject.app.crud.domain.dto.values.TaskDto;
@@ -21,6 +22,7 @@ import java.util.Date;
 import java.util.List;
 
 @Controller
+@CrossOrigin("*")
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
 @PreAuthorize("hasAnyAuthority('ROLE_USER','ROLE_ADMIN')")
 public class MessageController {

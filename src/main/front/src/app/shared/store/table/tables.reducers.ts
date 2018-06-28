@@ -173,6 +173,11 @@ export function tablesReducers(state: TableState = initialTableState, action: Ta
         editRowMode: initialTableState.editRowMode,
         editedRow: initialTableState.editedRow,
       };
+      case TableActions.ADD_TASK:
+      return {
+        ...state,
+        tableContent: [...addRowTask(state.tableContent, action.payload)]
+      };
     default:
       return state;
   }
@@ -230,6 +235,15 @@ function setRowTasks(rows: RowContentModel[], data: { tasks: TaskModel[], rowId 
   rows.forEach((row) => {
     if (row.id === data.rowId) {
       row.taskDtos = data.tasks;
+    }
+  });
+  return rows;
+}
+
+function addRowTask(rows: RowContentModel[], data: { task: TaskModel, rowId }): RowContentModel[] {
+  rows.forEach((row) => {
+    if (row.id === data.rowId) {
+      row.taskDtos = [...row.taskDtos, data.task];
     }
   });
   return rows;

@@ -65,15 +65,15 @@ export class TaskComponent implements OnInit {
       userNames: [],
       taskDtos: []
     };
-    this.dss.saveNewTask(task, this.row.id);
+    this.dss.saveNewTask(this.tableName, task, this.row.id);
   }
 
   onAssignUserToTask(username: string ) {
     console.log('onAssignUserToTask username >' + username + '<');
-    this.dss.onAssignUserToTask(this.row.id, this.task.id , username);
+    this.dss.onAssignUserToTask(this.tableName, this.row.id, this.task.id , username);
   }
 
   onRemoveUserFromTask(username: string) {
-    this.dss.onRemoveUserFromTask(this.row.id, this.task.id , username);
+    this.dss.onRemoveUserFromTask(this.tableName, this.row.id, this.task.id , username);
   }
 }

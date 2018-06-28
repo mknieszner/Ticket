@@ -27,20 +27,20 @@ public class TableController {
     private final DatabaseEnvironment databaseEnvironment;
 
 
-    @DeleteMapping(value = "projects/tables/rows/tasks/{taskId}")
-    public boolean deleteTask(@PathVariable final Long taskId, final Principal principal) {
-        return tableService.deleteTask(taskId, principal.getName());
+    @DeleteMapping(value = "projects/tables/{tableName}/rows/tasks/{taskId}")
+    public boolean deleteTask(@PathVariable final String tableName, @PathVariable final Long taskId, final Principal principal) {
+        return databaseEnvironment.getHandler(tableName).deleteTask(taskId, tableName);
     }
 
 
-    @PostMapping(value = "projects/tables/rows/tasks/{taskId}")
-    public TaskDto assignUserToTask(@PathVariable final Long taskId, @RequestBody final String username) {
-        return tableService.assignUserToTask(taskId, username);
+    @PostMapping(value = "projects/tables/{tableName}/rows/tasks/{taskId}")
+    public TaskDto assignUserToTask(@PathVariable final String tableName, @PathVariable final Long taskId, @RequestBody final String username) {
+        return databaseEnvironment.getHandler(tableName).assignUserToTask(tableName, taskId, username);
     }
 
-    @DeleteMapping(value = "projects/tables/rows/tasks/{taskId}/user/{username}")
-    public TaskDto removeUserFromToTask(@PathVariable final Long taskId, @PathVariable final String username) {
-        return tableService.removeUserFromTask(taskId, username);
+    @DeleteMapping(value = "projects/tables/{tableName}/rows/tasks/{taskId}/user/{username}")
+    public TaskDto removeUserFromToTask(@PathVariable final Long taskId, @PathVariable String tableName, @PathVariable final String username) {
+        return databaseEnvironment.getHandler(tableName).removeUserFromTask(tableName, taskId, username);
     }
 
     @PutMapping(value = "projects/tables/rows/tasks/")
@@ -48,9 +48,9 @@ public class TableController {
         return tableService.updateTask(taskDto, principal.getName());
     }
 
-    @PostMapping(value = "projects/tables/rows/{rowId}/tasks")
-    public List<TaskDto> addTaskToRow(@PathVariable final Long rowId, @RequestBody final TaskDto taskDto) {
-        return tableService.addTaskToRow(rowId, taskDto);
+    @PostMapping(value = "projects/tables/{tableName}/rows/{rowId}/tasks")
+    public TaskDto addTaskToRow(@PathVariable String tableName, @PathVariable final Long rowId, @RequestBody final TaskDto taskDto) {
+        return databaseEnvironment.getHandler(tableName).addTaskToRow(tableName, rowId, taskDto);
     }
 
     @GetMapping(value = "projects/tables/rows/{rowId}/tasks/")
@@ -80,10 +80,9 @@ public class TableController {
         return tableService.getRowDetails(rowId);
     }
 
-    @PostMapping(value = "projects/tables/definition")
+    @PostMapping(value = "projects/tables/definition/{dbEnvironment}")
     public ProjectDefinitionDto defineProject(@RequestBody final TableDefinitionDto tableDefinitionDto,
-                                              @RequestParam(required = false) DatabaseEnvironment.Environments dbEnvironment) {
-        dbEnvironment = ofNullable(dbEnvironment).orElse(SEPARATE_TABLE_ENVIRONMENT);
+                                              @PathVariable DatabaseEnvironment.Environments dbEnvironment) {
         return databaseEnvironment.getHandler(dbEnvironment).handleTableDefinitionRequest(tableDefinitionDto, dbEnvironment);
     }
 
@@ -109,7 +108,8 @@ public class TableController {
     }
 
     @DeleteMapping(value = "projects/tables/{tableName}/rows/{rowId}")
-    public @ResponseBody boolean deleteRowById(@PathVariable final String tableName, @PathVariable final Long rowId ) {
+    public @ResponseBody
+    boolean deleteRowById(@PathVariable final String tableName, @PathVariable final Long rowId) {
         return databaseEnvironment.getHandler(tableName).handleDeleteRowRequest(tableName, rowId);
     }
 

@@ -12,6 +12,8 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static ticketproject.app.crud.service.UserService.getCurrentUserUsername;
+
 @Component
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
 @Getter
@@ -55,13 +57,13 @@ public class RowMapper {
                 .collect(Collectors.toList());
     }
 
-    public Row updateRow(Row oldRow, RowDto newRow, final String username) {
+    public Row updateRow(Row oldRow, RowDto newRow) {
         return new Row(
                 oldRow.getId(),
                 oldRow.getName(),
                 oldRow.getCreatedBy(),
                 oldRow.getCreatedOn(),
-                username,
+                getCurrentUserUsername(),
                 LocalDateTime.now(),
                 columnValueMapper.mapToTableColumnList(newRow.getColumnValueDtos()),
                 oldRow.getProjectTable(),

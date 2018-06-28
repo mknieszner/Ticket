@@ -25,10 +25,10 @@ public class RowDto {
     private String name;
     @NotNull
     @Singular
-    private List<ColumnValueDto> columnValueDtos = new ArrayList<>();
+    private List<ColumnValueDto> columnValueDtos;
     @NotNull
     @Singular
-    private List<TaskDto> taskDtos = new ArrayList<>();
+    private List<TaskDto> taskDtos;
     @NotNull
     private String createdBy;
     @NotNull
@@ -42,10 +42,6 @@ public class RowDto {
     @NotNull
     private LocalDateTime lastModifiedOn;
 
-    public void addColumnValue(final ColumnValueDto columnValueDto) {
-        this.columnValueDtos.add(columnValueDto);
-    }
-
     public RowDtoBuilder updateWithfModificationInfo(RowDto rowDto) {
         return RowDto.builder()
                 .id(rowDto.getId())
@@ -57,7 +53,7 @@ public class RowDto {
 
     }
 
-    public RowDtoBuilder updateWithCreationAnfModificationInfo(RowDto rowDto) {
+    public static RowDtoBuilder updateWithCreationAnfModificationInfo(RowDto rowDto) {
         return RowDto.builder()
                 .id(rowDto.getId())
                 .name(rowDto.getName())
@@ -66,7 +62,27 @@ public class RowDto {
 
     }
 
-    public void addTask(final TaskDto taskDto) {
-        this.taskDtos.add(taskDto);
+    public static RowDto addTask(RowDto rowDto, final TaskDto taskDto) {
+        return RowDto.builder()
+                .id(rowDto.getId())
+                .name(rowDto.getName())
+                .columnValueDtos(rowDto.getColumnValueDtos())
+                .taskDtos(rowDto.getTaskDtos())
+                .createdOn(rowDto.getCreatedOn())
+                .createdBy(rowDto.getCreatedBy())
+                .taskDto(taskDto)
+                .build();
+    }
+
+    public static  RowDto addTasks(RowDto rowDto, List<TaskDto> taskDto) {
+        return RowDto.builder()
+                .id(rowDto.getId())
+                .name(rowDto.getName())
+                .columnValueDtos(rowDto.getColumnValueDtos())
+                .taskDtos(rowDto.getTaskDtos())
+                .createdOn(rowDto.getCreatedOn())
+                .createdBy(rowDto.getCreatedBy())
+                .taskDtos(taskDto)
+                .build();
     }
 }

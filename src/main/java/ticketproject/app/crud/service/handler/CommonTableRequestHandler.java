@@ -6,6 +6,7 @@ import ticketproject.app.crud.dao.ProjectTableRepository;
 import ticketproject.app.crud.domain.dto.definition.ProjectDefinitionDto;
 import ticketproject.app.crud.domain.dto.definition.TableDefinitionDto;
 import ticketproject.app.crud.domain.dto.values.RowDto;
+import ticketproject.app.crud.domain.dto.values.TaskDto;
 import ticketproject.app.crud.service.DatabaseEnvironment;
 import ticketproject.app.crud.service.RowValidator;
 import ticketproject.app.crud.service.TableService;
@@ -52,7 +53,27 @@ public class CommonTableRequestHandler implements TableRequestHandler {
 
     @Override
     public RowDto updateRowByTableId(RowDto rowDto, String tableName) {
-        throw new UnsupportedOperationException();
+        return tableService.updateRowByTableId(rowDto, tableName);
+    }
+
+    @Override
+    public TaskDto addTaskToRow(String tableName, Long rowId, TaskDto taskDto) {
+        return tableService.addTaskToRow(rowId, taskDto);
+    }
+
+    @Override
+    public boolean deleteTask(Long taskId, String tableName) {
+        return tableService.deleteTask(taskId, tableName);
+    }
+
+    @Override
+    public TaskDto assignUserToTask(String tableName, Long taskId, String username) {
+        return tableService.assignUserToTask(taskId, username);
+    }
+
+    @Override
+    public TaskDto removeUserFromTask(String tableName, Long taskId, String username) {
+        return tableService.removeUserFromTask(taskId, username);
     }
 
     private Long getTableIdByName(final String tableName) {

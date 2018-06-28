@@ -204,7 +204,7 @@ export class RowDetailsComponent implements OnInit, OnDestroy {
   }
 
   onDeleteTask(taskId: number) {
-    this.dss.deleteTask(taskId, this.selesctedRow.id);
+    this.dss.deleteTask(this.selectedTableName, taskId, this.selesctedRow.id);
   }
 
   switchExtendedRowView() {

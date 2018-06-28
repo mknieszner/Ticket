@@ -63,6 +63,4 @@ public class DatabaseEnvironment {
     private Environments getDatabaseEnvironmentByTableName(final String name) {
         return projectRepository.findByName(name).getDatabaseEnvironment();
     }
-
-
 }
