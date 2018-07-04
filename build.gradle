@@ -34,7 +34,8 @@ dependencies {
     compile group: 'org.springframework.security', name: 'spring-security-jwt', version: '1.0.9.RELEASE'
     compile("com.h2database:h2")
     compile("org.springframework:spring-jdbc")
-    compile group: 'mysql', name: 'mysql-connector-java'
+//    compile group: 'mysql', name: 'mysql-connector-java'
+    compile group: 'org.postgresql', name: 'postgresql', version: '42.2.2'
     testCompile("junit:junit")
     compile 'org.springframework:spring-webmvc'
     compile group: 'org.springframework', name: 'spring-websocket'
