@@ -41,7 +41,7 @@ public class HelloController {
                 userDto
         );
         user.addRole(roleRepository.findByName("ROLE_USER"));
-        user.addRole(roleRepository.findByName("ROLE_USER"))
+        user.addRole(roleRepository.findByName("ROLE_USER"));
         userRepository.save(user);
         return user;
     }
