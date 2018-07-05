@@ -3,14 +3,13 @@ package ticketproject.app;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
+import javax.annotation.PostConstruct;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
-import java.util.Properties;
 
 @Component
-public enum DbManager {
-    INSTANCE;
+public class DbManager {
 
 //    @Value("${spring.jpa.database}")
 //    private String database;
@@ -24,6 +23,10 @@ public enum DbManager {
     private Connection conn;
 
     DbManager() {
+    }
+
+    @PostConstruct
+    private void init() {
         try {
             conn = DriverManager.getConnection(url, username, password);
         } catch (SQLException e) {

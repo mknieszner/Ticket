@@ -21,44 +21,51 @@ import org.springframework.security.oauth2.config.annotation.web.configuration.R
 @Configuration
 @EnableResourceServer
 @EnableWebSecurity
-@EnableGlobalMethodSecurity(prePostEnabled = true,securedEnabled = true)
+@EnableGlobalMethodSecurity(prePostEnabled = true, securedEnabled = true)
 public class ResourceServerConfiguration extends ResourceServerConfigurerAdapter {
 
-  @Autowired
-  private UserDetailsService userDetailsService;
+    @Autowired
+    private UserDetailsService userDetailsService;
 
-  public ResourceServerConfiguration() {
-    super();
-  }
+    public ResourceServerConfiguration() {
+        super();
+    }
 
-  @Bean
-  public DaoAuthenticationProvider authProvider() {
-    DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
-    authProvider.setUserDetailsService(userDetailsService);
-    authProvider.setPasswordEncoder(encoder());
-    return authProvider;
-  }
+    @Bean
+    public DaoAuthenticationProvider authProvider() {
+        DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
+        authProvider.setUserDetailsService(userDetailsService);
+        authProvider.setPasswordEncoder(encoder());
+        return authProvider;
+    }
 
-  @Autowired
-  public void configureGlobal(final AuthenticationManagerBuilder auth) {
-    auth.authenticationProvider(authProvider());
-  }
+    @Autowired
+    public void configureGlobal(final AuthenticationManagerBuilder auth) {
+        auth.authenticationProvider(authProvider());
+    }
 
-  @Override
-  public void configure(final HttpSecurity http) throws Exception {
-    http.authorizeRequests()
-        .anyRequest().authenticated()
+    @Override
+    public void configure(final HttpSecurity http) throws Exception {
+        http.authorizeRequests()
+                .antMatchers(
+                        "/**",
+                        "/**/index.html",
+                        "/hello",
+                        "/"
+                )
+                .permitAll()
+                .anyRequest().authenticated()
 //        .antMatchers(HttpMethod.GET,"/v1/**").access("#oauth2.hasScope('read')")
 //        .antMatchers(HttpMethod.POST,"/v1/**").access("#oauth2.hasScope('write')")
 //        .antMatchers(HttpMethod.DELETE,"/v1/**").access("#oauth2.hasScope('write')")
-        .and()
-        .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
-        .csrf().disable()
-        .cors().disable();
-  }
+                .and()
+                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
+                .csrf().disable()
+                .cors().disable();
+    }
 
-  @Bean
-  public PasswordEncoder encoder() {
-    return new BCryptPasswordEncoder();
-  }
+    @Bean
+    public PasswordEncoder encoder() {
+        return new BCryptPasswordEncoder();
+    }
 }

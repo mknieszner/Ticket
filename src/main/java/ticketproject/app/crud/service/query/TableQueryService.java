@@ -42,6 +42,7 @@ public class TableQueryService {
 
     private final ProjectTableRepository projectTableRepository;
     private final UserRepository userRepository;
+    private final DbManager dbManager;
 
     //TODO POLSKIE ZNAKI!
     @Transactional
@@ -424,9 +425,9 @@ public class TableQueryService {
                 .build();
     }
 
-    private static JdbcTemplate getJDBCTemplate() {
+    private JdbcTemplate getJDBCTemplate() {
         return new JdbcTemplate(
-                new SingleConnectionDataSource(DbManager.INSTANCE.getConnection(), true));
+                new SingleConnectionDataSource(dbManager.getConnection(), true));
     }
 
     public TaskDto removeUserFromTask(String tableName, Long taskId, String username) {

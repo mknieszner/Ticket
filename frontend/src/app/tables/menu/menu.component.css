@@ -1,0 +1,13 @@
+a.bg-dark:hover {
+  background-color: #343a40!important;
+}
+
+li {
+  background-color: rgba(200,200,200,0.05);
+  border: none;
+}
+
+.form-control {
+  background-color: rgba(200,200,200,0.05);
+  border: none;
+}

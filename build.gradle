@@ -22,6 +22,26 @@ repositories {
     mavenCentral()
 }
 
+jar {
+    from('frontend/dist') {
+        //Public is a default supported Spring Boot resources directory.
+        into 'static'
+    }
+    doLast{
+        copyFront()
+    }
+}
+
+task copyFront(type: Copy) {
+    from('frontend/dist')
+    into('src/main/resources/static')
+}
+
+copyFront.dependsOn('frontend:build')
+
+//frontend:build will be run before the processResources
+processResources.dependsOn(copyFront)
+
 
 dependencies {
     compile group: 'com.google.guava', name: 'guava', version: '25.0-jre'
@@ -34,7 +54,7 @@ dependencies {
     compile group: 'org.springframework.security', name: 'spring-security-jwt', version: '1.0.9.RELEASE'
     compile("com.h2database:h2")
     compile("org.springframework:spring-jdbc")
-//    compile group: 'mysql', name: 'mysql-connector-java'
+    compile group: 'mysql', name: 'mysql-connector-java'
     compile group: 'org.postgresql', name: 'postgresql', version: '42.2.2'
     testCompile("junit:junit")
     compile 'org.springframework:spring-webmvc'

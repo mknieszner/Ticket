@@ -1,0 +1,18 @@
+<div class="jumbotron">
+    <div class="row">
+      <div class="col-3">
+        <ul class="list-group">
+          <li class="list-group-item" style="background-color: rgba(0,0,0,0.05)">Tables:</li>
+          <li class="list-group-item" *ngFor="let tableName of (tableState | async).tablesNames"
+              [ngClass]="(selectedTableName | async) == tableName ? 'bg-light' : ''"
+              (click)="onSelectTableName(tableName)"
+          >
+            {{ tableName }}
+          </li>
+        </ul>
+      </div>
+      <div class="col-9">
+        <app-table-statistics></app-table-statistics>
+      </div>
+    </div>
+</div>
