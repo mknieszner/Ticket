@@ -7,6 +7,7 @@ import {Store} from '@ngrx/store';
 import * as fromAppReducers from '../store/app.reducers';
 import * as UserActions from '../store/user/users.actions';
 import * as ChatActions from '../store/chat/chat.actions';
+import {baseUrl} from "../server.model";
 
 
 @Injectable()
@@ -18,11 +19,11 @@ export class WebSocketService {
   }
 
   public connect(): Client {
-      return this.connectWS();
+    return this.connectWS();
   }
 
   private connectWS(): Subject<any> {
-    const socket = new SockJS('http://localhost:8080/newTasks?access_token=' + AuthCookie.getAuth()) as WebSocket;
+    const socket = new SockJS(baseUrl + '/newTasks?access_token=' + AuthCookie.getAuth()) as WebSocket;
     this.stompClient = Stomp.over(socket);
     this.stompClient.connect({}, () => {
       // console.log('CONNECT CONNECT', frame);

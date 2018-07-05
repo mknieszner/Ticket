@@ -1973,7 +1973,7 @@ var ReversePipe = /** @class */ (function () {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "baseUrl", function() { return baseUrl; });
-var baseUrl = 'http://localhost:8080';
+var baseUrl = 'https://historic-cuyahoga-valley-32152.herokuapp.com';
 
 
 /***/ }),
@@ -2039,6 +2039,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _ngrx_store__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @ngrx/store */ "./node_modules/@ngrx/store/@ngrx/store.es5.js");
 /* harmony import */ var _store_user_users_actions__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../store/user/users.actions */ "./src/app/shared/store/user/users.actions.ts");
 /* harmony import */ var _store_chat_chat_actions__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../store/chat/chat.actions */ "./src/app/shared/store/chat/chat.actions.ts");
+/* harmony import */ var _server_model__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../server.model */ "./src/app/shared/server.model.ts");
 var __decorate = (undefined && undefined.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -2048,6 +2049,7 @@ var __decorate = (undefined && undefined.__decorate) || function (decorators, ta
 var __metadata = (undefined && undefined.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
+
 
 
 
@@ -2065,7 +2067,7 @@ var WebSocketService = /** @class */ (function () {
     };
     WebSocketService.prototype.connectWS = function () {
         var _this = this;
-        var socket = new sockjs_client__WEBPACK_IMPORTED_MODULE_1__('http://localhost:8080/newTasks?access_token=' + _auth_cookies_handler__WEBPACK_IMPORTED_MODULE_2__["AuthCookie"].getAuth());
+        var socket = new sockjs_client__WEBPACK_IMPORTED_MODULE_1__(_server_model__WEBPACK_IMPORTED_MODULE_7__["baseUrl"] + '/newTasks?access_token=' + _auth_cookies_handler__WEBPACK_IMPORTED_MODULE_2__["AuthCookie"].getAuth());
         this.stompClient = stompjs_lib_stomp_js__WEBPACK_IMPORTED_MODULE_3__["Stomp"].over(socket);
         this.stompClient.connect({}, function () {
             // console.log('CONNECT CONNECT', frame);
