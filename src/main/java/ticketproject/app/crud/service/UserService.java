@@ -2,6 +2,7 @@ package ticketproject.app.crud.service;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
+import groovy.lang.Lazy;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -43,7 +44,9 @@ public class UserService implements UserDetailsService {
   private final UserMapper userMapper;
   private final TableService tableService;
   private final ActiveWebSocketUserRepository activeWebSocketUserRepository;
-  private final PasswordEncoder passwordEncoder;
+  @Autowired
+  @Lazy
+  private PasswordEncoder passwordEncoder;
 
 
 

@@ -23,13 +23,15 @@ import org.springframework.security.oauth2.config.annotation.web.configuration.R
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true, securedEnabled = true)
 public class ResourceServerConfiguration extends ResourceServerConfigurerAdapter {
+    @Autowired
+    private UserDetailsService userDetailsService;
 
     public ResourceServerConfiguration() {
         super();
     }
 
     @Bean
-    public DaoAuthenticationProvider authProvider(final UserDetailsService userDetailsService) {
+    public DaoAuthenticationProvider authProvider() {
         DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
         authProvider.setUserDetailsService(userDetailsService);
         authProvider.setPasswordEncoder(encoder());
@@ -37,8 +39,8 @@ public class ResourceServerConfiguration extends ResourceServerConfigurerAdapter
     }
 
     @Autowired
-    public void configureGlobal(final AuthenticationManagerBuilder auth, final UserDetailsService userDetailsService) {
-        auth.authenticationProvider(authProvider(userDetailsService));
+    public void configureGlobal(final AuthenticationManagerBuilder auth) {
+        auth.authenticationProvider(authProvider());
     }
 
     @Override
