@@ -2,6 +2,7 @@ package ticketproject.app.crud.mapper;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
 import ticketproject.app.crud.dao.TaskRepository;
 import ticketproject.app.crud.dao.UserRepository;
@@ -15,10 +16,11 @@ import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
 @Component
-@RequiredArgsConstructor(onConstructor = @__(@Autowired))
 public class TaskMapper {
-  private final TaskRepository taskRepository;
-  private final UserRepository userRepository;
+
+  @Autowired
+  @Lazy
+  private UserRepository userRepository;
 
   public TaskDto mapTaskToTaskDto(final Task task) {
     return new TaskDto(
