@@ -22,25 +22,25 @@ repositories {
     mavenCentral()
 }
 
-jar {
-    from('frontend/dist') {
-        //Public is a default supported Spring Boot resources directory.
-        into 'static'
-    }
-//    doLast{
-//        copyFront()
+//jar {
+//    from('frontend/dist') {
+//        //Public is a default supported Spring Boot resources directory.
+//        into 'static'
 //    }
-}
-
-task copyFront(type: Copy) {
-    from('frontend/dist')
-    into('src/main/resources/static')
-}
-
-copyFront.dependsOn('frontend:build')
+////    doLast{
+////        copyFront()
+////    }
+//}
+//
+//task copyFront(type: Copy) {
+//    from('frontend/dist')
+//    into('src/main/resources/static')
+//}
+//
+//copyFront.dependsOn('frontend:build')
 
 //frontend:build will be run before the processResources
-processResources.dependsOn(copyFront)
+//processResources.dependsOn(copyFront)
 
 
 dependencies {
