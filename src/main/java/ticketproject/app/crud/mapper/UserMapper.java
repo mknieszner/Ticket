@@ -2,6 +2,7 @@ package ticketproject.app.crud.mapper;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 import ticketproject.app.crud.domain.dto.authorization.UserDto;
@@ -13,7 +14,9 @@ import java.util.stream.Collectors;
 @Component
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
 public class UserMapper {
-  private final PasswordEncoder passwordEncoder;
+  @Autowired
+  @Lazy
+  private PasswordEncoder passwordEncoder;
   private final TaskMapper taskMapper;
 
   public User mapUserDtoToUser(final UserDto userDto) {
