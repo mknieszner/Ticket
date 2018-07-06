@@ -42,7 +42,6 @@ public class HelloController {
         );
         user.addRole(roleRepository.findByName("ROLE_USER"));
         user.addRole(roleRepository.findByName("ROLE_USER"));
-        userRepository
         return userMapper.mapUserToUserDto(userRepository.save(user));
     }
 }
