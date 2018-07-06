@@ -43,8 +43,12 @@ jar {
     }
 }
 
-processResources.dependsOn(copyFront)
-copyFront.dependsOn('frontend:build')
+if(project.hasProperty('local')){
+    processResources.dependsOn(copyFront)
+    copyFront.dependsOn('frontend:build')
+}
+
+bootRun.dependsOn(build)
 
 
 dependencies {
