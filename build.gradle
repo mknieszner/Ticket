@@ -29,24 +29,24 @@ task copyFront(type: Copy) {
 }
 
 
-jar {
-    from('frontend/dist') {
-        //Public is a default supported Spring Boot resources directory.
-        into 'static'
-    }
-    doLast{
-        if(project.hasProperty('local')){
-            println 'LOCAL COPY -> START!'
-            copyFront
-            println 'LOCAL COPY -> DONE!'
-        }
-    }
-}
-
-if(project.hasProperty('local')){
-    processResources.dependsOn(copyFront)
-    copyFront.dependsOn('frontend:build')
-}
+//jar {
+//    from('frontend/dist') {
+//        //Public is a default supported Spring Boot resources directory.
+//        into 'static'
+//    }
+//    doLast{
+//        if(project.hasProperty('local')){
+//            println 'LOCAL COPY -> START!'
+//            copyFront
+//            println 'LOCAL COPY -> DONE!'
+//        }
+//    }
+//}
+//
+//if(project.hasProperty('local')){
+//    processResources.dependsOn(copyFront)
+//    copyFront.dependsOn('frontend:build')
+//}
 
 bootRun.dependsOn(build)
 
