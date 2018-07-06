@@ -23,24 +23,24 @@ repositories {
 }
 
 
-//jar {
-//    from('frontend/dist') {
-//        //Public is a default supported Spring Boot resources directory.
-//        into 'static'
+jar {
+    from('frontend/dist') {
+        //Public is a default supported Spring Boot resources directory.
+        into 'static'
+    }
+//    doLast{
+//        copyFront()
 //    }
-////    doLast{
-////        copyFront()
-////    }
-//}
-//
-//task copyFront(type: Copy) {
-//    from('frontend/dist')
-//    into('src/main/resources/static')
-//}
-//
-//copyFront.dependsOn('frontend:build')
-//
-//processResources.dependsOn(copyFront)
+}
+
+task copyFront(type: Copy) {
+    from('frontend/dist')
+    into('src/main/resources/static')
+}
+
+copyFront.dependsOn('frontend:build')
+
+processResources.dependsOn(copyFront)
 
 
 dependencies {
