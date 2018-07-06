@@ -13,7 +13,6 @@ buildscript {
 apply plugin: 'java'
 apply plugin: 'eclipse'
 apply plugin: 'org.springframework.boot'
-apply plugin: 'groovy'
 
 group = 'ticketproject'
 version = '0.0.1-SNAPSHOT'
@@ -23,32 +22,25 @@ repositories {
     mavenCentral()
 }
 
-task copyFront(type: Copy) {
-    from('frontend/dist')
-    into('src/main/resources/static')
-}
-
 
 //jar {
 //    from('frontend/dist') {
 //        //Public is a default supported Spring Boot resources directory.
 //        into 'static'
 //    }
-//    doLast{
-//        if(project.hasProperty('local')){
-//            println 'LOCAL COPY -> START!'
-//            copyFront
-//            println 'LOCAL COPY -> DONE!'
-//        }
-//    }
+////    doLast{
+////        copyFront()
+////    }
 //}
 //
-//if(project.hasProperty('local')){
-//    processResources.dependsOn(copyFront)
-//    copyFront.dependsOn('frontend:build')
+//task copyFront(type: Copy) {
+//    from('frontend/dist')
+//    into('src/main/resources/static')
 //}
-
-bootRun.dependsOn(build)
+//
+//copyFront.dependsOn('frontend:build')
+//
+//processResources.dependsOn(copyFront)
 
 
 dependencies {
