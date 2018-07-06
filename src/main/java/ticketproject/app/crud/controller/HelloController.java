@@ -26,7 +26,7 @@ public class HelloController {
     }
 
     @GetMapping(value = "/init")
-    public User init() {
+    public UserDto init() {
         UserDto userDto = new UserDto("mk",
                 "m",
                 "k",
@@ -42,7 +42,7 @@ public class HelloController {
         );
         user.addRole(roleRepository.findByName("ROLE_USER"));
         user.addRole(roleRepository.findByName("ROLE_USER"));
-        userRepository.save(user);
-        return user;
+        userRepository
+        return userMapper.mapUserToUserDto(userRepository.save(user));
     }
 }
