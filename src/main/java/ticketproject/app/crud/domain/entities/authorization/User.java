@@ -32,9 +32,9 @@ public class User implements Serializable {
   private String email;
   private String password;
   private boolean enabled;
-  @ManyToMany(mappedBy = "users", fetch = FetchType.EAGER)
+  @ManyToMany(mappedBy = "users", fetch = FetchType.EAGER, cascade=CascadeType.ALL)
   Set<Role> roles = new HashSet<>();
-  @ManyToMany(mappedBy = "users", fetch = FetchType.EAGER)
+  @ManyToMany(mappedBy = "users", fetch = FetchType.EAGER, cascade=CascadeType.ALL)
   List<Task> tasks = new ArrayList<>();
 
   public User(final String username,
