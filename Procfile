@@ -1,1 +1,0 @@
-web: java -Dspring.profiles.active="heroku" java -Dserver.port=38999 java $JAVA_OPTS java -jar build/libs/manager-0.0.1-SNAPSHOT.jar
