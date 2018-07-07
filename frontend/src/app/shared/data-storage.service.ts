@@ -234,7 +234,7 @@ export class DataStorageService {
   //       });
   // }
 
-  deleteUser(username: string) {
+  deleteUser(username: string): boolean | void {
     this.httpClient.delete<boolean>(this.basehost + '/v1/users/' + username)
       .subscribe((status: boolean) => {
           if (status) {
@@ -242,6 +242,7 @@ export class DataStorageService {
             this.store.dispatch(new UsersActions.SetNewUserModeAction(false));
             this.store.dispatch(new UsersActions.SetUserDisplayedTask(null));
           }
+          return true;
         },
         err => {
           console.log('deleteUser dss err: ', err);
@@ -251,8 +252,9 @@ export class DataStorageService {
   saveNewUser(user: UserModel) {
     this.httpClient.post<UserModel>(this.basehost + '/v1/users', user)
       .subscribe((savedUser: UserModel) => {
-          // console.log('saveNewUser dss OK: ', savedUser)
+          console.log('saveNewUser dss OK: ', savedUser)
           this.store.dispatch(new UsersActions.AddUserAction(savedUser));
+          this.store.dispatch(new UsersActions.SetNewUserModeAction(false));
         },
         err => {
           console.log('saveNewUser dss err: ', err);

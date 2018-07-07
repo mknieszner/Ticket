@@ -133,8 +133,8 @@
         Whhaaaaaatt??!!
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-outline-secondary" (click)="onRemoveUser(user.username)">Confirm</button>
+        <button #closeModal type="button" class="btn btn-outline-secondary" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-outline-secondary" (click)="onRemoveUser(user.username, closeModal)">Confirm</button>
       </div>
     </div>
   </div>

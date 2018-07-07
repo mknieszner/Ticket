@@ -2,6 +2,7 @@ package ticketproject.app.crud.domain.dto.authorization;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import ticketproject.app.crud.domain.dto.values.TaskDto;
 
 import java.util.ArrayList;
@@ -10,6 +11,7 @@ import java.util.List;
 import java.util.Set;
 
 @Getter
+@NoArgsConstructor
 @AllArgsConstructor
 public class UserDto {
   private String username;

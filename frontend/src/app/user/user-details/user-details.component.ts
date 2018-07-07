@@ -82,8 +82,10 @@ export class UserDetailsComponent implements OnInit {
       });
   }
 
-  onRemoveUser(username: string) {
-    this.dss.deleteUser(username);
+  onRemoveUser(username: string, closeModalButton: HTMLButtonElement): boolean | void {
+    if (closeModalButton && this.dss.deleteUser(username)) {
+      closeModalButton.click();
+    }
   }
 
 
@@ -93,8 +95,7 @@ export class UserDetailsComponent implements OnInit {
 // }
 
   onSubmitUser() {
-    alert("this.newUserForm" + this.newUserForm.value);
-    // this.dss.saveNewUser(this.newUserForm.value);
+    this.dss.saveNewUser(this.newUserForm.value);
   }
 
   onSelectTask(taskDto: TaskModel) {
