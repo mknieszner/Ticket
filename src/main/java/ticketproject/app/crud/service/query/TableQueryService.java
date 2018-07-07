@@ -1,7 +1,6 @@
 package ticketproject.app.crud.service.query;
 
 import com.google.common.collect.ImmutableList;
-import com.google.common.collect.Lists;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.util.Pair;
@@ -24,7 +23,9 @@ import ticketproject.app.crud.domain.entities.authorization.User;
 import ticketproject.app.crud.service.helper.ColumnType;
 
 import javax.transaction.Transactional;
-import java.sql.*;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -43,6 +44,7 @@ public class TableQueryService {
     private final ProjectTableRepository projectTableRepository;
     private final UserRepository userRepository;
     private final DbManager dbManager;
+    private final TableQueryBaseStatements statements;
 
     //TODO POLSKIE ZNAKI!
     @Transactional
@@ -83,7 +85,7 @@ public class TableQueryService {
         String taskUSerJunctionName = TABLE_TASK_USER_JUNCTION_NAME_VARIABLE
                 .replaceFirst(TABLE_NAME_VARIABLE, tableDefinitionDto.getName());
 
-        return DEFINE_TASKS_USERS_JUNCTION_STATEMENT
+        return statements.getDefineTasksUsersJunctionStatement()
                 .replaceAll(TABLE_TASK_USER_JUNCTION_NAME_VARIABLE, taskUSerJunctionName)
                 .replaceFirst(TABLE_TASK_NAME_VARIABLE, taskTableName);
     }
@@ -95,14 +97,14 @@ public class TableQueryService {
         String taskTableName = TABLE_TASK_NAME_VARIABLE
                 .replaceFirst(TABLE_NAME_VARIABLE, tableDefinitionDto.getName());
 
-        return DEFINE_TABLE_TASKS_JUNCTION_STATEMENT
+        return statements.getDefineTableTasksJunctionStatement()
                 .replaceFirst(TABLE_TASK_JUNCTION_NAME_VARIABLE, taskTableJunctionName)
                 .replaceFirst(TABLE_NAME_VARIABLE, tableDefinitionDto.getName())
                 .replaceFirst(TABLE_TASK_NAME_VARIABLE, taskTableName);
     }
 
     private String prepareDefineTableTasksStatement(TableDefinitionDto tableDefinitionDto) {
-        return DEFINE_TABLE_TASKS_STATEMENT
+        return statements.getDefineTableTasksStatement()
                 .replaceFirst(TABLE_NAME_VARIABLE, tableDefinitionDto.getName());
     }
 
@@ -338,7 +340,7 @@ public class TableQueryService {
     }
 
     private RowDto setNotModifiableNewRowValues(RowDto rowDto) {
-        rowDto = rowDto.updateWithCreationAnfModificationInfo(rowDto)
+        rowDto = RowDto.updateWithCreationAnfModificationInfo(rowDto)
                 .createdBy(getCurrentUserUsername())
                 .createdOn(LocalDateTime.now())
                 .lastModifiedBy(getCurrentUserUsername())
@@ -365,8 +367,8 @@ public class TableQueryService {
                 .replace(TABLE_NAME_VARIABLE, tableName);
     }
 
-    private static String prepareDefineTableStatement(TableDefinitionDto tableDefinitionDto) {
-        String statement = DEFINE_TABLE_STATEMENT.replaceFirst(TABLE_NAME_VARIABLE, tableDefinitionDto.getName());
+    private String prepareDefineTableStatement(TableDefinitionDto tableDefinitionDto) {
+        String statement = statements.getDefineTableStatement().replaceFirst(TABLE_NAME_VARIABLE, tableDefinitionDto.getName());
         return statement.replaceFirst(COLUMN_DEFINITIONS_VARIABLE, getSeparatedColumnDefinitions(tableDefinitionDto));
     }
 
