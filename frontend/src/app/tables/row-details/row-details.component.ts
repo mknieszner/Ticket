@@ -1,5 +1,5 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
-import {RowContentModel, TableDefinitionModel, TaskModel} from '../../shared/table.model';
+import {RowContentModel, TableDefinitionModel, TablesDetails, TaskModel} from '../../shared/table.model';
 import {Observable} from 'rxjs/Observable';
 import {DataStorageService} from '../../shared/data-storage.service';
 import {Store} from '@ngrx/store';
@@ -24,10 +24,11 @@ export class RowDetailsComponent implements OnInit, OnDestroy {
   unlockFields: boolean;
   newRowMode: Observable<boolean>;
   selectedTask: TaskModel = null;
-  selesctedRow: RowContentModel;
+  selectedRow: RowContentModel;
   extendedRowView: Observable<boolean>;
   extendedRowViewValue: boolean;
-  private selectedTableName: string;
+  tablesDetails: TablesDetails[];
+  private tableDefinition: TableDefinitionModel;
 
   constructor(private qcs: QuestionControlService,
               private store: Store<fromAppReducers.AppState>,
@@ -44,15 +45,18 @@ export class RowDetailsComponent implements OnInit, OnDestroy {
     this.row = this.store.select('tables', 'editedRow');
     this.header = this.store.select('tables', 'tableDefinition');
     this.header.subscribe((header: TableDefinitionModel) => {
-      this.selectedTableName = header[0].name;
+      this.tableDefinition = header[0];
     });
     this.row.subscribe(row => {
       this.createUpdateRowForm(row);
-      this.selesctedRow = row;
+      this.selectedRow = row;
     });
     this.newRowMode = this.store.select('tables', 'newRowMode');
     this.newRowMode.subscribe(() => {
       this.createNewRowForm();
+    });
+    this.store.select('tables', 'tablesDetails').subscribe((tablesDetails: TablesDetails[]) => {
+      this.tablesDetails = tablesDetails;
     });
   }
 
@@ -131,7 +135,7 @@ export class RowDetailsComponent implements OnInit, OnDestroy {
   onSubmit() {
     if (this.unlockFields) {
       this.header.forEach(header => {
-        this.dss.updateRow(header[0].name, mapForm(this.updateRowForm.value));
+        this.dss.updateRow(header[0].id, mapForm(this.updateRowForm.value));
       });
       this.onToggleRowEditMode();
     }
@@ -151,7 +155,7 @@ export class RowDetailsComponent implements OnInit, OnDestroy {
   onSaveNewRow() {
     const newRow = this.mapNewRow();
     this.header.forEach(header => {
-      this.dss.addNewRow(header[0].name, newRow);
+      this.dss.addNewRow(header[0].id, newRow);
     });
   }
 
@@ -199,15 +203,18 @@ export class RowDetailsComponent implements OnInit, OnDestroy {
   }
 
   onDeleteRow() {
-    console.log(this.selesctedRow);
-    this.dss.deleteRow(this.selectedTableName, this.selesctedRow.id);
+    this.dss.deleteRow(this.tableDefinition.id, this.selectedRow.id);
   }
 
   onDeleteTask(taskId: number) {
-    this.dss.deleteTask(this.selectedTableName, taskId, this.selesctedRow.id);
+    this.dss.deleteTask(this.tableDefinition.id, taskId, this.selectedRow.id);
   }
 
   switchExtendedRowView() {
     this.store.dispatch(new TablesActions.SetExtendedRowView(!this.extendedRowViewValue));
+  }
+
+  private getTableId(tableName: string): number {
+    return this.tablesDetails.find((tableDetails) => tableDetails.name === tableName).id
   }
 }

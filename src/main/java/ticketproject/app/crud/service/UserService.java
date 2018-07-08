@@ -138,7 +138,8 @@ public class UserService implements UserDetailsService {
   }
 
   @Transactional
-  public List<UserDto> getUsersAuthorized(final String username) {
+  public List<UserDto> getUsersAuthorized() {
+    String username = getCurrentUserUsername();
     if (isAdmin(username)) {
       return getAllUsers();
     } else {

@@ -69,28 +69,26 @@ export class DataStorageService {
       });
   }
 
-  getTableHeaderByName(tableName: string) {
-    return this.httpClient.get<TableDefinitionModel>(this.basehost + '/v1/projects/tables/definition/' + tableName)
-      .map((definition) => {
-        return definition;
-      }).subscribe((definition: TableDefinitionModel) => {
+  getTableHeaderBy(tableId: number) {
+    return this.httpClient.get<TableDefinitionModel>(this.basehost + '/v1/projects/tables/' + tableId + '/definition')
+      .subscribe((definition: TableDefinitionModel) => {
         this.store.dispatch(new TablesActions.SetTableDefinitionAction(definition));
       }, (err) => {
         console.log('getTableHeaderByName dss err: ', err);
       });
   }
 
-  getTableRowsByName(tableName: string) {
-    return this.httpClient.get<RowContentModel[]>(this.basehost + '/v1/projects/tables/' + tableName + '/rows')
+  getTableRowsBy(tableId: number) {
+    return this.httpClient.get<RowContentModel[]>(this.basehost + '/v1/projects/tables/' + tableId + '/rows')
       .subscribe((rows: RowContentModel[]) => {
         this.store.dispatch(new TablesActions.SetRowsAction(rows));
       }, (err) => {
-      console.log('getTableRowsByName dss err: ', err);
-    });
+        console.log('getTableRowsByName dss err: ', err);
+      });
   }
 
   getTableNames() {
-    this.httpClient.get<string[]>(this.basehost + '/v1/projects/tables/names')
+    this.httpClient.get<{ id: number, name: string }[]>(this.basehost + '/v1/projects/tables/names')
       .subscribe(
         (names) => {
           this.store.dispatch(new TablesActions.SetNamesAction(names));
@@ -103,7 +101,7 @@ export class DataStorageService {
   postTableDefinition(definition: TableDefinitionModel, databaseEnvironment) {
     this.httpClient.post(this.basehost + '/v1/projects/tables/definition/' + databaseEnvironment, definition)
       .subscribe(() => {
-        //TODO komunikat
+          //TODO komunikat
           alert("DONE!");
         }, (err) => {
           console.log('postTableDefinition dss err: ', err);
@@ -177,8 +175,8 @@ export class DataStorageService {
       });
   }
 
-  addNewRow(tableName: string, newRow: RowContentModel) {
-    this.httpClient.post<RowContentModel>(this.basehost + '/v1/projects/tables/' + tableName + '/row', newRow)
+  addNewRow(tableId: number, newRow: RowContentModel) {
+    this.httpClient.post<RowContentModel>(this.basehost + '/v1/projects/tables/' + tableId + '/row', newRow)
       .subscribe((savedRow: RowContentModel) => {
           // console.log('addNewRow dss OK: ', savedRow)
           this.store.dispatch(new TablesActions.AddRowAction(savedRow));
@@ -188,8 +186,8 @@ export class DataStorageService {
         });
   }
 
-  updateRow(tableName: string, updatedRow: RowContentModel) {
-    this.httpClient.put<RowContentModel>(this.basehost + '/v1/projects/tables/' + tableName + '/row', updatedRow)
+  updateRow(tableId: number, updatedRow: RowContentModel) {
+    this.httpClient.put<RowContentModel>(this.basehost + '/v1/projects/tables/' + tableId + '/row', updatedRow)
       .subscribe(
         (savedRow: RowContentModel) => {
           // console.log("updateRow dss OK: ", savedRow);
@@ -261,10 +259,9 @@ export class DataStorageService {
         });
   }
 
-  saveNewTask(tableName: string, newTask: TaskModel, rowId: number) {
-    this.httpClient.post<TaskModel>(this.basehost + '/v1/projects/tables/' + tableName + '/rows/' + rowId + '/tasks', newTask)
+  saveNewTask(tableId: number, newTask: TaskModel, rowId: number) {
+    this.httpClient.post<TaskModel>(this.basehost + '/v1/projects/tables/' + tableId + '/rows/' + rowId + '/tasks', newTask)
       .subscribe((task: TaskModel) => {
-          // console.log('saveNewTask dss OK: ', tasks)
           this.store.dispatch(new TablesActions.AddTaskAction({task: task, rowId: rowId}));
         },
         err => {
@@ -284,10 +281,9 @@ export class DataStorageService {
       );
   }
 
-  onAssignUserToTask(tableName: string, rowId: number, taskId: number, username: string) {
-    this.httpClient.post<TaskModel>(this.basehost + '/v1/projects/tables/' + tableName + '/rows/tasks/' + taskId, username)
+  onAssignUserToTask(tableId: number, rowId: number, taskId: number, username: string) {
+    this.httpClient.post<TaskModel>(this.basehost + '/v1/projects/tables/' + tableId + '/rows/tasks/' + taskId, username)
       .subscribe((task: TaskModel) => {
-          // console.log('onAssignUserToTask dss OK: ', task)
           this.store.dispatch(new TablesActions.UpdateRowsTaskAction({rowId: rowId, task: task}));
           this.taskInfoService.stompClient.send('/app/newTasks/' + username, {});
         },
@@ -296,8 +292,8 @@ export class DataStorageService {
         });
   }
 
-  onRemoveUserFromTask(tableName: string, rowId: number, taskId: number, username: string) {
-    this.httpClient.delete<TaskModel>(this.basehost + '/v1/projects/tables/' + tableName + '/rows/tasks/' + taskId + '/user/' + username)
+  onRemoveUserFromTask(tableId: number, rowId: number, taskId: number, username: string) {
+    this.httpClient.delete<TaskModel>(this.basehost + '/v1/projects/tables/' + tableId + '/rows/tasks/' + taskId + '/user/' + username)
       .subscribe((task: TaskModel) => {
           // console.log('onRemoveUserFromTask dss OK: ', task)
           this.store.dispatch(new TablesActions.UpdateRowsTaskAction({rowId: rowId, task: task}));
@@ -309,7 +305,7 @@ export class DataStorageService {
   }
 
   updateTask(task: TaskModel) {
-    this.httpClient.put<TaskModel>(this.basehost + '/v1/projects/tables/rows/tasks/', task)
+    this.httpClient.put<TaskModel>(this.basehost + '/v1/projects/tables/' +task.tableId+ '/rows/tasks', task)
       .subscribe(
         (updatedTask: TaskModel) => {
           console.log('updateTask dss OK: ', updatedTask);
@@ -321,9 +317,8 @@ export class DataStorageService {
       );
   }
 
-  deleteTask(tableName: string, taskId: number, rowId: number) {
-    // console.log('deleteTask',taskId, rowId)
-    this.httpClient.delete<boolean>(this.basehost + '/v1/projects/tables/' + tableName + '/rows/tasks/' + taskId)
+  deleteTask(tableId: number, taskId: number, rowId: number) {
+    this.httpClient.delete<boolean>(this.basehost + '/v1/projects/tables/' + tableId + '/rows/tasks/' + taskId)
       .subscribe((response) => {
         if (response) {
           this.store.dispatch(new TaskActions.OnDeleteTask(taskId));
@@ -334,8 +329,8 @@ export class DataStorageService {
       });
   }
 
-  deleteRow(tableName: string, rowId: number) {
-    this.httpClient.delete<boolean>(this.basehost + '/v1/projects/tables/' + tableName + '/rows/' + rowId)
+  deleteRow(tableId: number, rowId: number) {
+    this.httpClient.delete<boolean>(this.basehost + '/v1/projects/tables/' + tableId + '/rows/' + rowId)
       .subscribe((response) => {
         if (response) {
           this.store.dispatch(new TablesActions.DeleteRow(rowId));

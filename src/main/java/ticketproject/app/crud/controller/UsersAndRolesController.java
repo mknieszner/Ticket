@@ -90,8 +90,8 @@ public class UsersAndRolesController {
 
 
   @GetMapping(value = "users")
-  public List<UserDto> getUsersIfAdmin(final Principal principal) {
-    return userService.getUsersAuthorized(principal.getName());
+  public List<UserDto> getUsersIfAdmin() {
+    return userService.getUsersAuthorized();
   }
 
   @PostMapping(value = "users", consumes = APPLICATION_JSON_VALUE)

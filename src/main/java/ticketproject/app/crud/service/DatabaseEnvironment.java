@@ -52,15 +52,23 @@ public class DatabaseEnvironment {
                 .build();
     }
 
-    public TableRequestHandler getHandler(String tableName) {
-        return getHandler(getDatabaseEnvironmentByTableName(tableName));
+    public TableRequestHandler getHandlerBy(String tableName) {
+        return getHandlerBy(getDatabaseEnvironmentBy(tableName));
     }
 
-    public TableRequestHandler getHandler(Environments databaseEnvironment) {
+    public TableRequestHandler getHandlerBy(Long tableId) {
+        return getHandlerBy(getDatabaseEnvironmentBy(tableId));
+    }
+
+    public TableRequestHandler getHandlerBy(Environments databaseEnvironment) {
         return handlerMap.get(databaseEnvironment);
     }
 
-    private Environments getDatabaseEnvironmentByTableName(final String name) {
+    private Environments getDatabaseEnvironmentBy(final String name) {
         return projectRepository.findByName(name).getDatabaseEnvironment();
+    }
+
+    private Environments getDatabaseEnvironmentBy(final Long tableId) {
+        return projectRepository.findOne(tableId).getDatabaseEnvironment();
     }
 }

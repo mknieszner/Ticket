@@ -19,6 +19,7 @@ export class RowContentModel {
 
 export class TaskModel {
   public id: number;
+  public tableId: number;
   public name: string;
   public description: string;
   public status: Status;
@@ -45,4 +46,9 @@ export interface ExtendedFilterModel { // TODO: Filter do poprawy (własciwe war
   lastModifiedOn: string;
   columnValueDtos: any[];
   taskDtos: any;
+}
+
+export interface TablesDetails {
+  id: number;
+  name: string;
 }

@@ -5,19 +5,34 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
+import ticketproject.app.crud.dao.ProjectTableRepository;
 import ticketproject.app.crud.domain.dto.authorization.UserDto;
+import ticketproject.app.crud.domain.dto.values.TaskDto;
+import ticketproject.app.crud.domain.entities.authorization.Role;
 import ticketproject.app.crud.domain.entities.authorization.User;
+import ticketproject.app.crud.service.query.TableQueryService;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
+
+import static java.util.stream.Collectors.toList;
 
 @Component
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
 public class UserMapper {
-  @Autowired
-  @Lazy
-  private PasswordEncoder passwordEncoder;
-  private final TaskMapper taskMapper;
+    @Autowired
+    @Lazy
+    private PasswordEncoder passwordEncoder;
+
+    @Autowired
+    @Lazy
+    private TableQueryService tableQueryService;
+    private ProjectTableRepository projectTableRepository;
+    private final TaskMapper taskMapper;
+    private static final List<String> NO_TABLE_ROLES = Arrays.asList("ROLE_USER", "ROLE_ADMIN");
 
   public User mapUserDtoToUser(final UserDto userDto) {
     User user = new User(
@@ -27,28 +42,51 @@ public class UserMapper {
         userDto.getEmail(),
         passwordEncoder.encode(userDto.getPassword()),
         userDto.isEnabled(),
-        taskMapper.mapTaskDtosToTasks(userDto.getTaskDtos()));
+        taskMapper.mapTaskDtosToTasks(userDto.getTaskDtos().stream()
+                .filter(taskDto -> projectTableRepository.exists(taskDto.getTableId()) || taskDto.getTableId() == null)
+                .collect(toList())
+        )
+    );
     return user;
   }
 
-  public UserDto mapUserToUserDto(final User user) {
-    UserDto userDto = new UserDto(
-        user.getUsername(),
-        user.getFirstName(),
-        user.getLastName(),
-        user.getEmail(),
-        user.getPassword(),
-        user.isEnabled(),
-        taskMapper.mapTasksToTaskDtos(user.getTasks()));
-    user.getRoles().forEach(role -> userDto.addRoleDto(role.getName()));
-    return userDto;
-  }
 
-  public Set<UserDto> mapUserSetToUserDtoSet(final Set<User> users) {
-    return users.stream().map(this::mapUserToUserDto).collect(Collectors.toSet());
-  }
 
-  public Set<User> mapUserDtoSetToUserSet(final Set<UserDto> users) {
-    return users.stream().map(this::mapUserDtoToUser).collect(Collectors.toSet());
-  }
+    private List<TaskDto> userTasks(User user) {
+        List<TaskDto> userTasks = new ArrayList<>();
+
+        //common table tasks
+        userTasks.addAll(taskMapper.mapTasksToTaskDtos(user.getTasks()));
+
+        //separate table tasks
+        user.getRoles().stream()
+                .map(Role::getName)
+                .filter(roleName -> !NO_TABLE_ROLES.contains(roleName))
+                .forEach(roleName ->
+                        userTasks.addAll(tableQueryService.getUserTasks(roleName, user.getUsername()))
+                );
+
+        return userTasks;
+    }
+
+    public UserDto mapUserToUserDto(final User user) {
+        UserDto userDto = new UserDto(
+                user.getUsername(),
+                user.getFirstName(),
+                user.getLastName(),
+                user.getEmail(),
+                user.getPassword(),
+                user.isEnabled(),
+                userTasks(user));
+        user.getRoles().forEach(role -> userDto.addRoleDto(role.getName()));
+        return userDto;
+    }
+
+    public Set<UserDto> mapUserSetToUserDtoSet(final Set<User> users) {
+        return users.stream().map(this::mapUserToUserDto).collect(Collectors.toSet());
+    }
+
+    public Set<User> mapUserDtoSetToUserSet(final Set<UserDto> users) {
+        return users.stream().map(this::mapUserDtoToUser).collect(Collectors.toSet());
+    }
 }

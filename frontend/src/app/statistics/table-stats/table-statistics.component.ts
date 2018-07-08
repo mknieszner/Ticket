@@ -4,7 +4,7 @@ import {Observable} from 'rxjs/Observable';
 
 import * as fromAppReducers from '../../shared/store/app.reducers';
 import {TableState} from '../../shared/store/table/tables.reducers';
-import {TableDefinitionModel} from '../../shared/table.model';
+import {TableDefinitionModel, TablesDetails} from '../../shared/table.model';
 import {DataStorageService} from '../../shared/data-storage.service';
 import {EnumInfoModel, TableInfoModel} from '../../shared/statistics/table-info.model';
 import {StatisticsService} from '../../shared/statistics/statistics.service';
@@ -21,6 +21,7 @@ export class TableStatisticsComponent implements OnInit {
   tableHeaderState: Observable<TableDefinitionModel>;
   tableState: Observable<TableState>;
   selectedTableName: Observable<string>;
+  tablesDetails: TablesDetails[];
   tableInfo: TableInfoModel = null;
   tasksInfo: TasksInfoModel = null;
   enumCharts: EnumChart[] = [];
@@ -37,14 +38,16 @@ export class TableStatisticsComponent implements OnInit {
     });
     this.tableState = this.store.select('tables');
     this.selectedTableName = this.store.select('statistics', 'selectedTableName');
+    this.store.select('tables', 'tablesDetails')
+      .subscribe((tableDetails: TablesDetails[])=> this.tablesDetails = tableDetails);
     this.selectedTableName.subscribe((tableName: string) => {
       if (tableName) {
-        this.dss.getTableRowsByName(tableName);
-        this.dss.getTableHeaderByName(tableName);
+        const tableDetails = this.tablesDetails.find((tableDetails) => tableDetails.name === tableName);
+        this.dss.getTableRowsBy(tableDetails.id);
+        this.dss.getTableHeaderBy(tableDetails.id);
       }
     });
     this.tableState.subscribe((tableState: TableState) => {
-
       if (tableState) {
         this.tasksInfo = this.statistics.mapToTaskInfo(tableState.tableContent);
         this.tableInfo = this.statistics.mapToRowsInfo(tableState.tableContent);

@@ -74,7 +74,7 @@ public class MvcConfig extends WebMvcConfigurerAdapter {
 
         //Create mapping to index.html for Angular HTML5 mode.
         String[] indexLocations = getIndexLocations();
-        registry.addResourceHandler("/**")
+        registry.addResourceHandler("/")
                 .addResourceLocations(indexLocations)
                 .setCachePeriod(cachePeriod)
                 .resourceChain(true)

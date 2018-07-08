@@ -35,7 +35,7 @@ public class TableQueryBaseStatements {
     final String getDefineTableStatement() {
         return String.format(
                 "CREATE TABLE %s ( " +
-                        "id BIGINT NOT NULL PRIMARY KEY " + params.getAutoIncrement() + ", " +
+                        "id " + params.getAutoIncrement() + ", " +
                         "createdOn datetime , " +
                         "createdBy varchar(255) , " +
                         "lastModifiedOn datetime , " +
@@ -51,7 +51,8 @@ public class TableQueryBaseStatements {
     final String getDefineTableTasksStatement() {
         return String.format(
                 "CREATE TABLE %s ( " +
-                        "id BIGINT NOT NULL PRIMARY KEY " + params.getAutoIncrement() + ", " +
+                        "id " + params.getAutoIncrement() + ", " +
+                        "table_id BIGINT," +
                         "description varchar(255) , " +
                         "name varchar(255) , " +
                         "status varchar(255) )",
@@ -62,7 +63,7 @@ public class TableQueryBaseStatements {
     final String getDefineTableTasksJunctionStatement() {
         return String.format(
                 "CREATE TABLE %s ( " +
-                        "id BIGINT NOT NULL PRIMARY KEY " + params.getAutoIncrement() + ", " +
+                        "id " + params.getAutoIncrement() + ", " +
                         "row_id BIGINT, " +
                         "task_id BIGINT , " +
                         "    FOREIGN KEY (row_id)" +
@@ -80,7 +81,7 @@ public class TableQueryBaseStatements {
     final String getDefineTasksUsersJunctionStatement() {
         return String.format(
                 "CREATE TABLE %s ( " +
-                        "id BIGINT NOT NULL PRIMARY KEY " + params.getAutoIncrement() + ", " +
+                        "id " + params.getAutoIncrement() + ", " +
                         "task_id BIGINT, " +
                         "user_id BIGINT , " +
                         "    FOREIGN KEY (task_id)" +
@@ -110,7 +111,7 @@ public class TableQueryBaseStatements {
             );
 
     static final String GET_TABLE_TASKS_STATEMENT =
-            ("SELECT %s.id as ROW_ID, %s_tasks.id, %s_tasks.NAME, %s_tasks.DESCRIPTION, %s_tasks.STATUS " +
+            ("SELECT %s.id as ROW_ID, %s_tasks.id, %s_tasks.TABLE_ID, %s_tasks.NAME, %s_tasks.DESCRIPTION, %s_tasks.STATUS " +
                     "FROM %s, %s_tasks, %s_reference_tasks " +
                     "WHERE %s_reference_tasks.row_id=%s.id AND %s_reference_tasks.task_id=%s_tasks.id")
                     .replace("%s", TABLE_NAME_VARIABLE);
@@ -126,9 +127,18 @@ public class TableQueryBaseStatements {
             );
 
     static final String ADD_TASK_TO_ROW_STATEMENT =
-            String.format("INSERT INTO %s_tasks (description, name,status) " +
-                            "VALUES (?, ?, ?)",
-                    TABLE_TASK_NAME_VARIABLE
+            String.format("INSERT INTO %s_tasks (table_id, description, name, status) " +
+                            "VALUES (?, ?, ?, ?)",
+                    TABLE_NAME_VARIABLE
+            );
+
+    static final String SIMPLE_UPDATE_TASK_STATEMENT =
+            String.format("UPDATE %s_tasks SET " +
+                            "description = ?, " +
+                            "name = ?, " +
+                            "status = ? " +
+                            "WHERE id = ?",
+                    TABLE_NAME_VARIABLE
             );
 
     static final String DELETE_TASK_STATEMENT =

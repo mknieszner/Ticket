@@ -2,7 +2,6 @@ package ticketproject.app.crud.domain.dto.values;
 
 import lombok.*;
 import ticketproject.app.crud.domain.entities.Task;
-import ticketproject.app.crud.domain.entities.authorization.User;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -17,6 +16,8 @@ import java.util.Set;
 public class TaskDto {
 
   private Long id;
+
+  private Long tableId;
 
   private String name;
 

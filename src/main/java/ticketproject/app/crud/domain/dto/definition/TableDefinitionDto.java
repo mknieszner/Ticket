@@ -11,7 +11,11 @@ import java.util.List;
 @AllArgsConstructor
 @ToString
 public class TableDefinitionDto {
-  Long id;
-  String name;
-  List<ColumnDetailDefinitionDto> columnDetailDefinitionDtoList = new ArrayList<>();
+    Long id;
+    String name;
+    List<ColumnDetailDefinitionDto> columnDetailDefinitionDtoList = new ArrayList<>();
+
+    public String getSqlValidTableName() {
+        return name.replaceAll(" ", "_");
+    }
 }

@@ -13,7 +13,6 @@ import {UserModel} from '../../user/user.model';
   styleUrls: ['./task.component.css']
 })
 export class TaskComponent implements OnInit {
-  // @Input() task: TaskModel;
   showedTask: Observable<TaskModel>;
   task: TaskModel;
   // showedInnerTask: Observable<TaskModel>;
@@ -21,8 +20,7 @@ export class TaskComponent implements OnInit {
   editedRow: Observable<RowContentModel>;
   row: RowContentModel;
   tableUsers: Observable<UserModel[]>;
-  tableDefinition: Observable<TableDefinitionModel>;
-  tableName: string;
+  tableDefinition: TableDefinitionModel;
 
 
   constructor(private store: Store<fromAppReducers.AppState>,
@@ -38,14 +36,10 @@ export class TaskComponent implements OnInit {
     this.editedRow.forEach((row: RowContentModel) => {
       this.row = row;
     });
-    this.tableDefinition = this.store.select('tables', 'tableDefinition');
-    this.tableDefinition.subscribe((tableDefinition: TableDefinitionModel) => {
-      // console.log( 'setTableUsers');
-      // console.log(tableDefinition);
-
+    this.store.select('tables', 'tableDefinition').subscribe((tableDefinition: TableDefinitionModel) => {
       if (tableDefinition) { // TODO: ???
-        this.tableName = tableDefinition[0].name;
-        this.dss.setTableUsers(this.tableName);
+        this.tableDefinition = tableDefinition[0];
+        this.dss.setTableUsers(this.tableDefinition.name);
       }
     });
     this.tableUsers = this.store.select('tables', 'tableUsers');
@@ -59,21 +53,22 @@ export class TaskComponent implements OnInit {
   onSaveRowNewTask(newTaskDetails: { name: string, description: string, status: Status }) {
     const task: TaskModel = {
       id: null,
+      tableId: this.tableDefinition.id,
       name: newTaskDetails.name,
       description: newTaskDetails.description,
       status: newTaskDetails.status,
       userNames: [],
       taskDtos: []
     };
-    this.dss.saveNewTask(this.tableName, task, this.row.id);
+    this.dss.saveNewTask(this.tableDefinition.id, task, this.row.id);
   }
 
   onAssignUserToTask(username: string ) {
     console.log('onAssignUserToTask username >' + username + '<');
-    this.dss.onAssignUserToTask(this.tableName, this.row.id, this.task.id , username);
+    this.dss.onAssignUserToTask(this.tableDefinition.id, this.row.id, this.task.id , username);
   }
 
   onRemoveUserFromTask(username: string) {
-    this.dss.onRemoveUserFromTask(this.tableName, this.row.id, this.task.id , username);
+    this.dss.onRemoveUserFromTask(this.tableDefinition.id, this.row.id, this.task.id , username);
   }
 }

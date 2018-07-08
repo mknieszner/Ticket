@@ -3,7 +3,6 @@ package ticketproject.app.crud.mapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import ticketproject.app.crud.dao.TaskRepository;
 import ticketproject.app.crud.dao.UserRepository;
 import ticketproject.app.crud.domain.dto.values.TaskDto;
 import ticketproject.app.crud.domain.entities.Task;
@@ -11,7 +10,6 @@ import ticketproject.app.crud.domain.entities.authorization.User;
 
 import javax.transaction.Transactional;
 import java.util.List;
-import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
 @Component
@@ -22,6 +20,7 @@ public class TaskMapper {
   public TaskDto mapTaskToTaskDto(final Task task) {
     return new TaskDto(
         task.getId(),
+        task.getTableId(),
         task.getName(),
         task.getDescription(),
         task.getStatus(),
@@ -34,6 +33,7 @@ public class TaskMapper {
   public Task mapTaskDtoToTask(final TaskDto taskDto) {
     return new Task(
       taskDto.getId(),
+      taskDto.getTableId(),
       taskDto.getName(),
       taskDto.getDescription(),
       taskDto.getStatus(),

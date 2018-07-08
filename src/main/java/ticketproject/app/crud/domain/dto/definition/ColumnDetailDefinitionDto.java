@@ -13,7 +13,11 @@ import java.util.List;
 @AllArgsConstructor
 @ToString
 public class ColumnDetailDefinitionDto {
-  String name;
-  ColumnType.Types type;
-  List<Option> optionList = new ArrayList<>();
+    String name;
+    ColumnType.Types type;
+    List<Option> optionList = new ArrayList<>();
+
+    public String getSQLValidColumnName() {
+        return name.replaceAll(" ", "_");
+    }
 }

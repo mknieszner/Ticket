@@ -1,6 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {Store} from '@ngrx/store';
-import {ExtendedFilterModel} from '../shared/table.model';
+import {ExtendedFilterModel, TablesDetails} from '../shared/table.model';
 import {Observable} from 'rxjs/Observable';
 import {DataStorageService} from '../shared/data-storage.service';
 import * as fromAppReducers from '../shared/store/app.reducers';
@@ -54,12 +54,12 @@ export class TablesComponent implements OnInit {
   //   this.contentStore.dispatch(new TablesActions.SetEditRowMode(false));
   // }
 
-  setTable(tableName) {// TODO: RESET STANU PO ZMIANIE STOLU
+  setTable(tablesDetails: TablesDetails) {// TODO: RESET STANU PO ZMIANIE STOLU
     this.showSpinner = true;
     this.contentStore.dispatch(new TablesActions.SwitchTableReset());
     this.contentStore.dispatch(new UsersAction.SwitchTableReset());
-    this.dss.getTableHeaderByName(tableName);
-    this.dss.getTableRowsByName(tableName);
+    this.dss.getTableHeaderBy(tablesDetails.id);
+    this.dss.getTableRowsBy(tablesDetails.id);
     this.tableChosen = true;
   }
 }

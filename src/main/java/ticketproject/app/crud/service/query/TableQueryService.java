@@ -73,7 +73,7 @@ public class TableQueryService {
 
     private String prepareUniqueUserPerSingleTask(TableDefinitionDto tableDefinitionDto) {
         String taskUserJunctionName = TABLE_TASK_USER_JUNCTION_NAME_VARIABLE
-                .replaceFirst(TABLE_NAME_VARIABLE, tableDefinitionDto.getName());
+                .replaceFirst(TABLE_NAME_VARIABLE, tableDefinitionDto.getSqlValidTableName());
 
         return UNIQUE_USERS_IN_SINGLE_TASK_INDEX_STATEMENT
                 .replaceAll(TABLE_TASK_USER_JUNCTION_NAME_VARIABLE, taskUserJunctionName);
@@ -81,9 +81,9 @@ public class TableQueryService {
 
     private String prepareDefineTableTasksUsersJunctionStatement(TableDefinitionDto tableDefinitionDto) {
         String taskTableName = TABLE_TASK_NAME_VARIABLE
-                .replaceFirst(TABLE_NAME_VARIABLE, tableDefinitionDto.getName());
+                .replaceFirst(TABLE_NAME_VARIABLE, tableDefinitionDto.getSqlValidTableName());
         String taskUSerJunctionName = TABLE_TASK_USER_JUNCTION_NAME_VARIABLE
-                .replaceFirst(TABLE_NAME_VARIABLE, tableDefinitionDto.getName());
+                .replaceFirst(TABLE_NAME_VARIABLE, tableDefinitionDto.getSqlValidTableName());
 
         return statements.getDefineTasksUsersJunctionStatement()
                 .replaceAll(TABLE_TASK_USER_JUNCTION_NAME_VARIABLE, taskUSerJunctionName)
@@ -92,41 +92,58 @@ public class TableQueryService {
 
     private String prepareDefineTableTasksJunctionStatement(TableDefinitionDto tableDefinitionDto) {
         String taskTableJunctionName = TABLE_TASK_JUNCTION_NAME_VARIABLE
-                .replaceFirst(TABLE_NAME_VARIABLE, tableDefinitionDto.getName());
+                .replaceFirst(TABLE_NAME_VARIABLE, tableDefinitionDto.getSqlValidTableName());
 
         String taskTableName = TABLE_TASK_NAME_VARIABLE
-                .replaceFirst(TABLE_NAME_VARIABLE, tableDefinitionDto.getName());
+                .replaceFirst(TABLE_NAME_VARIABLE, tableDefinitionDto.getSqlValidTableName());
 
         return statements.getDefineTableTasksJunctionStatement()
                 .replaceFirst(TABLE_TASK_JUNCTION_NAME_VARIABLE, taskTableJunctionName)
-                .replaceFirst(TABLE_NAME_VARIABLE, tableDefinitionDto.getName())
+                .replaceFirst(TABLE_NAME_VARIABLE, tableDefinitionDto.getSqlValidTableName())
                 .replaceFirst(TABLE_TASK_NAME_VARIABLE, taskTableName);
     }
 
     private String prepareDefineTableTasksStatement(TableDefinitionDto tableDefinitionDto) {
         return statements.getDefineTableTasksStatement()
-                .replaceFirst(TABLE_NAME_VARIABLE, tableDefinitionDto.getName());
+                .replaceFirst(TABLE_NAME_VARIABLE, tableDefinitionDto.getSqlValidTableName());
     }
 
     public List<RowDto> getRows(String tableName, List<ColumnDetail> columnsMetadata) {
+        String sqlCorrectTableName = toCorrectSqlTableName(tableName);
         List<RowDto> rows = new ArrayList<>();
         Map<Long, List<TaskDto>> rowIdtoTask = new HashMap<>();
 
         getJDBCTemplate()
-                .query(prepareGetRowsStatement(tableName), (resultSet, rowNum) -> {
+                .query(prepareGetRowsStatement(sqlCorrectTableName), (resultSet, rowNum) -> {
                     rows.addAll(getRows(columnsMetadata, resultSet));
                     return null;
                 });
 
         getJDBCTemplate()
-                .query(prepareGetTasksStatement(tableName), (resultSet, rowNum) -> {
-                    rowIdtoTask.putAll(getTasks(resultSet, tableName));
+                .query(prepareGetTasksStatement(sqlCorrectTableName), (resultSet, rowNum) -> {
+                    rowIdtoTask.putAll(getTasks(resultSet, sqlCorrectTableName));
                     return null;
                 });
 
 
         return rows.stream()
                 .map(rowDto -> rowIdtoTask.get(rowDto.getId()) != null ? RowDto.addTasks(rowDto, rowIdtoTask.get(rowDto.getId())) : rowDto)
+                .collect(toList());
+    }
+
+     public List<TaskDto> getUserTasks(String tableName, String username) {
+        String sqlCorrectTableName = toCorrectSqlTableName(tableName);
+        Map<Long, List<TaskDto>> rowIdToTask = new HashMap<>();
+
+        getJDBCTemplate()
+                .query(prepareGetTasksStatement(sqlCorrectTableName), (resultSet, rowNum) -> {
+                    rowIdToTask.putAll(getTasks(resultSet, sqlCorrectTableName));
+                    return null;
+                });
+
+        return rowIdToTask.values().stream()
+                .flatMap(Collection::stream)
+                .filter(taskDto -> taskDto.getUserNames().contains(username))
                 .collect(toList());
     }
 
@@ -157,6 +174,7 @@ public class TableQueryService {
 
         return new TaskDto(
                 resultSet.getLong("ID"),
+                resultSet.getLong("TABLE_ID"),
                 resultSet.getString("NAME"),
                 resultSet.getString("DESCRIPTION"),
                 Task.Status.valueOf(resultSet.getString("STATUS")),
@@ -205,14 +223,15 @@ public class TableQueryService {
     }
 
     public RowDto addRow(RowDto rowDto, String tableName) {
+        String sqlCorrectTableName = toCorrectSqlTableName(tableName);
         rowDto = setNotModifiableNewRowValues(rowDto);
 
         String parameterPlaceholders = getQuestionMarkParametersPlaceholders(rowDto);
         List<Object> rowValues = getRowValues(rowDto);
-        String columnNames = getSeparatedColumnNames(tableName, "", ", ", "");
+        String columnNames = getSeparatedColumnNamesNoSql(tableName, "", ", ", "");
 
         String statement = ADD_ROW_STATEMENT
-                .replaceFirst(TABLE_NAME_VARIABLE, tableName)
+                .replaceFirst(TABLE_NAME_VARIABLE, sqlCorrectTableName)
                 .replaceFirst(ORDERED_COLUMN_NAMES_VARIABLE, columnNames)
                 .replaceFirst(ORDERED_ROW_VALUES_VARIABLE, parameterPlaceholders);
 
@@ -222,13 +241,14 @@ public class TableQueryService {
     }
 
     public RowDto updateRow(RowDto rowDto, String tableName) {
+        String sqlCorrectTableName = toCorrectSqlTableName(tableName);
         rowDto = setNotModifiableEditRowValues(rowDto);
         List<Object> rowValues = getRowValues(rowDto);
-        String columnNamesAndQuestionMarkParametersPlaceholders = getSeparatedColumnNames(tableName, "", "=?, ", "=? ");
+        String columnNamesAndQuestionMarkParametersPlaceholders = getSeparatedColumnNamesNoSql(tableName, "", "=?, ", "=? ");
 
         String statement = UPDATE_ROW_STATEMENT
                 .replace("?", rowDto.getId().toString())
-                .replaceFirst(TABLE_NAME_VARIABLE, tableName)
+                .replaceFirst(TABLE_NAME_VARIABLE, sqlCorrectTableName)
                 .replaceFirst(COLUMN_VALUE_PAIRS, columnNamesAndQuestionMarkParametersPlaceholders);
 
         runParametrizedUpdate(statement, rowValues);
@@ -238,7 +258,7 @@ public class TableQueryService {
 
     public boolean deleteRowById(String tableName, Long rowId) {
         String statement = DELETE_BY_ID_STATEMENT
-                .replaceFirst(TABLE_NAME_VARIABLE, tableName);
+                .replaceFirst(TABLE_NAME_VARIABLE, toCorrectSqlTableName(tableName));
 
         int count = getJDBCTemplate()
                 .update(statement, rowId);
@@ -246,18 +266,19 @@ public class TableQueryService {
     }
 
     public TaskDto addTaskToRow(String tableName, Long rowId, TaskDto taskDto) {
-
+        String sqlCorrectTableName = toCorrectSqlTableName(tableName);
         String statement = ADD_TASK_TO_ROW_STATEMENT
-                .replaceFirst(TABLE_TASK_NAME_VARIABLE, tableName);
+                .replaceFirst(TABLE_NAME_VARIABLE, sqlCorrectTableName);
 
         List<Object> values = new ArrayList<>();
+        values.add(taskDto.getTableId());
         values.add(taskDto.getDescription());
         values.add(taskDto.getName());
         values.add(taskDto.getStatus().name());
         taskDto.setId(runParametrizedUpdate(statement, values).getKey().longValue());
 
         statement = ADD_TASK_TO_ROW_REFERENCE_STATEMENT
-                .replaceFirst(TABLE_TASK_JUNCTION_NAME_VARIABLE, tableName);
+                .replaceFirst(TABLE_TASK_JUNCTION_NAME_VARIABLE, sqlCorrectTableName);
         values = new ArrayList<>();
         values.add(rowId.toString());
         values.add(taskDto.getId().toString());
@@ -268,13 +289,14 @@ public class TableQueryService {
 
     @Transactional
     public boolean deleteTask(Long taskId, String tableName) {
+        String sqlCorrectTableName = toCorrectSqlTableName(tableName);
         String statement = DELETE_TASK_FROM_JUNCTION_STATEMENT
-                .replaceFirst(TABLE_NAME_VARIABLE, tableName);
+                .replaceFirst(TABLE_NAME_VARIABLE, sqlCorrectTableName);
 
         runParametrizedUpdate(statement, Collections.singletonList(taskId));
 
         statement = DELETE_TASK_STATEMENT
-                .replaceFirst(TABLE_NAME_VARIABLE, tableName);
+                .replaceFirst(TABLE_NAME_VARIABLE, sqlCorrectTableName);
 
         runParametrizedUpdate(statement, Collections.singletonList(taskId));
         return true;
@@ -282,12 +304,12 @@ public class TableQueryService {
 
     @Transactional
     public TaskDto assignUserToTask(String tableName, Long taskId, String username) {
+        String sqlCorrectTableName = toCorrectSqlTableName(tableName);
         String tableTaskUserJunction = TABLE_TASK_USER_JUNCTION_NAME_VARIABLE
-                .replaceFirst(TABLE_NAME_VARIABLE, tableName);
+                .replaceFirst(TABLE_NAME_VARIABLE, sqlCorrectTableName);
 
         String statement = ASSIGN_USER_TO_TASK
                 .replaceFirst(TABLE_TASK_USER_JUNCTION_NAME_VARIABLE, tableTaskUserJunction);
-
 
         User user = userRepository.findByUsername(username);
 
@@ -297,7 +319,8 @@ public class TableQueryService {
     }
 
     private TaskDto getTask(String tableName, Long taskId) {
-        String tableTaskName = TABLE_TASK_NAME_VARIABLE.replaceFirst(TABLE_NAME_VARIABLE, tableName);
+        String sqlCorrectTableName = toCorrectSqlTableName(tableName);
+        String tableTaskName = TABLE_TASK_NAME_VARIABLE.replaceFirst(TABLE_NAME_VARIABLE, sqlCorrectTableName);
 
         String statement = GET_TASK_STATEMENT.
                 replaceFirst(TABLE_TASK_NAME_VARIABLE, tableTaskName)
@@ -308,12 +331,46 @@ public class TableQueryService {
 
         getJDBCTemplate()
                 .query(statement, (resultSet) -> {
-                    tasks.add(getTask(resultSet, tableName));
+                    tasks.add(getTask(resultSet, sqlCorrectTableName));
                 });
 
         return tasks.get(0);
     }
 
+    public TaskDto updateTask(String tableName, TaskDto taskDto) {
+        String sqlCorrectTableName = toCorrectSqlTableName(tableName);
+        String statement = SIMPLE_UPDATE_TASK_STATEMENT
+                .replaceFirst(TABLE_NAME_VARIABLE, sqlCorrectTableName);
+
+        List<Object> values = new ArrayList<>();
+        values.add(taskDto.getDescription());
+        values.add(taskDto.getName());
+        values.add(taskDto.getStatus().name());
+        values.add(taskDto.getId());
+
+        runParametrizedUpdate(statement, values);
+
+        return taskDto;
+    }
+
+    public TaskDto removeUserFromTask(String tableName, Long taskId, String username) {
+        String sqlCorrectTableName = toCorrectSqlTableName(tableName);
+        TaskDto task = getTask(tableName, taskId);
+        String tableTaskUserJunction = TABLE_TASK_USER_JUNCTION_NAME_VARIABLE
+                .replaceFirst(TABLE_NAME_VARIABLE, sqlCorrectTableName);
+
+        String statement = DELETE_TASKS_USER_BY_ID_STATEMENT
+                .replaceFirst(TABLE_TASK_USER_JUNCTION_NAME_VARIABLE, tableTaskUserJunction);
+
+        User user = userRepository.findByUsername(username);
+
+        getJDBCTemplate()
+                .update(statement, taskId, user.getId());
+
+        task.getUserNames().remove(username);
+
+        return task;
+    }
 
     // == private methods ==
 
@@ -368,7 +425,7 @@ public class TableQueryService {
     }
 
     private String prepareDefineTableStatement(TableDefinitionDto tableDefinitionDto) {
-        String statement = statements.getDefineTableStatement().replaceFirst(TABLE_NAME_VARIABLE, tableDefinitionDto.getName());
+        String statement = statements.getDefineTableStatement().replaceFirst(TABLE_NAME_VARIABLE, tableDefinitionDto.getSqlValidTableName());
         return statement.replaceFirst(COLUMN_DEFINITIONS_VARIABLE, getSeparatedColumnDefinitions(tableDefinitionDto));
     }
 
@@ -377,13 +434,13 @@ public class TableQueryService {
         for (int i = 0; i < tableDefinitionDto.getColumnDetailDefinitionDtoList().size(); i++) {
             columnsVariables.add(
                     String.format(tableDefinitionDto.getColumnDetailDefinitionDtoList().get(i).getType()
-                            .getSqlCreationVariable(), tableDefinitionDto.getColumnDetailDefinitionDtoList().get(i).getName())
+                            .getSqlCreationVariable(), tableDefinitionDto.getColumnDetailDefinitionDtoList().get(i).getSQLValidColumnName())
             );
         }
         return columnsVariables.toString();
     }
 
-    private String getSeparatedColumnNames(String tableName, String prefix, String delimiter, String suffix) {
+    private String getSeparatedColumnNamesNoSql(String tableName, String prefix, String delimiter, String suffix) {
         StringJoiner columnNames = new StringJoiner(delimiter, prefix, suffix);
         columnNames.add(CREATED_ON_COLUMN_NAME);
         columnNames.add(CREATED_BY_COLUMN_NAME);
@@ -427,27 +484,14 @@ public class TableQueryService {
                 .build();
     }
 
+    private String toCorrectSqlTableName(String tableName) {
+        return tableName.replaceAll(" ", "_");
+    }
+
+
     private JdbcTemplate getJDBCTemplate() {
         return new JdbcTemplate(
                 new SingleConnectionDataSource(dbManager.getConnection(), true));
-    }
-
-    public TaskDto removeUserFromTask(String tableName, Long taskId, String username) {
-        TaskDto task = getTask(tableName, taskId);
-        String tableTaskUserJunction = TABLE_TASK_USER_JUNCTION_NAME_VARIABLE
-                .replaceFirst(TABLE_NAME_VARIABLE, tableName);
-
-        String statement = DELETE_TASKS_USER_BY_ID_STATEMENT
-                .replaceFirst(TABLE_TASK_USER_JUNCTION_NAME_VARIABLE, tableTaskUserJunction);
-
-        User user = userRepository.findByUsername(username);
-
-        getJDBCTemplate()
-                .update(statement, taskId, user.getId());
-
-        task.getUserNames().remove(username);
-
-        return task;
     }
 }
 

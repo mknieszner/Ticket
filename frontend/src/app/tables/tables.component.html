@@ -14,9 +14,9 @@
 
     <div class="panel">
       {{showSpinner | json}}
-      <app-menu *ngIf="(tableState | async).tablesNames.length != 0"
-                [tableNames]="(tableState | async).tablesNames"
-                (choosenNameChanged)="setTable($event)"></app-menu>
+      <app-menu *ngIf="(tableState | async).tablesDetails.length != 0"
+                [tablesDetails]="(tableState | async).tablesDetails"
+                (chosenNameChanged)="setTable($event)"></app-menu>
       <div class="panel-body" style="padding: 0">
 
         <div *ngIf="tableChosen && !showSpinner">

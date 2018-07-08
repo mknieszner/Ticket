@@ -93,7 +93,7 @@ export class SetTableDefinitionAction implements Action {
 export class SetNamesAction implements Action {
   readonly type = SET_NAMES;
 
-  constructor(public payload: string[]) {
+  constructor(public payload: { id: number, name: string }[]) {
   }
 }
 

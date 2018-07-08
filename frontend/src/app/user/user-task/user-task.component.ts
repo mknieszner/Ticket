@@ -34,12 +34,14 @@ export class UserTaskComponent implements OnInit {
   onSaveEditedTask() { //(payload: { name: string, description: string, status: Status }) {
     const task: TaskModel = {
       id: this.task.id,
+      tableId: this.task.tableId,
       name: this.editedTaskForm.value.name,
       description: this.editedTaskForm.value.description,
       status: this.editedTaskForm.value.status,
       userNames: this.task.userNames,
       taskDtos: this.task.taskDtos
     };
+
     this.dss.updateTask(task);
   }
 }

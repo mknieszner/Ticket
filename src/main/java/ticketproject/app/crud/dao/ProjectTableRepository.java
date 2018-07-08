@@ -7,7 +7,6 @@ import ticketproject.app.crud.domain.entities.ProjectTable;
 import javax.transaction.Transactional;
 
 public interface ProjectTableRepository extends CrudRepository<ProjectTable, Long> {
-  @Override
   ProjectTable findOne(Long id);
 
   ProjectTable findValuesById(@Param("TABLE_ID") Long tableId);

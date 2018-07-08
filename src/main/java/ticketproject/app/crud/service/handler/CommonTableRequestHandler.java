@@ -36,44 +36,49 @@ public class CommonTableRequestHandler implements TableRequestHandler {
         );
     }
 
-    public RowDto handleAddRowRequest(String tableName, RowDto rowDto) {
-        rowValidator.validateRow(getTableIdByName(tableName), rowDto);
-        return tableService.addRow(rowDto, tableName);
+    public RowDto handleAddRowRequest(Long tableId, RowDto rowDto) {
+        rowValidator.validateRow(tableId, rowDto);
+        return tableService.addRow(rowDto, tableId);
     }
 
-
-    public List<RowDto> getTableRowsByTableName(String tableName) {
-        return tableService.getTableRowsByTableName(tableName);
+    @Override
+    public List<RowDto> getTableRowsBy(Long tableId) {
+        return tableService.getTableRowsBy(tableId);
     }
 
-    public boolean handleDeleteRowRequest(String tableName, Long rowId) {
+    public boolean handleDeleteRowRequest(Long tableId, Long rowId) {
         tableService.deleteRowById(rowId);
         return true;
     }
 
     @Override
-    public RowDto updateRowByTableId(RowDto rowDto, String tableName) {
-        return tableService.updateRowByTableId(rowDto, tableName);
+    public RowDto updateRowByTableId(RowDto rowDto, Long tableId) {
+        return tableService.updateRowByTableId(rowDto, tableId);
     }
 
     @Override
-    public TaskDto addTaskToRow(String tableName, Long rowId, TaskDto taskDto) {
+    public TaskDto addTaskToRow(Long tableId, Long rowId, TaskDto taskDto) {
         return tableService.addTaskToRow(rowId, taskDto);
     }
 
     @Override
-    public boolean deleteTask(Long taskId, String tableName) {
-        return tableService.deleteTask(taskId, tableName);
+    public boolean deleteTask(Long tableId, Long taskId) {
+        return tableService.deleteTask(taskId, tableId);
     }
 
     @Override
-    public TaskDto assignUserToTask(String tableName, Long taskId, String username) {
+    public TaskDto assignUserToTask(Long tableId, Long taskId, String username) {
         return tableService.assignUserToTask(taskId, username);
     }
 
     @Override
-    public TaskDto removeUserFromTask(String tableName, Long taskId, String username) {
+    public TaskDto removeUserFromTask(Long tableId, Long taskId, String username) {
         return tableService.removeUserFromTask(taskId, username);
+    }
+
+    @Override
+    public TaskDto updateTask(Long tableId, TaskDto taskDto) {
+        return tableService.updateTask(tableId, taskDto);
     }
 
     private Long getTableIdByName(final String tableName) {

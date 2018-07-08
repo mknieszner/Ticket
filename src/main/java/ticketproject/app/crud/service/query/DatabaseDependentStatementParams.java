@@ -6,8 +6,8 @@ import lombok.Getter;
 
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 public enum DatabaseDependentStatementParams {
-    mysql("AUTO_INCREMENT"),
-    postgresql("SERIAL");
+    mysql("BIGINT NOT NULL PRIMARY KEY AUTO_INCREMENT"),
+    postgresql("SERIAL PRIMARY KEY");
 
     @Getter private String autoIncrement;
 }

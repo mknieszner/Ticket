@@ -42,60 +42,76 @@ public class SeparateTableRequestHandler implements TableRequestHandler {
         return projectDefinitionDto;
     }
 
-    public RowDto handleAddRowRequest(String tableName, RowDto rowDto) {
+    public RowDto handleAddRowRequest(Long tableId, RowDto rowDto) {
         RowDto savedRowDto;
-        rowValidator.validateRow(getTableIdByName(tableName), rowDto);
-        savedRowDto = tableQueryService.addRow(rowDto, tableName);
+        rowValidator.validateRow(tableId, rowDto);
+        savedRowDto = tableQueryService.addRow(rowDto, getTableNameBy(tableId));
         return savedRowDto;
     }
 
-
-    public List<RowDto> getTableRowsByTableName(String tableName) {
+    @Override
+    public List<RowDto> getTableRowsBy(Long tableId) {
+        String tableName = projectTableRepository.findOne(tableId).getName();
         List<RowDto> rows;
         List<ColumnDetail> columnsDetails = getColumnsDetails(tableName);
         rows = tableQueryService.getRows(tableName, columnsDetails);
         return rows;
     }
 
-    public boolean handleDeleteRowRequest(String tableName, Long rowId) {
-        return this.tableQueryService.deleteRowById(tableName, rowId);
+    public boolean handleDeleteRowRequest(Long tableId, Long rowId) {
+        return this.tableQueryService.deleteRowById(getTableNameBy(tableId), rowId);
     }
 
     @Override
-    public RowDto updateRowByTableId(RowDto rowDto, String tableName) {
+    public RowDto updateRowByTableId(RowDto rowDto, Long tableId) {
         RowDto savedRowDto;
-        rowValidator.validateRow(getTableIdByName(tableName), rowDto);
-        savedRowDto = tableQueryService.updateRow(rowDto, tableName);
+        rowValidator.validateRow(tableId, rowDto);
+        savedRowDto = tableQueryService.updateRow(rowDto, getTableNameBy(tableId));
         return savedRowDto;
     }
 
     @Override
     @Transactional
-    public TaskDto addTaskToRow(String tableName, Long rowId, TaskDto taskDto) {
+    public TaskDto addTaskToRow(Long tableId, Long rowId, TaskDto taskDto) {
+        String tableName = projectTableRepository.findOne(tableId).getName();
+        taskDto.setTableId(tableId);
         return this.tableQueryService.addTaskToRow(tableName, rowId, taskDto);
     }
 
     @Override
-    public boolean deleteTask(Long taskId, String tableName) {
+    public boolean deleteTask(Long tableId, Long taskId) {
+        String tableName = projectTableRepository.findOne(tableId).getName();
         return this.tableQueryService.deleteTask(taskId, tableName);
     }
 
     @Override
-    public TaskDto assignUserToTask(String tableName, Long taskId, String username) {
-        return tableQueryService.assignUserToTask(tableName,taskId,username);
+    public TaskDto assignUserToTask(Long tableId, Long taskId, String username) {
+        String tableName = projectTableRepository.findOne(tableId).getName();
+        return tableQueryService.assignUserToTask(tableName, taskId, username);
     }
 
     @Override
-    public TaskDto removeUserFromTask(String tableName, Long taskId, String username) {
+    public TaskDto removeUserFromTask(Long tableId, Long taskId, String username) {
+        String tableName = projectTableRepository.findOne(tableId).getName();
         return tableQueryService.removeUserFromTask(tableName, taskId, username);
+    }
+
+    @Override
+    public TaskDto updateTask(Long tableId, TaskDto taskDto) {
+        String tableName = projectTableRepository.findOne(tableId).getName();
+        return tableQueryService.updateTask(tableName, taskDto);
     }
 
     private List<ColumnDetail> getColumnsDetails(final String name) {
         return projectTableRepository.findByName(name).getColumnDetails();
     }
 
-    private Long getTableIdByName(final String tableName) {
+    private Long getTableIdBy(final String tableName) {
         return projectTableRepository.findByName(tableName).getId();
+    }
+
+    private String getTableNameBy(final Long tableId) {
+        return projectTableRepository.findOne(tableId).getName();
     }
 }
 

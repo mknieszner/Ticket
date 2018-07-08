@@ -13,19 +13,21 @@ public interface TableRequestHandler {
 
     ProjectDefinitionDto handleTableDefinitionRequest(TableDefinitionDto tableDefinitionDto, DatabaseEnvironment.Environments dbEnvironment);
 
-    RowDto handleAddRowRequest(String tableName, RowDto rowDto);
+    RowDto handleAddRowRequest(Long tableId, RowDto rowDto);
 
-    List<RowDto> getTableRowsByTableName(String tableName);
+    List<RowDto> getTableRowsBy(Long tableId);
 
-    boolean handleDeleteRowRequest(String tableName, Long rowId);
+    boolean handleDeleteRowRequest(Long tableId, Long rowId);
 
-    RowDto updateRowByTableId(RowDto rowDto, String tableName);
+    RowDto updateRowByTableId(RowDto rowDto, Long tableId);
 
-    TaskDto addTaskToRow(String tableName, Long rowId, TaskDto taskDto);
+    TaskDto addTaskToRow(Long tableId, Long rowId, TaskDto taskDto);
 
-    boolean deleteTask(Long taskId, String tableName);
+    boolean deleteTask(Long tableId, Long taskId);
 
-    TaskDto assignUserToTask(String tableName, Long taskId, String username);
+    TaskDto assignUserToTask(Long tableId, Long taskId, String username);
 
-    TaskDto removeUserFromTask(String tableName, Long taskId, String username);
+    TaskDto removeUserFromTask(Long tableId, Long taskId, String username);
+
+    TaskDto updateTask(Long tableId, TaskDto taskDto);
 }

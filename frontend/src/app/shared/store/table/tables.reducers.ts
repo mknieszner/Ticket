@@ -1,5 +1,5 @@
 import * as TableActions from './tables.actions';
-import {ExtendedFilterModel, RowContentModel, TableDefinitionModel, TaskModel} from '../../table.model';
+import {ExtendedFilterModel, RowContentModel, TableDefinitionModel, TablesDetails, TaskModel} from '../../table.model';
 import {UserModel} from '../../../user/user.model';
 import {SortModel} from '../../sort/sort.model';
 
@@ -10,7 +10,7 @@ export interface TableState {
   tableDefinition: TableDefinitionModel;
   tableContent: RowContentModel[];
   tableUsers: UserModel[];
-  tablesNames: string[];
+  tablesDetails: TablesDetails[];
   tableFilter: string;
   extendedFilterMode: boolean;
   extendedFilterAction: boolean;
@@ -28,7 +28,7 @@ const initialTableState: TableState = {
   tableDefinition: null,
   tableContent: [],
   tableUsers: [],
-  tablesNames: [],
+  tablesDetails: [],
   tableFilter: '',
   extendedFilterMode: false,
   extendedFilterAction: false,
@@ -65,12 +65,12 @@ export function tablesReducers(state: TableState = initialTableState, action: Ta
     case TableActions.SET_NAMES:
       return {
         ...state,
-        tablesNames: [...action.payload]
+        tablesDetails: [...action.payload]
       };
     case TableActions.ADD_NAMES:
       return {
         ...state,
-        tablesNames: [...state.tablesNames, ...action.payload]
+        tablesDetails: [...state.tablesDetails, ...action.payload]
       };
     case TableActions.SET_DEFINITION:
       return {
@@ -124,7 +124,7 @@ export function tablesReducers(state: TableState = initialTableState, action: Ta
     case TableActions.SWITCH_TABLE_RESET:
       return {
         ...initialTableState,
-        tablesNames: state.tablesNames,
+        tablesDetails: state.tablesDetails,
       };
     case TableActions.SET_ROW_TASKS:
       return {
@@ -173,7 +173,7 @@ export function tablesReducers(state: TableState = initialTableState, action: Ta
         editRowMode: initialTableState.editRowMode,
         editedRow: initialTableState.editedRow,
       };
-      case TableActions.ADD_TASK:
+    case TableActions.ADD_TASK:
       return {
         ...state,
         tableContent: [...addRowTask(state.tableContent, action.payload)]

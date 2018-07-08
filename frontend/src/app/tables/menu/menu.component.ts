@@ -4,6 +4,7 @@ import {Store} from '@ngrx/store';
 import * as fromAppReducers from '../../shared/store/app.reducers';
 import * as TablesActions from '../../shared/store/table/tables.actions';
 import {Observable} from 'rxjs/Observable';
+import {TablesDetails} from "../../shared/table.model";
 
 @Component({
   selector: 'app-menu',
@@ -11,9 +12,11 @@ import {Observable} from 'rxjs/Observable';
   styleUrls: ['./menu.component.css']
 })
 export class MenuComponent implements OnInit {
-  @Input() tableNames: string[];
-  choosenName: string;
-  @Output() choosenNameChanged = new Subject<string>();
+  @Input() tablesDetails: TablesDetails[];
+  @Output() chosenNameChanged = new Subject<TablesDetails>();
+
+  tableNames: string[] = [];
+  chosenName: string;
   extendedFilterMode: Observable<boolean>;
   extendedTableView: Observable<boolean>;
   extendedTableViewValue: boolean;
@@ -33,11 +36,13 @@ export class MenuComponent implements OnInit {
     this.extendedTableView.subscribe((value) => {
       this.extendedTableViewValue = value;
     });
+    this.tablesDetails.forEach(tableDetails => this.tableNames.push(tableDetails.name));
   }
 
   onChooseName(tableName: string) {
-    this.choosenName = tableName;
-    this.choosenNameChanged.next(tableName);
+    this.chosenName = tableName;
+    const tableDetails = this.tablesDetails.find((tableDetails) => tableDetails.name === tableName);
+    this.chosenNameChanged.next(tableDetails);
   }
 
   onFilter(filter) {

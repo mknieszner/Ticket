@@ -1212,20 +1212,18 @@ var DataStorageService = /** @class */ (function () {
             console.log('getActiveWsUsers dss err: ', err);
         });
     };
-    DataStorageService.prototype.getTableHeaderByName = function (tableName) {
+    DataStorageService.prototype.getTableHeaderBy = function (tableId) {
         var _this = this;
-        return this.httpClient.get(this.basehost + '/v1/projects/tables/definition/' + tableName)
-            .map(function (definition) {
-            return definition;
-        }).subscribe(function (definition) {
+        return this.httpClient.get(this.basehost + '/v1/projects/tables/' + tableId + '/definition')
+            .subscribe(function (definition) {
             _this.store.dispatch(new _store_table_tables_actions__WEBPACK_IMPORTED_MODULE_5__["SetTableDefinitionAction"](definition));
         }, function (err) {
             console.log('getTableHeaderByName dss err: ', err);
         });
     };
-    DataStorageService.prototype.getTableRowsByName = function (tableName) {
+    DataStorageService.prototype.getTableRowsBy = function (tableId) {
         var _this = this;
-        return this.httpClient.get(this.basehost + '/v1/projects/tables/' + tableName + '/rows')
+        return this.httpClient.get(this.basehost + '/v1/projects/tables/' + tableId + '/rows')
             .subscribe(function (rows) {
             _this.store.dispatch(new _store_table_tables_actions__WEBPACK_IMPORTED_MODULE_5__["SetRowsAction"](rows));
         }, function (err) {
@@ -1315,9 +1313,9 @@ var DataStorageService = /** @class */ (function () {
             }
         });
     };
-    DataStorageService.prototype.addNewRow = function (tableName, newRow) {
+    DataStorageService.prototype.addNewRow = function (tableId, newRow) {
         var _this = this;
-        this.httpClient.post(this.basehost + '/v1/projects/tables/' + tableName + '/row', newRow)
+        this.httpClient.post(this.basehost + '/v1/projects/tables/' + tableId + '/row', newRow)
             .subscribe(function (savedRow) {
             // console.log('addNewRow dss OK: ', savedRow)
             _this.store.dispatch(new _store_table_tables_actions__WEBPACK_IMPORTED_MODULE_5__["AddRowAction"](savedRow));
@@ -1325,9 +1323,9 @@ var DataStorageService = /** @class */ (function () {
             console.log('addNewRow dss err: ', err);
         });
     };
-    DataStorageService.prototype.updateRow = function (tableName, updatedRow) {
+    DataStorageService.prototype.updateRow = function (tableId, updatedRow) {
         var _this = this;
-        this.httpClient.put(this.basehost + '/v1/projects/tables/' + tableName + '/row', updatedRow)
+        this.httpClient.put(this.basehost + '/v1/projects/tables/' + tableId + '/row', updatedRow)
             .subscribe(function (savedRow) {
             // console.log("updateRow dss OK: ", savedRow);
             _this.store.dispatch(new _store_table_tables_actions__WEBPACK_IMPORTED_MODULE_5__["UpdateRowAction"](savedRow));
@@ -1390,11 +1388,10 @@ var DataStorageService = /** @class */ (function () {
             console.log('saveNewUser dss err: ', err);
         });
     };
-    DataStorageService.prototype.saveNewTask = function (tableName, newTask, rowId) {
+    DataStorageService.prototype.saveNewTask = function (tableId, newTask, rowId) {
         var _this = this;
-        this.httpClient.post(this.basehost + '/v1/projects/tables/' + tableName + '/rows/' + rowId + '/tasks', newTask)
+        this.httpClient.post(this.basehost + '/v1/projects/tables/' + tableId + '/rows/' + rowId + '/tasks', newTask)
             .subscribe(function (task) {
-            // console.log('saveNewTask dss OK: ', tasks)
             _this.store.dispatch(new _store_table_tables_actions__WEBPACK_IMPORTED_MODULE_5__["AddTaskAction"]({ task: task, rowId: rowId }));
         }, function (err) {
             console.log('saveNewTask dss err: ', err);
@@ -1410,20 +1407,19 @@ var DataStorageService = /** @class */ (function () {
             console.log('setTableUsers dss ERR: ', err);
         });
     };
-    DataStorageService.prototype.onAssignUserToTask = function (tableName, rowId, taskId, username) {
+    DataStorageService.prototype.onAssignUserToTask = function (tableId, rowId, taskId, username) {
         var _this = this;
-        this.httpClient.post(this.basehost + '/v1/projects/tables/' + tableName + '/rows/tasks/' + taskId, username)
+        this.httpClient.post(this.basehost + '/v1/projects/tables/' + tableId + '/rows/tasks/' + taskId, username)
             .subscribe(function (task) {
-            // console.log('onAssignUserToTask dss OK: ', task)
             _this.store.dispatch(new _store_table_tables_actions__WEBPACK_IMPORTED_MODULE_5__["UpdateRowsTaskAction"]({ rowId: rowId, task: task }));
             _this.taskInfoService.stompClient.send('/app/newTasks/' + username, {});
         }, function (err) {
             console.log('onAssignUserToTask dss err: ', err);
         });
     };
-    DataStorageService.prototype.onRemoveUserFromTask = function (tableName, rowId, taskId, username) {
+    DataStorageService.prototype.onRemoveUserFromTask = function (tableId, rowId, taskId, username) {
         var _this = this;
-        this.httpClient.delete(this.basehost + '/v1/projects/tables/' + tableName + '/rows/tasks/' + taskId + '/user/' + username)
+        this.httpClient.delete(this.basehost + '/v1/projects/tables/' + tableId + '/rows/tasks/' + taskId + '/user/' + username)
             .subscribe(function (task) {
             // console.log('onRemoveUserFromTask dss OK: ', task)
             _this.store.dispatch(new _store_table_tables_actions__WEBPACK_IMPORTED_MODULE_5__["UpdateRowsTaskAction"]({ rowId: rowId, task: task }));
@@ -1434,7 +1430,7 @@ var DataStorageService = /** @class */ (function () {
     };
     DataStorageService.prototype.updateTask = function (task) {
         var _this = this;
-        this.httpClient.put(this.basehost + '/v1/projects/tables/rows/tasks/', task)
+        this.httpClient.put(this.basehost + '/v1/projects/tables/' + task.tableId + '/rows/tasks', task)
             .subscribe(function (updatedTask) {
             console.log('updateTask dss OK: ', updatedTask);
             _this.store.dispatch(new _store_table_tables_actions__WEBPACK_IMPORTED_MODULE_5__["UpdateTaskAction"](updatedTask));
@@ -1443,10 +1439,9 @@ var DataStorageService = /** @class */ (function () {
             console.log('updateTask dss ERR: ', err);
         });
     };
-    DataStorageService.prototype.deleteTask = function (tableName, taskId, rowId) {
+    DataStorageService.prototype.deleteTask = function (tableId, taskId, rowId) {
         var _this = this;
-        // console.log('deleteTask',taskId, rowId)
-        this.httpClient.delete(this.basehost + '/v1/projects/tables/' + tableName + '/rows/tasks/' + taskId)
+        this.httpClient.delete(this.basehost + '/v1/projects/tables/' + tableId + '/rows/tasks/' + taskId)
             .subscribe(function (response) {
             if (response) {
                 _this.store.dispatch(new _store_task_tasks_actions__WEBPACK_IMPORTED_MODULE_7__["OnDeleteTask"](taskId));
@@ -1456,9 +1451,9 @@ var DataStorageService = /** @class */ (function () {
             console.log('deleteTask dss err: ', err);
         });
     };
-    DataStorageService.prototype.deleteRow = function (tableName, rowId) {
+    DataStorageService.prototype.deleteRow = function (tableId, rowId) {
         var _this = this;
-        this.httpClient.delete(this.basehost + '/v1/projects/tables/' + tableName + '/rows/' + rowId)
+        this.httpClient.delete(this.basehost + '/v1/projects/tables/' + tableId + '/rows/' + rowId)
             .subscribe(function (response) {
             if (response) {
                 _this.store.dispatch(new _store_table_tables_actions__WEBPACK_IMPORTED_MODULE_5__["DeleteRow"](rowId));
@@ -1976,7 +1971,7 @@ var ReversePipe = /** @class */ (function () {
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "baseUrl", function() { return baseUrl; });
 var baseUrl = 'https://my-jira.herokuapp.com';
-//export const baseUrl = 'http://localhost:8080';
+// export const baseUrl = 'http://localhost:8080';
 
 
 /***/ }),
@@ -3013,7 +3008,7 @@ var initialTableState = {
     tableDefinition: null,
     tableContent: [],
     tableUsers: [],
-    tablesNames: [],
+    tablesDetails: [],
     tableFilter: '',
     extendedFilterMode: false,
     extendedFilterAction: false,
@@ -3038,9 +3033,9 @@ function tablesReducers(state, action) {
         case _tables_actions__WEBPACK_IMPORTED_MODULE_0__["SET_ROWS"]:
             return __assign({}, state, { tableContent: action.payload.slice() });
         case _tables_actions__WEBPACK_IMPORTED_MODULE_0__["SET_NAMES"]:
-            return __assign({}, state, { tablesNames: action.payload.slice() });
+            return __assign({}, state, { tablesDetails: action.payload.slice() });
         case _tables_actions__WEBPACK_IMPORTED_MODULE_0__["ADD_NAMES"]:
-            return __assign({}, state, { tablesNames: state.tablesNames.concat(action.payload) });
+            return __assign({}, state, { tablesDetails: state.tablesDetails.concat(action.payload) });
         case _tables_actions__WEBPACK_IMPORTED_MODULE_0__["SET_DEFINITION"]:
             return __assign({}, state, { tableDefinition: [action.payload] });
         case _tables_actions__WEBPACK_IMPORTED_MODULE_0__["EDIT_ROW_MODE"]:
@@ -3062,7 +3057,7 @@ function tablesReducers(state, action) {
         case _tables_actions__WEBPACK_IMPORTED_MODULE_0__["SET_EXTENDED_FILTER_SELECT"]:
             return __assign({}, state, { filterSelect: action.payload });
         case _tables_actions__WEBPACK_IMPORTED_MODULE_0__["SWITCH_TABLE_RESET"]:
-            return __assign({}, initialTableState, { tablesNames: state.tablesNames });
+            return __assign({}, initialTableState, { tablesDetails: state.tablesDetails });
         case _tables_actions__WEBPACK_IMPORTED_MODULE_0__["SET_ROW_TASKS"]:
             return __assign({}, state, { tableContent: setRowTasks(state.tableContent, action.payload).slice() });
         case _tables_actions__WEBPACK_IMPORTED_MODULE_0__["SET_TABLE_USERS"]:
@@ -4109,10 +4104,13 @@ var TableStatisticsComponent = /** @class */ (function () {
         });
         this.tableState = this.store.select('tables');
         this.selectedTableName = this.store.select('statistics', 'selectedTableName');
+        this.store.select('tables', 'tablesDetails')
+            .subscribe(function (tableDetails) { return _this.tablesDetails = tableDetails; });
         this.selectedTableName.subscribe(function (tableName) {
             if (tableName) {
-                _this.dss.getTableRowsByName(tableName);
-                _this.dss.getTableHeaderByName(tableName);
+                var tableDetails = _this.tablesDetails.find(function (tableDetails) { return tableDetails.name === tableName; });
+                _this.dss.getTableRowsBy(tableDetails.id);
+                _this.dss.getTableHeaderBy(tableDetails.id);
             }
         });
         this.tableState.subscribe(function (tableState) {
@@ -4234,7 +4232,7 @@ module.exports = "a.bg-dark:hover {\r\n  background-color: #343a40!important;\r\
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "\r\n  <div class=\"container-fluid\" style=\"padding: 0\" *ngIf=\"choosenName\">\r\n    <nav class=\"navbar\" style=\"margin-bottom: 0;padding-bottom: 0; border-bottom: none;\">\r\n      <ul class=\"nav\" style=\"margin-bottom: 0;padding-bottom: 0; border-bottom: none;\">\r\n        <li style=\"background-color: transparent !important;\">\r\n          <form class=\"form-inline input-group my-2 my-lg-0\" style=\"margin-bottom: 0;padding-left: 20px;\">\r\n            <div class=\"btn-group\" role=\"group\" aria-label=\"\">\r\n              <button class=\"btn btn-outline-secondary my-2 my-sm-0\" (click)=\"onNewRow()\">\r\n                New row\r\n              </button>\r\n              <button class=\"btn btn-outline-secondary my-2 my-sm-0\"\r\n                      *ngIf=\"(extendedTableView|async)\"\r\n                      (click)=\"onExtendedFilterMode()\">\r\n                Filter Mode\r\n              </button>\r\n              <button class=\"btn btn-outline-secondary my-2 my-sm-0\" (click)=\"switchExtendedTableView()\">\r\n                {{ (extendedTableView|async) ? 'Reduce View' : 'Extend View'}}\r\n              </button>\r\n            </div>\r\n            <div class=\"btn-group btn-group-toggle\" data-toggle=\"buttons\"\r\n                 *ngIf=\"(extendedTableView|async) && (extendedFilterMode | async)\">\r\n              <label class=\"btn btn-outline-secondary active\"(click)=\"setFilterSelectValue(false)\">\r\n                <input type=\"radio\"> All\r\n              </label>\r\n              <label class=\"btn btn-outline-secondary\" (click)=\"setFilterSelectValue(true)\">\r\n                <input type=\"radio\"> Any\r\n              </label>\r\n            </div>\r\n            <div class=\"btn-group\" role=\"group\" aria-label=\"\">\r\n              <input class=\"form-control mr-sm-2\" type=\"text\" placeholder=\"Search\"\r\n                     (keyup)=\"onFilter(filterInput.value)\"\r\n                     *ngIf=\"!(extendedTableView|async)\"\r\n                     #filterInput>\r\n            </div>\r\n          </form>\r\n        </li>\r\n      </ul>\r\n      <ul class=\"nav nav-pills nav-collapse\" style=\"margin-bottom: 0;padding-bottom: 0;border-bottom: none;\">\r\n        <li class=\"nav-item\">\r\n          <div class=\"btn-group\" role=\"group\" aria-label=\"\">\r\n            <button class=\"btn btn-outline-secondary\"\r\n                    *ngFor=\"let tableName of tableNames\" (click)=\"onChooseName(tableName)\"\r\n                    [ngClass]=\"choosenName == tableName ? 'text-info' : 'text-secondary'\">\r\n              {{tableName}}\r\n            </button>\r\n          </div>\r\n        </li>\r\n      </ul>\r\n    </nav>\r\n  </div>\r\n\r\n<div class=\"container\" style=\"margin-top: 10%\" *ngIf=\"choosenName == null || choosenName == undefined\">\r\n  <div class=\"row justify-content-center\">\r\n    <div class=\"col-sm-12 col-md-6\">\r\n      <ul class=\"list-group\">\r\n        <li class=\"list-group-item bg-dark text-info\">Select a table:</li>\r\n        <li class=\"list-group-item text-secondary\" *ngFor=\"let tableName of tableNames\" (click)=\"onChooseName(tableName)\"> {{tableName}}</li>\r\n      </ul>\r\n    </div>\r\n  </div>\r\n</div>\r\n"
+module.exports = "<div class=\"container-fluid\" style=\"padding: 0\" *ngIf=\"chosenName\">\r\n  <nav class=\"navbar\" style=\"margin-bottom: 0;padding-bottom: 0; border-bottom: none;\">\r\n    <ul class=\"nav\" style=\"margin-bottom: 0;padding-bottom: 0; border-bottom: none;\">\r\n      <li style=\"background-color: transparent !important;\">\r\n        <form class=\"form-inline input-group my-2 my-lg-0\" style=\"margin-bottom: 0;padding-left: 20px;\">\r\n          <div class=\"btn-group\" role=\"group\" aria-label=\"\">\r\n            <button class=\"btn btn-outline-secondary my-2 my-sm-0\" (click)=\"onNewRow()\">\r\n              New row\r\n            </button>\r\n            <button class=\"btn btn-outline-secondary my-2 my-sm-0\"\r\n                    *ngIf=\"(extendedTableView|async)\"\r\n                    (click)=\"onExtendedFilterMode()\">\r\n              Filter Mode\r\n            </button>\r\n            <button class=\"btn btn-outline-secondary my-2 my-sm-0\" (click)=\"switchExtendedTableView()\">\r\n              {{ (extendedTableView|async) ? 'Reduce View' : 'Extend View'}}\r\n            </button>\r\n          </div>\r\n          <div class=\"btn-group btn-group-toggle\" data-toggle=\"buttons\"\r\n               *ngIf=\"(extendedTableView|async) && (extendedFilterMode | async)\">\r\n            <label class=\"btn btn-outline-secondary active\" (click)=\"setFilterSelectValue(false)\">\r\n              <input type=\"radio\">\r\n              All\r\n            </label>\r\n            <label class=\"btn btn-outline-secondary\" (click)=\"setFilterSelectValue(true)\">\r\n              <input type=\"radio\">\r\n              Any\r\n            </label>\r\n          </div>\r\n          <div class=\"btn-group\" role=\"group\" aria-label=\"\">\r\n            <input class=\"form-control mr-sm-2\" type=\"text\" placeholder=\"Search\"\r\n                   (keyup)=\"onFilter(filterInput.value)\"\r\n                   *ngIf=\"!(extendedTableView|async)\"\r\n                   #filterInput>\r\n          </div>\r\n        </form>\r\n      </li>\r\n    </ul>\r\n    <ul class=\"nav nav-pills nav-collapse\" style=\"margin-bottom: 0;padding-bottom: 0;border-bottom: none;\">\r\n      <li class=\"nav-item\">\r\n        <div class=\"btn-group\" role=\"group\" aria-label=\"\">\r\n          <button class=\"btn btn-outline-secondary\"\r\n                  *ngFor=\"let tableDetails of tablesDetails\" (click)=\"onChooseName(tableDetails.name)\"\r\n                  [ngClass]=\"chosenName == tableDetails.name ? 'text-info' : 'text-secondary'\">\r\n            {{tableDetails.name}}\r\n          </button>\r\n        </div>\r\n      </li>\r\n    </ul>\r\n  </nav>\r\n</div>\r\n\r\n<div class=\"container\" style=\"margin-top: 10%\" *ngIf=\"chosenName == null || chosenName == undefined\">\r\n  <div class=\"row justify-content-center\">\r\n    <div class=\"col-sm-12 col-md-6\">\r\n      <ul class=\"list-group\">\r\n        <li class=\"list-group-item bg-dark text-info\">Select a table:</li>\r\n        <li class=\"list-group-item text-secondary\" *ngFor=\"let tableDetails of tablesDetails\"\r\n            (click)=\"onChooseName(tableDetails.name)\">{{tableDetails.name}}\r\n        </li>\r\n      </ul>\r\n    </div>\r\n  </div>\r\n</div>\r\n"
 
 /***/ }),
 
@@ -4268,7 +4266,8 @@ var __metadata = (undefined && undefined.__metadata) || function (k, v) {
 var MenuComponent = /** @class */ (function () {
     function MenuComponent(store) {
         this.store = store;
-        this.choosenNameChanged = new rxjs_Subject__WEBPACK_IMPORTED_MODULE_1__["Subject"]();
+        this.chosenNameChanged = new rxjs_Subject__WEBPACK_IMPORTED_MODULE_1__["Subject"]();
+        this.tableNames = [];
     }
     MenuComponent.prototype.setFilterSelectValue = function (value) {
         console.log('setFilterSelectValue', value);
@@ -4281,10 +4280,12 @@ var MenuComponent = /** @class */ (function () {
         this.extendedTableView.subscribe(function (value) {
             _this.extendedTableViewValue = value;
         });
+        this.tablesDetails.forEach(function (tableDetails) { return _this.tableNames.push(tableDetails.name); });
     };
     MenuComponent.prototype.onChooseName = function (tableName) {
-        this.choosenName = tableName;
-        this.choosenNameChanged.next(tableName);
+        this.chosenName = tableName;
+        var tableDetails = this.tablesDetails.find(function (tableDetails) { return tableDetails.name === tableName; });
+        this.chosenNameChanged.next(tableDetails);
     };
     MenuComponent.prototype.onFilter = function (filter) {
         console.log(filter);
@@ -4304,11 +4305,11 @@ var MenuComponent = /** @class */ (function () {
     __decorate([
         Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["Input"])(),
         __metadata("design:type", Array)
-    ], MenuComponent.prototype, "tableNames", void 0);
+    ], MenuComponent.prototype, "tablesDetails", void 0);
     __decorate([
         Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["Output"])(),
         __metadata("design:type", Object)
-    ], MenuComponent.prototype, "choosenNameChanged", void 0);
+    ], MenuComponent.prototype, "chosenNameChanged", void 0);
     MenuComponent = __decorate([
         Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["Component"])({
             selector: 'app-menu',
@@ -4399,15 +4400,18 @@ var RowDetailsComponent = /** @class */ (function () {
         this.row = this.store.select('tables', 'editedRow');
         this.header = this.store.select('tables', 'tableDefinition');
         this.header.subscribe(function (header) {
-            _this.selectedTableName = header[0].name;
+            _this.tableDefinition = header[0];
         });
         this.row.subscribe(function (row) {
             _this.createUpdateRowForm(row);
-            _this.selesctedRow = row;
+            _this.selectedRow = row;
         });
         this.newRowMode = this.store.select('tables', 'newRowMode');
         this.newRowMode.subscribe(function () {
             _this.createNewRowForm();
+        });
+        this.store.select('tables', 'tablesDetails').subscribe(function (tablesDetails) {
+            _this.tablesDetails = tablesDetails;
         });
     };
     RowDetailsComponent.prototype.createNewRowForm = function () {
@@ -4474,7 +4478,7 @@ var RowDetailsComponent = /** @class */ (function () {
         var _this = this;
         if (this.unlockFields) {
             this.header.forEach(function (header) {
-                _this.dss.updateRow(header[0].name, mapForm(_this.updateRowForm.value));
+                _this.dss.updateRow(header[0].id, mapForm(_this.updateRowForm.value));
             });
             this.onToggleRowEditMode();
         }
@@ -4493,7 +4497,7 @@ var RowDetailsComponent = /** @class */ (function () {
         var _this = this;
         var newRow = this.mapNewRow();
         this.header.forEach(function (header) {
-            _this.dss.addNewRow(header[0].name, newRow);
+            _this.dss.addNewRow(header[0].id, newRow);
         });
     };
     RowDetailsComponent.prototype.mapNewRow = function () {
@@ -4532,14 +4536,16 @@ var RowDetailsComponent = /** @class */ (function () {
         this.store.dispatch(new _shared_store_task_tasks_actions__WEBPACK_IMPORTED_MODULE_7__["SetShowedTaskAction"](task));
     };
     RowDetailsComponent.prototype.onDeleteRow = function () {
-        console.log(this.selesctedRow);
-        this.dss.deleteRow(this.selectedTableName, this.selesctedRow.id);
+        this.dss.deleteRow(this.tableDefinition.id, this.selectedRow.id);
     };
     RowDetailsComponent.prototype.onDeleteTask = function (taskId) {
-        this.dss.deleteTask(this.selectedTableName, taskId, this.selesctedRow.id);
+        this.dss.deleteTask(this.tableDefinition.id, taskId, this.selectedRow.id);
     };
     RowDetailsComponent.prototype.switchExtendedRowView = function () {
         this.store.dispatch(new _shared_store_table_tables_actions__WEBPACK_IMPORTED_MODULE_3__["SetExtendedRowView"](!this.extendedRowViewValue));
+    };
+    RowDetailsComponent.prototype.getTableId = function (tableName) {
+        return this.tablesDetails.find(function (tableDetails) { return tableDetails.name === tableName; }).id;
     };
     RowDetailsComponent = __decorate([
         Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["Component"])({
@@ -4926,7 +4932,7 @@ module.exports = ".header-fixed {\r\n  width: 100%\r\n}\r\n\r\n.header-fixed > t
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<div class=\"row\" style=\"margin: 0 10px;padding: 0;\">\r\n  <div [ngClass]=\"(tableState | async).editRowMode ? ((taskDetailsMode | async) ? 'col-12 col-md-6 col-lg-4' : 'col-12 col-md-6 col-lg-4') : 'd-none'\"\r\n       style=\"margin: 41px 0\">\r\n    <app-row-details *ngIf=\"(tableState | async).editRowMode\"></app-row-details>\r\n  </div>\r\n  <div [ngClass]=\"(taskDetailsMode | async) ? 'col-12 col-md-6 col-lg-4' : 'd-none'\" style=\"margin: 41px 0\">\r\n    <app-task></app-task>\r\n  </div>\r\n  <div [ngClass]=\"(tableState | async).editRowMode ?\r\n                        ((taskDetailsMode | async) ? 'col-lg-4' : 'col-md-6 col-lg-8')\r\n                        : ('col-12')\" style=\"padding: 0\"\r\n  >\r\n\r\n\r\n    <div class=\"panel\">\r\n      {{showSpinner | json}}\r\n      <app-menu *ngIf=\"(tableState | async).tablesNames.length != 0\"\r\n                [tableNames]=\"(tableState | async).tablesNames\"\r\n                (choosenNameChanged)=\"setTable($event)\"></app-menu>\r\n      <div class=\"panel-body\" style=\"padding: 0\">\r\n\r\n        <div *ngIf=\"tableChosen && !showSpinner\">\r\n          <div class=\"table-responsive\" style=\"border-radius: 10px\">\r\n            <table\r\n              class=\"table table-hover header-fixed table-striped\"\r\n              style=\"margin-bottom: 0\"\r\n            >\r\n              <thead>\r\n                <app-table-header></app-table-header>\r\n              </thead>\r\n              <tbody style=\"max-height: 700px; height: auto; background-color: transparent\">\r\n                <app-row\r\n                  *ngFor=\"let row of ((tableState | async).tableContent)  | extendedFilter: extendedFilterContent : filterSelect | orderBy : sortContentValue\"\r\n                  [row]=\"row\"\r\n                  [header]=\"(tableState|async).tableDefinition\">\r\n                </app-row>\r\n              </tbody>\r\n            </table>\r\n          </div>\r\n        </div>\r\n        <app-spinner *ngIf=\"tableChosen && showSpinner\"></app-spinner>\r\n      </div>\r\n    </div>\r\n  </div>\r\n</div>\r\n"
+module.exports = "<div class=\"row\" style=\"margin: 0 10px;padding: 0;\">\r\n  <div [ngClass]=\"(tableState | async).editRowMode ? ((taskDetailsMode | async) ? 'col-12 col-md-6 col-lg-4' : 'col-12 col-md-6 col-lg-4') : 'd-none'\"\r\n       style=\"margin: 41px 0\">\r\n    <app-row-details *ngIf=\"(tableState | async).editRowMode\"></app-row-details>\r\n  </div>\r\n  <div [ngClass]=\"(taskDetailsMode | async) ? 'col-12 col-md-6 col-lg-4' : 'd-none'\" style=\"margin: 41px 0\">\r\n    <app-task></app-task>\r\n  </div>\r\n  <div [ngClass]=\"(tableState | async).editRowMode ?\r\n                        ((taskDetailsMode | async) ? 'col-lg-4' : 'col-md-6 col-lg-8')\r\n                        : ('col-12')\" style=\"padding: 0\"\r\n  >\r\n\r\n\r\n    <div class=\"panel\">\r\n      {{showSpinner | json}}\r\n      <app-menu *ngIf=\"(tableState | async).tablesDetails.length != 0\"\r\n                [tablesDetails]=\"(tableState | async).tablesDetails\"\r\n                (chosenNameChanged)=\"setTable($event)\"></app-menu>\r\n      <div class=\"panel-body\" style=\"padding: 0\">\r\n\r\n        <div *ngIf=\"tableChosen && !showSpinner\">\r\n          <div class=\"table-responsive\" style=\"border-radius: 10px\">\r\n            <table\r\n              class=\"table table-hover header-fixed table-striped\"\r\n              style=\"margin-bottom: 0\"\r\n            >\r\n              <thead>\r\n                <app-table-header></app-table-header>\r\n              </thead>\r\n              <tbody style=\"max-height: 700px; height: auto; background-color: transparent\">\r\n                <app-row\r\n                  *ngFor=\"let row of ((tableState | async).tableContent)  | extendedFilter: extendedFilterContent : filterSelect | orderBy : sortContentValue\"\r\n                  [row]=\"row\"\r\n                  [header]=\"(tableState|async).tableDefinition\">\r\n                </app-row>\r\n              </tbody>\r\n            </table>\r\n          </div>\r\n        </div>\r\n        <app-spinner *ngIf=\"tableChosen && showSpinner\"></app-spinner>\r\n      </div>\r\n    </div>\r\n  </div>\r\n</div>\r\n"
 
 /***/ }),
 
@@ -4988,12 +4994,12 @@ var TablesComponent = /** @class */ (function () {
     // onToggleRowEditMode() {
     //   this.contentStore.dispatch(new TablesActions.SetEditRowMode(false));
     // }
-    TablesComponent.prototype.setTable = function (tableName) {
+    TablesComponent.prototype.setTable = function (tablesDetails) {
         this.showSpinner = true;
         this.contentStore.dispatch(new _shared_store_table_tables_actions__WEBPACK_IMPORTED_MODULE_3__["SwitchTableReset"]());
         this.contentStore.dispatch(new _shared_store_user_users_actions__WEBPACK_IMPORTED_MODULE_4__["SwitchTableReset"]());
-        this.dss.getTableHeaderByName(tableName);
-        this.dss.getTableRowsByName(tableName);
+        this.dss.getTableHeaderBy(tablesDetails.id);
+        this.dss.getTableRowsBy(tablesDetails.id);
         this.tableChosen = true;
     };
     TablesComponent = __decorate([
@@ -5080,13 +5086,10 @@ var TaskComponent = /** @class */ (function () {
         this.editedRow.forEach(function (row) {
             _this.row = row;
         });
-        this.tableDefinition = this.store.select('tables', 'tableDefinition');
-        this.tableDefinition.subscribe(function (tableDefinition) {
-            // console.log( 'setTableUsers');
-            // console.log(tableDefinition);
+        this.store.select('tables', 'tableDefinition').subscribe(function (tableDefinition) {
             if (tableDefinition) {
-                _this.tableName = tableDefinition[0].name;
-                _this.dss.setTableUsers(_this.tableName);
+                _this.tableDefinition = tableDefinition[0];
+                _this.dss.setTableUsers(_this.tableDefinition.name);
             }
         });
         this.tableUsers = this.store.select('tables', 'tableUsers');
@@ -5098,20 +5101,21 @@ var TaskComponent = /** @class */ (function () {
     TaskComponent.prototype.onSaveRowNewTask = function (newTaskDetails) {
         var task = {
             id: null,
+            tableId: this.tableDefinition.id,
             name: newTaskDetails.name,
             description: newTaskDetails.description,
             status: newTaskDetails.status,
             userNames: [],
             taskDtos: []
         };
-        this.dss.saveNewTask(this.tableName, task, this.row.id);
+        this.dss.saveNewTask(this.tableDefinition.id, task, this.row.id);
     };
     TaskComponent.prototype.onAssignUserToTask = function (username) {
         console.log('onAssignUserToTask username >' + username + '<');
-        this.dss.onAssignUserToTask(this.tableName, this.row.id, this.task.id, username);
+        this.dss.onAssignUserToTask(this.tableDefinition.id, this.row.id, this.task.id, username);
     };
     TaskComponent.prototype.onRemoveUserFromTask = function (username) {
-        this.dss.onRemoveUserFromTask(this.tableName, this.row.id, this.task.id, username);
+        this.dss.onRemoveUserFromTask(this.tableDefinition.id, this.row.id, this.task.id, username);
     };
     TaskComponent = __decorate([
         Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["Component"])({
@@ -5787,6 +5791,7 @@ var UserTaskComponent = /** @class */ (function () {
     UserTaskComponent.prototype.onSaveEditedTask = function () {
         var task = {
             id: this.task.id,
+            tableId: this.task.tableId,
             name: this.editedTaskForm.value.name,
             description: this.editedTaskForm.value.description,
             status: this.editedTaskForm.value.status,
