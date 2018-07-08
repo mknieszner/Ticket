@@ -131,7 +131,7 @@ public class TableQueryService {
                 .collect(toList());
     }
 
-     public List<TaskDto> getUserTasks(String tableName, String username) {
+    public List<TaskDto> getUserTasks(String tableName, String username) {
         String sqlCorrectTableName = toCorrectSqlTableName(tableName);
         Map<Long, List<TaskDto>> rowIdToTask = new HashMap<>();
 
@@ -235,7 +235,7 @@ public class TableQueryService {
                 .replaceFirst(ORDERED_COLUMN_NAMES_VARIABLE, columnNames)
                 .replaceFirst(ORDERED_ROW_VALUES_VARIABLE, parameterPlaceholders);
 
-        rowDto.setId(runParametrizedUpdate(statement, rowValues).getKey().longValue());
+        rowDto.setId((Long) runParametrizedUpdate(statement, rowValues).getKeyList().get(0).get("ID"));
 
         return rowDto;
     }
