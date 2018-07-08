@@ -44,7 +44,7 @@ public class ColumnType {
                 throw new RuntimeException(e);
             }
         }),
-        DT(ColumnType.DT, "%s datetime ", (resultSet, detail) -> {
+        DT(ColumnType.DT, "%s timestamp ", (resultSet, detail) -> {
             try {
                 return new DateValueDto(resultSet.getObject(detail.getName(), LocalDateTime.class));
             } catch (SQLException e) {

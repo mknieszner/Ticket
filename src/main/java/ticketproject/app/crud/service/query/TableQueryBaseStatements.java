@@ -36,17 +36,15 @@ public class TableQueryBaseStatements {
         return String.format(
                 "CREATE TABLE %s ( " +
                         "id " + params.getAutoIncrement() + ", " +
-                        "createdOn datetime , " +
+                        "createdOn timestamp , " +
                         "createdBy varchar(255) , " +
-                        "lastModifiedOn datetime , " +
+                        "lastModifiedOn timestamp , " +
                         "lastModifiedBy varchar(255) , " +
                         "%s)",
                 TABLE_NAME_VARIABLE,
                 COLUMN_DEFINITIONS_VARIABLE
         );
     }
-
-    ;
 
     final String getDefineTableTasksStatement() {
         return String.format(
