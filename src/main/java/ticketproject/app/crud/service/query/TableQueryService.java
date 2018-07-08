@@ -235,7 +235,7 @@ public class TableQueryService {
                 .replaceFirst(ORDERED_COLUMN_NAMES_VARIABLE, columnNames)
                 .replaceFirst(ORDERED_ROW_VALUES_VARIABLE, parameterPlaceholders);
 
-        rowDto.setId((Long) runParametrizedUpdate(statement, rowValues).getKeyList().get(0).get("ID"));
+        rowDto.setId((long) runParametrizedUpdate(statement, rowValues).getKeyList().get(0).get("ID"));
 
         return rowDto;
     }
