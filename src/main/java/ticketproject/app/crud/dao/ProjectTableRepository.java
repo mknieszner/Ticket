@@ -5,6 +5,7 @@ import org.springframework.data.repository.query.Param;
 import ticketproject.app.crud.domain.entities.ProjectTable;
 
 import javax.transaction.Transactional;
+import java.util.List;
 
 public interface ProjectTableRepository extends CrudRepository<ProjectTable, Long> {
   ProjectTable findOne(Long id);
@@ -15,4 +16,6 @@ public interface ProjectTableRepository extends CrudRepository<ProjectTable, Lon
 
   @Transactional
   void deleteByName(String tableName);
+
+  List<ProjectTable> findAllByName(String roleName);
 }

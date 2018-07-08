@@ -32,7 +32,7 @@ export class TablesComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.dss.getTableNames();
+    this.dss.getTablesDetails();
     this.tableState = this.contentStore.select('tables');
     this.tableState.subscribe(() => {
       this.showSpinner = false;

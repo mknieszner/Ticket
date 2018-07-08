@@ -42,7 +42,7 @@
           <button class="btn btn-outline-secondary"
                   *ngFor="let tableDetails of tablesDetails" (click)="onChooseName(tableDetails.name)"
                   [ngClass]="chosenName == tableDetails.name ? 'text-info' : 'text-secondary'">
-            {{tableDetails.name}}
+            {{tableDetails.name}} <b>({{constants.getShortcut(tableDetails.databaseEnvironment)}})</b>
           </button>
         </div>
       </li>
@@ -56,7 +56,7 @@
       <ul class="list-group">
         <li class="list-group-item bg-dark text-info">Select a table:</li>
         <li class="list-group-item text-secondary" *ngFor="let tableDetails of tablesDetails"
-            (click)="onChooseName(tableDetails.name)">{{tableDetails.name}}
+            (click)="onChooseName(tableDetails.name)">{{tableDetails.name}} <b>({{constants.getShortcut(tableDetails.databaseEnvironment)}})</b>
         </li>
       </ul>
     </div>

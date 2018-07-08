@@ -108,14 +108,18 @@ public class TableQueryService {
                 .replaceFirst(TABLE_NAME_VARIABLE, tableDefinitionDto.getSqlValidTableName());
     }
 
-    public List<RowDto> getRows(String tableName, List<ColumnDetail> columnsMetadata) {
+    public List<RowDto> getRows(String tableName, List<ColumnDetail> columnDetails) {
+        List<ColumnDetail>  toCorrectSqlColumnDetails = columnDetails.stream()
+                .peek(detail -> detail.setName(toCorrectSqlColumnName(detail.getName())))
+                .collect(toList());
+
         String sqlCorrectTableName = toCorrectSqlTableName(tableName);
         List<RowDto> rows = new ArrayList<>();
         Map<Long, List<TaskDto>> rowIdtoTask = new HashMap<>();
 
         getJDBCTemplate()
                 .query(prepareGetRowsStatement(sqlCorrectTableName), (resultSet, rowNum) -> {
-                    rows.addAll(getRows(columnsMetadata, resultSet));
+                    rows.addAll(getRows(toCorrectSqlColumnDetails, resultSet));
                     return null;
                 });
 
@@ -235,7 +239,7 @@ public class TableQueryService {
                 .replaceFirst(ORDERED_COLUMN_NAMES_VARIABLE, columnNames)
                 .replaceFirst(ORDERED_ROW_VALUES_VARIABLE, parameterPlaceholders);
 
-        rowDto.setId((long) runParametrizedUpdate(statement, rowValues).getKeyList().get(0).get("ID"));
+         rowDto.setId(runParametrizedUpdate(statement, rowValues).getKey().longValue());
 
         return rowDto;
     }
@@ -434,7 +438,7 @@ public class TableQueryService {
         for (int i = 0; i < tableDefinitionDto.getColumnDetailDefinitionDtoList().size(); i++) {
             columnsVariables.add(
                     String.format(tableDefinitionDto.getColumnDetailDefinitionDtoList().get(i).getType()
-                            .getSqlCreationVariable(), tableDefinitionDto.getColumnDetailDefinitionDtoList().get(i).getSQLValidColumnName())
+                            .getSqlCreationVariable(), toCorrectSqlColumnName(tableDefinitionDto.getColumnDetailDefinitionDtoList().get(i).getName()))
             );
         }
         return columnsVariables.toString();
@@ -447,7 +451,7 @@ public class TableQueryService {
         columnNames.add(LAST_MODIFIED_ON_COLUMN_NAME);
         columnNames.add(LAST_MODIFIED_BY_COLUMN_NAME);
         projectTableRepository.findByName(tableName).getColumnDetails()
-                .forEach(columnDetail -> columnNames.add(columnDetail.getName()));
+                .forEach(columnDetail -> columnNames.add(toCorrectSqlColumnName(columnDetail.getName())));
         return columnNames.toString();
     }
 
@@ -484,8 +488,14 @@ public class TableQueryService {
                 .build();
     }
 
-    private String toCorrectSqlTableName(String tableName) {
+    // TODO UUID.randomUUID() or RandomStringUtils.randomAlphanumeric(8)
+    public String toCorrectSqlTableName(String tableName) {
         return tableName.replaceAll(" ", "_");
+    }
+
+    // TODO UUID.randomUUID() OR RandomStringUtils.randomAlphanumeric(8)
+    public static String toCorrectSqlColumnName(String columnName) {
+        return columnName.replaceAll(" ", "_");
     }
 
 

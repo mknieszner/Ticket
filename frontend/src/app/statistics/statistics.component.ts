@@ -20,7 +20,7 @@ export class StatisticsComponent implements OnInit {
               private dss: DataStorageService) { }
 
   ngOnInit() {
-    this.dss.getTableNames();
+    this.dss.getTablesDetails();
     this.tableState = this.store.select('tables');
     this.selectedTableName = this.store.select('statistics', 'selectedTableName');
   }

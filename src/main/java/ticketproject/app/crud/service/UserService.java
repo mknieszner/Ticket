@@ -127,13 +127,7 @@ public class UserService implements UserDetailsService {
 
   @Transactional
   @PreAuthorize("hasAuthority('ROLE_ADMIN')")
-  public void removeUser(final String username) { //TODO: Check Iterator ? Stream Concurent error
-    User user = userRepository.findByUsername(username);
-    Set<Role> roles = user.getRoles();
-    for (Iterator<Role> roleIt = roles.iterator(); roleIt.hasNext();) {
-      Role role = roleIt.next();
-      removeUserFromRoleByUserName(role.getName(), username);
-    }
+  public void removeUser(final String username) {
     userRepository.deleteByUsername(username);
   }
 

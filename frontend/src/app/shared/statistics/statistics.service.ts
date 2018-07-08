@@ -1,4 +1,4 @@
-import {RowContentModel, TaskModel} from '../table.model';
+import {RowContentModel, Status, TaskModel} from '../table.model';
 import {
   ColumnInfoModel, DescriptionInfoModel, EnumInfoModel, NumberInfoModel, ShortTextInfoModel,
   TableInfoModel
@@ -169,19 +169,19 @@ export class StatisticsService {
     rows.forEach((row) => {
       row.taskDtos.forEach((task: TaskModel) => {
         switch (task.status.toString()) {
-          case ('UNASSIGNED'):
+          case (Status.UNASSIGNED.toString()):
             tasks.push(task);
             unassignedTasks.push(task);
             return;
-          case ('ASSIGNED'):
+          case (Status.ASSIGNED.toString()):
             tasks.push(task);
             assignedTasks.push(task);
             return;
-          case ('IN_PROGRESS'):
+          case (Status.IN_PROGRESS.toString()):
             tasks.push(task);
             inProgressTasks.push(task);
             return;
-          case ('DONE'):
+          case (Status.DONE.toString()):
             tasks.push(task);
             doneTasks.push(task);
             return;

@@ -51,4 +51,5 @@ export interface ExtendedFilterModel { // TODO: Filter do poprawy (własciwe war
 export interface TablesDetails {
   id: number;
   name: string;
+  databaseEnvironment: string;
 }

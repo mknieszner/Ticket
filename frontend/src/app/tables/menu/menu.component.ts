@@ -5,6 +5,7 @@ import * as fromAppReducers from '../../shared/store/app.reducers';
 import * as TablesActions from '../../shared/store/table/tables.actions';
 import {Observable} from 'rxjs/Observable';
 import {TablesDetails} from "../../shared/table.model";
+import {ConstantsService} from "../../shared/constants.service";
 
 @Component({
   selector: 'app-menu',
@@ -22,7 +23,7 @@ export class MenuComponent implements OnInit {
   extendedTableViewValue: boolean;
 
 
-  constructor(private store: Store<fromAppReducers.AppState>) {
+  constructor(private store: Store<fromAppReducers.AppState>, public constants: ConstantsService) {
   }
 
   setFilterSelectValue(value: boolean) {

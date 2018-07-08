@@ -10,6 +10,7 @@ import ticketproject.app.crud.domain.dto.authorization.UserDto;
 import ticketproject.app.crud.domain.dto.values.TaskDto;
 import ticketproject.app.crud.domain.entities.authorization.Role;
 import ticketproject.app.crud.domain.entities.authorization.User;
+import ticketproject.app.crud.service.TableService;
 import ticketproject.app.crud.service.query.TableQueryService;
 
 import java.util.ArrayList;
@@ -30,7 +31,8 @@ public class UserMapper {
     @Autowired
     @Lazy
     private TableQueryService tableQueryService;
-    private ProjectTableRepository projectTableRepository;
+    private final ProjectTableRepository projectTableRepository;
+    private final TableService tableService;
     private final TaskMapper taskMapper;
     private static final List<String> NO_TABLE_ROLES = Arrays.asList("ROLE_USER", "ROLE_ADMIN");
 
@@ -54,6 +56,7 @@ public class UserMapper {
 
     private List<TaskDto> userTasks(User user) {
         List<TaskDto> userTasks = new ArrayList<>();
+        List<String> commonTableRoleNames = tableService.findAllUserCommonTableRoleNames(user);
 
         //common table tasks
         userTasks.addAll(taskMapper.mapTasksToTaskDtos(user.getTasks()));
@@ -62,6 +65,7 @@ public class UserMapper {
         user.getRoles().stream()
                 .map(Role::getName)
                 .filter(roleName -> !NO_TABLE_ROLES.contains(roleName))
+                .filter(roleName -> !commonTableRoleNames.contains(roleName))
                 .forEach(roleName ->
                         userTasks.addAll(tableQueryService.getUserTasks(roleName, user.getUsername()))
                 );

@@ -191,6 +191,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _training_table_table_component__WEBPACK_IMPORTED_MODULE_56__ = __webpack_require__(/*! ./training/table/table.component */ "./src/app/training/table/table.component.ts");
 /* harmony import */ var _angular_cdk_overlay__WEBPACK_IMPORTED_MODULE_57__ = __webpack_require__(/*! @angular/cdk/overlay */ "./node_modules/@angular/cdk/esm5/overlay.es5.js");
 /* harmony import */ var _training_snack_bar_snack_bar_component__WEBPACK_IMPORTED_MODULE_58__ = __webpack_require__(/*! ./training/snack-bar/snack-bar.component */ "./src/app/training/snack-bar/snack-bar.component.ts");
+/* harmony import */ var _shared_constants_service__WEBPACK_IMPORTED_MODULE_59__ = __webpack_require__(/*! ./shared/constants.service */ "./src/app/shared/constants.service.ts");
 var __decorate = (undefined && undefined.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -200,6 +201,7 @@ var __decorate = (undefined && undefined.__decorate) || function (decorators, ta
 var __metadata = (undefined && undefined.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
+
 
 
 
@@ -328,6 +330,7 @@ var AppModule = /** @class */ (function () {
                 _shared_socket_web_socket_service__WEBPACK_IMPORTED_MODULE_37__["WebSocketService"],
                 _shared_store_reset_service__WEBPACK_IMPORTED_MODULE_39__["StoreResetService"],
                 _shared_statistics_statistics_service__WEBPACK_IMPORTED_MODULE_45__["StatisticsService"],
+                _shared_constants_service__WEBPACK_IMPORTED_MODULE_59__["ConstantsService"],
                 { provide: _angular_common_http__WEBPACK_IMPORTED_MODULE_2__["HTTP_INTERCEPTORS"], useClass: _shared_auth_interceptor__WEBPACK_IMPORTED_MODULE_22__["AuthInterceptor"], multi: true }
                 // {provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi:true}
             ],
@@ -1125,6 +1128,32 @@ var ClearArrayPipe = /** @class */ (function () {
 
 /***/ }),
 
+/***/ "./src/app/shared/constants.service.ts":
+/*!*********************************************!*\
+  !*** ./src/app/shared/constants.service.ts ***!
+  \*********************************************/
+/*! exports provided: ConstantsService */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ConstantsService", function() { return ConstantsService; });
+var ConstantsService = /** @class */ (function () {
+    function ConstantsService() {
+        this.shortcuts = new Map();
+        this.shortcuts.set('COMMON_TABLE_ENVIRONMENT', "C");
+        this.shortcuts.set('SEPARATE_TABLE_ENVIRONMENT', "S");
+    }
+    ConstantsService.prototype.getShortcut = function (environment) {
+        return this.shortcuts.get(environment);
+    };
+    return ConstantsService;
+}());
+
+
+
+/***/ }),
+
 /***/ "./src/app/shared/data-storage.service.ts":
 /*!************************************************!*\
   !*** ./src/app/shared/data-storage.service.ts ***!
@@ -1230,9 +1259,9 @@ var DataStorageService = /** @class */ (function () {
             console.log('getTableRowsByName dss err: ', err);
         });
     };
-    DataStorageService.prototype.getTableNames = function () {
+    DataStorageService.prototype.getTablesDetails = function () {
         var _this = this;
-        this.httpClient.get(this.basehost + '/v1/projects/tables/names')
+        this.httpClient.get(this.basehost + '/v1/projects/tables/details')
             .subscribe(function (names) {
             _this.store.dispatch(new _store_table_tables_actions__WEBPACK_IMPORTED_MODULE_5__["SetNamesAction"](names));
         }, function (err) {
@@ -1971,7 +2000,7 @@ var ReversePipe = /** @class */ (function () {
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "baseUrl", function() { return baseUrl; });
 var baseUrl = 'https://my-jira.herokuapp.com';
-//  export const baseUrl = 'http://localhost:8080';
+// export const baseUrl = 'http://localhost:8080';
 
 
 /***/ }),
@@ -2275,6 +2304,8 @@ var SortByPipe = /** @class */ (function () {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "StatisticsService", function() { return StatisticsService; });
+/* harmony import */ var _table_model__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../table.model */ "./src/app/shared/table.model.ts");
+
 var StatisticsService = /** @class */ (function () {
     function StatisticsService() {
     }
@@ -2431,19 +2462,19 @@ var StatisticsService = /** @class */ (function () {
         rows.forEach(function (row) {
             row.taskDtos.forEach(function (task) {
                 switch (task.status.toString()) {
-                    case ('UNASSIGNED'):
+                    case (_table_model__WEBPACK_IMPORTED_MODULE_0__["Status"].UNASSIGNED.toString()):
                         tasks.push(task);
                         unassignedTasks.push(task);
                         return;
-                    case ('ASSIGNED'):
+                    case (_table_model__WEBPACK_IMPORTED_MODULE_0__["Status"].ASSIGNED.toString()):
                         tasks.push(task);
                         assignedTasks.push(task);
                         return;
-                    case ('IN_PROGRESS'):
+                    case (_table_model__WEBPACK_IMPORTED_MODULE_0__["Status"].IN_PROGRESS.toString()):
                         tasks.push(task);
                         inProgressTasks.push(task);
                         return;
-                    case ('DONE'):
+                    case (_table_model__WEBPACK_IMPORTED_MODULE_0__["Status"].DONE.toString()):
                         tasks.push(task);
                         doneTasks.push(task);
                         return;
@@ -4015,7 +4046,7 @@ var StatisticsComponent = /** @class */ (function () {
         this.dss = dss;
     }
     StatisticsComponent.prototype.ngOnInit = function () {
-        this.dss.getTableNames();
+        this.dss.getTablesDetails();
         this.tableState = this.store.select('tables');
         this.selectedTableName = this.store.select('statistics', 'selectedTableName');
     };
@@ -4232,7 +4263,7 @@ module.exports = "a.bg-dark:hover {\r\n  background-color: #343a40!important;\r\
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<div class=\"container-fluid\" style=\"padding: 0\" *ngIf=\"chosenName\">\r\n  <nav class=\"navbar\" style=\"margin-bottom: 0;padding-bottom: 0; border-bottom: none;\">\r\n    <ul class=\"nav\" style=\"margin-bottom: 0;padding-bottom: 0; border-bottom: none;\">\r\n      <li style=\"background-color: transparent !important;\">\r\n        <form class=\"form-inline input-group my-2 my-lg-0\" style=\"margin-bottom: 0;padding-left: 20px;\">\r\n          <div class=\"btn-group\" role=\"group\" aria-label=\"\">\r\n            <button class=\"btn btn-outline-secondary my-2 my-sm-0\" (click)=\"onNewRow()\">\r\n              New row\r\n            </button>\r\n            <button class=\"btn btn-outline-secondary my-2 my-sm-0\"\r\n                    *ngIf=\"(extendedTableView|async)\"\r\n                    (click)=\"onExtendedFilterMode()\">\r\n              Filter Mode\r\n            </button>\r\n            <button class=\"btn btn-outline-secondary my-2 my-sm-0\" (click)=\"switchExtendedTableView()\">\r\n              {{ (extendedTableView|async) ? 'Reduce View' : 'Extend View'}}\r\n            </button>\r\n          </div>\r\n          <div class=\"btn-group btn-group-toggle\" data-toggle=\"buttons\"\r\n               *ngIf=\"(extendedTableView|async) && (extendedFilterMode | async)\">\r\n            <label class=\"btn btn-outline-secondary active\" (click)=\"setFilterSelectValue(false)\">\r\n              <input type=\"radio\">\r\n              All\r\n            </label>\r\n            <label class=\"btn btn-outline-secondary\" (click)=\"setFilterSelectValue(true)\">\r\n              <input type=\"radio\">\r\n              Any\r\n            </label>\r\n          </div>\r\n          <div class=\"btn-group\" role=\"group\" aria-label=\"\">\r\n            <input class=\"form-control mr-sm-2\" type=\"text\" placeholder=\"Search\"\r\n                   (keyup)=\"onFilter(filterInput.value)\"\r\n                   *ngIf=\"!(extendedTableView|async)\"\r\n                   #filterInput>\r\n          </div>\r\n        </form>\r\n      </li>\r\n    </ul>\r\n    <ul class=\"nav nav-pills nav-collapse\" style=\"margin-bottom: 0;padding-bottom: 0;border-bottom: none;\">\r\n      <li class=\"nav-item\">\r\n        <div class=\"btn-group\" role=\"group\" aria-label=\"\">\r\n          <button class=\"btn btn-outline-secondary\"\r\n                  *ngFor=\"let tableDetails of tablesDetails\" (click)=\"onChooseName(tableDetails.name)\"\r\n                  [ngClass]=\"chosenName == tableDetails.name ? 'text-info' : 'text-secondary'\">\r\n            {{tableDetails.name}}\r\n          </button>\r\n        </div>\r\n      </li>\r\n    </ul>\r\n  </nav>\r\n</div>\r\n\r\n<div class=\"container\" style=\"margin-top: 10%\" *ngIf=\"chosenName == null || chosenName == undefined\">\r\n  <div class=\"row justify-content-center\">\r\n    <div class=\"col-sm-12 col-md-6\">\r\n      <ul class=\"list-group\">\r\n        <li class=\"list-group-item bg-dark text-info\">Select a table:</li>\r\n        <li class=\"list-group-item text-secondary\" *ngFor=\"let tableDetails of tablesDetails\"\r\n            (click)=\"onChooseName(tableDetails.name)\">{{tableDetails.name}}\r\n        </li>\r\n      </ul>\r\n    </div>\r\n  </div>\r\n</div>\r\n"
+module.exports = "<div class=\"container-fluid\" style=\"padding: 0\" *ngIf=\"chosenName\">\r\n  <nav class=\"navbar\" style=\"margin-bottom: 0;padding-bottom: 0; border-bottom: none;\">\r\n    <ul class=\"nav\" style=\"margin-bottom: 0;padding-bottom: 0; border-bottom: none;\">\r\n      <li style=\"background-color: transparent !important;\">\r\n        <form class=\"form-inline input-group my-2 my-lg-0\" style=\"margin-bottom: 0;padding-left: 20px;\">\r\n          <div class=\"btn-group\" role=\"group\" aria-label=\"\">\r\n            <button class=\"btn btn-outline-secondary my-2 my-sm-0\" (click)=\"onNewRow()\">\r\n              New row\r\n            </button>\r\n            <button class=\"btn btn-outline-secondary my-2 my-sm-0\"\r\n                    *ngIf=\"(extendedTableView|async)\"\r\n                    (click)=\"onExtendedFilterMode()\">\r\n              Filter Mode\r\n            </button>\r\n            <button class=\"btn btn-outline-secondary my-2 my-sm-0\" (click)=\"switchExtendedTableView()\">\r\n              {{ (extendedTableView|async) ? 'Reduce View' : 'Extend View'}}\r\n            </button>\r\n          </div>\r\n          <div class=\"btn-group btn-group-toggle\" data-toggle=\"buttons\"\r\n               *ngIf=\"(extendedTableView|async) && (extendedFilterMode | async)\">\r\n            <label class=\"btn btn-outline-secondary active\" (click)=\"setFilterSelectValue(false)\">\r\n              <input type=\"radio\">\r\n              All\r\n            </label>\r\n            <label class=\"btn btn-outline-secondary\" (click)=\"setFilterSelectValue(true)\">\r\n              <input type=\"radio\">\r\n              Any\r\n            </label>\r\n          </div>\r\n          <div class=\"btn-group\" role=\"group\" aria-label=\"\">\r\n            <input class=\"form-control mr-sm-2\" type=\"text\" placeholder=\"Search\"\r\n                   (keyup)=\"onFilter(filterInput.value)\"\r\n                   *ngIf=\"!(extendedTableView|async)\"\r\n                   #filterInput>\r\n          </div>\r\n        </form>\r\n      </li>\r\n    </ul>\r\n    <ul class=\"nav nav-pills nav-collapse\" style=\"margin-bottom: 0;padding-bottom: 0;border-bottom: none;\">\r\n      <li class=\"nav-item\">\r\n        <div class=\"btn-group\" role=\"group\" aria-label=\"\">\r\n          <button class=\"btn btn-outline-secondary\"\r\n                  *ngFor=\"let tableDetails of tablesDetails\" (click)=\"onChooseName(tableDetails.name)\"\r\n                  [ngClass]=\"chosenName == tableDetails.name ? 'text-info' : 'text-secondary'\">\r\n            {{tableDetails.name}} <b>({{constants.getShortcut(tableDetails.databaseEnvironment)}})</b>\r\n          </button>\r\n        </div>\r\n      </li>\r\n    </ul>\r\n  </nav>\r\n</div>\r\n\r\n<div class=\"container\" style=\"margin-top: 10%\" *ngIf=\"chosenName == null || chosenName == undefined\">\r\n  <div class=\"row justify-content-center\">\r\n    <div class=\"col-sm-12 col-md-6\">\r\n      <ul class=\"list-group\">\r\n        <li class=\"list-group-item bg-dark text-info\">Select a table:</li>\r\n        <li class=\"list-group-item text-secondary\" *ngFor=\"let tableDetails of tablesDetails\"\r\n            (click)=\"onChooseName(tableDetails.name)\">{{tableDetails.name}} <b>({{constants.getShortcut(tableDetails.databaseEnvironment)}})</b>\r\n        </li>\r\n      </ul>\r\n    </div>\r\n  </div>\r\n</div>\r\n"
 
 /***/ }),
 
@@ -4250,6 +4281,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var rxjs_Subject__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! rxjs/Subject */ "./node_modules/rxjs-compat/_esm5/Subject.js");
 /* harmony import */ var _ngrx_store__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @ngrx/store */ "./node_modules/@ngrx/store/@ngrx/store.es5.js");
 /* harmony import */ var _shared_store_table_tables_actions__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../shared/store/table/tables.actions */ "./src/app/shared/store/table/tables.actions.ts");
+/* harmony import */ var _shared_constants_service__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../shared/constants.service */ "./src/app/shared/constants.service.ts");
 var __decorate = (undefined && undefined.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -4263,9 +4295,11 @@ var __metadata = (undefined && undefined.__metadata) || function (k, v) {
 
 
 
+
 var MenuComponent = /** @class */ (function () {
-    function MenuComponent(store) {
+    function MenuComponent(store, constants) {
         this.store = store;
+        this.constants = constants;
         this.chosenNameChanged = new rxjs_Subject__WEBPACK_IMPORTED_MODULE_1__["Subject"]();
         this.tableNames = [];
     }
@@ -4316,7 +4350,7 @@ var MenuComponent = /** @class */ (function () {
             template: __webpack_require__(/*! ./menu.component.html */ "./src/app/tables/menu/menu.component.html"),
             styles: [__webpack_require__(/*! ./menu.component.css */ "./src/app/tables/menu/menu.component.css")]
         }),
-        __metadata("design:paramtypes", [_ngrx_store__WEBPACK_IMPORTED_MODULE_2__["Store"]])
+        __metadata("design:paramtypes", [_ngrx_store__WEBPACK_IMPORTED_MODULE_2__["Store"], _shared_constants_service__WEBPACK_IMPORTED_MODULE_4__["ConstantsService"]])
     ], MenuComponent);
     return MenuComponent;
 }());
@@ -4974,7 +5008,7 @@ var TablesComponent = /** @class */ (function () {
     }
     TablesComponent.prototype.ngOnInit = function () {
         var _this = this;
-        this.dss.getTableNames();
+        this.dss.getTablesDetails();
         this.tableState = this.contentStore.select('tables');
         this.tableState.subscribe(function () {
             _this.showSpinner = false;

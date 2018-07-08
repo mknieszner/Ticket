@@ -1,6 +1,7 @@
 package ticketproject.app.crud.domain.entities;
 
 import lombok.*;
+import org.hibernate.annotations.Cascade;
 import ticketproject.app.crud.domain.entities.authorization.User;
 
 import javax.persistence.*;
@@ -8,6 +9,8 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+
+import static org.hibernate.annotations.CascadeType.*;
 
 @Entity
 @Getter
@@ -39,12 +42,14 @@ public class Task {
       joinColumns = { @JoinColumn(name = "USER_id") },
       inverseJoinColumns = { @JoinColumn(name = "TASK_id") }
   )
+  @Cascade(value = {PERSIST, MERGE, REFRESH})
   private Set<User> users = new HashSet<>();
 
   @OneToMany(
       fetch = FetchType.EAGER
   )
   @OrderColumn
+  @Cascade(value = {PERSIST, MERGE, REFRESH})
   List<Task> tasks = new ArrayList<>();
 
   //TODO: adding attachments

@@ -60,6 +60,7 @@ import { DialogComponent } from './training/dialog/dialog.component';
 import { TableComponent } from './training/table/table.component';
 import {OverlayContainer} from "@angular/cdk/overlay";
 import {SnackBarComponent} from "./training/snack-bar/snack-bar.component";
+import {ConstantsService} from "./shared/constants.service";
 
 @NgModule({
   declarations: [
@@ -124,6 +125,7 @@ import {SnackBarComponent} from "./training/snack-bar/snack-bar.component";
     WebSocketService,
     StoreResetService,
     StatisticsService,
+    ConstantsService,
     {provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true}
     // {provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi:true}
   ],

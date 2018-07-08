@@ -5,9 +5,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import ticketproject.app.crud.dao.UserRepository;
 import ticketproject.app.crud.domain.entities.authorization.Role;
 import ticketproject.app.crud.domain.entities.authorization.User;
-import ticketproject.app.crud.dao.UserRepository;
 
 import java.util.Set;
 

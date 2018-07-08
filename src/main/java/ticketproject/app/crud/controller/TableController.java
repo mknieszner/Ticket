@@ -94,7 +94,7 @@ public class TableController {
     }
 
 
-    @GetMapping(value = "projects/tables/names")
+    @GetMapping(value = "projects/tables/details")
     public List<TableDetailsDto> getTablesNamesList(final Principal principal) {
         return tableService.getTablesNamesListAuthorized(principal.getName());
     }

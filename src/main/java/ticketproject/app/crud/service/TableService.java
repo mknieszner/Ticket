@@ -22,8 +22,9 @@ import ticketproject.app.crud.service.dao.UserRepositoryService;
 import javax.transaction.Transactional;
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.stream.Collectors;
+import java.util.Objects;
 
+import static java.util.stream.Collectors.toList;
 import static ticketproject.app.crud.service.UserService.getCurrentUserUsername;
 
 
@@ -109,7 +110,7 @@ public class TableService {
                             row.setCreatedOn(LocalDateTime.now());
                             row.setLastModifiedBy(username);
                             row.setLastModifiedOn(LocalDateTime.now());
-                        }).collect(Collectors.toList()))));
+                        }).collect(toList()))));
     }
 
     public RowDto getRowById(final Long rowId) {
@@ -134,7 +135,7 @@ public class TableService {
 
     public List<RowDto> updateRowsByTableId(final List<RowDto> rowDtos, final Long tableId) {
         ProjectTable projectTable = projectTableRepository.findOne(tableId);
-        return rowMapper.mapToRowDtos(Lists.newArrayList(rowRepository.save(rowDtos.stream().map(rowMapper::mapToRow).peek(row -> row.setProjectTable(projectTable)).collect(Collectors.toList()))));
+        return rowMapper.mapToRowDtos(Lists.newArrayList(rowRepository.save(rowDtos.stream().map(rowMapper::mapToRow).peek(row -> row.setProjectTable(projectTable)).collect(toList()))));
     }
 
     public ProjectTableDto addTableByProjectId(final ProjectTableDto projectTableDto, final Long projectId) {
@@ -181,8 +182,8 @@ public class TableService {
     public List<TableDetailsDto> getTablesNamesListAuthorized(final String username) {
         List<TableDetailsDto> tablesDetails = Lists.newArrayList(projectTableRepository.findAll())
                 .stream()
-                .map(projectTable -> new TableDetailsDto(projectTable.getId(), projectTable.getName()))
-                .collect(Collectors.toList());
+                .map(projectTable -> new TableDetailsDto(projectTable.getId(), projectTable.getName(), projectTable.getProject().getDatabaseEnvironment().name()))
+                .collect(toList());
 
         if (isAdmin(username)) {
             return tablesDetails;
@@ -190,7 +191,7 @@ public class TableService {
             List<String> userRoleNames = getUsersRoles(username);
             return tablesDetails.stream()
                     .filter(tableDetailsDto -> userRoleNames.contains(tableDetailsDto.getName()))
-                    .collect(Collectors.toList());
+                    .collect(toList());
         }
     }
 
@@ -211,7 +212,7 @@ public class TableService {
     }
 
     private List<String> getUsersRoles(final java.lang.String username) {
-        return userRepository.findByUsername(username).getRoles().stream().map(Role::getName).collect(Collectors.toList());
+        return userRepository.findByUsername(username).getRoles().stream().map(Role::getName).collect(toList());
     }
 
     @PreAuthorize("hasAnyAuthority('ROLE_ADMIN') || @tableAccessManager.hasTableAccessAuthorityByRowId(#rowId)")
@@ -257,8 +258,7 @@ public class TableService {
     @PreAuthorize("hasAnyAuthority('ROLE_ADMIN') || @tableAccessManager.hasTableAccessAuthorityBy(#tableId)")
     public TaskDto updateTask(final Long tableId, final TaskDto taskDto) {
         rowRepository.save(updateRowTask(rowRepository.findByTasks(taskRepository.findOne(taskDto.getId())), taskDto));
-        //return taskMapper.mapTaskToTaskDto(taskRepository.findOne(taskDto.getId()));
-        return taskDto;// TODO return whatttt???
+        return taskDto;
     }
 
     @PreAuthorize("hasAnyAuthority('ROLE_ADMIN') || @tableAccessManager.hasTableAccessAuthorityByRowId(#taskId)")
@@ -279,8 +279,20 @@ public class TableService {
                             }
                             return task;
                         })
-                .collect(Collectors.toList()));
+                .collect(toList()));
         return row;
+    }
+
+    public List<String> findAllUserCommonTableRoleNames(User user) {
+        return user.getRoles().stream()
+                .map(role -> projectTableRepository.findByName(role.getName()))
+                .filter(Objects::nonNull)
+                .filter(projectTable ->
+                        DatabaseEnvironment.Environments.COMMON_TABLE_ENVIRONMENT
+                                .equals(projectTable.getProject().getDatabaseEnvironment())
+                )
+                .map(ProjectTable::getName)
+                .collect(toList());
     }
 
     //todo cache??

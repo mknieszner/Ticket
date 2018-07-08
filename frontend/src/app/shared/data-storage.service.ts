@@ -1,7 +1,7 @@
 import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import 'rxjs/add/operator/map';
-import {RowContentModel, TableDefinitionModel, TaskModel} from './table.model';
+import {RowContentModel, TableDefinitionModel, TablesDetails, TaskModel} from './table.model';
 import {Store} from '@ngrx/store';
 import * as UsersActions from './store/user/users.actions';
 import * as TablesActions from './store/table/tables.actions';
@@ -87,8 +87,8 @@ export class DataStorageService {
       });
   }
 
-  getTableNames() {
-    this.httpClient.get<{ id: number, name: string }[]>(this.basehost + '/v1/projects/tables/names')
+  getTablesDetails() {
+    this.httpClient.get<TablesDetails[]>(this.basehost + '/v1/projects/tables/details')
       .subscribe(
         (names) => {
           this.store.dispatch(new TablesActions.SetNamesAction(names));

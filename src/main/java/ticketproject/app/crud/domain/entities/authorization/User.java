@@ -7,7 +7,6 @@ import lombok.Setter;
 import org.hibernate.annotations.Cascade;
 import ticketproject.app.crud.domain.entities.Task;
 
-
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -15,6 +14,10 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
+
+import static org.hibernate.annotations.CascadeType.MERGE;
+import static org.hibernate.annotations.CascadeType.PERSIST;
+import static org.hibernate.annotations.CascadeType.REFRESH;
 
 @Entity
 @Table(name = "USERS")
@@ -33,11 +36,11 @@ public class User implements Serializable {
     private String email;
     private String password;
     private boolean enabled;
-    @ManyToMany(mappedBy = "users", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    @Cascade(value = org.hibernate.annotations.CascadeType.ALL)
+    @ManyToMany(mappedBy = "users", fetch = FetchType.EAGER, cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH})
+    @Cascade(value = {PERSIST, MERGE, REFRESH})
     Set<Role> roles = new HashSet<>();
-    @ManyToMany(mappedBy = "users", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    @Cascade(value = org.hibernate.annotations.CascadeType.ALL)
+    @ManyToMany(mappedBy = "users", fetch = FetchType.EAGER, cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH})
+    @Cascade(value = {PERSIST, MERGE, REFRESH})
     List<Task> tasks = new ArrayList<>();
 
     public User(final String username,
@@ -59,7 +62,7 @@ public class User implements Serializable {
     public User(final String username) {
 
     }
-
+    //TODO WYDZIELIC ROLE (DODAC POLE COMMON SEPARATE NO_TABLE)-> poprawić dodawanie tasków do usera
     public void addRole(Role role) {
         role.getUsers().add(this);
         roles.add(role);
@@ -68,6 +71,11 @@ public class User implements Serializable {
     public void removeRoleWARN(Role role) {
         roles.remove(role);
         role.getUsers().remove(this);
+    }
+
+    @PreRemove
+    public void removeAllRoles() {
+        roles.forEach(role -> role.getUsers().remove(this));
     }
 
     @Override
