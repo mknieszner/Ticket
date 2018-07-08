@@ -1971,7 +1971,7 @@ var ReversePipe = /** @class */ (function () {
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "baseUrl", function() { return baseUrl; });
 var baseUrl = 'https://my-jira.herokuapp.com';
-// export const baseUrl = 'http://localhost:8080';
+//  export const baseUrl = 'http://localhost:8080';
 
 
 /***/ }),
