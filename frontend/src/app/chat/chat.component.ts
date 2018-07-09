@@ -1,4 +1,12 @@
-import {Component, OnInit} from '@angular/core';
+import {
+  AfterContentChecked,
+  AfterViewChecked,
+  AfterViewInit,
+  Component,
+  ElementRef,
+  OnInit,
+  ViewChild
+} from '@angular/core';
 import {Store} from '@ngrx/store';
 import * as fromAppReducers from '../shared/store/app.reducers';
 import {TaskInfoService} from '../shared/socket/task-info.service';
@@ -14,7 +22,9 @@ import * as ChatActions from "../shared/store/chat/chat.actions";
   templateUrl: './chat.component.html',
   styleUrls: ['./chat.component.css']
 })
-export class ChatComponent implements OnInit {
+export class ChatComponent implements OnInit, AfterViewChecked {
+  @ViewChild('chatGlobalDiv') private chatGlobalDiv: ElementRef;
+  @ViewChild('chatUserDiv') private chatUserDiv: ElementRef;
   chatContent: Observable<ChatMessageModel[]>;
   currentUser: Observable<string>;
   activeWsUsers: Observable<string[]>;
@@ -37,19 +47,26 @@ export class ChatComponent implements OnInit {
     this.dss.getActiveWsUsers();
   }
 
+  ngAfterViewChecked(): void {
+    console.log('global', this.chatGlobalDiv.nativeElement.scrollHeight);
+    console.log('user', this.chatUserDiv.nativeElement.innerHTML.contains());
+    this.chatGlobalDiv.nativeElement.scrollTop = this.chatGlobalDiv.nativeElement.scrollHeight;
+    this.chatUserDiv.nativeElement.scrollTop = this.chatUserDiv.nativeElement.scrollHeight;
+  }
+
   postMessage(messageContent: string) {
-    console.log(messageContent);
-    if (this.chatName === 'global') {
-      console.log('postMessage' + this.chatName);
-      this.ws.stompClient.send('/app/chat', {}, messageContent);
-    } else {
-      this.store.dispatch(new ChatActions.AppendChatWithMessage(new ChatMessageModel(this.username, messageContent, this.chatName)));
-      this.ws.stompClient.send('/app/chat/' + this.chatName, {}, messageContent);
+    if (messageContent) {
+      if (this.chatName === 'global') {
+        this.ws.stompClient.send('/app/chat', {}, messageContent);
+      } else {
+        this.store.dispatch(new ChatActions.AppendChatWithMessage(new ChatMessageModel(this.username, messageContent, this.chatName)));
+        this.ws.stompClient.send('/app/chat/' + this.chatName, {}, messageContent);
+      }
     }
   }
 
   setChat(chatName: string) {
-    console.log('chatName' + chatName);
     this.chatName = chatName;
   }
+
 }

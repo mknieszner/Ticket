@@ -22,6 +22,7 @@ export class HeaderComponent implements OnInit {
   isAdmin: Observable<boolean>;
   newTaskState: Observable<boolean>;
   currentUsername: string;
+  navVisible = false;
 
   constructor(private store: Store<fromAppReducers.AppState>,
               private oauth: OauthService,
@@ -37,7 +38,6 @@ export class HeaderComponent implements OnInit {
     this.username.subscribe((username: string) => {
       this.dss.getCurrentUserRoles(username);
       this.currentUsername = username;
-      // this.dss.getActiveWsUsers();
     });
     this.currentUserRoles = this.store.select('users', 'currentUserRoles');
     this.isAdmin = this.currentUserRoles.map(roles => {
@@ -59,5 +59,10 @@ export class HeaderComponent implements OnInit {
 
   onNewTasksSeen() {
     this.store.dispatch(new UserActions.SetTaskInfoAction(false));
+  }
+
+  toggleNav() {
+    console.log("T");
+    this.navVisible = !this.navVisible;
   }
 }
