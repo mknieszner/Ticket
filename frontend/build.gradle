@@ -16,4 +16,8 @@ task build(type: NpmTask) {
   args = ['run', 'build']
 }
 
+task serve(type: NpmTask) {
+  args = ['run', 'start']
+}
+
 build.dependsOn(npm_install)
