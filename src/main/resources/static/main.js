@@ -57,7 +57,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "AppComponent", function() { return AppComponent; });
 /* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm5/core.js");
 /* harmony import */ var _shared_auth_cookies_handler__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./shared/auth-cookies-handler */ "./src/app/shared/auth-cookies-handler.ts");
-/* harmony import */ var _ngrx_store__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @ngrx/store */ "./node_modules/@ngrx/store/@ngrx/store.es5.js");
+/* harmony import */ var _ngrx_store__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @ngrx/store */ "./node_modules/@ngrx/store/fesm5/store.js");
 /* harmony import */ var _shared_socket_task_info_service__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./shared/socket/task-info.service */ "./src/app/shared/socket/task-info.service.ts");
 /* harmony import */ var _shared_store_user_users_actions__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./shared/store/user/users.actions */ "./src/app/shared/store/user/users.actions.ts");
 /* harmony import */ var _angular_router__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! @angular/router */ "./node_modules/@angular/router/fesm5/router.js");
@@ -144,7 +144,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _home_home_component__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ./home/home.component */ "./src/app/home/home.component.ts");
 /* harmony import */ var _angular_forms__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! @angular/forms */ "./node_modules/@angular/forms/fesm5/forms.js");
 /* harmony import */ var _tables_row_row_component__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! ./tables/row/row.component */ "./src/app/tables/row/row.component.ts");
-/* harmony import */ var _ngrx_store__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! @ngrx/store */ "./node_modules/@ngrx/store/@ngrx/store.es5.js");
+/* harmony import */ var _ngrx_store__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! @ngrx/store */ "./node_modules/@ngrx/store/fesm5/store.js");
 /* harmony import */ var _tables_key_pipe__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! ./tables/key.pipe */ "./src/app/tables/key.pipe.ts");
 /* harmony import */ var _tables_row_question_control_service__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(/*! ./tables/row/question-control.service */ "./src/app/tables/row/question-control.service.ts");
 /* harmony import */ var _tables_table_header_table_header_component__WEBPACK_IMPORTED_MODULE_16__ = __webpack_require__(/*! ./tables/table-header/table-header.component */ "./src/app/tables/table-header/table-header.component.ts");
@@ -163,8 +163,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _shared_store_task_tasks_reducers__WEBPACK_IMPORTED_MODULE_29__ = __webpack_require__(/*! ./shared/store/task/tasks.reducers */ "./src/app/shared/store/task/tasks.reducers.ts");
 /* harmony import */ var _shared_store_chat_chat_reducers__WEBPACK_IMPORTED_MODULE_30__ = __webpack_require__(/*! ./shared/store/chat/chat.reducers */ "./src/app/shared/store/chat/chat.reducers.ts");
 /* harmony import */ var _shared_store_statistics_statistics_reducers__WEBPACK_IMPORTED_MODULE_31__ = __webpack_require__(/*! ./shared/store/statistics/statistics.reducers */ "./src/app/shared/store/statistics/statistics.reducers.ts");
-/* harmony import */ var _ngrx_router_store__WEBPACK_IMPORTED_MODULE_32__ = __webpack_require__(/*! @ngrx/router-store */ "./node_modules/@ngrx/router-store/@ngrx/router-store.es5.js");
-/* harmony import */ var _ngrx_store_devtools__WEBPACK_IMPORTED_MODULE_33__ = __webpack_require__(/*! @ngrx/store-devtools */ "./node_modules/@ngrx/store-devtools/@ngrx/store-devtools.es5.js");
+/* harmony import */ var _ngrx_router_store__WEBPACK_IMPORTED_MODULE_32__ = __webpack_require__(/*! @ngrx/router-store */ "./node_modules/@ngrx/router-store/fesm5/router-store.js");
+/* harmony import */ var _ngrx_store_devtools__WEBPACK_IMPORTED_MODULE_33__ = __webpack_require__(/*! @ngrx/store-devtools */ "./node_modules/@ngrx/store-devtools/fesm5/store-devtools.js");
 /* harmony import */ var _environments_environment__WEBPACK_IMPORTED_MODULE_34__ = __webpack_require__(/*! ../environments/environment */ "./src/environments/environment.ts");
 /* harmony import */ var _user_user_task_user_task_component__WEBPACK_IMPORTED_MODULE_35__ = __webpack_require__(/*! ./user/user-task/user-task.component */ "./src/app/user/user-task/user-task.component.ts");
 /* harmony import */ var _shared_socket_task_info_service__WEBPACK_IMPORTED_MODULE_36__ = __webpack_require__(/*! ./shared/socket/task-info.service */ "./src/app/shared/socket/task-info.service.ts");
@@ -383,7 +383,7 @@ module.exports = "<div class=\"jumbotron\">\r\n  <div class=\"row\">\r\n\r\n    
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ChatComponent", function() { return ChatComponent; });
 /* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm5/core.js");
-/* harmony import */ var _ngrx_store__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @ngrx/store */ "./node_modules/@ngrx/store/@ngrx/store.es5.js");
+/* harmony import */ var _ngrx_store__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @ngrx/store */ "./node_modules/@ngrx/store/fesm5/store.js");
 /* harmony import */ var _shared_socket_task_info_service__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../shared/socket/task-info.service */ "./src/app/shared/socket/task-info.service.ts");
 /* harmony import */ var _shared_chat_message_model__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../shared/chat-message.model */ "./src/app/shared/chat-message.model.ts");
 /* harmony import */ var _shared_data_storage_service__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../shared/data-storage.service */ "./src/app/shared/data-storage.service.ts");
@@ -420,9 +420,13 @@ var ChatComponent = /** @class */ (function () {
         this.activeWsUsers = this.store.select('chat', 'activeUsers');
         this.dss.getActiveWsUsers();
     };
-    ChatComponent.prototype.ngAfterViewChecked = function () {
-        this.chatGlobalDiv.nativeElement.scrollTop = this.chatGlobalDiv.nativeElement.scrollHeight;
-        this.chatUserDiv.nativeElement.scrollTop = this.chatUserDiv.nativeElement.scrollHeight;
+    ChatComponent.prototype.ngAfterContentChecked = function () {
+        if (this.chatGlobalDiv) {
+            this.chatGlobalDiv.nativeElement.scrollTop = this.chatGlobalDiv.nativeElement.scrollHeight;
+        }
+        if (this.chatUserDiv) {
+            this.chatUserDiv.nativeElement.scrollTop = this.chatUserDiv.nativeElement.scrollHeight;
+        }
     };
     ChatComponent.prototype.postMessage = function (messageContent) {
         if (messageContent) {
@@ -613,7 +617,7 @@ module.exports = "<nav class=\"navbar navbar-expand-lg navbar-dark\" style=\"mar
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "HeaderComponent", function() { return HeaderComponent; });
 /* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm5/core.js");
-/* harmony import */ var _ngrx_store__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @ngrx/store */ "./node_modules/@ngrx/store/@ngrx/store.es5.js");
+/* harmony import */ var _ngrx_store__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @ngrx/store */ "./node_modules/@ngrx/store/fesm5/store.js");
 /* harmony import */ var _shared_oauth_service__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../shared/oauth.service */ "./src/app/shared/oauth.service.ts");
 /* harmony import */ var _shared_data_storage_service__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../shared/data-storage.service */ "./src/app/shared/data-storage.service.ts");
 /* harmony import */ var _shared_store_user_users_actions__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../shared/store/user/users.actions */ "./src/app/shared/store/user/users.actions.ts");
@@ -793,7 +797,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm5/core.js");
 /* harmony import */ var _role_model__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../role.model */ "./src/app/roles/role.model.ts");
 /* harmony import */ var _angular_forms__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @angular/forms */ "./node_modules/@angular/forms/fesm5/forms.js");
-/* harmony import */ var _ngrx_store__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @ngrx/store */ "./node_modules/@ngrx/store/@ngrx/store.es5.js");
+/* harmony import */ var _ngrx_store__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @ngrx/store */ "./node_modules/@ngrx/store/fesm5/store.js");
 /* harmony import */ var _shared_data_storage_service__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../shared/data-storage.service */ "./src/app/shared/data-storage.service.ts");
 /* harmony import */ var _shared_store_user_users_actions__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../../shared/store/user/users.actions */ "./src/app/shared/store/user/users.actions.ts");
 var __decorate = (undefined && undefined.__decorate) || function (decorators, target, key, desc) {
@@ -926,7 +930,7 @@ module.exports = "<div class=\"jumbotron\">\r\n  <div class=\"row\" style=\"padd
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "RolesComponent", function() { return RolesComponent; });
 /* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm5/core.js");
-/* harmony import */ var _ngrx_store__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @ngrx/store */ "./node_modules/@ngrx/store/@ngrx/store.es5.js");
+/* harmony import */ var _ngrx_store__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @ngrx/store */ "./node_modules/@ngrx/store/fesm5/store.js");
 /* harmony import */ var _shared_data_storage_service__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../shared/data-storage.service */ "./src/app/shared/data-storage.service.ts");
 /* harmony import */ var _shared_store_user_users_actions__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../shared/store/user/users.actions */ "./src/app/shared/store/user/users.actions.ts");
 var __decorate = (undefined && undefined.__decorate) || function (decorators, target, key, desc) {
@@ -1182,7 +1186,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm5/core.js");
 /* harmony import */ var _angular_common_http__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/common/http */ "./node_modules/@angular/common/fesm5/http.js");
 /* harmony import */ var rxjs_add_operator_map__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! rxjs/add/operator/map */ "./node_modules/rxjs-compat/_esm5/add/operator/map.js");
-/* harmony import */ var _ngrx_store__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @ngrx/store */ "./node_modules/@ngrx/store/@ngrx/store.es5.js");
+/* harmony import */ var _ngrx_store__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @ngrx/store */ "./node_modules/@ngrx/store/fesm5/store.js");
 /* harmony import */ var _store_user_users_actions__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./store/user/users.actions */ "./src/app/shared/store/user/users.actions.ts");
 /* harmony import */ var _store_table_tables_actions__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./store/table/tables.actions */ "./src/app/shared/store/table/tables.actions.ts");
 /* harmony import */ var _server_model__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./server.model */ "./src/app/shared/server.model.ts");
@@ -1867,7 +1871,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm5/core.js");
 /* harmony import */ var _angular_router__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/router */ "./node_modules/@angular/router/fesm5/router.js");
 /* harmony import */ var _angular_common_http__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @angular/common/http */ "./node_modules/@angular/common/fesm5/http.js");
-/* harmony import */ var _ngrx_store__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @ngrx/store */ "./node_modules/@ngrx/store/@ngrx/store.es5.js");
+/* harmony import */ var _ngrx_store__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @ngrx/store */ "./node_modules/@ngrx/store/fesm5/store.js");
 /* harmony import */ var _shared_server_model__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../shared/server.model */ "./src/app/shared/server.model.ts");
 /* harmony import */ var _auth_cookies_handler__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./auth-cookies-handler */ "./src/app/shared/auth-cookies-handler.ts");
 /* harmony import */ var _store_user_users_actions__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./store/user/users.actions */ "./src/app/shared/store/user/users.actions.ts");
@@ -2078,7 +2082,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _auth_cookies_handler__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../auth-cookies-handler */ "./src/app/shared/auth-cookies-handler.ts");
 /* harmony import */ var stompjs_lib_stomp_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! stompjs/lib/stomp.js */ "./node_modules/stompjs/lib/stomp.js");
 /* harmony import */ var stompjs_lib_stomp_js__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(stompjs_lib_stomp_js__WEBPACK_IMPORTED_MODULE_3__);
-/* harmony import */ var _ngrx_store__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @ngrx/store */ "./node_modules/@ngrx/store/@ngrx/store.es5.js");
+/* harmony import */ var _ngrx_store__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @ngrx/store */ "./node_modules/@ngrx/store/fesm5/store.js");
 /* harmony import */ var _store_user_users_actions__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../store/user/users.actions */ "./src/app/shared/store/user/users.actions.ts");
 /* harmony import */ var _store_chat_chat_actions__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../store/chat/chat.actions */ "./src/app/shared/store/chat/chat.actions.ts");
 /* harmony import */ var _server_model__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../server.model */ "./src/app/shared/server.model.ts");
@@ -2523,7 +2527,7 @@ var StatisticsService = /** @class */ (function () {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "StoreResetService", function() { return StoreResetService; });
-/* harmony import */ var _ngrx_store__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @ngrx/store */ "./node_modules/@ngrx/store/@ngrx/store.es5.js");
+/* harmony import */ var _ngrx_store__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @ngrx/store */ "./node_modules/@ngrx/store/fesm5/store.js");
 /* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm5/core.js");
 /* harmony import */ var _store_table_tables_actions__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./store/table/tables.actions */ "./src/app/shared/store/table/tables.actions.ts");
 /* harmony import */ var _store_user_users_actions__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./store/user/users.actions */ "./src/app/shared/store/user/users.actions.ts");
@@ -3872,7 +3876,7 @@ module.exports = ".container {\r\n  margin-top: 30%;\r\n}\r\n\r\n.card {\r\n  ba
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<div class=\"container\">\r\n  <div class=\"row justify-content-center\">\r\n    <div>\r\n      <div class=\"card\" class=\"col-sm-12 col-md-6\">\r\n        <div class=\"card-header text-white text-center\">\r\n\r\n          <h3 class=\"text-info\">MY JIRA</h3>\r\n\r\n        </div>\r\n        <div class=\"card-body\">\r\n          <div class=\"form-group\">\r\n            <form [formGroup]=\"signinForm\">\r\n              <div class=\"form-group\">\r\n                <input type=\"text\" aria-describedby=\"usernameHelpInline\" name=\"username\" placeholder=\"username\" class=\"form-control\" formControlName=\"username\">\r\n                <small id=\"usernameHelpInline\" class=\"text-muted\">\r\n                  Must be 8-20 characters long.\r\n                </small>\r\n              </div>\r\n              <div class=\"form-group\">\r\n                <input type=\"password\" aria-describedby=\"passwordHelpInline\" name=\"password\" placeholder=\"password\" class=\"form-control\"\r\n                       formControlName=\"password\">\r\n                <small id=\"passwordHelpInline\" class=\"text-muted\">\r\n                  Must be 8-20 characters long.\r\n                </small>\r\n              </div>\r\n              <div class=\"btn-group\">\r\n                <button value=\"Sign In\" class=\"btn btn-outline-info\" (click)=\"onSignin()\">Sign In</button>\r\n              </div>\r\n              <div class=\"alert alert-danger\" *ngIf=\"loginFailureInfo | async\">\r\n                <span> {{ loginFailureInfo | async }} </span>\r\n              </div>\r\n              <div class=\"alert alert-success\" *ngIf=\"logoutInfo | async\">\r\n                <span> {{ logoutInfo | async}} </span>\r\n              </div>\r\n            </form>\r\n          </div>\r\n        </div>\r\n      </div>\r\n    </div>\r\n  </div>\r\n</div>\r\n"
+module.exports = "<div class=\"container\">\r\n  <div class=\"row justify-content-center\">\r\n    <div class=\"col-12 col-md-6\">\r\n      <div class=\"card\">\r\n        <div class=\"card-header text-white text-center\">\r\n          <h3 class=\"text-info\">MY JIRA</h3>\r\n        </div>\r\n        <div class=\"card-body\">\r\n          <div class=\"form-group\">\r\n            <form [formGroup]=\"signinForm\">\r\n              <div class=\"form-group\">\r\n                <input type=\"text\" aria-describedby=\"usernameHelpInline\" name=\"username\" placeholder=\"username\" class=\"form-control\" formControlName=\"username\">\r\n                <small id=\"usernameHelpInline\" class=\"text-muted\">\r\n                  Must be 8-20 characters long.\r\n                </small>\r\n              </div>\r\n              <div class=\"form-group\">\r\n                <input type=\"password\" aria-describedby=\"passwordHelpInline\" name=\"password\" placeholder=\"password\" class=\"form-control\"\r\n                       formControlName=\"password\">\r\n                <small id=\"passwordHelpInline\" class=\"text-muted\">\r\n                  Must be 8-20 characters long.\r\n                </small>\r\n              </div>\r\n              <div class=\"btn-group\">\r\n                <button value=\"Sign In\" class=\"btn btn-outline-info\" (click)=\"onSignin()\">Sign In</button>\r\n              </div>\r\n              <div class=\"alert alert-danger\" *ngIf=\"loginFailureInfo | async\">\r\n                <span> {{ loginFailureInfo | async }} </span>\r\n              </div>\r\n              <div class=\"alert alert-success\" *ngIf=\"logoutInfo | async\">\r\n                <span> {{ logoutInfo | async}} </span>\r\n              </div>\r\n            </form>\r\n          </div>\r\n        </div>\r\n      </div>\r\n    </div>\r\n  </div>\r\n</div>\r\n"
 
 /***/ }),
 
@@ -3890,7 +3894,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _angular_forms__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/forms */ "./node_modules/@angular/forms/fesm5/forms.js");
 /* harmony import */ var _shared_oauth_service__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../shared/oauth.service */ "./src/app/shared/oauth.service.ts");
 /* harmony import */ var _shared_auth_cookies_handler__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../shared/auth-cookies-handler */ "./src/app/shared/auth-cookies-handler.ts");
-/* harmony import */ var _ngrx_store__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @ngrx/store */ "./node_modules/@ngrx/store/@ngrx/store.es5.js");
+/* harmony import */ var _ngrx_store__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @ngrx/store */ "./node_modules/@ngrx/store/fesm5/store.js");
 var __decorate = (undefined && undefined.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -4039,7 +4043,7 @@ module.exports = "<div class=\"jumbotron\">\r\n    <div class=\"row\">\r\n      
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "StatisticsComponent", function() { return StatisticsComponent; });
 /* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm5/core.js");
-/* harmony import */ var _ngrx_store__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @ngrx/store */ "./node_modules/@ngrx/store/@ngrx/store.es5.js");
+/* harmony import */ var _ngrx_store__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @ngrx/store */ "./node_modules/@ngrx/store/fesm5/store.js");
 /* harmony import */ var _shared_data_storage_service__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../shared/data-storage.service */ "./src/app/shared/data-storage.service.ts");
 /* harmony import */ var _shared_store_statistics_statistics_actions__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../shared/store/statistics/statistics.actions */ "./src/app/shared/store/statistics/statistics.actions.ts");
 var __decorate = (undefined && undefined.__decorate) || function (decorators, target, key, desc) {
@@ -4117,7 +4121,7 @@ module.exports = "<div *ngIf=\"selectedTableName | async\">\r\n\r\n  <div *ngIf=
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "TableStatisticsComponent", function() { return TableStatisticsComponent; });
 /* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm5/core.js");
-/* harmony import */ var _ngrx_store__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @ngrx/store */ "./node_modules/@ngrx/store/@ngrx/store.es5.js");
+/* harmony import */ var _ngrx_store__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @ngrx/store */ "./node_modules/@ngrx/store/fesm5/store.js");
 /* harmony import */ var _shared_data_storage_service__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../shared/data-storage.service */ "./src/app/shared/data-storage.service.ts");
 /* harmony import */ var _shared_statistics_statistics_service__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../shared/statistics/statistics.service */ "./src/app/shared/statistics/statistics.service.ts");
 var __decorate = (undefined && undefined.__decorate) || function (decorators, target, key, desc) {
@@ -4294,7 +4298,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "MenuComponent", function() { return MenuComponent; });
 /* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm5/core.js");
 /* harmony import */ var rxjs_Subject__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! rxjs/Subject */ "./node_modules/rxjs-compat/_esm5/Subject.js");
-/* harmony import */ var _ngrx_store__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @ngrx/store */ "./node_modules/@ngrx/store/@ngrx/store.es5.js");
+/* harmony import */ var _ngrx_store__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @ngrx/store */ "./node_modules/@ngrx/store/fesm5/store.js");
 /* harmony import */ var _shared_store_table_tables_actions__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../shared/store/table/tables.actions */ "./src/app/shared/store/table/tables.actions.ts");
 /* harmony import */ var _shared_constants_service__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../shared/constants.service */ "./src/app/shared/constants.service.ts");
 var __decorate = (undefined && undefined.__decorate) || function (decorators, target, key, desc) {
@@ -4408,7 +4412,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "RowDetailsComponent", function() { return RowDetailsComponent; });
 /* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm5/core.js");
 /* harmony import */ var _shared_data_storage_service__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../shared/data-storage.service */ "./src/app/shared/data-storage.service.ts");
-/* harmony import */ var _ngrx_store__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @ngrx/store */ "./node_modules/@ngrx/store/@ngrx/store.es5.js");
+/* harmony import */ var _ngrx_store__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @ngrx/store */ "./node_modules/@ngrx/store/fesm5/store.js");
 /* harmony import */ var _shared_store_table_tables_actions__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../shared/store/table/tables.actions */ "./src/app/shared/store/table/tables.actions.ts");
 /* harmony import */ var _angular_forms__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @angular/forms */ "./node_modules/@angular/forms/fesm5/forms.js");
 /* harmony import */ var _row_value_types_question_base_model__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../row/value-types/question-base.model */ "./src/app/tables/row/value-types/question-base.model.ts");
@@ -4695,7 +4699,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _question_control_service__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./question-control.service */ "./src/app/tables/row/question-control.service.ts");
 /* harmony import */ var _shared_table_model__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../shared/table.model */ "./src/app/shared/table.model.ts");
 /* harmony import */ var _value_types_question_base_model__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./value-types/question-base.model */ "./src/app/tables/row/value-types/question-base.model.ts");
-/* harmony import */ var _ngrx_store__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! @ngrx/store */ "./node_modules/@ngrx/store/@ngrx/store.es5.js");
+/* harmony import */ var _ngrx_store__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! @ngrx/store */ "./node_modules/@ngrx/store/fesm5/store.js");
 /* harmony import */ var _shared_data_storage_service__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../../shared/data-storage.service */ "./src/app/shared/data-storage.service.ts");
 /* harmony import */ var _shared_store_table_tables_actions__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../../shared/store/table/tables.actions */ "./src/app/shared/store/table/tables.actions.ts");
 /* harmony import */ var _shared_filter_filter_service__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ../../shared/filter/filter.service */ "./src/app/shared/filter/filter.service.ts");
@@ -4876,7 +4880,7 @@ module.exports = "<div class=\"d-flex justify-content-center\">\r\n  <tr *ngIf=\
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "TableHeaderComponent", function() { return TableHeaderComponent; });
 /* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm5/core.js");
-/* harmony import */ var _ngrx_store__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @ngrx/store */ "./node_modules/@ngrx/store/@ngrx/store.es5.js");
+/* harmony import */ var _ngrx_store__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @ngrx/store */ "./node_modules/@ngrx/store/fesm5/store.js");
 /* harmony import */ var _shared_store_table_tables_actions__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../shared/store/table/tables.actions */ "./src/app/shared/store/table/tables.actions.ts");
 /* harmony import */ var _angular_forms__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @angular/forms */ "./node_modules/@angular/forms/fesm5/forms.js");
 var __decorate = (undefined && undefined.__decorate) || function (decorators, target, key, desc) {
@@ -4996,7 +5000,7 @@ module.exports = "<div class=\"row\" style=\"margin: 0 10px;padding: 0;\">\r\n  
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "TablesComponent", function() { return TablesComponent; });
 /* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm5/core.js");
-/* harmony import */ var _ngrx_store__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @ngrx/store */ "./node_modules/@ngrx/store/@ngrx/store.es5.js");
+/* harmony import */ var _ngrx_store__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @ngrx/store */ "./node_modules/@ngrx/store/fesm5/store.js");
 /* harmony import */ var _shared_data_storage_service__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../shared/data-storage.service */ "./src/app/shared/data-storage.service.ts");
 /* harmony import */ var _shared_store_table_tables_actions__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../shared/store/table/tables.actions */ "./src/app/shared/store/table/tables.actions.ts");
 /* harmony import */ var _shared_store_user_users_actions__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../shared/store/user/users.actions */ "./src/app/shared/store/user/users.actions.ts");
@@ -5101,7 +5105,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "TaskComponent", function() { return TaskComponent; });
 /* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm5/core.js");
 /* harmony import */ var _shared_table_model__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../shared/table.model */ "./src/app/shared/table.model.ts");
-/* harmony import */ var _ngrx_store__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @ngrx/store */ "./node_modules/@ngrx/store/@ngrx/store.es5.js");
+/* harmony import */ var _ngrx_store__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @ngrx/store */ "./node_modules/@ngrx/store/fesm5/store.js");
 /* harmony import */ var _shared_store_task_tasks_actions__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../shared/store/task/tasks.actions */ "./src/app/shared/store/task/tasks.actions.ts");
 /* harmony import */ var _shared_data_storage_service__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../shared/data-storage.service */ "./src/app/shared/data-storage.service.ts");
 var __decorate = (undefined && undefined.__decorate) || function (decorators, target, key, desc) {
@@ -5559,7 +5563,7 @@ module.exports = "<div *ngIf=\"(usernameState| async)\">\r\n  <div class=\"jumbo
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "UserInfoComponent", function() { return UserInfoComponent; });
 /* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm5/core.js");
-/* harmony import */ var _ngrx_store__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @ngrx/store */ "./node_modules/@ngrx/store/@ngrx/store.es5.js");
+/* harmony import */ var _ngrx_store__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @ngrx/store */ "./node_modules/@ngrx/store/fesm5/store.js");
 /* harmony import */ var _shared_data_storage_service__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../shared/data-storage.service */ "./src/app/shared/data-storage.service.ts");
 var __decorate = (undefined && undefined.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
@@ -5668,7 +5672,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "UserDetailsComponent", function() { return UserDetailsComponent; });
 /* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm5/core.js");
 /* harmony import */ var _shared_data_storage_service__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../shared/data-storage.service */ "./src/app/shared/data-storage.service.ts");
-/* harmony import */ var _ngrx_store__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @ngrx/store */ "./node_modules/@ngrx/store/@ngrx/store.es5.js");
+/* harmony import */ var _ngrx_store__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @ngrx/store */ "./node_modules/@ngrx/store/fesm5/store.js");
 /* harmony import */ var _angular_forms__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @angular/forms */ "./node_modules/@angular/forms/fesm5/forms.js");
 /* harmony import */ var _shared_store_user_users_actions__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../shared/store/user/users.actions */ "./src/app/shared/store/user/users.actions.ts");
 var __decorate = (undefined && undefined.__decorate) || function (decorators, target, key, desc) {
@@ -5901,7 +5905,7 @@ module.exports = "<div class=\"jumbotron\">\r\n  <div class=\"row\" style=\"padd
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "UserComponent", function() { return UserComponent; });
 /* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm5/core.js");
-/* harmony import */ var _ngrx_store__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @ngrx/store */ "./node_modules/@ngrx/store/@ngrx/store.es5.js");
+/* harmony import */ var _ngrx_store__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @ngrx/store */ "./node_modules/@ngrx/store/fesm5/store.js");
 /* harmony import */ var _shared_data_storage_service__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../shared/data-storage.service */ "./src/app/shared/data-storage.service.ts");
 /* harmony import */ var _shared_store_user_users_actions__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../shared/store/user/users.actions */ "./src/app/shared/store/user/users.actions.ts");
 var __decorate = (undefined && undefined.__decorate) || function (decorators, target, key, desc) {

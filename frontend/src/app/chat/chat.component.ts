@@ -22,7 +22,7 @@ import * as ChatActions from "../shared/store/chat/chat.actions";
   templateUrl: './chat.component.html',
   styleUrls: ['./chat.component.css']
 })
-export class ChatComponent implements OnInit, AfterViewChecked {
+export class ChatComponent implements OnInit, AfterContentChecked {
   @ViewChild('chatGlobalDiv') private chatGlobalDiv: ElementRef;
   @ViewChild('chatUserDiv') private chatUserDiv: ElementRef;
   chatContent: Observable<ChatMessageModel[]>;
@@ -47,7 +47,7 @@ export class ChatComponent implements OnInit, AfterViewChecked {
     this.dss.getActiveWsUsers();
   }
 
-  ngAfterViewChecked(): void {
+  ngAfterContentChecked(): void {
     if(this.chatGlobalDiv) {
       this.chatGlobalDiv.nativeElement.scrollTop = this.chatGlobalDiv.nativeElement.scrollHeight;
     }
