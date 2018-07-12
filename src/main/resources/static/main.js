@@ -331,6 +331,7 @@ var AppModule = /** @class */ (function () {
                 _shared_store_reset_service__WEBPACK_IMPORTED_MODULE_39__["StoreResetService"],
                 _shared_statistics_statistics_service__WEBPACK_IMPORTED_MODULE_45__["StatisticsService"],
                 _shared_constants_service__WEBPACK_IMPORTED_MODULE_59__["ConstantsService"],
+                Location,
                 { provide: _angular_common_http__WEBPACK_IMPORTED_MODULE_2__["HTTP_INTERCEPTORS"], useClass: _shared_auth_interceptor__WEBPACK_IMPORTED_MODULE_22__["AuthInterceptor"], multi: true }
                 // {provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi:true}
             ],
@@ -368,7 +369,7 @@ module.exports = "li {\r\n  border: 1px solid #32383e;\r\n  background-color: rg
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<div class=\"jumbotron\">\r\n  <div class=\"row\">\r\n\r\n    <div class=\"col-4\">\r\n      <ul class=\"list-group\" style=\"padding: 50px 30px\">\r\n        <li class=\"list-group-item list-group-item-dark bg-dark text-white\">Active Users:</li>\r\n        <li class=\"list-group-item list-group-item-action list-group-item-light\"\r\n            (click)=\"setChat('global')\">\r\n          Global chat\r\n        </li>\r\n        <div *ngFor=\"let activeWsUser of (activeWsUsers | async)\">\r\n          <li *ngIf=\"activeWsUser != (currentUser |async)\"\r\n              class=\"list-group-item list-group-item-action list-group-item-light\"\r\n              (click)=\"setChat(activeWsUser)\"\r\n          >{{activeWsUser}}\r\n          </li>\r\n        </div>\r\n      </ul>\r\n    </div>\r\n    <div class=\"col-8\" style=\"padding: 50px 70px 0 0;\">\r\n      <ul class=\"list-group\" [ngClass]=\"chatName != 'global' ? 'd-none' : ''\">\r\n        <li class=\"list-group-item bg-dark text-info\">Global chat:</li>\r\n        <li class=\"list-group-item\">\r\n          <div #chatGlobalDiv style=\"min-height: 600px; max-height: 600px; overflow-y: scroll;\">\r\n            <div *ngFor=\"let message of (chatContent | async)\">\r\n              <div *ngIf=\"(message.senderName) === 'global' || (message.recipientName) === 'global'\">\r\n                <div *ngIf=\"(message.senderName) === (currentUser |async)\" class=\"alert border-primary text-primary\"\r\n                     style=\"width: 70%; margin-bottom: 5px;\">{{message.senderName}} : {{message.message}}\r\n                </div>\r\n                <div *ngIf=\"(message.senderName) !== (currentUser |async)\" class=\"alert border-success text-success\"\r\n                     style=\"width: 70%; margin: 0 0 5px 30%\">{{message.senderName}} : {{message.message}}\r\n                </div>\r\n              </div>\r\n            </div>\r\n          </div>\r\n        </li>\r\n        <li *ngIf=\"chatName == 'global'\" class=\"list-group-item bg-dark\">\r\n          <div class=\"input-group\">\r\n            <input class=\"form-control border-secondary\" type=\"text\" #messageContentGlobal\r\n                   (keyup.enter)=\"globalPost.click()\">\r\n            <div class=\"input-group-append\">\r\n              <button #globalPost (click)=\"postMessage(messageContentGlobal.value);messageContentGlobal.value = '';\"\r\n                      class=\"btn btn-default\">Post\r\n              </button>\r\n            </div>\r\n          </div>\r\n        </li>\r\n      </ul>\r\n\r\n      <div *ngFor=\"let activeWsUser of (activeWsUsers | async)\">\r\n        <ul class=\"list-group\" [ngClass]=\"chatName != activeWsUser ? 'd-none' : ''\">\r\n          <li class=\"list-group-item bg-dark text-info\">{{activeWsUser}} chat:</li>\r\n          <li class=\"list-group-item\">\r\n            <div #chatUserDiv style=\"min-height: 600px; max-height: 600px; overflow-y: scroll;\">\r\n              <div *ngFor=\"let message of (chatContent | async)\">\r\n                <div *ngIf=\"\r\n            (message.senderName === activeWsUser || message.recipientName === activeWsUser) &&\r\n            (message.senderName !== 'global' && message.recipientName !== 'global')\r\n            \">\r\n                  <div *ngIf=\"(message.senderName) === (currentUser |async)\" class=\"alert border-primary text-primary\"\r\n                       style=\"width: 70%; margin-bottom: 5px;\">{{message.senderName}} :{{message.message}}\r\n                  </div>\r\n                  <div *ngIf=\"(message.senderName) !== (currentUser |async)\" class=\"alert border-success text-success\"\r\n                       style=\"width: 70%; margin: 0 0 5px 30%\">{{message.senderName}} : {{message.message}}\r\n                  </div>\r\n                </div>\r\n              </div>\r\n            </div>\r\n          </li>\r\n          <li *ngIf=\"chatName == activeWsUser\" class=\"list-group-item bg-dark text-white\">\r\n            <div class=\"input-group\">\r\n              <input class=\"form-control border-secondary\" type=\"text\" #messageContent (keyup.enter)=\"userPost.click()\">\r\n              <div class=\"input-group-append\">\r\n                <button #userPost (click)=\"postMessage(messageContent.value);messageContent.value = '';\"\r\n                        class=\"btn btn-default\">Post\r\n                </button>\r\n              </div>\r\n            </div>\r\n          </li>\r\n        </ul>\r\n      </div>\r\n    </div>\r\n  </div>\r\n</div>\r\n"
+module.exports = "<div class=\"jumbotron\">\r\n  <div class=\"row\">\r\n\r\n    <div class=\"col-4\">\r\n      <ul class=\"list-group\" style=\"padding: 50px 30px\">\r\n        <li class=\"list-group-item list-group-item-dark bg-dark text-white\">Active Users:</li>\r\n        <li class=\"list-group-item list-group-item-action list-group-item-light\"\r\n            (click)=\"setChat('global')\">\r\n          Global chat\r\n          <span *ngIf=\"unreadMessages.get('global')\" class=\"badge badge-danger\">New</span>\r\n        </li>\r\n        <div *ngFor=\"let activeWsUser of (activeWsUsers | async)\">\r\n          <li *ngIf=\"activeWsUser != (currentUser |async)\"\r\n              class=\"list-group-item list-group-item-action list-group-item-light\"\r\n              (click)=\"setChat(activeWsUser)\"\r\n          >{{activeWsUser}}\r\n            <span *ngIf=\"unreadMessages.get(activeWsUser)\" class=\"badge badge-primary\">New</span>\r\n          </li>\r\n        </div>\r\n      </ul>\r\n    </div>\r\n    <div class=\"col-8\" style=\"padding: 50px 70px 0 0;\">\r\n      <ul class=\"list-group\" [ngClass]=\"chatName != 'global' ? 'd-none' : ''\">\r\n        <li class=\"list-group-item bg-dark text-info\">Global chat:</li>\r\n        <li class=\"list-group-item\">\r\n          <div #chatGlobalDiv style=\"min-height: 600px; max-height: 600px; overflow-y: scroll;\">\r\n            <div *ngFor=\"let message of (chatContent | async)\">\r\n              <div *ngIf=\"(message.senderName) === 'global' || (message.recipientName) === 'global'\">\r\n                <div *ngIf=\"(message.senderName) === (currentUser |async)\" class=\"alert border-primary text-primary\"\r\n                     style=\"width: 70%; margin-bottom: 5px;\">{{message.senderName}} : {{message.message}}\r\n                </div>\r\n                <div *ngIf=\"(message.senderName) !== (currentUser |async)\" class=\"alert border-success text-success\"\r\n                     style=\"width: 70%; margin: 0 0 5px 30%\">{{message.senderName}} : {{message.message}}\r\n                </div>\r\n              </div>\r\n            </div>\r\n          </div>\r\n        </li>\r\n        <li *ngIf=\"chatName == 'global'\" class=\"list-group-item bg-dark\">\r\n          <div class=\"input-group\">\r\n            <input class=\"form-control border-secondary\" type=\"text\" #messageContentGlobal\r\n                   (keyup.enter)=\"globalPost.click()\">\r\n            <div class=\"input-group-append\">\r\n              <button #globalPost (click)=\"postMessage(messageContentGlobal.value);messageContentGlobal.value = '';\"\r\n                      class=\"btn btn-default\">Post\r\n              </button>\r\n            </div>\r\n          </div>\r\n        </li>\r\n      </ul>\r\n\r\n      <div *ngFor=\"let activeWsUser of (activeWsUsers | async)\">\r\n        <ul class=\"list-group\" [ngClass]=\"chatName != activeWsUser ? 'd-none' : ''\">\r\n          <li class=\"list-group-item bg-dark text-info\">{{activeWsUser}} chat:</li>\r\n          <li class=\"list-group-item\">\r\n            <div #chatUserDiv style=\"min-height: 600px; max-height: 600px; overflow-y: scroll;\">\r\n              <div *ngFor=\"let message of (chatContent | async)\">\r\n                <div *ngIf=\"\r\n            (message.senderName === activeWsUser || message.recipientName === activeWsUser) &&\r\n            (message.senderName !== 'global' && message.recipientName !== 'global')\r\n            \">\r\n                  <div *ngIf=\"(message.senderName) === (currentUser |async)\" class=\"alert border-primary text-primary\"\r\n                       style=\"width: 70%; margin-bottom: 5px;\">{{message.senderName}} :{{message.message}}\r\n                  </div>\r\n                  <div *ngIf=\"(message.senderName) !== (currentUser |async)\" class=\"alert border-success text-success\"\r\n                       style=\"width: 70%; margin: 0 0 5px 30%\">{{message.senderName}} : {{message.message}}\r\n                  </div>\r\n                </div>\r\n              </div>\r\n            </div>\r\n          </li>\r\n          <li *ngIf=\"chatName == activeWsUser\" class=\"list-group-item bg-dark text-white\">\r\n            <div class=\"input-group\">\r\n              <input class=\"form-control border-secondary\" type=\"text\" #messageContent (keyup.enter)=\"userPost.click()\">\r\n              <div class=\"input-group-append\">\r\n                <button #userPost (click)=\"postMessage(messageContent.value);messageContent.value = '';\"\r\n                        class=\"btn btn-default\">Post\r\n                </button>\r\n              </div>\r\n            </div>\r\n          </li>\r\n        </ul>\r\n      </div>\r\n    </div>\r\n  </div>\r\n</div>\r\n"
 
 /***/ }),
 
@@ -388,6 +389,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _shared_chat_message_model__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../shared/chat-message.model */ "./src/app/shared/chat-message.model.ts");
 /* harmony import */ var _shared_data_storage_service__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../shared/data-storage.service */ "./src/app/shared/data-storage.service.ts");
 /* harmony import */ var _shared_store_chat_chat_actions__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../shared/store/chat/chat.actions */ "./src/app/shared/store/chat/chat.actions.ts");
+/* harmony import */ var _angular_router__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! @angular/router */ "./node_modules/@angular/router/fesm5/router.js");
 var __decorate = (undefined && undefined.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -403,22 +405,53 @@ var __metadata = (undefined && undefined.__metadata) || function (k, v) {
 
 
 
+
 var ChatComponent = /** @class */ (function () {
-    function ChatComponent(store, ws, dss) {
+    function ChatComponent(store, ws, dss, route) {
         this.store = store;
         this.ws = ws;
         this.dss = dss;
-        this.chatName = 'global';
+        this.route = route;
+        this.unreadMessages = new Map();
+        this.messages = [];
     }
     ChatComponent.prototype.ngOnInit = function () {
         var _this = this;
+        this.unreadMessages.set('global', false);
+        this.store.dispatch(new _shared_store_chat_chat_actions__WEBPACK_IMPORTED_MODULE_5__["SelectChat"]('global'));
         this.chatContent = this.store.select('chat', 'chatContent');
+        this.chatNameState = this.store.select('chat', 'selectedChat');
+        this.chatNameState.subscribe(function (chatName) { return _this.chatName = chatName; });
+        this.chatContent.subscribe(function (chat) {
+            _this.messages = chat;
+            if (_this.messages.length > 0) {
+                if (_this.messages[_this.messages.length - 1].recipientName === 'global' && _this.chatName !== 'global') {
+                    _this.unreadMessages.set('global', true);
+                }
+                if (_this.messages[_this.messages.length - 1].recipientName !== 'global'
+                    && _this.chatName !== _this.messages[_this.messages.length - 1].senderName) {
+                    _this.unreadMessages.set(_this.messages[_this.messages.length - 1].senderName, true);
+                }
+            }
+        });
         this.currentUser = this.store.select('users', 'currentUser');
         this.currentUser.subscribe(function (username) {
             _this.username = username;
         });
         this.activeWsUsers = this.store.select('chat', 'activeUsers');
+        this.activeWsUsers.subscribe(function (users) {
+            users.forEach(function (user) {
+                if (!_this.unreadMessages.has(user)) {
+                    _this.unreadMessages.set(user, false);
+                }
+            });
+        });
         this.dss.getActiveWsUsers();
+        this.route.queryParams.subscribe(function (params) {
+            if (_this.messages.length > 0) {
+                _this.setChat(_this.messages[_this.messages.length - 1].recipientName !== 'global' ? params.user : 'global');
+            }
+        });
     };
     ChatComponent.prototype.ngAfterContentChecked = function () {
         if (this.chatGlobalDiv) {
@@ -440,7 +473,11 @@ var ChatComponent = /** @class */ (function () {
         }
     };
     ChatComponent.prototype.setChat = function (chatName) {
-        this.chatName = chatName;
+        this.unreadMessages.set(chatName, false);
+        this.store.dispatch(new _shared_store_chat_chat_actions__WEBPACK_IMPORTED_MODULE_5__["SelectChat"](chatName));
+    };
+    ChatComponent.prototype.ngOnDestroy = function () {
+        this.store.dispatch(new _shared_store_chat_chat_actions__WEBPACK_IMPORTED_MODULE_5__["SelectChat"](''));
     };
     __decorate([
         Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["ViewChild"])('chatGlobalDiv'),
@@ -458,7 +495,8 @@ var ChatComponent = /** @class */ (function () {
         }),
         __metadata("design:paramtypes", [_ngrx_store__WEBPACK_IMPORTED_MODULE_1__["Store"],
             _shared_socket_task_info_service__WEBPACK_IMPORTED_MODULE_2__["TaskInfoService"],
-            _shared_data_storage_service__WEBPACK_IMPORTED_MODULE_4__["DataStorageService"]])
+            _shared_data_storage_service__WEBPACK_IMPORTED_MODULE_4__["DataStorageService"],
+            _angular_router__WEBPACK_IMPORTED_MODULE_6__["ActivatedRoute"]])
     ], ChatComponent);
     return ChatComponent;
 }());
@@ -602,7 +640,7 @@ module.exports = "nav {\r\n  background-color: rgba(0,0,0,0.1);\r\n}\r\n"
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<nav class=\"navbar navbar-expand-lg navbar-dark\" style=\"margin-bottom: 0\">\r\n  <!--*ngIf=\"(token | async)\"-->\r\n  <a class=\"navbar-brand text-info\" href=\"/\">MY JIRA</a>\r\n  <button class=\"navbar-toggler\" type=\"button\" data-toggle=\"collapse\" data-target=\"#navbarNavDropdown\" aria-controls=\"navbarNavDropdown\"\r\n          aria-expanded=\"false\" aria-label=\"Toggle navigation\">\r\n    <span class=\"navbar-toggler-icon\"></span>\r\n  </button>\r\n  <div class=\"collapse navbar-collapse\" id=\"navbarNavDropdown\">\r\n    <ul class=\"navbar-nav mr-auto\" *ngIf=\"(token | async)\">\r\n      <li class=\"nav-item \" data-toggle=\"collapse\" data-target=\".navbar-collapse.show\" routerLinkActive=\"active\" [routerLinkActiveOptions]=\"{exact: true}\"><a class=\"nav-link text-info\" routerLink=\"/home\">Home</a></li>\r\n      <li class=\"nav-item\" data-toggle=\"collapse\" data-target=\".navbar-collapse.show\" routerLinkActive=\"active\"><a class=\"nav-link text-info\" routerLink=\"/tables\">Tables</a></li>\r\n      <li class=\"nav-item\" data-toggle=\"collapse\" data-target=\".navbar-collapse.show\" routerLinkActive=\"active\"><a class=\"nav-link text-info\" routerLink=\"/users\">Users</a></li>\r\n      <li *ngIf=\"(isAdmin | async)\" data-toggle=\"collapse\" data-target=\".navbar-collapse.show\" class=\"nav-item\" routerLinkActive=\"active\"><a class=\"nav-link text-info\" routerLink=\"/definitions\">Definition</a></li>\r\n      <li *ngIf=\"(isAdmin | async)\" data-toggle=\"collapse\" data-target=\".navbar-collapse.show\" class=\"nav-item\" routerLinkActive=\"active\"><a class=\"nav-link text-info\" routerLink=\"/roles\">Roles</a></li>\r\n      <li *ngIf=\"(isAdmin | async)\" data-toggle=\"collapse\" data-target=\".navbar-collapse.show\" class=\"nav-item\" routerLinkActive=\"active\"><a class=\"nav-link text-info\" routerLink=\"/statistics\">Statistics</a></li>\r\n      <li class=\"nav-item\" data-toggle=\"collapse\" data-target=\".navbar-collapse.show\" routerLinkActive=\"active\"><a class=\"nav-link text-info\" routerLink=\"/chat\">Chat</a></li>\r\n      <li class=\"nav-item\" data-toggle=\"collapse\" data-target=\".navbar-collapse.show\" routerLinkActive=\"active\"><a class=\"nav-link text-info\" routerLink=\"/training\">Training</a></li>\r\n    </ul>\r\n\r\n    <span class=\"nav navbar-text font-weight-bold\" *ngIf=\"(token | async)\">\r\n      <a class=\"text-info\" routerLink=\"/user-info\">Welcome : {{ username | async }}</a>\r\n    </span>\r\n    <span *ngIf=\"(newTaskState | async)\" (click)=\"onNewTasksSeen()\" class=\"nav navbar-text text-danger\">!Check Tasks!</span>\r\n    <span class=\"navbar-text\">\r\n      <a class=\"nav-link text-info\" routerLink=\"/signin\" *ngIf=\"!(token | async)\">Login</a>\r\n    </span>\r\n    <span class=\"navbar-text\">\r\n      <a class=\"nav-link text-info\" (click)=\"onLogout()\" *ngIf=\"(token | async)\" routerLink=\"/\">Logout</a>\r\n    </span>\r\n  </div>\r\n</nav>\r\n"
+module.exports = "<nav class=\"navbar navbar-expand-lg navbar-dark\" style=\"margin-bottom: 0\">\r\n  <!--*ngIf=\"(token | async)\"-->\r\n  <a class=\"navbar-brand text-info\" href=\"/\">MY JIRA</a>\r\n  <button class=\"navbar-toggler\" type=\"button\" data-toggle=\"collapse\" data-target=\"#navbarNavDropdown\" aria-controls=\"navbarNavDropdown\"\r\n          aria-expanded=\"false\" aria-label=\"Toggle navigation\">\r\n    <span class=\"navbar-toggler-icon\"></span>\r\n  </button>\r\n  <div class=\"collapse navbar-collapse\" id=\"navbarNavDropdown\">\r\n    <ul class=\"navbar-nav mr-auto\" *ngIf=\"(token | async)\">\r\n      <li class=\"nav-item \" data-toggle=\"collapse\" data-target=\".navbar-collapse.show\" routerLinkActive=\"active\" [routerLinkActiveOptions]=\"{exact: true}\"><a class=\"nav-link text-info\" routerLink=\"/home\">Home</a></li>\r\n      <li class=\"nav-item\" data-toggle=\"collapse\" data-target=\".navbar-collapse.show\" routerLinkActive=\"active\"><a class=\"nav-link text-info\" routerLink=\"/tables\">Tables</a></li>\r\n      <li class=\"nav-item\" data-toggle=\"collapse\" data-target=\".navbar-collapse.show\" routerLinkActive=\"active\"><a class=\"nav-link text-info\" routerLink=\"/users\">Users</a></li>\r\n      <li *ngIf=\"(isAdmin | async)\" data-toggle=\"collapse\" data-target=\".navbar-collapse.show\" class=\"nav-item\" routerLinkActive=\"active\"><a class=\"nav-link text-info\" routerLink=\"/definitions\">Definition</a></li>\r\n      <li *ngIf=\"(isAdmin | async)\" data-toggle=\"collapse\" data-target=\".navbar-collapse.show\" class=\"nav-item\" routerLinkActive=\"active\"><a class=\"nav-link text-info\" routerLink=\"/roles\">Roles</a></li>\r\n      <li *ngIf=\"(isAdmin | async)\" data-toggle=\"collapse\" data-target=\".navbar-collapse.show\" class=\"nav-item\" routerLinkActive=\"active\"><a class=\"nav-link text-info\" routerLink=\"/statistics\">Statistics</a></li>\r\n      <li class=\"nav-item\" data-toggle=\"collapse\" data-target=\".navbar-collapse.show\" routerLinkActive=\"active\"><a class=\"nav-link text-info\" routerLink=\"/chat\">Chat</a></li>\r\n      <li class=\"nav-item\" data-toggle=\"collapse\" data-target=\".navbar-collapse.show\" routerLinkActive=\"active\"><a class=\"nav-link text-info\" routerLink=\"/training\">Training</a></li>\r\n    </ul>\r\n\r\n    <h4><span *ngIf=\"chatChanged\" (click)=\"toChat()\" style=\"margin-right: 20px\" class=\"nav badge badge-primary\">Chat</span></h4>\r\n    <h4><span *ngIf=\"(newTaskState | async)\" (click)=\"onNewTasksSeen()\" style=\"margin-right: 20px\" class=\"nav badge badge-danger\">Tasks</span></h4>\r\n    <span class=\"nav navbar-text font-weight-bold\" style=\"margin-right: 20px\" *ngIf=\"(token | async)\">\r\n      <a class=\"text-info\" routerLink=\"/user-info\">Welcome : {{ username | async }}</a>\r\n    </span>\r\n    <span class=\"navbar-text\">\r\n      <a class=\"nav-link text-info\" routerLink=\"/signin\" *ngIf=\"!(token | async)\">Login</a>\r\n    </span>\r\n    <span class=\"navbar-text\">\r\n      <a class=\"nav-link text-info\" (click)=\"onLogout()\" *ngIf=\"(token | async)\" routerLink=\"/\">Logout</a>\r\n    </span>\r\n  </div>\r\n</nav>\r\n"
 
 /***/ }),
 
@@ -623,6 +661,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _shared_store_user_users_actions__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../shared/store/user/users.actions */ "./src/app/shared/store/user/users.actions.ts");
 /* harmony import */ var _shared_store_reset_service__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../shared/store-reset.service */ "./src/app/shared/store-reset.service.ts");
 /* harmony import */ var _angular_router__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! @angular/router */ "./node_modules/@angular/router/fesm5/router.js");
+/* harmony import */ var _angular_common__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! @angular/common */ "./node_modules/@angular/common/fesm5/common.js");
 var __decorate = (undefined && undefined.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -639,14 +678,19 @@ var __metadata = (undefined && undefined.__metadata) || function (k, v) {
 
 
 
+
 var HeaderComponent = /** @class */ (function () {
-    function HeaderComponent(store, oauth, dss, resetService, router) {
+    function HeaderComponent(store, oauth, dss, resetService, router, route, location) {
         this.store = store;
         this.oauth = oauth;
         this.dss = dss;
         this.resetService = resetService;
         this.router = router;
+        this.route = route;
+        this.location = location;
         this.navVisible = false;
+        this.chatChanged = false;
+        this.chatModel = [];
     }
     HeaderComponent.prototype.ngOnInit = function () {
         var _this = this;
@@ -667,6 +711,18 @@ var HeaderComponent = /** @class */ (function () {
             });
             return condition;
         });
+        this.store.select('chat', 'selectedChat').subscribe(function (chatName) { return _this.chatName = chatName; });
+        this.route.params.subscribe(function (params) { return _this.params = params; });
+        this.store.select('chat', 'chatContent').subscribe(function (chatModel) {
+            _this.chatModel = chatModel;
+            if (chatModel.length <= 0 || chatModel[chatModel.length - 1].senderName === _this.currentUsername) {
+                return;
+            }
+            if (_this.location.path() === '/chat') {
+                return;
+            }
+            _this.chatChanged = true;
+        });
     };
     HeaderComponent.prototype.onLogout = function () {
         this.resetService.resetStore();
@@ -675,10 +731,11 @@ var HeaderComponent = /** @class */ (function () {
     };
     HeaderComponent.prototype.onNewTasksSeen = function () {
         this.store.dispatch(new _shared_store_user_users_actions__WEBPACK_IMPORTED_MODULE_4__["SetTaskInfoAction"](false));
+        this.router.navigate(['/users']);
     };
-    HeaderComponent.prototype.toggleNav = function () {
-        console.log("T");
-        this.navVisible = !this.navVisible;
+    HeaderComponent.prototype.toChat = function () {
+        this.chatChanged = false;
+        this.router.navigate(['/chat']);
     };
     HeaderComponent = __decorate([
         Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["Component"])({
@@ -690,7 +747,9 @@ var HeaderComponent = /** @class */ (function () {
             _shared_oauth_service__WEBPACK_IMPORTED_MODULE_2__["OauthService"],
             _shared_data_storage_service__WEBPACK_IMPORTED_MODULE_3__["DataStorageService"],
             _shared_store_reset_service__WEBPACK_IMPORTED_MODULE_5__["StoreResetService"],
-            _angular_router__WEBPACK_IMPORTED_MODULE_6__["Router"]])
+            _angular_router__WEBPACK_IMPORTED_MODULE_6__["Router"],
+            _angular_router__WEBPACK_IMPORTED_MODULE_6__["ActivatedRoute"],
+            _angular_common__WEBPACK_IMPORTED_MODULE_7__["Location"]])
     ], HeaderComponent);
     return HeaderComponent;
 }());
@@ -1445,10 +1504,10 @@ var DataStorageService = /** @class */ (function () {
             console.log('saveNewTask dss err: ', err);
         });
     };
-    DataStorageService.prototype.setTableUsers = function (tableName) {
+    DataStorageService.prototype.setTableUsers = function (tableId) {
         var _this = this;
         // console.log(tableName);
-        this.httpClient.get(this.basehost + '/v1/users/table/' + tableName)
+        this.httpClient.get(this.basehost + '/v1/users/table/' + tableId)
             .subscribe(function (users) {
             _this.store.dispatch(new _store_table_tables_actions__WEBPACK_IMPORTED_MODULE_5__["SetTableUsers"](users));
         }, function (err) {
@@ -2583,19 +2642,22 @@ var StoreResetService = /** @class */ (function () {
 /*!***************************************************!*\
   !*** ./src/app/shared/store/chat/chat.actions.ts ***!
   \***************************************************/
-/*! exports provided: APPEND_CHAT_WITH_MESSAGE, SET_ACTIVE_USERS, RESET_STORE, AppendChatWithMessage, SetActiveWsUsers, ResetStore */
+/*! exports provided: APPEND_CHAT_WITH_MESSAGE, SET_ACTIVE_USERS, SELECT_CHAT, RESET_STORE, AppendChatWithMessage, SetActiveWsUsers, SelectChat, ResetStore */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "APPEND_CHAT_WITH_MESSAGE", function() { return APPEND_CHAT_WITH_MESSAGE; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "SET_ACTIVE_USERS", function() { return SET_ACTIVE_USERS; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "SELECT_CHAT", function() { return SELECT_CHAT; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "RESET_STORE", function() { return RESET_STORE; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "AppendChatWithMessage", function() { return AppendChatWithMessage; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "SetActiveWsUsers", function() { return SetActiveWsUsers; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "SelectChat", function() { return SelectChat; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ResetStore", function() { return ResetStore; });
 var APPEND_CHAT_WITH_MESSAGE = 'APPEND_CHAT_WITH_MESSAGE';
 var SET_ACTIVE_USERS = 'SET_ACTIVE_USERS';
+var SELECT_CHAT = 'SELECT_CHAT';
 var RESET_STORE = 'RESET_STORE';
 var AppendChatWithMessage = /** @class */ (function () {
     function AppendChatWithMessage(payload) {
@@ -2611,6 +2673,14 @@ var SetActiveWsUsers = /** @class */ (function () {
         this.type = SET_ACTIVE_USERS;
     }
     return SetActiveWsUsers;
+}());
+
+var SelectChat = /** @class */ (function () {
+    function SelectChat(payload) {
+        this.payload = payload;
+        this.type = SELECT_CHAT;
+    }
+    return SelectChat;
 }());
 
 var ResetStore = /** @class */ (function () {
@@ -2646,7 +2716,8 @@ var __assign = (undefined && undefined.__assign) || Object.assign || function(t)
 
 var initialChatState = {
     chatContent: [],
-    activeUsers: []
+    activeUsers: [],
+    selectedChat: ''
 };
 function chatReducers(state, action) {
     if (state === void 0) { state = initialChatState; }
@@ -2655,6 +2726,8 @@ function chatReducers(state, action) {
             return __assign({}, state, { chatContent: state.chatContent.concat([action.payload]) });
         case _chat_actions__WEBPACK_IMPORTED_MODULE_0__["SET_ACTIVE_USERS"]:
             return __assign({}, state, { activeUsers: action.payload.slice() });
+        case _chat_actions__WEBPACK_IMPORTED_MODULE_0__["SELECT_CHAT"]:
+            return __assign({}, state, { selectedChat: action.payload });
         case _chat_actions__WEBPACK_IMPORTED_MODULE_0__["RESET_STORE"]:
             return __assign({}, initialChatState);
         default:
@@ -5142,7 +5215,7 @@ var TaskComponent = /** @class */ (function () {
         this.store.select('tables', 'tableDefinition').subscribe(function (tableDefinition) {
             if (tableDefinition) {
                 _this.tableDefinition = tableDefinition[0];
-                _this.dss.setTableUsers(_this.tableDefinition.name);
+                _this.dss.setTableUsers(_this.tableDefinition.id);
             }
         });
         this.tableUsers = this.store.select('tables', 'tableUsers');

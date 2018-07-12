@@ -239,7 +239,10 @@ public class TableQueryService {
                 .replaceFirst(ORDERED_COLUMN_NAMES_VARIABLE, columnNames)
                 .replaceFirst(ORDERED_ROW_VALUES_VARIABLE, parameterPlaceholders);
 
-         rowDto.setId(runParametrizedUpdate(statement, rowValues).getKey().longValue());
+        KeyHolder keys = runParametrizedUpdate(statement, rowValues);
+
+        //mysql - posgres workaround
+        rowDto.setId((long) keys.getKeys().getOrDefault("GENERATED_KEY", keys.getKeys().get("ID")));
 
         return rowDto;
     }

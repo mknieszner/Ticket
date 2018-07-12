@@ -269,9 +269,9 @@ export class DataStorageService {
         });
   }
 
-  setTableUsers(tableName: string) {
+  setTableUsers(tableId: number) {
     // console.log(tableName);
-    this.httpClient.get<UserModel[]>(this.basehost + '/v1/users/table/' + tableName)
+    this.httpClient.get<UserModel[]>(this.basehost + '/v1/users/table/' + tableId)
       .subscribe((users: UserModel[]) => {
           this.store.dispatch(new TablesActions.SetTableUsers(users));
         },

@@ -216,11 +216,11 @@ public class UserService implements UserDetailsService {
     }
   }
 
-  @PreAuthorize("hasAnyAuthority('ROLE_ADMIN','#tablename')")
-  public List<String> getTableUsers(final String tableName) {
+  @PreAuthorize("hasAnyAuthority('ROLE_ADMIN') || @tableAccessManager.hasTableAccessAuthorityBy(#tableId)")
+  public List<String> getTableUsers(final Long tableId) {
     return userMapper.mapUserSetToUserDtoSet(
         userRepository.findAllByRolesContaining(
-          roleRepository.findByName(tableName)))
+          roleRepository.findByName(tableService.getTableNameBy(tableId))))
             .stream()
             .map(UserDto::getUsername)
             .collect(Collectors.toList());

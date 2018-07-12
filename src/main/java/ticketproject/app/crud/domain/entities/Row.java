@@ -16,61 +16,66 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Table(name = "TABLE_ROWS")
+@EqualsAndHashCode(of = "id")
 public class Row {
 
-  @Id
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
-  private Long id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
-  //@Column(unique = true)
-  private String name;
+    //@Column(unique = true)
+    private String name;
 
-  private String createdBy;
+    private String createdBy;
 
-  private LocalDateTime createdOn;
+    private LocalDateTime createdOn;
 
-  private String lastModifiedBy;
+    private String lastModifiedBy;
 
-  private LocalDateTime lastModifiedOn;
+    private LocalDateTime lastModifiedOn;
 
-  public Row(final String name) {
-    this.name = name;
-  }
+    public Row(final String name) {
+        this.name = name;
+    }
 
-  @OneToMany(
-      cascade = CascadeType.ALL,
-      fetch = FetchType.EAGER
-  )
-  @Cascade(org.hibernate.annotations.CascadeType.ALL)
-  @OrderColumn
-  public List<ColumnValue> columnValues = new ArrayList<>();
+    @OneToMany(
+            cascade = CascadeType.ALL,
+            fetch = FetchType.EAGER
+    )
+    @Cascade(org.hibernate.annotations.CascadeType.ALL)
+    @OrderColumn
+    public List<ColumnValue> columnValues = new ArrayList<>();
 
-  @NotNull
-  @ManyToOne(
-      //fetch = FetchType.EAGER
-  )
-  @JoinColumn(name = "TABLES_ID")
-  private ProjectTable projectTable;
+    @NotNull
+    @ManyToOne(
+            //fetch = FetchType.EAGER
+    )
+    @JoinColumn(name = "TABLES_ID")
+    private ProjectTable projectTable;
 
 
+    public Row(final Long id, final String name, final List<ColumnValue> columnValues, final List<Task> tasks) {
+        this.id = id;
+        this.name = name;
+        this.columnValues.addAll(columnValues);
+        this.tasks.addAll(tasks);
+    }
 
-  public Row(final Long id, final String name, final List<ColumnValue> columnValues, final List<Task> tasks) {
-    this.id = id;
-    this.name = name;
-    this.columnValues.addAll(columnValues);
-    this.tasks.addAll(tasks);
-  }
+    @Override
+    public String toString() {
+        return "Row{" + "id=" + id + ", name='" + name + '\'' + ", columnValues=" + columnValues + ", projectTable=" + projectTable.getId() + '}';
+    }
 
-  @Override
-  public String toString() {
-    return "Row{" + "id=" + id + ", name='" + name + '\'' + ", columnValues=" + columnValues + ", projectTable=" + projectTable.getId() + '}';
-  }
+    @OneToMany(
+            fetch= FetchType.EAGER,
+            orphanRemoval = true
+    )
+    @Cascade({org.hibernate.annotations.CascadeType.SAVE_UPDATE, org.hibernate.annotations.CascadeType.DELETE})
+    @OrderColumn
+    List<Task> tasks = new ArrayList<>();
 
-  @OneToMany(
-      cascade = CascadeType.ALL,
-      fetch = FetchType.EAGER
-  )
-  @Cascade(org.hibernate.annotations.CascadeType.ALL)
-  @OrderColumn
-  List<Task> tasks = new ArrayList<>();
+    public void updateTask(Task task) {
+        this.tasks.remove(task);
+        this.tasks.add(task);
+    }
 }

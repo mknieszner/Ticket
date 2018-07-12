@@ -169,7 +169,7 @@ public class TableService {
 
     @Transactional
     public void deleteTablebyId(final Long tableId) { //TODO:TRANSACTION?
-        roleRepository.deleteByName(getTableNameById(tableId));
+        roleRepository.deleteByName(getTableNameBy(tableId));
         projectTableRepository.delete(tableId);
     }
 
@@ -248,6 +248,8 @@ public class TableService {
     @PreAuthorize("hasAnyAuthority('ROLE_ADMIN') || @tableAccessManager.hasTableAccessAuthorityBy(#tableId)")
     public boolean deleteTask(final Long taskId, final Long tableId) {
         Task task = taskRepository.findOne(taskId);
+        task.getUsers().clear();
+        taskRepository.save(task);
         Row row = rowRepository.findByTasks(task);
         row.getTasks().remove(task);
         rowRepository.save(row);
@@ -270,16 +272,7 @@ public class TableService {
     }
 
     private Row updateRowTask(final Row row, final TaskDto newTask) {
-        row.setTasks(row.getTasks()
-                .stream()
-                .map(
-                        (task) -> {
-                            if (task.getId().equals(newTask.getId())) {
-                                task = taskMapper.mapTaskDtoToTask(newTask);
-                            }
-                            return task;
-                        })
-                .collect(toList()));
+        row.updateTask(taskMapper.mapTaskDtoToTask(newTask));
         return row;
     }
 
@@ -300,7 +293,7 @@ public class TableService {
         return projectTableRepository.findByName(tableName).getId();
     }
 
-    private String getTableNameById(final Long tableId) {
+    public String getTableNameBy(final Long tableId) {
         return projectTableRepository.findOne(tableId).getName();
     }
 }

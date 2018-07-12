@@ -8,7 +8,9 @@ import {Token} from '../shared/auth.model';
 import {Client} from 'stompjs/lib/stomp.js';
 import * as UserActions from '../shared/store/user/users.actions';
 import {StoreResetService} from '../shared/store-reset.service';
-import {Router} from '@angular/router';
+import {ActivatedRoute, Params, Router} from '@angular/router';
+import {ChatMessageModel} from "../shared/chat-message.model";
+import {Location} from "@angular/common";
 
 @Component({
   selector: 'app-header',
@@ -23,12 +25,18 @@ export class HeaderComponent implements OnInit {
   newTaskState: Observable<boolean>;
   currentUsername: string;
   navVisible = false;
+  chatChanged = false;
+  chatModel: ChatMessageModel[] = [];
+  private params: Params;
+  private chatName: string;
 
   constructor(private store: Store<fromAppReducers.AppState>,
               private oauth: OauthService,
               private dss: DataStorageService,
               private resetService: StoreResetService,
-              private router: Router) {
+              private router: Router,
+              private route: ActivatedRoute,
+              private location: Location) {
   }
 
   ngOnInit() {
@@ -49,6 +57,18 @@ export class HeaderComponent implements OnInit {
       });
       return condition;
     });
+    this.store.select('chat', 'selectedChat').subscribe(chatName => this.chatName = chatName);
+    this.route.params.subscribe(params => this.params = params)
+    this.store.select('chat', 'chatContent').subscribe((chatModel: ChatMessageModel[]) => {
+      this.chatModel = chatModel;
+      if (chatModel.length <= 0 || chatModel[chatModel.length -1].senderName === this.currentUsername) {
+        return;
+      }
+      if (this.location.path() === '/chat') {
+        return;
+      }
+      this.chatChanged = true;
+    });
   }
 
   onLogout() {
@@ -59,10 +79,11 @@ export class HeaderComponent implements OnInit {
 
   onNewTasksSeen() {
     this.store.dispatch(new UserActions.SetTaskInfoAction(false));
+    this.router.navigate(['/users']);
   }
 
-  toggleNav() {
-    console.log("T");
-    this.navVisible = !this.navVisible;
+  toChat() {
+    this.chatChanged = false;
+    this.router.navigate(['/chat']);
   }
 }

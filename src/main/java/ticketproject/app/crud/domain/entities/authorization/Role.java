@@ -1,6 +1,11 @@
 package ticketproject.app.crud.domain.entities.authorization;
 
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
 import org.hibernate.annotations.Cascade;
 
 import javax.persistence.*;
@@ -18,6 +23,7 @@ import static org.hibernate.annotations.CascadeType.REFRESH;
 @Getter
 @Setter
 @ToString
+@EqualsAndHashCode(of = "name")
 public class Role {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -61,20 +67,5 @@ public class Role {
     @PreRemove
     public void removeAllUsers() {
         users.forEach(user -> user.getRoles().remove(this));
-    }
-
-    @Override
-    public boolean equals(final Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-
-        final Role role = (Role) o;
-
-        return name.equals(role.name);
-    }
-
-    @Override
-    public int hashCode() {
-        return name.hashCode();
     }
 }

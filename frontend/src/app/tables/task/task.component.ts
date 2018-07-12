@@ -39,7 +39,7 @@ export class TaskComponent implements OnInit {
     this.store.select('tables', 'tableDefinition').subscribe((tableDefinition: TableDefinitionModel) => {
       if (tableDefinition) { // TODO: ???
         this.tableDefinition = tableDefinition[0];
-        this.dss.setTableUsers(this.tableDefinition.name);
+        this.dss.setTableUsers(this.tableDefinition.id);
       }
     });
     this.tableUsers = this.store.select('tables', 'tableUsers');

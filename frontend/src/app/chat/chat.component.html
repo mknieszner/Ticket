@@ -7,12 +7,14 @@
         <li class="list-group-item list-group-item-action list-group-item-light"
             (click)="setChat('global')">
           Global chat
+          <span *ngIf="unreadMessages.get('global')" class="badge badge-danger">New</span>
         </li>
         <div *ngFor="let activeWsUser of (activeWsUsers | async)">
           <li *ngIf="activeWsUser != (currentUser |async)"
               class="list-group-item list-group-item-action list-group-item-light"
               (click)="setChat(activeWsUser)"
           >{{activeWsUser}}
+            <span *ngIf="unreadMessages.get(activeWsUser)" class="badge badge-primary">New</span>
           </li>
         </div>
       </ul>

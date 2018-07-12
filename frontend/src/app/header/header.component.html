@@ -17,10 +17,11 @@
       <li class="nav-item" data-toggle="collapse" data-target=".navbar-collapse.show" routerLinkActive="active"><a class="nav-link text-info" routerLink="/training">Training</a></li>
     </ul>
 
-    <span class="nav navbar-text font-weight-bold" *ngIf="(token | async)">
+    <h4><span *ngIf="chatChanged" (click)="toChat()" style="margin-right: 20px" class="nav badge badge-primary">Chat</span></h4>
+    <h4><span *ngIf="(newTaskState | async)" (click)="onNewTasksSeen()" style="margin-right: 20px" class="nav badge badge-danger">Tasks</span></h4>
+    <span class="nav navbar-text font-weight-bold" style="margin-right: 20px" *ngIf="(token | async)">
       <a class="text-info" routerLink="/user-info">Welcome : {{ username | async }}</a>
     </span>
-    <span *ngIf="(newTaskState | async)" (click)="onNewTasksSeen()" class="nav navbar-text text-danger">!Check Tasks!</span>
     <span class="navbar-text">
       <a class="nav-link text-info" routerLink="/signin" *ngIf="!(token | async)">Login</a>
     </span>

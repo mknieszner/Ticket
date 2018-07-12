@@ -126,6 +126,7 @@ import {ConstantsService} from "./shared/constants.service";
     StoreResetService,
     StatisticsService,
     ConstantsService,
+    Location,
     {provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true}
     // {provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi:true}
   ],

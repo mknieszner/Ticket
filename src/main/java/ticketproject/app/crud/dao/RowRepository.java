@@ -13,6 +13,6 @@ public interface RowRepository extends CrudRepository<Row, Long> {
   Row findByProjectTableIdAndId(Long tableId, Long rowId);
   List<Row> findAllByProjectTable_Id(Long tableId);
   List<Row> findAllByProjectTable_Name(String tableName);
-  Row findByTasksIsContaining(List<Task> tasks);
+  Row findByTasksIsContaining(Task task);
   Row findByTasks(Task task);
 }

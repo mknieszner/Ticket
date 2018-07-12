@@ -3,6 +3,7 @@ import {ChatMessageModel} from '../../chat-message.model';
 
 export const APPEND_CHAT_WITH_MESSAGE = 'APPEND_CHAT_WITH_MESSAGE';
 export const SET_ACTIVE_USERS = 'SET_ACTIVE_USERS';
+export const SELECT_CHAT = 'SELECT_CHAT';
 export const RESET_STORE = 'RESET_STORE';
 
 export class AppendChatWithMessage implements Action {
@@ -19,6 +20,13 @@ export class SetActiveWsUsers implements Action {
   }
 }
 
+export class SelectChat implements Action {
+  readonly type = SELECT_CHAT;
+
+  constructor(public payload: string) {
+  }
+}
+
 export class ResetStore implements Action {
   readonly type = RESET_STORE;
 
@@ -29,4 +37,5 @@ export class ResetStore implements Action {
 export type ChatActions =
   AppendChatWithMessage |
   SetActiveWsUsers |
+  SelectChat |
   ResetStore;

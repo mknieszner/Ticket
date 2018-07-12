@@ -17,7 +17,7 @@ public class TaskInfoService {
   private final UserRepository userRepositoryService;
   private final TaskMapper taskMapper;
 
-  @PreAuthorize("principal.username == #username || hasAnyAuthority('ROLE_ADMIN')")
+  @PreAuthorize("hasAnyAuthority('ROLE_ADMIN', 'ROLE_USER')")
   public List<TaskDto> getUserTasks(final String username) {
     return taskMapper.mapTasksToTaskDtos(userRepositoryService.findByUsername(username).getTasks());
   }

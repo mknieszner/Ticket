@@ -4,11 +4,13 @@ import {ChatMessageModel} from '../../chat-message.model';
 export interface ChatState {
   chatContent: ChatMessageModel[];
   activeUsers: string[];
+  selectedChat: string;
 }
 
 const initialChatState: ChatState = {
   chatContent: [],
-  activeUsers: []
+  activeUsers: [],
+  selectedChat: ''
 };
 
 export function chatReducers(state: ChatState = initialChatState, action: ChatActions.ChatActions) {
@@ -22,6 +24,11 @@ export function chatReducers(state: ChatState = initialChatState, action: ChatAc
       return {
         ...state,
         activeUsers: [...action.payload]
+      };
+    case ChatActions.SELECT_CHAT:
+      return {
+        ...state,
+        selectedChat: action.payload
       };
     case ChatActions.RESET_STORE:
       return {

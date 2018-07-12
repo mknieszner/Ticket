@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.*;
 import ticketproject.app.crud.domain.dto.authorization.PasswordResetData;
 import ticketproject.app.crud.domain.dto.authorization.RoleDto;
 import ticketproject.app.crud.domain.dto.authorization.UserDto;
+import ticketproject.app.crud.service.DatabaseEnvironment;
 import ticketproject.app.crud.service.UserService;
 
 import java.security.Principal;
@@ -21,6 +22,7 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
 public class UsersAndRolesController {
   private final UserService userService;
+  private final DatabaseEnvironment databaseEnvironment;
 
   @GetMapping(value = "roles/details")
   public List<RoleDto> getFullRolesAuthorized(final Principal principal) {
@@ -99,9 +101,9 @@ public class UsersAndRolesController {
     return userService.registerNewUserAccount(userDto);
   }
 
-  @GetMapping(value = "users/table/{tablename}")
-  public List<String> getTableUsers(@PathVariable final String tablename) {
-    return userService.getTableUsers(tablename);
+  @GetMapping(value = "users/table/{tableId}")
+  public List<String> getTableUsers(@PathVariable final Long tableId) {
+    return userService.getTableUsers(tableId);
   }
 
 

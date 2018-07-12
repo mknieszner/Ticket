@@ -19,43 +19,45 @@ import static org.hibernate.annotations.CascadeType.*;
 @NoArgsConstructor
 @Table(name = "TASK")
 @ToString
+@EqualsAndHashCode(of = {"id"})
 public class Task {
 
-  @Id
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
-  private Long id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
-  private Long tableId;
+    private Long tableId;
 
-  private String name;
+    private String name;
 
-  private String description;
+    private String description;
 
-  @Enumerated(EnumType.STRING)
-  private Status status;
+    @Enumerated(EnumType.STRING)
+    private Status status;
 
-  @ManyToMany(
-      fetch = FetchType.EAGER
-  )
-  @JoinTable(
-      name = "USER_TASK",
-      joinColumns = { @JoinColumn(name = "USER_id") },
-      inverseJoinColumns = { @JoinColumn(name = "TASK_id") }
-  )
-  @Cascade(value = {PERSIST, MERGE, REFRESH})
-  private Set<User> users = new HashSet<>();
+    @ManyToMany(
+            fetch = FetchType.EAGER
+    )
+    @JoinTable(
+            name = "USER_TASK",
+            joinColumns = {@JoinColumn(name = "USER_id")},
+            inverseJoinColumns = {@JoinColumn(name = "TASK_id")}
+    )
+    @Cascade(value = {PERSIST, MERGE, REFRESH, DETACH})
+    private Set<User> users = new HashSet<>();
 
-  @OneToMany(
-      fetch = FetchType.EAGER
-  )
-  @OrderColumn
-  @Cascade(value = {PERSIST, MERGE, REFRESH})
-  List<Task> tasks = new ArrayList<>();
+    @OneToMany(
+            fetch = FetchType.EAGER,
+            orphanRemoval = true
+    )
+    @OrderColumn
+    @Cascade(value = {PERSIST, MERGE, REFRESH})
+    List<Task> tasks = new ArrayList<>();
 
-  //TODO: adding attachments
-  //List<Blob> artifacts;
+    //TODO: adding attachments
+    //List<Blob> artifacts;
 
-  public enum Status {
-    UNASSIGNED, ASSIGNED, IN_PROGRESS, DONE,
-  }
+    public enum Status {
+        UNASSIGNED, ASSIGNED, IN_PROGRESS, DONE,
+    }
 }
