@@ -1,7 +1,5 @@
 import {
-  AfterContentChecked,
   AfterViewChecked,
-  AfterViewInit,
   Component,
   ElementRef, OnDestroy,
   OnInit,
@@ -15,48 +13,57 @@ import {Observable} from 'rxjs/Observable';
 import {ChatMessageModel} from '../shared/chat-message.model';
 import {DataStorageService} from '../shared/data-storage.service';
 import * as ChatActions from "../shared/store/chat/chat.actions";
-import {ActivatedRoute} from "@angular/router";
-
 
 @Component({
   selector: 'app-chat',
   templateUrl: './chat.component.html',
   styleUrls: ['./chat.component.css']
 })
-export class ChatComponent implements OnInit, AfterContentChecked, OnDestroy {
-  @ViewChild('chatGlobalDiv') private chatGlobalDiv: ElementRef;
-  @ViewChild('chatUserDiv') private chatUserDiv: ElementRef;
+export class ChatComponent implements OnInit, AfterViewChecked, OnDestroy {
+  @ViewChild('chatDiv') private chatDiv: ElementRef;
   chatContent: Observable<ChatMessageModel[]>;
   currentUser: Observable<string>;
   activeWsUsers: Observable<string[]>;
-  public unreadMessages = new Map<string,boolean>();
+  public unreadMessages = new Map<string, boolean>();
+  public messagesMap = new Map<string, ChatMessageModel[]>();
   username: string;
   chatName: string;
-  private messages: ChatMessageModel[] = [];
-  private chatNameState: Observable<string>;
+  chatNameState: Observable<string>;
 
 
   constructor(private store: Store<fromAppReducers.AppState>,
               private ws: TaskInfoService,
-              private dss: DataStorageService,
-              private route: ActivatedRoute) {
+              private dss: DataStorageService) {
   }
 
   ngOnInit() {
+    this.dss.getActiveWsUsers();
     this.unreadMessages.set('global', false);
+    this.messagesMap.set('global', []);
     this.store.dispatch(new ChatActions.SelectChat('global'));
     this.chatContent = this.store.select('chat', 'chatContent');
     this.chatNameState = this.store.select('chat', 'selectedChat');
-    this.chatNameState.subscribe(chatName => this.chatName = chatName);
+    this.chatNameState.subscribe(chatName => {
+      this.chatName = chatName
+    });
+    this.activeWsUsers = this.store.select('chat', 'activeUsers');
+    this.activeWsUsers.subscribe(users => {
+      users.forEach(user => {
+        if (!this.unreadMessages.has(user)) {
+          this.unreadMessages.set(user, false);
+          this.messagesMap.set(user, []);
+        }
+      })
+    });
     this.chatContent.subscribe(chat => {
-      this.messages = chat;
-      if(this.messages.length > 0){
-        if(this.messages[this.messages.length-1].recipientName === 'global' && this.chatName !== 'global'){
+      this.mapLastToRespectiveChat(chat);
+      if (chat.length > 0) {
+        if (chat[chat.length - 1].recipientName === 'global' && this.chatName !== 'global') {
           this.unreadMessages.set('global', true);
         }
-        if(this.messages[this.messages.length-1].recipientName !== 'global'
-          && this.chatName !== this.messages[this.messages.length-1].senderName){
-          this.unreadMessages.set(this.messages[this.messages.length-1].senderName, true);
+        if (chat[chat.length - 1].recipientName !== 'global'
+          && this.chatName !== chat[chat.length - 1].senderName) {
+          this.unreadMessages.set(chat[chat.length - 1].senderName, true);
         }
       }
     });
@@ -64,29 +71,26 @@ export class ChatComponent implements OnInit, AfterContentChecked, OnDestroy {
     this.currentUser.subscribe((username) => {
       this.username = username;
     });
-    this.activeWsUsers = this.store.select('chat', 'activeUsers');
-    this.activeWsUsers.subscribe(users => {
-      users.forEach(user => {
-        if(!this.unreadMessages.has(user)) {
-          this.unreadMessages.set(user, false);
-        }
-      })
-    });
-    this.dss.getActiveWsUsers();
-    this.route.queryParams.subscribe(params => {
-      if (this.messages.length > 0) {
-        this.setChat(this.messages[this.messages.length - 1].recipientName !== 'global' ? params.user : 'global');
-      }
-    })
+    this.store.select('chat', 'chatContent')
+      .subscribe(chat => {
+        console.log("init", chat);
+      this.fillInitially(chat)
+    }).unsubscribe();
   }
 
-  ngAfterContentChecked(): void {
-    if (this.chatGlobalDiv) {
-      this.chatGlobalDiv.nativeElement.scrollTop = this.chatGlobalDiv.nativeElement.scrollHeight;
+  ngAfterViewChecked(): void {
+    if (this.chatDiv) {
+      this.chatDiv.nativeElement.scrollTop = this.chatDiv.nativeElement.scrollHeight + 20;
     }
-    if (this.chatUserDiv) {
-      this.chatUserDiv.nativeElement.scrollTop = this.chatUserDiv.nativeElement.scrollHeight;
-    }
+  }
+
+  ngOnDestroy(): void {
+    this.store.dispatch(new ChatActions.SelectChat(''))
+  }
+
+  setChat(chatName: string) {
+    this.unreadMessages.set(chatName, false);
+    this.store.dispatch(new ChatActions.SelectChat(chatName));
   }
 
   postMessage(messageContent: string) {
@@ -100,13 +104,28 @@ export class ChatComponent implements OnInit, AfterContentChecked, OnDestroy {
     }
   }
 
-  setChat(chatName: string) {
-    this.unreadMessages.set(chatName,false);
-    this.store.dispatch(new ChatActions.SelectChat(chatName));
+  private fillInitially(chat: ChatMessageModel[]) {
+    this.messagesMap.forEach((value, key) => this.messagesMap.set(key,[]));
+    if (chat.length > 0) {
+      chat.forEach((value) => {
+        const chatName = value.recipientName === 'global'
+          ? 'global'
+          : value.senderName === this.username
+            ? value.recipientName
+            : value.senderName;
+        this.messagesMap.set(chatName, [...this.messagesMap.get(chatName), value]);
+      })
+    }
   }
 
-  ngOnDestroy(): void {
-    this.store.dispatch(new ChatActions.SelectChat(''))
+  private mapLastToRespectiveChat(chat: ChatMessageModel[]) {
+    if (chat.length > 0) {
+      const chatName = chat[chat.length - 1].recipientName === 'global'
+        ? 'global'
+        : chat[chat.length - 1].senderName === this.username
+          ? chat[chat.length - 1].recipientName
+          : chat[chat.length - 1].senderName;
+      this.messagesMap.set(chatName, [...this.messagesMap.get(chatName), chat[chat.length - 1]]);
+    }
   }
-
 }

@@ -369,7 +369,7 @@ module.exports = "li {\r\n  border: 1px solid #32383e;\r\n  background-color: rg
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<div class=\"jumbotron\">\r\n  <div class=\"row\">\r\n\r\n    <div class=\"col-4\">\r\n      <ul class=\"list-group\" style=\"padding: 50px 30px\">\r\n        <li class=\"list-group-item list-group-item-dark bg-dark text-white\">Active Users:</li>\r\n        <li class=\"list-group-item list-group-item-action list-group-item-light\"\r\n            (click)=\"setChat('global')\">\r\n          Global chat\r\n          <span *ngIf=\"unreadMessages.get('global')\" class=\"badge badge-danger\">New</span>\r\n        </li>\r\n        <div *ngFor=\"let activeWsUser of (activeWsUsers | async)\">\r\n          <li *ngIf=\"activeWsUser != (currentUser |async)\"\r\n              class=\"list-group-item list-group-item-action list-group-item-light\"\r\n              (click)=\"setChat(activeWsUser)\"\r\n          >{{activeWsUser}}\r\n            <span *ngIf=\"unreadMessages.get(activeWsUser)\" class=\"badge badge-primary\">New</span>\r\n          </li>\r\n        </div>\r\n      </ul>\r\n    </div>\r\n    <div class=\"col-8\" style=\"padding: 50px 70px 0 0;\">\r\n      <ul class=\"list-group\" [ngClass]=\"chatName != 'global' ? 'd-none' : ''\">\r\n        <li class=\"list-group-item bg-dark text-info\">Global chat:</li>\r\n        <li class=\"list-group-item\">\r\n          <div #chatGlobalDiv style=\"min-height: 600px; max-height: 600px; overflow-y: scroll;\">\r\n            <div *ngFor=\"let message of (chatContent | async)\">\r\n              <div *ngIf=\"(message.senderName) === 'global' || (message.recipientName) === 'global'\">\r\n                <div *ngIf=\"(message.senderName) === (currentUser |async)\" class=\"alert border-primary text-primary\"\r\n                     style=\"width: 70%; margin-bottom: 5px;\">{{message.senderName}} : {{message.message}}\r\n                </div>\r\n                <div *ngIf=\"(message.senderName) !== (currentUser |async)\" class=\"alert border-success text-success\"\r\n                     style=\"width: 70%; margin: 0 0 5px 30%\">{{message.senderName}} : {{message.message}}\r\n                </div>\r\n              </div>\r\n            </div>\r\n          </div>\r\n        </li>\r\n        <li *ngIf=\"chatName == 'global'\" class=\"list-group-item bg-dark\">\r\n          <div class=\"input-group\">\r\n            <input class=\"form-control border-secondary\" type=\"text\" #messageContentGlobal\r\n                   (keyup.enter)=\"globalPost.click()\">\r\n            <div class=\"input-group-append\">\r\n              <button #globalPost (click)=\"postMessage(messageContentGlobal.value);messageContentGlobal.value = '';\"\r\n                      class=\"btn btn-default\">Post\r\n              </button>\r\n            </div>\r\n          </div>\r\n        </li>\r\n      </ul>\r\n\r\n      <div *ngFor=\"let activeWsUser of (activeWsUsers | async)\">\r\n        <ul class=\"list-group\" [ngClass]=\"chatName != activeWsUser ? 'd-none' : ''\">\r\n          <li class=\"list-group-item bg-dark text-info\">{{activeWsUser}} chat:</li>\r\n          <li class=\"list-group-item\">\r\n            <div #chatUserDiv style=\"min-height: 600px; max-height: 600px; overflow-y: scroll;\">\r\n              <div *ngFor=\"let message of (chatContent | async)\">\r\n                <div *ngIf=\"\r\n            (message.senderName === activeWsUser || message.recipientName === activeWsUser) &&\r\n            (message.senderName !== 'global' && message.recipientName !== 'global')\r\n            \">\r\n                  <div *ngIf=\"(message.senderName) === (currentUser |async)\" class=\"alert border-primary text-primary\"\r\n                       style=\"width: 70%; margin-bottom: 5px;\">{{message.senderName}} :{{message.message}}\r\n                  </div>\r\n                  <div *ngIf=\"(message.senderName) !== (currentUser |async)\" class=\"alert border-success text-success\"\r\n                       style=\"width: 70%; margin: 0 0 5px 30%\">{{message.senderName}} : {{message.message}}\r\n                  </div>\r\n                </div>\r\n              </div>\r\n            </div>\r\n          </li>\r\n          <li *ngIf=\"chatName == activeWsUser\" class=\"list-group-item bg-dark text-white\">\r\n            <div class=\"input-group\">\r\n              <input class=\"form-control border-secondary\" type=\"text\" #messageContent (keyup.enter)=\"userPost.click()\">\r\n              <div class=\"input-group-append\">\r\n                <button #userPost (click)=\"postMessage(messageContent.value);messageContent.value = '';\"\r\n                        class=\"btn btn-default\">Post\r\n                </button>\r\n              </div>\r\n            </div>\r\n          </li>\r\n        </ul>\r\n      </div>\r\n    </div>\r\n  </div>\r\n</div>\r\n"
+module.exports = "<div class=\"jumbotron\">\r\n  <div class=\"row\">\r\n    <div class=\"col-4\">\r\n      <ul class=\"list-group\" style=\"padding: 50px 30px\">\r\n        <li class=\"list-group-item list-group-item-dark bg-dark text-white\">Active Users:</li>\r\n        <li class=\"list-group-item list-group-item-action list-group-item-light\"\r\n            (click)=\"setChat('global')\">\r\n          Global chat\r\n          <span *ngIf=\"unreadMessages.get('global')\" class=\"badge badge-danger\">New</span>\r\n        </li>\r\n        <div *ngFor=\"let activeWsUser of (activeWsUsers | async)\">\r\n          <li *ngIf=\"activeWsUser != (currentUser |async)\"\r\n              class=\"list-group-item list-group-item-action list-group-item-light\"\r\n              (click)=\"setChat(activeWsUser)\"\r\n          >{{activeWsUser}}\r\n            <span *ngIf=\"unreadMessages.get(activeWsUser)\" class=\"badge badge-primary\">New</span>\r\n          </li>\r\n        </div>\r\n      </ul>\r\n    </div>\r\n    <div class=\"col-8\" style=\"padding: 50px 70px 0 0;\">\r\n      <ul class=\"list-group\">\r\n        <li class=\"list-group-item bg-dark text-info\">{{chatNameState | async}} chat:</li>\r\n        <li class=\"list-group-item\">\r\n          <div #chatDiv style=\"min-height: 600px; max-height: 600px; overflow-y: scroll;\">\r\n            <div *ngFor=\"let message of messagesMap.get(chatNameState | async)\">\r\n              <div *ngIf=\"(message.senderName) === (currentUser |async)\" class=\"alert border-primary text-primary\"\r\n                   style=\"width: 70%; margin-bottom: 5px;\">{{message.senderName}} : {{message.message}}\r\n              </div>\r\n              <div *ngIf=\"(message.senderName) !== (currentUser |async)\" class=\"alert border-success text-success\"\r\n                   style=\"width: 70%; margin: 0 0 5px 30%\">{{message.senderName}} : {{message.message}}\r\n              </div>\r\n            </div>\r\n          </div>\r\n        </li>\r\n        <li class=\"list-group-item bg-dark\">\r\n          <div class=\"input-group\">\r\n            <input class=\"form-control border-secondary\" type=\"text\" #messageContent\r\n                   (keyup.enter)=\"post.click()\">\r\n            <div class=\"input-group-append\">\r\n              <button #post (click)=\"postMessage(messageContent.value);messageContent.value = '';\"\r\n                      class=\"btn btn-default\">Post\r\n              </button>\r\n            </div>\r\n          </div>\r\n        </li>\r\n      </ul>\r\n    </div>\r\n  </div>\r\n</div>\r\n"
 
 /***/ }),
 
@@ -389,7 +389,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _shared_chat_message_model__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../shared/chat-message.model */ "./src/app/shared/chat-message.model.ts");
 /* harmony import */ var _shared_data_storage_service__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../shared/data-storage.service */ "./src/app/shared/data-storage.service.ts");
 /* harmony import */ var _shared_store_chat_chat_actions__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../shared/store/chat/chat.actions */ "./src/app/shared/store/chat/chat.actions.ts");
-/* harmony import */ var _angular_router__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! @angular/router */ "./node_modules/@angular/router/fesm5/router.js");
 var __decorate = (undefined && undefined.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -405,32 +404,43 @@ var __metadata = (undefined && undefined.__metadata) || function (k, v) {
 
 
 
-
 var ChatComponent = /** @class */ (function () {
-    function ChatComponent(store, ws, dss, route) {
+    function ChatComponent(store, ws, dss) {
         this.store = store;
         this.ws = ws;
         this.dss = dss;
-        this.route = route;
         this.unreadMessages = new Map();
-        this.messages = [];
+        this.messagesMap = new Map();
     }
     ChatComponent.prototype.ngOnInit = function () {
         var _this = this;
+        this.dss.getActiveWsUsers();
         this.unreadMessages.set('global', false);
+        this.messagesMap.set('global', []);
         this.store.dispatch(new _shared_store_chat_chat_actions__WEBPACK_IMPORTED_MODULE_5__["SelectChat"]('global'));
         this.chatContent = this.store.select('chat', 'chatContent');
         this.chatNameState = this.store.select('chat', 'selectedChat');
-        this.chatNameState.subscribe(function (chatName) { return _this.chatName = chatName; });
+        this.chatNameState.subscribe(function (chatName) {
+            _this.chatName = chatName;
+        });
+        this.activeWsUsers = this.store.select('chat', 'activeUsers');
+        this.activeWsUsers.subscribe(function (users) {
+            users.forEach(function (user) {
+                if (!_this.unreadMessages.has(user)) {
+                    _this.unreadMessages.set(user, false);
+                    _this.messagesMap.set(user, []);
+                }
+            });
+        });
         this.chatContent.subscribe(function (chat) {
-            _this.messages = chat;
-            if (_this.messages.length > 0) {
-                if (_this.messages[_this.messages.length - 1].recipientName === 'global' && _this.chatName !== 'global') {
+            _this.mapLastToRespectiveChat(chat);
+            if (chat.length > 0) {
+                if (chat[chat.length - 1].recipientName === 'global' && _this.chatName !== 'global') {
                     _this.unreadMessages.set('global', true);
                 }
-                if (_this.messages[_this.messages.length - 1].recipientName !== 'global'
-                    && _this.chatName !== _this.messages[_this.messages.length - 1].senderName) {
-                    _this.unreadMessages.set(_this.messages[_this.messages.length - 1].senderName, true);
+                if (chat[chat.length - 1].recipientName !== 'global'
+                    && _this.chatName !== chat[chat.length - 1].senderName) {
+                    _this.unreadMessages.set(chat[chat.length - 1].senderName, true);
                 }
             }
         });
@@ -438,28 +448,23 @@ var ChatComponent = /** @class */ (function () {
         this.currentUser.subscribe(function (username) {
             _this.username = username;
         });
-        this.activeWsUsers = this.store.select('chat', 'activeUsers');
-        this.activeWsUsers.subscribe(function (users) {
-            users.forEach(function (user) {
-                if (!_this.unreadMessages.has(user)) {
-                    _this.unreadMessages.set(user, false);
-                }
-            });
-        });
-        this.dss.getActiveWsUsers();
-        this.route.queryParams.subscribe(function (params) {
-            if (_this.messages.length > 0) {
-                _this.setChat(_this.messages[_this.messages.length - 1].recipientName !== 'global' ? params.user : 'global');
-            }
-        });
+        this.store.select('chat', 'chatContent')
+            .subscribe(function (chat) {
+            console.log("init", chat);
+            _this.fillInitially(chat);
+        }).unsubscribe();
     };
-    ChatComponent.prototype.ngAfterContentChecked = function () {
-        if (this.chatGlobalDiv) {
-            this.chatGlobalDiv.nativeElement.scrollTop = this.chatGlobalDiv.nativeElement.scrollHeight;
+    ChatComponent.prototype.ngAfterViewChecked = function () {
+        if (this.chatDiv) {
+            this.chatDiv.nativeElement.scrollTop = this.chatDiv.nativeElement.scrollHeight + 20;
         }
-        if (this.chatUserDiv) {
-            this.chatUserDiv.nativeElement.scrollTop = this.chatUserDiv.nativeElement.scrollHeight;
-        }
+    };
+    ChatComponent.prototype.ngOnDestroy = function () {
+        this.store.dispatch(new _shared_store_chat_chat_actions__WEBPACK_IMPORTED_MODULE_5__["SelectChat"](''));
+    };
+    ChatComponent.prototype.setChat = function (chatName) {
+        this.unreadMessages.set(chatName, false);
+        this.store.dispatch(new _shared_store_chat_chat_actions__WEBPACK_IMPORTED_MODULE_5__["SelectChat"](chatName));
     };
     ChatComponent.prototype.postMessage = function (messageContent) {
         if (messageContent) {
@@ -472,21 +477,34 @@ var ChatComponent = /** @class */ (function () {
             }
         }
     };
-    ChatComponent.prototype.setChat = function (chatName) {
-        this.unreadMessages.set(chatName, false);
-        this.store.dispatch(new _shared_store_chat_chat_actions__WEBPACK_IMPORTED_MODULE_5__["SelectChat"](chatName));
+    ChatComponent.prototype.fillInitially = function (chat) {
+        var _this = this;
+        this.messagesMap.forEach(function (value, key) { return _this.messagesMap.set(key, []); });
+        if (chat.length > 0) {
+            chat.forEach(function (value) {
+                var chatName = value.recipientName === 'global'
+                    ? 'global'
+                    : value.senderName === _this.username
+                        ? value.recipientName
+                        : value.senderName;
+                _this.messagesMap.set(chatName, _this.messagesMap.get(chatName).concat([value]));
+            });
+        }
     };
-    ChatComponent.prototype.ngOnDestroy = function () {
-        this.store.dispatch(new _shared_store_chat_chat_actions__WEBPACK_IMPORTED_MODULE_5__["SelectChat"](''));
+    ChatComponent.prototype.mapLastToRespectiveChat = function (chat) {
+        if (chat.length > 0) {
+            var chatName = chat[chat.length - 1].recipientName === 'global'
+                ? 'global'
+                : chat[chat.length - 1].senderName === this.username
+                    ? chat[chat.length - 1].recipientName
+                    : chat[chat.length - 1].senderName;
+            this.messagesMap.set(chatName, this.messagesMap.get(chatName).concat([chat[chat.length - 1]]));
+        }
     };
     __decorate([
-        Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["ViewChild"])('chatGlobalDiv'),
+        Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["ViewChild"])('chatDiv'),
         __metadata("design:type", _angular_core__WEBPACK_IMPORTED_MODULE_0__["ElementRef"])
-    ], ChatComponent.prototype, "chatGlobalDiv", void 0);
-    __decorate([
-        Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["ViewChild"])('chatUserDiv'),
-        __metadata("design:type", _angular_core__WEBPACK_IMPORTED_MODULE_0__["ElementRef"])
-    ], ChatComponent.prototype, "chatUserDiv", void 0);
+    ], ChatComponent.prototype, "chatDiv", void 0);
     ChatComponent = __decorate([
         Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["Component"])({
             selector: 'app-chat',
@@ -495,8 +513,7 @@ var ChatComponent = /** @class */ (function () {
         }),
         __metadata("design:paramtypes", [_ngrx_store__WEBPACK_IMPORTED_MODULE_1__["Store"],
             _shared_socket_task_info_service__WEBPACK_IMPORTED_MODULE_2__["TaskInfoService"],
-            _shared_data_storage_service__WEBPACK_IMPORTED_MODULE_4__["DataStorageService"],
-            _angular_router__WEBPACK_IMPORTED_MODULE_6__["ActivatedRoute"]])
+            _shared_data_storage_service__WEBPACK_IMPORTED_MODULE_4__["DataStorageService"]])
     ], ChatComponent);
     return ChatComponent;
 }());
@@ -688,7 +705,6 @@ var HeaderComponent = /** @class */ (function () {
         this.router = router;
         this.route = route;
         this.location = location;
-        this.navVisible = false;
         this.chatChanged = false;
         this.chatModel = [];
     }

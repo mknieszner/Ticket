@@ -24,7 +24,6 @@ export class HeaderComponent implements OnInit {
   isAdmin: Observable<boolean>;
   newTaskState: Observable<boolean>;
   currentUsername: string;
-  navVisible = false;
   chatChanged = false;
   chatModel: ChatMessageModel[] = [];
   private params: Params;
