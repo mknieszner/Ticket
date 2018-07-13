@@ -28,9 +28,9 @@ repositories {
 //        //Public is a default supported Spring Boot resources directory.
 //        into 'static'
 //    }
-////    doLast{
-////        copyFront()
-////    }
+//    doLast{
+//        copyFront()
+//    }
 //}
 //
 //task copyFront(type: Copy) {

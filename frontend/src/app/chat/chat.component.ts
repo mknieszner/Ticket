@@ -74,8 +74,8 @@ export class ChatComponent implements OnInit, AfterViewChecked, OnDestroy {
     this.store.select('chat', 'chatContent')
       .subscribe(chat => {
         console.log("init", chat);
-      this.fillInitially(chat)
-    }).unsubscribe();
+        this.fillInitially(chat)
+      }).unsubscribe();
   }
 
   ngAfterViewChecked(): void {
@@ -105,7 +105,7 @@ export class ChatComponent implements OnInit, AfterViewChecked, OnDestroy {
   }
 
   private fillInitially(chat: ChatMessageModel[]) {
-    this.messagesMap.forEach((value, key) => this.messagesMap.set(key,[]));
+    this.messagesMap.forEach((value, key) => this.messagesMap.set(key, []));
     if (chat.length > 0) {
       chat.forEach((value) => {
         const chatName = value.recipientName === 'global'
@@ -125,7 +125,7 @@ export class ChatComponent implements OnInit, AfterViewChecked, OnDestroy {
         : chat[chat.length - 1].senderName === this.username
           ? chat[chat.length - 1].recipientName
           : chat[chat.length - 1].senderName;
-      this.messagesMap.set(chatName, [...this.messagesMap.get(chatName), chat[chat.length - 1]]);
+      this.messagesMap.set(chatName, [...(this.messagesMap.get(chatName) || []), chat[chat.length - 1]]);
     }
   }
 }

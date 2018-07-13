@@ -498,7 +498,7 @@ var ChatComponent = /** @class */ (function () {
                 : chat[chat.length - 1].senderName === this.username
                     ? chat[chat.length - 1].recipientName
                     : chat[chat.length - 1].senderName;
-            this.messagesMap.set(chatName, this.messagesMap.get(chatName).concat([chat[chat.length - 1]]));
+            this.messagesMap.set(chatName, (this.messagesMap.get(chatName) || []).concat([chat[chat.length - 1]]));
         }
     };
     __decorate([
