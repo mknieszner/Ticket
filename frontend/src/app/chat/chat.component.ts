@@ -73,7 +73,6 @@ export class ChatComponent implements OnInit, AfterViewChecked, OnDestroy {
     });
     this.store.select('chat', 'chatContent')
       .subscribe(chat => {
-        console.log("init", chat);
         this.fillInitially(chat)
       }).unsubscribe();
   }

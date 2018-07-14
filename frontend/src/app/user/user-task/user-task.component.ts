@@ -2,6 +2,9 @@ import {Component, Input, OnInit} from '@angular/core';
 import {Status, TaskModel} from '../../shared/table.model';
 import {FormControl, FormGroup} from '@angular/forms';
 import {DataStorageService} from '../../shared/data-storage.service';
+import {Store} from "@ngrx/store";
+import * as fromAppReducers from "../../shared/store/app.reducers";
+import * as UsersActions from "../../shared/store/user/users.actions";
 
 @Component({
   selector: 'app-user-task',
@@ -14,7 +17,8 @@ export class UserTaskComponent implements OnInit {
   editTaskMode = false;
   status = Status;
 
-  constructor(private dss: DataStorageService) {
+  constructor(private dss: DataStorageService,
+              private store: Store<fromAppReducers.AppState>) {
   }
 
   ngOnInit() {
@@ -43,5 +47,10 @@ export class UserTaskComponent implements OnInit {
     };
 
     this.dss.updateTask(task);
+  }
+
+
+  onCloseTaskMode() {
+    this.store.dispatch(new UsersActions.SetUserDisplayedTask(null));
   }
 }

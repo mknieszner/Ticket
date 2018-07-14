@@ -21,6 +21,7 @@ export class MenuComponent implements OnInit {
   extendedFilterMode: Observable<boolean>;
   extendedTableView: Observable<boolean>;
   extendedTableViewValue: boolean;
+  extendedFilterModeValue: boolean;
 
 
   constructor(private store: Store<fromAppReducers.AppState>, public constants: ConstantsService) {
@@ -33,6 +34,9 @@ export class MenuComponent implements OnInit {
 
   ngOnInit() {
     this.extendedFilterMode = this.store.select('tables', 'extendedFilterMode');
+    this.extendedFilterMode.subscribe((filterModeValue => {
+      this.extendedFilterModeValue = filterModeValue;
+    }));
     this.extendedTableView = this.store.select('tables', 'extendedTableView');
     this.extendedTableView.subscribe((value) => {
       this.extendedTableViewValue = value;
@@ -58,10 +62,13 @@ export class MenuComponent implements OnInit {
   }
 
   switchExtendedTableView() {
+    if(this.extendedFilterModeValue && this.extendedTableViewValue){
+      this.onExtendedFilterMode()
+    }
     this.store.dispatch(new TablesActions.SetExtendedTableView(!this.extendedTableViewValue));
   }
 
   onExtendedFilterMode() {
-    this.store.dispatch(new TablesActions.SetExtendedFilterMode());
+    this.store.dispatch(new TablesActions.SetExtendedFilterMode(!this.extendedFilterModeValue));
   }
 }

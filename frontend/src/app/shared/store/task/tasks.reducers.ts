@@ -26,13 +26,10 @@ export function tasksReducers(state: TaskState = initialTaskState, action: TaskA
     case TaskActions.ON_DELETE_TASK:
       state.taskDetailsMode = false;
       state.showedTask = null;
-      return {
-        state
-      };
-    case TaskActions.RESET_STORE:
-      return {
-        ...initialTaskState
-      };
+      return state;
+    case TaskActions.RESET_TASK_STORE:
+      state = initialTaskState;
+      return state;
     default:
       return state;
   }

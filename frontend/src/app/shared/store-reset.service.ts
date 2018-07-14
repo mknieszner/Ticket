@@ -22,7 +22,7 @@ export class StoreResetService {
     this.store.dispatch(new TableActions.ResetStore());
     this.store.dispatch(new UserActions.ResetStore());
     this.store.dispatch(new ChatActions.ResetStore());
-    this.store.dispatch(new TaskActions.ResetStore());
+    this.store.dispatch(new TaskActions.ResetTaskStore());
     AuthCookie.deleteAuth();
   }
 }

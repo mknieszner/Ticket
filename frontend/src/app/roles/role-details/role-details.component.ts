@@ -7,6 +7,8 @@ import {Store} from '@ngrx/store';
 import {DataStorageService} from '../../shared/data-storage.service';
 import * as fromAppReducers from '../../shared/store/app.reducers';
 import * as UsersActions from '../../shared/store/user/users.actions';
+import {ActionSnackBarComponent} from "../../shared/snack-bar/action-snack-bar.component";
+import {MatSnackBar, MatSnackBarRef} from "@angular/material";
 
 @Component({
   selector: 'app-role-details',
@@ -19,9 +21,12 @@ export class RoleDetailsComponent implements OnInit {
   users: Observable<UserModel[]>;
   userForm: FormGroup;
   newRoleMode: Observable<boolean>;
+  snackBarRef: MatSnackBarRef<ActionSnackBarComponent>;
 
   constructor(private store: Store<fromAppReducers.AppState>,
-              private dss: DataStorageService) {
+              private dss: DataStorageService,
+              public snackBar: MatSnackBar) {
+
   }
 
   ngOnInit() {
@@ -64,5 +69,22 @@ export class RoleDetailsComponent implements OnInit {
 
   onAbortSubmitRole() {
     this.store.dispatch(new UsersActions.SetNewRoleModeAction(false));
+  }
+
+  showSnackBar(message: string) {
+    this.snackBarRef = this.snackBar.openFromComponent(ActionSnackBarComponent, {
+      panelClass: ['styled-snack'],
+      data: {
+        message: message,
+        action: null
+      }
+    });
+
+    this.snackBarRef.afterDismissed().subscribe((data) => {
+      if(data.dismissedByAction){
+        this.dss.deleteRole(this.role.name);
+      }
+    });
+    this.snackBarRef.instance.ref = this.snackBarRef;
   }
 }

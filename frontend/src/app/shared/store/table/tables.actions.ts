@@ -3,7 +3,7 @@ import {ExtendedFilterModel, RowContentModel, TableDefinitionModel, TaskModel} f
 import {UserModel} from '../../../user/user.model';
 import {SortModel} from '../../sort/sort.model';
 
-export const RESET_STORE = 'RESET_STORE';
+export const RESET_TABLE_STORE = 'RESET_TABLE_STORE';
 
 export const ADD_ROW = 'ADD_ROW';
 export const ADD_TASK = 'ADD_TASK';
@@ -119,7 +119,7 @@ export class SetEditedRow implements Action {
 }
 
 export class ResetStore implements Action {
-  readonly type = RESET_STORE;
+  readonly type = RESET_TABLE_STORE;
 
   constructor() {
   }
@@ -135,7 +135,7 @@ export class TableFilter implements Action {
 export class SetExtendedFilterMode implements Action {
   readonly type = EXTENDED_FILTER_MODE;
 
-  constructor() {
+  constructor(public payload: boolean) {
   }
 }
 

@@ -15,10 +15,6 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import static org.hibernate.annotations.CascadeType.MERGE;
-import static org.hibernate.annotations.CascadeType.PERSIST;
-import static org.hibernate.annotations.CascadeType.REFRESH;
-
 @Entity
 @Table(name = "USERS")
 @AllArgsConstructor
@@ -36,11 +32,16 @@ public class User implements Serializable {
     private String email;
     private String password;
     private boolean enabled;
-    @ManyToMany(mappedBy = "users", fetch = FetchType.EAGER, cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH})
-    @Cascade(value = {PERSIST, MERGE, REFRESH})
+    @ManyToMany(mappedBy = "users",
+            fetch = FetchType.EAGER
+    )
+    @Cascade({org.hibernate.annotations.CascadeType.SAVE_UPDATE, org.hibernate.annotations.CascadeType.DELETE})
     Set<Role> roles = new HashSet<>();
-    @ManyToMany(mappedBy = "users", fetch = FetchType.EAGER, cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH})
-    @Cascade(value = {PERSIST, MERGE, REFRESH})
+    @ManyToMany(
+            mappedBy = "users",
+            fetch = FetchType.EAGER
+    )
+    @Cascade({org.hibernate.annotations.CascadeType.SAVE_UPDATE, org.hibernate.annotations.CascadeType.DELETE})
     List<Task> tasks = new ArrayList<>();
 
     public User(final String username,
@@ -62,6 +63,7 @@ public class User implements Serializable {
     public User(final String username) {
 
     }
+
     //TODO WYDZIELIC ROLE (DODAC POLE COMMON SEPARATE NO_TABLE)-> poprawić dodawanie tasków do usera
     public void addRole(Role role) {
         role.getUsers().add(this);

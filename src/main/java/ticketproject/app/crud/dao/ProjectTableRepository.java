@@ -18,4 +18,7 @@ public interface ProjectTableRepository extends CrudRepository<ProjectTable, Lon
   void deleteByName(String tableName);
 
   List<ProjectTable> findAllByName(String roleName);
+
+  boolean existsByName(String tableName);
+
 }

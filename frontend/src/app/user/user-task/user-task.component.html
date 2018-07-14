@@ -2,6 +2,7 @@
   <li class="list-group-item d-flex justify-content-between" style="background-color: rgba(0,0,0,0.05);">
     <span>Name: {{task.name}}</span>
     <button class="btn btn-outline-secondary" (click)="onEditTaskMode(true)">Edit</button>
+    <button class="btn btn-outline-secondary" (click)="onCloseTaskMode()">Close</button>
   </li>
   <li class="list-group-item"> ID: {{task.id}}</li>
   <li class="list-group-item"> Description: {{task.description}}</li>

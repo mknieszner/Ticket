@@ -59,8 +59,10 @@ import {FlexLayoutModule} from "@angular/flex-layout";
 import { DialogComponent } from './training/dialog/dialog.component';
 import { TableComponent } from './training/table/table.component';
 import {OverlayContainer} from "@angular/cdk/overlay";
-import {SnackBarComponent} from "./training/snack-bar/snack-bar.component";
+import {ActionSnackBarComponent} from "./shared/snack-bar/action-snack-bar.component";
 import {ConstantsService} from "./shared/constants.service";
+import {InfoSnackBarComponent} from "./shared/snack-bar/info-snack-bar.component";
+import {SnackBarService} from "./shared/snack-bar/snack-bar.service";
 
 @NgModule({
   declarations: [
@@ -93,7 +95,8 @@ import {ConstantsService} from "./shared/constants.service";
     TrainingComponent,
     DialogComponent,
     TableComponent,
-    SnackBarComponent
+    ActionSnackBarComponent,
+    InfoSnackBarComponent
   ],
   imports: [
     ChartsModule,
@@ -126,6 +129,7 @@ import {ConstantsService} from "./shared/constants.service";
     StoreResetService,
     StatisticsService,
     ConstantsService,
+    SnackBarService,
     Location,
     {provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true}
     // {provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi:true}
@@ -134,7 +138,7 @@ import {ConstantsService} from "./shared/constants.service";
     ExtendedFilterPipe,
     SortByPipe
   ],
-  entryComponents: [DialogComponent, SnackBarComponent],
+  entryComponents: [DialogComponent, InfoSnackBarComponent, ActionSnackBarComponent],
   bootstrap: [AppComponent]
 })
 export class AppModule {

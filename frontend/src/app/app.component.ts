@@ -26,7 +26,6 @@ export class AppComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    console.log('AAA');
     this.currentUser = this.store.select('users', 'currentUser');
     this.currentUser.subscribe((user: string) => {
         if (user.length > 0) {

@@ -43,8 +43,10 @@ export class HeaderComponent implements OnInit {
     this.token = this.store.select('users', 'token');
     this.username = this.store.select('users', 'currentUser');
     this.username.subscribe((username: string) => {
-      this.dss.getCurrentUserRoles(username);
-      this.currentUsername = username;
+      if(username){
+        this.dss.getCurrentUserRoles(username);
+        this.currentUsername = username;
+      }
     });
     this.currentUserRoles = this.store.select('users', 'currentUserRoles');
     this.isAdmin = this.currentUserRoles.map(roles => {

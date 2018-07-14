@@ -259,7 +259,10 @@ public class TableService {
     @Transactional
     @PreAuthorize("hasAnyAuthority('ROLE_ADMIN') || @tableAccessManager.hasTableAccessAuthorityBy(#tableId)")
     public TaskDto updateTask(final Long tableId, final TaskDto taskDto) {
-        rowRepository.save(updateRowTask(rowRepository.findByTasks(taskRepository.findOne(taskDto.getId())), taskDto));
+        Task task = taskMapper.mapTaskDtoToTask(taskDto);
+        Row row = rowRepository.findByTasks(task);
+        row.updateTask(task);
+        rowRepository.save(row);
         return taskDto;
     }
 
@@ -272,7 +275,9 @@ public class TableService {
     }
 
     private Row updateRowTask(final Row row, final TaskDto newTask) {
-        row.updateTask(taskMapper.mapTaskDtoToTask(newTask));
+        Task task = taskMapper.mapTaskDtoToTask(newTask);
+        row.updateTask(task);
+        taskRepository.save(task);
         return row;
     }
 

@@ -55,9 +55,7 @@ export class UserDetailsComponent implements OnInit {
   }
 
   postAddRole() {
-    if (this.dss.addRoleToUser({username: this.user.username, rolename: <string>this.roleForm.value.role})) {
-      this.user.roleNames.push(<string>this.roleForm.value.role);
-    }
+    this.dss.addRoleToUser({username: this.user.username, rolename: <string>this.roleForm.value.role})
   }
 
   abortAddRole() {
@@ -100,5 +98,9 @@ export class UserDetailsComponent implements OnInit {
 
   onSelectTask(taskDto: TaskModel) {
     this.store.dispatch(new UsersActions.SetUserDisplayedTask(taskDto));
+  }
+
+  closeUser() {
+    this.store.dispatch(new UsersActions.SetSelectedUser(null));
   }
 }

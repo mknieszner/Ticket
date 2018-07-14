@@ -8,6 +8,7 @@ import {Store} from '@ngrx/store';
 import {DataStorageService} from '../../shared/data-storage.service';
 import * as fromAppReducers from '../../shared/store/app.reducers';
 import * as TablesActions from '../../shared/store/table/tables.actions';
+import * as TaskActions from "../../shared/store/task/tasks.actions";
 import {FilterService} from '../../shared/filter/filter.service';
 
 @Component({
@@ -34,7 +35,6 @@ export class RowComponent implements OnInit {
   ngOnInit() {
     this.initForm();
     this.filter = this.store.select('tables', 'tableFilter');
-    // this.editMode = this.store.select('tables', 'editRowMode');
     this.extendedTableView = this.store.select('tables', 'extendedTableView');
     this.filter.subscribe(filter => {
       if (filter !== '') {
@@ -69,6 +69,7 @@ export class RowComponent implements OnInit {
   onEditForm() {
     this.store.dispatch(new TablesActions.SetNewRowModeAction(false));
     this.store.dispatch(new TablesActions.SetEditRowMode(true));
+    this.store.dispatch(new TaskActions.ResetTaskStore());
     this.store.dispatch(new TablesActions.SetEditedRow(this.row));
   }
 

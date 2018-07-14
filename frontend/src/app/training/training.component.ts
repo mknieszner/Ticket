@@ -2,7 +2,7 @@ import {Component, EmbeddedViewRef, OnInit, ViewChild} from '@angular/core';
 import {NgForm} from "@angular/forms";
 import {MatDialog, MatSnackBar, MatSnackBarConfig, MatSnackBarRef} from "@angular/material";
 import {DialogComponent} from "./dialog/dialog.component";
-import {SnackBarComponent} from "./snack-bar/snack-bar.component";
+import {ActionSnackBarComponent} from "../shared/snack-bar/action-snack-bar.component";
 
 @Component({
   selector: 'app-training',
@@ -16,7 +16,7 @@ export class TrainingComponent implements OnInit {
   progress = 0;
   timer: number;
   theme: boolean;
-  snackBarRef: MatSnackBarRef<SnackBarComponent>;
+  snackBarRef: MatSnackBarRef<ActionSnackBarComponent>;
 
   constructor(private dialog: MatDialog, public snackBar: MatSnackBar) {
   }
@@ -58,7 +58,7 @@ export class TrainingComponent implements OnInit {
   }
 
   showSnackBar(message: string, action: string) {
-    this.snackBarRef = this.snackBar.openFromComponent(SnackBarComponent, {
+    this.snackBarRef = this.snackBar.openFromComponent(ActionSnackBarComponent, {
       panelClass: ['styled-snack'],
       data: {
         message: message,

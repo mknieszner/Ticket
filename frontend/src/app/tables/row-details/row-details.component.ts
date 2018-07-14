@@ -45,7 +45,9 @@ export class RowDetailsComponent implements OnInit, OnDestroy {
     this.row = this.store.select('tables', 'editedRow');
     this.header = this.store.select('tables', 'tableDefinition');
     this.header.subscribe((header: TableDefinitionModel) => {
-      this.tableDefinition = header[0];
+      if (header) {
+        this.tableDefinition = header[0];
+      }
     });
     this.row.subscribe(row => {
       this.createUpdateRowForm(row);
@@ -119,10 +121,6 @@ export class RowDetailsComponent implements OnInit, OnDestroy {
     }
   }
 
-  // show() { TODO remove
-  //   this.row.subscribe(this.updateRowForm.value);
-  // }
-
   onToggleRowEditMode() { // TODO reset all details state
     this.store.dispatch(new TablesActions.SetEditRowMode(false));
     this.store.dispatch(new TablesActions.SetNewRowModeAction(false));
@@ -155,7 +153,9 @@ export class RowDetailsComponent implements OnInit, OnDestroy {
   onSaveNewRow() {
     const newRow = this.mapNewRow();
     this.header.forEach(header => {
-      this.dss.addNewRow(header[0].id, newRow);
+      if (header) {
+        this.dss.addNewRow(header[0].id, newRow);
+      }
     });
   }
 
@@ -186,6 +186,8 @@ export class RowDetailsComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
+    this.store.dispatch(new TaskActions.ResetTaskStore());
+    this.selectedTask = null;
   }
 
   onAddTask() {

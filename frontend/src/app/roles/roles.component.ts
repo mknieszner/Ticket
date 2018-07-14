@@ -32,10 +32,4 @@ export class RolesComponent implements OnInit {
   onNewRole() {
     this.roleStore.dispatch(new UsersActions.SetNewRoleModeAction(true));
   }
-
-  // onRemoveRole(name: string) { TODO remove?
-  //   this.dss.deleteRole(name);
-  //   this.roleStore.dispatch(new UsersActions.SetNewRoleModeAction(false));
-  //   this.selectedRole = null;
-  // }
 }

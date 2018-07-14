@@ -4,7 +4,7 @@ import {ChatMessageModel} from '../../chat-message.model';
 export const APPEND_CHAT_WITH_MESSAGE = 'APPEND_CHAT_WITH_MESSAGE';
 export const SET_ACTIVE_USERS = 'SET_ACTIVE_USERS';
 export const SELECT_CHAT = 'SELECT_CHAT';
-export const RESET_STORE = 'RESET_STORE';
+export const RESET_STORE = 'RESET_CHAT_STORE';
 
 export class AppendChatWithMessage implements Action {
   readonly type = APPEND_CHAT_WITH_MESSAGE;

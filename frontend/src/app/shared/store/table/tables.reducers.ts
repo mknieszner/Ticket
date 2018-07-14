@@ -92,7 +92,7 @@ export function tablesReducers(state: TableState = initialTableState, action: Ta
         ...state,
         editedRow: action.payload
       };
-    case TableActions.RESET_STORE:
+    case TableActions.RESET_TABLE_STORE:
       return {
         ...initialTableState
       };
@@ -104,7 +104,7 @@ export function tablesReducers(state: TableState = initialTableState, action: Ta
     case TableActions.EXTENDED_FILTER_MODE:
       return {
         ...state,
-        extendedFilterMode: !state.extendedFilterMode
+        extendedFilterMode: action.payload
       };
     case TableActions.RUN_EXTENDED_FILTER:
       return {

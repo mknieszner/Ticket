@@ -9,6 +9,7 @@ import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Entity
 @Getter
@@ -67,15 +68,16 @@ public class Row {
     }
 
     @OneToMany(
-            fetch= FetchType.EAGER,
-            orphanRemoval = true
+            fetch= FetchType.EAGER
     )
     @Cascade({org.hibernate.annotations.CascadeType.SAVE_UPDATE, org.hibernate.annotations.CascadeType.DELETE})
     @OrderColumn
     List<Task> tasks = new ArrayList<>();
 
     public void updateTask(Task task) {
-        this.tasks.remove(task);
+        this.tasks = this.tasks.stream()
+                .filter(oldTask -> !oldTask.getId().equals(task.getId()))
+                .collect(Collectors.toList());
         this.tasks.add(task);
     }
 }
