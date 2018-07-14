@@ -88,7 +88,6 @@ var AppComponent = /** @class */ (function () {
     }
     AppComponent.prototype.ngOnInit = function () {
         var _this = this;
-        console.log('AAA');
         this.currentUser = this.store.select('users', 'currentUser');
         this.currentUser.subscribe(function (user) {
             if (user.length > 0) {
@@ -190,8 +189,10 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _training_dialog_dialog_component__WEBPACK_IMPORTED_MODULE_55__ = __webpack_require__(/*! ./training/dialog/dialog.component */ "./src/app/training/dialog/dialog.component.ts");
 /* harmony import */ var _training_table_table_component__WEBPACK_IMPORTED_MODULE_56__ = __webpack_require__(/*! ./training/table/table.component */ "./src/app/training/table/table.component.ts");
 /* harmony import */ var _angular_cdk_overlay__WEBPACK_IMPORTED_MODULE_57__ = __webpack_require__(/*! @angular/cdk/overlay */ "./node_modules/@angular/cdk/esm5/overlay.es5.js");
-/* harmony import */ var _training_snack_bar_snack_bar_component__WEBPACK_IMPORTED_MODULE_58__ = __webpack_require__(/*! ./training/snack-bar/snack-bar.component */ "./src/app/training/snack-bar/snack-bar.component.ts");
+/* harmony import */ var _shared_snack_bar_action_snack_bar_component__WEBPACK_IMPORTED_MODULE_58__ = __webpack_require__(/*! ./shared/snack-bar/action-snack-bar.component */ "./src/app/shared/snack-bar/action-snack-bar.component.ts");
 /* harmony import */ var _shared_constants_service__WEBPACK_IMPORTED_MODULE_59__ = __webpack_require__(/*! ./shared/constants.service */ "./src/app/shared/constants.service.ts");
+/* harmony import */ var _shared_snack_bar_info_snack_bar_component__WEBPACK_IMPORTED_MODULE_60__ = __webpack_require__(/*! ./shared/snack-bar/info-snack-bar.component */ "./src/app/shared/snack-bar/info-snack-bar.component.ts");
+/* harmony import */ var _shared_snack_bar_snack_bar_service__WEBPACK_IMPORTED_MODULE_61__ = __webpack_require__(/*! ./shared/snack-bar/snack-bar.service */ "./src/app/shared/snack-bar/snack-bar.service.ts");
 var __decorate = (undefined && undefined.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -201,6 +202,8 @@ var __decorate = (undefined && undefined.__decorate) || function (decorators, ta
 var __metadata = (undefined && undefined.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
+
+
 
 
 
@@ -298,7 +301,8 @@ var AppModule = /** @class */ (function () {
                 _training_training_component__WEBPACK_IMPORTED_MODULE_52__["TrainingComponent"],
                 _training_dialog_dialog_component__WEBPACK_IMPORTED_MODULE_55__["DialogComponent"],
                 _training_table_table_component__WEBPACK_IMPORTED_MODULE_56__["TableComponent"],
-                _training_snack_bar_snack_bar_component__WEBPACK_IMPORTED_MODULE_58__["SnackBarComponent"]
+                _shared_snack_bar_action_snack_bar_component__WEBPACK_IMPORTED_MODULE_58__["ActionSnackBarComponent"],
+                _shared_snack_bar_info_snack_bar_component__WEBPACK_IMPORTED_MODULE_60__["InfoSnackBarComponent"]
             ],
             imports: [
                 ng4_charts__WEBPACK_IMPORTED_MODULE_46__["ChartsModule"],
@@ -331,6 +335,7 @@ var AppModule = /** @class */ (function () {
                 _shared_store_reset_service__WEBPACK_IMPORTED_MODULE_39__["StoreResetService"],
                 _shared_statistics_statistics_service__WEBPACK_IMPORTED_MODULE_45__["StatisticsService"],
                 _shared_constants_service__WEBPACK_IMPORTED_MODULE_59__["ConstantsService"],
+                _shared_snack_bar_snack_bar_service__WEBPACK_IMPORTED_MODULE_61__["SnackBarService"],
                 Location,
                 { provide: _angular_common_http__WEBPACK_IMPORTED_MODULE_2__["HTTP_INTERCEPTORS"], useClass: _shared_auth_interceptor__WEBPACK_IMPORTED_MODULE_22__["AuthInterceptor"], multi: true }
                 // {provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi:true}
@@ -339,7 +344,7 @@ var AppModule = /** @class */ (function () {
                 _shared_filter_extended_filter_pipe__WEBPACK_IMPORTED_MODULE_41__["ExtendedFilterPipe"],
                 _shared_sort_sort_by_pipe__WEBPACK_IMPORTED_MODULE_42__["SortByPipe"]
             ],
-            entryComponents: [_training_dialog_dialog_component__WEBPACK_IMPORTED_MODULE_55__["DialogComponent"], _training_snack_bar_snack_bar_component__WEBPACK_IMPORTED_MODULE_58__["SnackBarComponent"]],
+            entryComponents: [_training_dialog_dialog_component__WEBPACK_IMPORTED_MODULE_55__["DialogComponent"], _shared_snack_bar_info_snack_bar_component__WEBPACK_IMPORTED_MODULE_60__["InfoSnackBarComponent"], _shared_snack_bar_action_snack_bar_component__WEBPACK_IMPORTED_MODULE_58__["ActionSnackBarComponent"]],
             bootstrap: [_app_component__WEBPACK_IMPORTED_MODULE_3__["AppComponent"]]
         }),
         __metadata("design:paramtypes", [_angular_cdk_overlay__WEBPACK_IMPORTED_MODULE_57__["OverlayContainer"]])
@@ -450,7 +455,6 @@ var ChatComponent = /** @class */ (function () {
         });
         this.store.select('chat', 'chatContent')
             .subscribe(function (chat) {
-            console.log("init", chat);
             _this.fillInitially(chat);
         }).unsubscribe();
     };
@@ -714,8 +718,10 @@ var HeaderComponent = /** @class */ (function () {
         this.token = this.store.select('users', 'token');
         this.username = this.store.select('users', 'currentUser');
         this.username.subscribe(function (username) {
-            _this.dss.getCurrentUserRoles(username);
-            _this.currentUsername = username;
+            if (username) {
+                _this.dss.getCurrentUserRoles(username);
+                _this.currentUsername = username;
+            }
         });
         this.currentUserRoles = this.store.select('users', 'currentUserRoles');
         this.isAdmin = this.currentUserRoles.map(function (roles) {
@@ -855,7 +861,7 @@ module.exports = "li, td {\r\n  border: 1px solid #32383e;\r\n  background-color
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<div *ngIf=\"role && !(newRoleMode | async)\">\r\n  <table class=\"table table-bordered table-striped\">\r\n    <tbody>\r\n    <tr>\r\n      <td><span class=\"text-info\">ID:</span></td>\r\n      <td>\r\n        <div class=\"d-flex justify-content-between\">\r\n          <span> {{ role.id }} </span>\r\n          <button class=\"btn btn-outline-secondary text-danger\" data-toggle=\"modal\" data-target=\"#deleteConfirmModal\"> Delete Role</button>\r\n        </div>\r\n      </td>\r\n    </tr>\r\n    <tr>\r\n      <td><span class=\"text-info\">NAME:</span></td>\r\n      <td>{{ role.name }}</td>\r\n    </tr>\r\n    <tr>\r\n      <td><span class=\"text-info\">DESCRIPTION:</span></td>\r\n      <td> {{ role.description }}</td>\r\n    </tr>\r\n    <tr>\r\n      <td><span class=\"text-info\">USERS</span></td>\r\n      <td>\r\n        <ul class=\"list-group\">\r\n          <li class=\"list-group-item\" *ngFor=\"let user of role.userDtos\" style=\"background-color: rgba(0, 0, 0, 0.05) !important;\">{{user.username}}</li>\r\n        </ul>\r\n      </td>\r\n    </tr>\r\n    </tbody>\r\n  </table>\r\n  <div *ngIf=\"editUserMode && !(newRoleMode | async)\">\r\n    <form [formGroup]=\"userForm\" class=\"form-group\">\r\n      <div class=\"input-group\">\r\n        <select class=\"form-control border-secondary\" formControlName=\"user\">\r\n          <option selected>- Select -</option>\r\n          <option *ngFor=\"let user of (users|async)\"> {{ user.username }}</option>\r\n        </select>\r\n        <div class=\"input-group-append\">\r\n          <button class=\"btn btn-outline-secondary\" (click)=\"postAddUser()\">Add</button>\r\n          <button class=\"btn btn-outline-secondary\" (click)=\"postRemoveUser()\">Remove</button>\r\n          <button class=\"btn btn-outline-secondary\" (click)=\"abortAddUser()\">Abort</button>\r\n        </div>\r\n      </div>\r\n    </form>\r\n  </div>\r\n  <div *ngIf=\"!editUserMode\">\r\n    <button class=\"btn btn-outline-secondary\" (click)=\"onEditUserMode()\">Edit Role</button>\r\n  </div>\r\n</div>\r\n\r\n<div *ngIf=\"(newRoleMode | async)\">\r\n  <form>\r\n    <div class=\"form-group\">\r\n      <label class=\"text-info\">Role name:</label>\r\n      <input type=\"text\" class=\"form-control border-secondary\" #name>\r\n    </div>\r\n    <div class=\"form-group\">\r\n      <label class=\"text-info\">Role description:</label>\r\n      <textarea rows=\"6\" class=\"form-control border-secondary\" #description></textarea>\r\n    </div>\r\n    <div class=\"form-group\">\r\n      <button (click)=\"onSubmitRole(name.value, description.value)\" class=\"btn btn-outline-secondary\">Submit</button>\r\n      <button (click)=\"onAbortSubmitRole()\" class=\"btn btn-outline-secondary\">Close</button>\r\n    </div>\r\n  </form>\r\n</div>\r\n\r\n<!-- Modal -->\r\n<div class=\"modal fade\" id=\"deleteConfirmModal\" tabindex=\"-1\" role=\"dialog\" aria-labelledby=\"exampleModalLabel\" aria-hidden=\"true\">\r\n  <div class=\"modal-dialog\" role=\"document\">\r\n    <div class=\"modal-content\">\r\n      <div class=\"modal-header\">\r\n        <h5 class=\"modal-title\" id=\"exampleModalLabel\">Role removal</h5>\r\n        <button type=\"button\" class=\"close\" data-dismiss=\"modal\" aria-label=\"Close\">\r\n          <span aria-hidden=\"true\">&times;</span>\r\n        </button>\r\n      </div>\r\n      <div class=\"modal-body\">\r\n        Whhaaaaaatt??!!\r\n      </div>\r\n      <div class=\"modal-footer\">\r\n        <button type=\"button\" class=\"btn btn-outline-secondary\" data-dismiss=\"modal\">Abort</button>\r\n        <button type=\"button\" class=\"btn btn-outline-secondary\" (click)=\"postRemoveUser()\">Confirm</button>\r\n      </div>\r\n    </div>\r\n  </div>\r\n</div>\r\n"
+module.exports = "<div *ngIf=\"role && !(newRoleMode | async)\">\r\n  <table class=\"table table-bordered table-striped\">\r\n    <tbody>\r\n    <tr>\r\n      <td><span class=\"text-info\">ID:</span></td>\r\n      <td>\r\n        <div class=\"d-flex justify-content-between\">\r\n          <span> {{ role.id }} </span>\r\n          <button class=\"btn btn-outline-secondary text-danger\" mat-button (click)=\"showSnackBar('Really?')\">Delete Role</button>\r\n        </div>\r\n      </td>\r\n    </tr>\r\n    <tr>\r\n      <td><span class=\"text-info\">NAME:</span></td>\r\n      <td>{{ role.name }}</td>\r\n    </tr>\r\n    <tr>\r\n      <td><span class=\"text-info\">DESCRIPTION:</span></td>\r\n      <td> {{ role.description }}</td>\r\n    </tr>\r\n    <tr>\r\n      <td><span class=\"text-info\">USERS</span></td>\r\n      <td>\r\n        <ul class=\"list-group\">\r\n          <li class=\"list-group-item\" *ngFor=\"let user of role.userDtos\" style=\"background-color: rgba(0, 0, 0, 0.05) !important;\">{{user.username}}</li>\r\n        </ul>\r\n      </td>\r\n    </tr>\r\n    </tbody>\r\n  </table>\r\n  <div *ngIf=\"editUserMode && !(newRoleMode | async)\">\r\n    <form [formGroup]=\"userForm\" class=\"form-group\">\r\n      <div class=\"input-group\">\r\n        <select class=\"form-control border-secondary\" formControlName=\"user\">\r\n          <option selected>- Select -</option>\r\n          <option *ngFor=\"let user of (users|async)\"> {{ user.username }}</option>\r\n        </select>\r\n        <div class=\"input-group-append\">\r\n          <button class=\"btn btn-outline-secondary\" (click)=\"postAddUser()\">Add</button>\r\n          <button class=\"btn btn-outline-secondary\" (click)=\"postRemoveUser()\">Remove</button>\r\n          <button class=\"btn btn-outline-secondary\" (click)=\"abortAddUser()\">Abort</button>\r\n        </div>\r\n      </div>\r\n    </form>\r\n  </div>\r\n  <div *ngIf=\"!editUserMode\">\r\n    <button class=\"btn btn-outline-secondary\" (click)=\"onEditUserMode()\">Edit Role</button>\r\n  </div>\r\n</div>\r\n\r\n<div *ngIf=\"(newRoleMode | async)\">\r\n  <form>\r\n    <div class=\"form-group\">\r\n      <label class=\"text-info\">Role name:</label>\r\n      <input type=\"text\" class=\"form-control border-secondary\" #name>\r\n    </div>\r\n    <div class=\"form-group\">\r\n      <label class=\"text-info\">Role description:</label>\r\n      <textarea rows=\"6\" class=\"form-control border-secondary\" #description></textarea>\r\n    </div>\r\n    <div class=\"form-group\">\r\n      <button (click)=\"onSubmitRole(name.value, description.value)\" class=\"btn btn-outline-secondary\">Submit</button>\r\n      <button (click)=\"onAbortSubmitRole()\" class=\"btn btn-outline-secondary\">Close</button>\r\n    </div>\r\n  </form>\r\n</div>\r\n"
 
 /***/ }),
 
@@ -875,6 +881,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _ngrx_store__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @ngrx/store */ "./node_modules/@ngrx/store/fesm5/store.js");
 /* harmony import */ var _shared_data_storage_service__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../shared/data-storage.service */ "./src/app/shared/data-storage.service.ts");
 /* harmony import */ var _shared_store_user_users_actions__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../../shared/store/user/users.actions */ "./src/app/shared/store/user/users.actions.ts");
+/* harmony import */ var _shared_snack_bar_action_snack_bar_component__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../../shared/snack-bar/action-snack-bar.component */ "./src/app/shared/snack-bar/action-snack-bar.component.ts");
+/* harmony import */ var _angular_material__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! @angular/material */ "./node_modules/@angular/material/esm5/material.es5.js");
 var __decorate = (undefined && undefined.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -890,10 +898,13 @@ var __metadata = (undefined && undefined.__metadata) || function (k, v) {
 
 
 
+
+
 var RoleDetailsComponent = /** @class */ (function () {
-    function RoleDetailsComponent(store, dss) {
+    function RoleDetailsComponent(store, dss, snackBar) {
         this.store = store;
         this.dss = dss;
+        this.snackBar = snackBar;
         this.editUserMode = false;
     }
     RoleDetailsComponent.prototype.ngOnInit = function () {
@@ -932,6 +943,22 @@ var RoleDetailsComponent = /** @class */ (function () {
     RoleDetailsComponent.prototype.onAbortSubmitRole = function () {
         this.store.dispatch(new _shared_store_user_users_actions__WEBPACK_IMPORTED_MODULE_5__["SetNewRoleModeAction"](false));
     };
+    RoleDetailsComponent.prototype.showSnackBar = function (message) {
+        var _this = this;
+        this.snackBarRef = this.snackBar.openFromComponent(_shared_snack_bar_action_snack_bar_component__WEBPACK_IMPORTED_MODULE_6__["ActionSnackBarComponent"], {
+            panelClass: ['styled-snack'],
+            data: {
+                message: message,
+                action: null
+            }
+        });
+        this.snackBarRef.afterDismissed().subscribe(function (data) {
+            if (data.dismissedByAction) {
+                _this.dss.deleteRole(_this.role.name);
+            }
+        });
+        this.snackBarRef.instance.ref = this.snackBarRef;
+    };
     __decorate([
         Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["Input"])(),
         __metadata("design:type", _role_model__WEBPACK_IMPORTED_MODULE_1__["RoleModel"])
@@ -943,7 +970,8 @@ var RoleDetailsComponent = /** @class */ (function () {
             styles: [__webpack_require__(/*! ./role-details.component.css */ "./src/app/roles/role-details/role-details.component.css")]
         }),
         __metadata("design:paramtypes", [_ngrx_store__WEBPACK_IMPORTED_MODULE_3__["Store"],
-            _shared_data_storage_service__WEBPACK_IMPORTED_MODULE_4__["DataStorageService"]])
+            _shared_data_storage_service__WEBPACK_IMPORTED_MODULE_4__["DataStorageService"],
+            _angular_material__WEBPACK_IMPORTED_MODULE_7__["MatSnackBar"]])
     ], RoleDetailsComponent);
     return RoleDetailsComponent;
 }());
@@ -1268,6 +1296,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _store_task_tasks_actions__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./store/task/tasks.actions */ "./src/app/shared/store/task/tasks.actions.ts");
 /* harmony import */ var _socket_task_info_service__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./socket/task-info.service */ "./src/app/shared/socket/task-info.service.ts");
 /* harmony import */ var _store_chat_chat_actions__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./store/chat/chat.actions */ "./src/app/shared/store/chat/chat.actions.ts");
+/* harmony import */ var _snack_bar_snack_bar_service__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ./snack-bar/snack-bar.service */ "./src/app/shared/snack-bar/snack-bar.service.ts");
 var __decorate = (undefined && undefined.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -1287,11 +1316,13 @@ var __metadata = (undefined && undefined.__metadata) || function (k, v) {
 
 
 
+
 var DataStorageService = /** @class */ (function () {
-    function DataStorageService(httpClient, store, taskInfoService) {
+    function DataStorageService(httpClient, store, taskInfoService, snackBarService) {
         this.httpClient = httpClient;
         this.store = store;
         this.taskInfoService = taskInfoService;
+        this.snackBarService = snackBarService;
         // stompClientState: Observable<Client>;
         // stompClient: Client;
         this.basehost = _server_model__WEBPACK_IMPORTED_MODULE_6__["baseUrl"];
@@ -1301,38 +1332,40 @@ var DataStorageService = /** @class */ (function () {
         this.httpClient.get(this.basehost + '/v1/users/' + username)
             .subscribe(function (user) {
             _this.store.dispatch(new _store_user_users_actions__WEBPACK_IMPORTED_MODULE_4__["SetCurrntUserDetails"](user));
-        }, function (err) {
-            console.log('getCurrentUser dss err: ', err);
+        }, function (response) {
+            _this.snackBarService.showSnackBar(response.error.message);
         });
     };
     DataStorageService.prototype.updateUser = function (user) {
         var _this = this;
         this.httpClient.put(this.basehost + '/v1/users/' + user.username, user)
             .subscribe(function (updatedUser) {
-            console.log('updateUser dss OK: ', updatedUser);
             _this.store.dispatch(new _store_user_users_actions__WEBPACK_IMPORTED_MODULE_4__["SetCurrntUserDetails"](updatedUser));
-        }, function (err) {
-            console.log('updateUser dss ERR: ', err);
+            _this.snackBarService.showSnackBar('DONE!', _snack_bar_snack_bar_service__WEBPACK_IMPORTED_MODULE_10__["SnackBarTheme"].success);
+        }, function (response) {
+            _this.snackBarService.showSnackBar(response.error.message);
         });
     };
     DataStorageService.prototype.updatePassword = function (oldPassword, newPassword, username) {
+        var _this = this;
         this.httpClient.put(this.basehost + '/v1/users/' + username + '/pass', {
             oldPassword: oldPassword,
             newPassword: newPassword
         })
             .subscribe(function (done) {
-            console.log('updatePassword dss OK: ', done);
-        }, function (err) {
-            console.log('updatePassword dss ERR: ', err);
+            _this.snackBarService.showSnackBar('DONE!', _snack_bar_snack_bar_service__WEBPACK_IMPORTED_MODULE_10__["SnackBarTheme"].success);
+        }, function (response) {
+            _this.snackBarService.showSnackBar(response.error.message);
         });
     };
     DataStorageService.prototype.getActiveWsUsers = function () {
         var _this = this;
         this.httpClient.get(this.basehost + '/v1/users/ws-active')
             .subscribe(function (activeUsers) {
+            console.log('activeUsers', activeUsers);
             _this.store.dispatch(new _store_chat_chat_actions__WEBPACK_IMPORTED_MODULE_9__["SetActiveWsUsers"](activeUsers));
-        }, function (err) {
-            console.log('getActiveWsUsers dss err: ', err);
+        }, function (response) {
+            _this.snackBarService.showSnackBar(response.error.message);
         });
     };
     DataStorageService.prototype.getTableHeaderBy = function (tableId) {
@@ -1340,8 +1373,8 @@ var DataStorageService = /** @class */ (function () {
         return this.httpClient.get(this.basehost + '/v1/projects/tables/' + tableId + '/definition')
             .subscribe(function (definition) {
             _this.store.dispatch(new _store_table_tables_actions__WEBPACK_IMPORTED_MODULE_5__["SetTableDefinitionAction"](definition));
-        }, function (err) {
-            console.log('getTableHeaderByName dss err: ', err);
+        }, function (response) {
+            _this.snackBarService.showSnackBar(response.error.message);
         });
     };
     DataStorageService.prototype.getTableRowsBy = function (tableId) {
@@ -1349,8 +1382,8 @@ var DataStorageService = /** @class */ (function () {
         return this.httpClient.get(this.basehost + '/v1/projects/tables/' + tableId + '/rows')
             .subscribe(function (rows) {
             _this.store.dispatch(new _store_table_tables_actions__WEBPACK_IMPORTED_MODULE_5__["SetRowsAction"](rows));
-        }, function (err) {
-            console.log('getTableRowsByName dss err: ', err);
+        }, function (response) {
+            _this.snackBarService.showSnackBar(response.error.message);
         });
     };
     DataStorageService.prototype.getTablesDetails = function () {
@@ -1358,17 +1391,17 @@ var DataStorageService = /** @class */ (function () {
         this.httpClient.get(this.basehost + '/v1/projects/tables/details')
             .subscribe(function (names) {
             _this.store.dispatch(new _store_table_tables_actions__WEBPACK_IMPORTED_MODULE_5__["SetNamesAction"](names));
-        }, function (err) {
-            console.log('getTableNames dss err: ', err);
+        }, function (response) {
+            _this.snackBarService.showSnackBar(response.error.message);
         });
     };
     DataStorageService.prototype.postTableDefinition = function (definition, databaseEnvironment) {
+        var _this = this;
         this.httpClient.post(this.basehost + '/v1/projects/tables/definition/' + databaseEnvironment, definition)
             .subscribe(function () {
-            //TODO komunikat
-            alert("DONE!");
-        }, function (err) {
-            console.log('postTableDefinition dss err: ', err);
+            _this.snackBarService.showSnackBar("Done!", _snack_bar_snack_bar_service__WEBPACK_IMPORTED_MODULE_10__["SnackBarTheme"].success);
+        }, function (response) {
+            _this.snackBarService.showSnackBar(response.error.message);
         });
     };
     DataStorageService.prototype.getUsers = function () {
@@ -1376,8 +1409,8 @@ var DataStorageService = /** @class */ (function () {
         this.httpClient.get(this.basehost + '/v1/users')
             .subscribe(function (users) {
             _this.store.dispatch(new _store_user_users_actions__WEBPACK_IMPORTED_MODULE_4__["SetUsersAction"](users));
-        }, function (err) {
-            console.log('getUsers dss err: ', err);
+        }, function (response) {
+            _this.snackBarService.showSnackBar(response.error.message);
         });
     };
     DataStorageService.prototype.getRoles = function () {
@@ -1385,18 +1418,17 @@ var DataStorageService = /** @class */ (function () {
         this.httpClient.get(this.basehost + '/v1/roles/details')
             .subscribe(function (roles) {
             _this.store.dispatch(new _store_user_users_actions__WEBPACK_IMPORTED_MODULE_4__["SetRolesAction"](roles));
-        }, function (err) {
-            console.log('getRoles dss err: ', err);
+        }, function (response) {
+            _this.snackBarService.showSnackBar(response.error.message);
         });
     };
     DataStorageService.prototype.addRoleToUser = function (data) {
         var _this = this;
-        return this.httpClient.post(this.basehost + '/v1/users/' + data.username + '/roles/' + data.rolename, null)
+        this.httpClient.post(this.basehost + '/v1/users/' + data.username + '/roles/' + data.rolename, null)
             .subscribe(function (user) {
             _this.store.dispatch(new _store_user_users_actions__WEBPACK_IMPORTED_MODULE_4__["AddRoleToUser"](user));
-            return true;
-        }, function (err) {
-            console.log('addRoleToUser dss err: ', err);
+        }, function (response) {
+            _this.snackBarService.showSnackBar(response.error.message);
         });
     };
     DataStorageService.prototype.removeRoleFromUser = function (data) {
@@ -1407,19 +1439,10 @@ var DataStorageService = /** @class */ (function () {
                 data.user.roleNames.splice(data.user.roleNames.indexOf(data.rolename), 1);
                 _this.store.dispatch(new _store_user_users_actions__WEBPACK_IMPORTED_MODULE_4__["RemoveRoleFromUser"](data.user));
             }
-        }, function (err) {
-            console.log('removeRoleFromUser dss err: ', err);
+        }, function (response) {
+            _this.snackBarService.showSnackBar(response.error.message);
         });
     };
-    // addUserToRole(data: { rolename: string, username: string }) { TODO addUserToRole
-    //   return this.httpClient.post(this.basehost + '/v1/roles/' + data.rolename + '/users/' + data.username, null)
-    //     .subscribe((role: RoleModel) => {
-    //       this.store.dispatch(new UsersActions.AddUserToRole(role));
-    //       return true;
-    //     }, (err) => {
-    //       console.log('addUserToRole dss err: ', err);
-    //     });
-    // }
     DataStorageService.prototype.removeUserFromRole = function (data) {
         var _this = this;
         this.httpClient.delete(this.basehost + '/v1/roles/' + data.role.name + '/users/' + data.username)
@@ -1434,6 +1457,8 @@ var DataStorageService = /** @class */ (function () {
                 data.role.userDtos.splice(data.role.userDtos.indexOf(usertoRemove_1), 1);
                 _this.store.dispatch(new _store_user_users_actions__WEBPACK_IMPORTED_MODULE_4__["RemoveUserFromRole"](data.role));
             }
+        }, function (response) {
+            _this.snackBarService.showSnackBar(response.error.message);
         });
     };
     DataStorageService.prototype.addNewRow = function (tableId, newRow) {
@@ -1442,8 +1467,8 @@ var DataStorageService = /** @class */ (function () {
             .subscribe(function (savedRow) {
             // console.log('addNewRow dss OK: ', savedRow)
             _this.store.dispatch(new _store_table_tables_actions__WEBPACK_IMPORTED_MODULE_5__["AddRowAction"](savedRow));
-        }, function (err) {
-            console.log('addNewRow dss err: ', err);
+        }, function (response) {
+            _this.snackBarService.showSnackBar(response.error.message);
         });
     };
     DataStorageService.prototype.updateRow = function (tableId, updatedRow) {
@@ -1452,8 +1477,8 @@ var DataStorageService = /** @class */ (function () {
             .subscribe(function (savedRow) {
             // console.log("updateRow dss OK: ", savedRow);
             _this.store.dispatch(new _store_table_tables_actions__WEBPACK_IMPORTED_MODULE_5__["UpdateRowAction"](savedRow));
-        }, function (err) {
-            console.log('updateRow dss ERR: ', err);
+        }, function (response) {
+            _this.snackBarService.showSnackBar(response.error.message);
         });
     };
     DataStorageService.prototype.getCurrentUserRoles = function (username) {
@@ -1461,31 +1486,19 @@ var DataStorageService = /** @class */ (function () {
         this.httpClient.get(this.basehost + '/v1/roles/user/' + username)
             .subscribe(function (roles) {
             _this.store.dispatch(new _store_user_users_actions__WEBPACK_IMPORTED_MODULE_4__["SetCurrentUserRolenames"](roles));
-        }, function (err) {
-            console.log('getUserRoles dss ERR: ', err);
+        }, function (response) {
+            _this.snackBarService.showSnackBar(response.error.message);
         });
     };
     DataStorageService.prototype.saveNewRole = function (role) {
         var _this = this;
         this.httpClient.post(this.basehost + '/v1/roles/' + role.name, role.description)
             .subscribe(function (savedRole) {
-            // console.log('saveNewRole dss OK: ', savedRole)
             _this.store.dispatch(new _store_user_users_actions__WEBPACK_IMPORTED_MODULE_4__["AddRoleAction"](savedRole));
-        }, function (err) {
-            console.log('saveNewRole dss err: ', err);
+        }, function (response) {
+            _this.snackBarService.showSnackBar(response.error.message);
         });
     };
-    // deleteRole(roleName: string) { todo remove?
-    //   this.httpClient.delete<boolean>(this.basehost + '/v1/roles/' + roleName)
-    //     .subscribe((status: boolean) => {
-    //         if (status) {
-    //           this.store.dispatch(new UsersActions.DeleteRoleAction(roleName));
-    //         }
-    //       },
-    //       err => {
-    //         console.log('deleteRole dss err: ', err);
-    //       });
-    // }
     DataStorageService.prototype.deleteUser = function (username) {
         var _this = this;
         this.httpClient.delete(this.basehost + '/v1/users/' + username)
@@ -1496,8 +1509,8 @@ var DataStorageService = /** @class */ (function () {
                 _this.store.dispatch(new _store_user_users_actions__WEBPACK_IMPORTED_MODULE_4__["SetUserDisplayedTask"](null));
             }
             return true;
-        }, function (err) {
-            console.log('deleteUser dss err: ', err);
+        }, function (response) {
+            _this.snackBarService.showSnackBar(response.error.message);
         });
     };
     DataStorageService.prototype.saveNewUser = function (user) {
@@ -1507,8 +1520,8 @@ var DataStorageService = /** @class */ (function () {
             console.log('saveNewUser dss OK: ', savedUser);
             _this.store.dispatch(new _store_user_users_actions__WEBPACK_IMPORTED_MODULE_4__["AddUserAction"](savedUser));
             _this.store.dispatch(new _store_user_users_actions__WEBPACK_IMPORTED_MODULE_4__["SetNewUserModeAction"](false));
-        }, function (err) {
-            console.log('saveNewUser dss err: ', err);
+        }, function (response) {
+            _this.snackBarService.showSnackBar(response.error.message);
         });
     };
     DataStorageService.prototype.saveNewTask = function (tableId, newTask, rowId) {
@@ -1516,8 +1529,8 @@ var DataStorageService = /** @class */ (function () {
         this.httpClient.post(this.basehost + '/v1/projects/tables/' + tableId + '/rows/' + rowId + '/tasks', newTask)
             .subscribe(function (task) {
             _this.store.dispatch(new _store_table_tables_actions__WEBPACK_IMPORTED_MODULE_5__["AddTaskAction"]({ task: task, rowId: rowId }));
-        }, function (err) {
-            console.log('saveNewTask dss err: ', err);
+        }, function (response) {
+            _this.snackBarService.showSnackBar(response.error.message);
         });
     };
     DataStorageService.prototype.setTableUsers = function (tableId) {
@@ -1526,8 +1539,8 @@ var DataStorageService = /** @class */ (function () {
         this.httpClient.get(this.basehost + '/v1/users/table/' + tableId)
             .subscribe(function (users) {
             _this.store.dispatch(new _store_table_tables_actions__WEBPACK_IMPORTED_MODULE_5__["SetTableUsers"](users));
-        }, function (err) {
-            console.log('setTableUsers dss ERR: ', err);
+        }, function (response) {
+            _this.snackBarService.showSnackBar(response.error.message);
         });
     };
     DataStorageService.prototype.onAssignUserToTask = function (tableId, rowId, taskId, username) {
@@ -1536,8 +1549,8 @@ var DataStorageService = /** @class */ (function () {
             .subscribe(function (task) {
             _this.store.dispatch(new _store_table_tables_actions__WEBPACK_IMPORTED_MODULE_5__["UpdateRowsTaskAction"]({ rowId: rowId, task: task }));
             _this.taskInfoService.stompClient.send('/app/newTasks/' + username, {});
-        }, function (err) {
-            console.log('onAssignUserToTask dss err: ', err);
+        }, function (response) {
+            _this.snackBarService.showSnackBar(response.error.message);
         });
     };
     DataStorageService.prototype.onRemoveUserFromTask = function (tableId, rowId, taskId, username) {
@@ -1547,8 +1560,8 @@ var DataStorageService = /** @class */ (function () {
             // console.log('onRemoveUserFromTask dss OK: ', task)
             _this.store.dispatch(new _store_table_tables_actions__WEBPACK_IMPORTED_MODULE_5__["UpdateRowsTaskAction"]({ rowId: rowId, task: task }));
             _this.taskInfoService.stompClient.send('/app/newTasks/' + username, {});
-        }, function (err) {
-            console.log('onRemoveUserFromTask dss err: ', err);
+        }, function (response) {
+            _this.snackBarService.showSnackBar(response.error.message);
         });
     };
     DataStorageService.prototype.updateTask = function (task) {
@@ -1558,8 +1571,8 @@ var DataStorageService = /** @class */ (function () {
             console.log('updateTask dss OK: ', updatedTask);
             _this.store.dispatch(new _store_table_tables_actions__WEBPACK_IMPORTED_MODULE_5__["UpdateTaskAction"](updatedTask));
             _this.store.dispatch(new _store_user_users_actions__WEBPACK_IMPORTED_MODULE_4__["UpdateTaskAction"](updatedTask));
-        }, function (err) {
-            console.log('updateTask dss ERR: ', err);
+        }, function (response) {
+            _this.snackBarService.showSnackBar(response.error.message);
         });
     };
     DataStorageService.prototype.deleteTask = function (tableId, taskId, rowId) {
@@ -1570,8 +1583,8 @@ var DataStorageService = /** @class */ (function () {
                 _this.store.dispatch(new _store_task_tasks_actions__WEBPACK_IMPORTED_MODULE_7__["OnDeleteTask"](taskId));
                 _this.store.dispatch(new _store_table_tables_actions__WEBPACK_IMPORTED_MODULE_5__["DeleteTask"]({ rowId: rowId, taskId: taskId }));
             }
-        }, function (err) {
-            console.log('deleteTask dss err: ', err);
+        }, function (response) {
+            _this.snackBarService.showSnackBar(response.error.message);
         });
     };
     DataStorageService.prototype.deleteRow = function (tableId, rowId) {
@@ -1581,15 +1594,27 @@ var DataStorageService = /** @class */ (function () {
             if (response) {
                 _this.store.dispatch(new _store_table_tables_actions__WEBPACK_IMPORTED_MODULE_5__["DeleteRow"](rowId));
             }
-        }, function (err) {
-            console.log('deleteRow dss err: ', err);
+        }, function (response) {
+            _this.snackBarService.showSnackBar(response.error.message);
+        });
+    };
+    DataStorageService.prototype.deleteRole = function (roleName) {
+        var _this = this;
+        this.httpClient.delete(this.basehost + '/v1/roles/' + roleName)
+            .subscribe(function (status) {
+            if (status) {
+                _this.store.dispatch(new _store_user_users_actions__WEBPACK_IMPORTED_MODULE_4__["DeleteRoleAction"](roleName));
+            }
+        }, function (response) {
+            _this.snackBarService.showSnackBar(response.error.message);
         });
     };
     DataStorageService = __decorate([
         Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["Injectable"])(),
         __metadata("design:paramtypes", [_angular_common_http__WEBPACK_IMPORTED_MODULE_1__["HttpClient"],
             _ngrx_store__WEBPACK_IMPORTED_MODULE_3__["Store"],
-            _socket_task_info_service__WEBPACK_IMPORTED_MODULE_8__["TaskInfoService"]])
+            _socket_task_info_service__WEBPACK_IMPORTED_MODULE_8__["TaskInfoService"],
+            _snack_bar_snack_bar_service__WEBPACK_IMPORTED_MODULE_10__["SnackBarService"]])
     ], DataStorageService);
     return DataStorageService;
 }());
@@ -2095,6 +2120,178 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "baseUrl", function() { return baseUrl; });
 var baseUrl = 'https://my-jira.herokuapp.com';
 // export const baseUrl = 'http://localhost:8080';
+
+
+/***/ }),
+
+/***/ "./src/app/shared/snack-bar/action-snack-bar.component.ts":
+/*!****************************************************************!*\
+  !*** ./src/app/shared/snack-bar/action-snack-bar.component.ts ***!
+  \****************************************************************/
+/*! exports provided: ActionSnackBarComponent */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ActionSnackBarComponent", function() { return ActionSnackBarComponent; });
+/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm5/core.js");
+/* harmony import */ var _angular_material__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/material */ "./node_modules/@angular/material/esm5/material.es5.js");
+var __decorate = (undefined && undefined.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (undefined && undefined.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+var __param = (undefined && undefined.__param) || function (paramIndex, decorator) {
+    return function (target, key) { decorator(target, key, paramIndex); }
+};
+
+
+var ActionSnackBarComponent = /** @class */ (function () {
+    function ActionSnackBarComponent(data) {
+        var _this = this;
+        this.data = data;
+        this.message = data.message;
+        this.action = data.action;
+        setTimeout(function () {
+            _this.dismiss();
+        }, 5000);
+    }
+    ActionSnackBarComponent.prototype.dismiss = function () {
+        this.ref.dismiss();
+    };
+    ActionSnackBarComponent.prototype.dismissWithAction = function () {
+        this.ref.dismissWithAction();
+    };
+    ActionSnackBarComponent = __decorate([
+        Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["Component"])({
+            selector: 'app-snack-bar',
+            template: "\n    <section class=\"form\"\n             fxLayout\n             fxLayoutAlign=\"center\">\n        <mat-card fxFlex.xs=\"100%\" fxFlex=\"100%\" style=\"background-color: transparent !important;\">\n          <mat-card-title fxLayoutAlign=\"center\" class=\"text-info\">{{message || 'What!!!'}}</mat-card-title>\n          <mat-card-content  class=\"d-flex justify-content-between align-items-center\">\n            <button class=\"btn btn-outline-info\" (click)=\"dismiss()\">No</button>\n            <button class=\"btn btn-outline-danger\" (click)=\"dismissWithAction()\">Yes</button>\n          </mat-card-content>\n        </mat-card>\n    </section>\n  ",
+            styles: ["\n    ::ng-deep .styled-snack {\n      padding: 0;\n      margin: 0;\n      border: 1px solid #17a2b8!important;\n      background-color: transparent !important;\n    }\n    mat-card-content {\n      \n    }\n  "],
+        }),
+        __param(0, Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["Inject"])(_angular_material__WEBPACK_IMPORTED_MODULE_1__["MAT_SNACK_BAR_DATA"])),
+        __metadata("design:paramtypes", [Object])
+    ], ActionSnackBarComponent);
+    return ActionSnackBarComponent;
+}());
+
+
+
+/***/ }),
+
+/***/ "./src/app/shared/snack-bar/info-snack-bar.component.ts":
+/*!**************************************************************!*\
+  !*** ./src/app/shared/snack-bar/info-snack-bar.component.ts ***!
+  \**************************************************************/
+/*! exports provided: InfoSnackBarComponent */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "InfoSnackBarComponent", function() { return InfoSnackBarComponent; });
+/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm5/core.js");
+/* harmony import */ var _angular_material__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/material */ "./node_modules/@angular/material/esm5/material.es5.js");
+var __decorate = (undefined && undefined.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (undefined && undefined.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+var __param = (undefined && undefined.__param) || function (paramIndex, decorator) {
+    return function (target, key) { decorator(target, key, paramIndex); }
+};
+
+
+var InfoSnackBarComponent = /** @class */ (function () {
+    function InfoSnackBarComponent(data) {
+        var _this = this;
+        this.data = data;
+        this.message = data.message;
+        this.className = data.className;
+        setTimeout(function () {
+            _this.dismiss();
+        }, 5000);
+    }
+    InfoSnackBarComponent.prototype.dismiss = function () {
+        this.ref.dismiss();
+    };
+    InfoSnackBarComponent = __decorate([
+        Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["Component"])({
+            selector: 'app-snack-bar',
+            template: "\n    <section class=\"form\"\n             fxLayout\n             fxLayoutAlign=\"center\">\n      <mat-card fxFlex.xs=\"100%\" fxFlex=\"100%\" style=\"background-color: transparent !important;\">\n        <mat-card-content fxLayoutAlign=\"center\">\n          <span class=\"text-{{className}} h5\" style=\"margin: 5px 30px 0 0\">{{(message | json) || 'Error'}}</span>\n          <button class=\"btn btn-outline-{{className}}\" (click)=\"dismiss()\">Close</button>\n        </mat-card-content>\n      </mat-card>\n    </section>\n  ",
+            styles: ["    \n    ::ng-deep .info {\n      padding: 0;\n      margin: 0;\n      background-color: transparent !important;\n      color: #17a2b8 !important;\n    }\n\n    ::ng-deep .danger {\n      padding: 0;\n      margin: 0;\n      background-color: transparent !important;\n      color: #dc3545 !important;\n    }\n\n    ::ng-deep .success {\n      padding: 0;\n      margin: 0;\n      background-color: transparent !important;\n      color: #28a745 !important;\n    }\n\n    ::ng-deep .primary {\n      padding: 0;\n      margin: 0;\n      background-color: transparent !important;\n      color: #007bff !important;\n    }\n  "],
+        }),
+        __param(0, Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["Inject"])(_angular_material__WEBPACK_IMPORTED_MODULE_1__["MAT_SNACK_BAR_DATA"])),
+        __metadata("design:paramtypes", [Object])
+    ], InfoSnackBarComponent);
+    return InfoSnackBarComponent;
+}());
+
+
+
+/***/ }),
+
+/***/ "./src/app/shared/snack-bar/snack-bar.service.ts":
+/*!*******************************************************!*\
+  !*** ./src/app/shared/snack-bar/snack-bar.service.ts ***!
+  \*******************************************************/
+/*! exports provided: SnackBarTheme, SnackBarService */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "SnackBarTheme", function() { return SnackBarTheme; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "SnackBarService", function() { return SnackBarService; });
+/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm5/core.js");
+/* harmony import */ var _info_snack_bar_component__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./info-snack-bar.component */ "./src/app/shared/snack-bar/info-snack-bar.component.ts");
+/* harmony import */ var _angular_material__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @angular/material */ "./node_modules/@angular/material/esm5/material.es5.js");
+var __decorate = (undefined && undefined.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (undefined && undefined.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+
+
+
+var SnackBarTheme;
+(function (SnackBarTheme) {
+    SnackBarTheme["danger"] = "danger";
+    SnackBarTheme["info"] = "info";
+    SnackBarTheme["primary"] = "primary";
+    SnackBarTheme["success"] = "success";
+})(SnackBarTheme || (SnackBarTheme = {}));
+var SnackBarService = /** @class */ (function () {
+    function SnackBarService(snackBar) {
+        this.snackBar = snackBar;
+    }
+    SnackBarService.prototype.showSnackBar = function (message, color) {
+        if (color === void 0) { color = SnackBarTheme.danger; }
+        this.snackBarRef = this.snackBar.openFromComponent(_info_snack_bar_component__WEBPACK_IMPORTED_MODULE_1__["InfoSnackBarComponent"], {
+            panelClass: [color],
+            data: {
+                message: message,
+                className: color
+            }
+        });
+        this.snackBarRef.instance.ref = this.snackBarRef;
+    };
+    SnackBarService = __decorate([
+        Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["Injectable"])(),
+        __metadata("design:paramtypes", [_angular_material__WEBPACK_IMPORTED_MODULE_2__["MatSnackBar"]])
+    ], SnackBarService);
+    return SnackBarService;
+}());
+
 
 
 /***/ }),
@@ -2638,7 +2835,7 @@ var StoreResetService = /** @class */ (function () {
         this.store.dispatch(new _store_table_tables_actions__WEBPACK_IMPORTED_MODULE_2__["ResetStore"]());
         this.store.dispatch(new _store_user_users_actions__WEBPACK_IMPORTED_MODULE_3__["ResetStore"]());
         this.store.dispatch(new _store_chat_chat_actions__WEBPACK_IMPORTED_MODULE_4__["ResetStore"]());
-        this.store.dispatch(new _store_task_tasks_actions__WEBPACK_IMPORTED_MODULE_5__["ResetStore"]());
+        this.store.dispatch(new _store_task_tasks_actions__WEBPACK_IMPORTED_MODULE_5__["ResetTaskStore"]());
         _auth_cookies_handler__WEBPACK_IMPORTED_MODULE_6__["AuthCookie"].deleteAuth();
     };
     StoreResetService = __decorate([
@@ -2674,7 +2871,7 @@ __webpack_require__.r(__webpack_exports__);
 var APPEND_CHAT_WITH_MESSAGE = 'APPEND_CHAT_WITH_MESSAGE';
 var SET_ACTIVE_USERS = 'SET_ACTIVE_USERS';
 var SELECT_CHAT = 'SELECT_CHAT';
-var RESET_STORE = 'RESET_STORE';
+var RESET_STORE = 'RESET_CHAT_STORE';
 var AppendChatWithMessage = /** @class */ (function () {
     function AppendChatWithMessage(payload) {
         this.payload = payload;
@@ -2818,12 +3015,12 @@ function statisticsReducers(state, action) {
 /*!******************************************************!*\
   !*** ./src/app/shared/store/table/tables.actions.ts ***!
   \******************************************************/
-/*! exports provided: RESET_STORE, ADD_ROW, ADD_TASK, SHOW_ROW, UPDATE_ROW, EDIT_ROW_MODE, EDITED_ROW, DELETE_ROW, SET_ROWS, SET_DEFINITION, SET_NAMES, ADD_NAMES, NEW_ROW_MODE, SET_FILTER, EXTENDED_FILTER_MODE, SET_EXTENDED_TABLE_VIEW, SET_EXTENDED_ROW_VIEW, RUN_EXTENDED_FILTER, SET_EXTENDED_FILTER, SET_EXTENDED_FILTER_SELECT, SET_SORT_CONTENT, SWITCH_TABLE_RESET, SET_ROW_TASKS, SET_TABLE_USERS, UPDATE_ROWS_TASK, UPDATE_TASK, DELETE_ROWS_TASK, SetNewRowModeAction, SetSortContent, AddRowAction, ShowRowDetailsAction, UpdateRowAction, SetRowsAction, SetTableDefinitionAction, SetNamesAction, AddNamesAction, SetEditRowMode, SetEditedRow, ResetStore, TableFilter, SetExtendedFilterMode, RunExtendedFilter, SetExtendedFilterSelect, SetExtendedFilter, SwitchTableReset, SetRowsTasksAction, SetTableUsers, UpdateRowsTaskAction, UpdateTaskAction, DeleteTask, SetExtendedTableView, SetExtendedRowView, DeleteRow, AddTaskAction */
+/*! exports provided: RESET_TABLE_STORE, ADD_ROW, ADD_TASK, SHOW_ROW, UPDATE_ROW, EDIT_ROW_MODE, EDITED_ROW, DELETE_ROW, SET_ROWS, SET_DEFINITION, SET_NAMES, ADD_NAMES, NEW_ROW_MODE, SET_FILTER, EXTENDED_FILTER_MODE, SET_EXTENDED_TABLE_VIEW, SET_EXTENDED_ROW_VIEW, RUN_EXTENDED_FILTER, SET_EXTENDED_FILTER, SET_EXTENDED_FILTER_SELECT, SET_SORT_CONTENT, SWITCH_TABLE_RESET, SET_ROW_TASKS, SET_TABLE_USERS, UPDATE_ROWS_TASK, UPDATE_TASK, DELETE_ROWS_TASK, SetNewRowModeAction, SetSortContent, AddRowAction, ShowRowDetailsAction, UpdateRowAction, SetRowsAction, SetTableDefinitionAction, SetNamesAction, AddNamesAction, SetEditRowMode, SetEditedRow, ResetStore, TableFilter, SetExtendedFilterMode, RunExtendedFilter, SetExtendedFilterSelect, SetExtendedFilter, SwitchTableReset, SetRowsTasksAction, SetTableUsers, UpdateRowsTaskAction, UpdateTaskAction, DeleteTask, SetExtendedTableView, SetExtendedRowView, DeleteRow, AddTaskAction */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "RESET_STORE", function() { return RESET_STORE; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "RESET_TABLE_STORE", function() { return RESET_TABLE_STORE; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ADD_ROW", function() { return ADD_ROW; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ADD_TASK", function() { return ADD_TASK; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "SHOW_ROW", function() { return SHOW_ROW; });
@@ -2877,7 +3074,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "SetExtendedRowView", function() { return SetExtendedRowView; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "DeleteRow", function() { return DeleteRow; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "AddTaskAction", function() { return AddTaskAction; });
-var RESET_STORE = 'RESET_STORE';
+var RESET_TABLE_STORE = 'RESET_TABLE_STORE';
 var ADD_ROW = 'ADD_ROW';
 var ADD_TASK = 'ADD_TASK';
 var SHOW_ROW = 'SHOW_ROW';
@@ -2994,7 +3191,7 @@ var SetEditedRow = /** @class */ (function () {
 
 var ResetStore = /** @class */ (function () {
     function ResetStore() {
-        this.type = RESET_STORE;
+        this.type = RESET_TABLE_STORE;
     }
     return ResetStore;
 }());
@@ -3008,7 +3205,8 @@ var TableFilter = /** @class */ (function () {
 }());
 
 var SetExtendedFilterMode = /** @class */ (function () {
-    function SetExtendedFilterMode() {
+    function SetExtendedFilterMode(payload) {
+        this.payload = payload;
         this.type = EXTENDED_FILTER_MODE;
     }
     return SetExtendedFilterMode;
@@ -3183,12 +3381,12 @@ function tablesReducers(state, action) {
             return __assign({}, state, { newRowMode: action.payload });
         case _tables_actions__WEBPACK_IMPORTED_MODULE_0__["EDITED_ROW"]:
             return __assign({}, state, { editedRow: action.payload });
-        case _tables_actions__WEBPACK_IMPORTED_MODULE_0__["RESET_STORE"]:
+        case _tables_actions__WEBPACK_IMPORTED_MODULE_0__["RESET_TABLE_STORE"]:
             return __assign({}, initialTableState);
         case _tables_actions__WEBPACK_IMPORTED_MODULE_0__["SET_FILTER"]:
             return __assign({}, state, { tableFilter: action.payload });
         case _tables_actions__WEBPACK_IMPORTED_MODULE_0__["EXTENDED_FILTER_MODE"]:
-            return __assign({}, state, { extendedFilterMode: !state.extendedFilterMode });
+            return __assign({}, state, { extendedFilterMode: action.payload });
         case _tables_actions__WEBPACK_IMPORTED_MODULE_0__["RUN_EXTENDED_FILTER"]:
             return __assign({}, state, { extendedFilterAction: !state.extendedFilterAction });
         case _tables_actions__WEBPACK_IMPORTED_MODULE_0__["SET_EXTENDED_FILTER"]:
@@ -3337,7 +3535,7 @@ function updateRow(rows, updatedRow) {
 /*!****************************************************!*\
   !*** ./src/app/shared/store/task/tasks.actions.ts ***!
   \****************************************************/
-/*! exports provided: SET_TASK_DETAILS_MODE, SET_SHOWED_TASK, ON_DELETE_TASK, RESET_STORE, SetTaskDetailsModeAction, SetShowedTaskAction, OnDeleteTask, ResetStore */
+/*! exports provided: SET_TASK_DETAILS_MODE, SET_SHOWED_TASK, ON_DELETE_TASK, RESET_TASK_STORE, SetTaskDetailsModeAction, SetShowedTaskAction, OnDeleteTask, ResetTaskStore */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -3345,15 +3543,15 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "SET_TASK_DETAILS_MODE", function() { return SET_TASK_DETAILS_MODE; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "SET_SHOWED_TASK", function() { return SET_SHOWED_TASK; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ON_DELETE_TASK", function() { return ON_DELETE_TASK; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "RESET_STORE", function() { return RESET_STORE; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "RESET_TASK_STORE", function() { return RESET_TASK_STORE; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "SetTaskDetailsModeAction", function() { return SetTaskDetailsModeAction; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "SetShowedTaskAction", function() { return SetShowedTaskAction; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "OnDeleteTask", function() { return OnDeleteTask; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ResetStore", function() { return ResetStore; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ResetTaskStore", function() { return ResetTaskStore; });
 var SET_TASK_DETAILS_MODE = 'SET_TASK_DETAILS_MODE';
 var SET_SHOWED_TASK = 'SET_SHOWED_TASK';
 var ON_DELETE_TASK = 'ON_DELETE_TASK';
-var RESET_STORE = 'RESET_STORE';
+var RESET_TASK_STORE = 'RESET_TASK_STORE';
 var SetTaskDetailsModeAction = /** @class */ (function () {
     function SetTaskDetailsModeAction(payload) {
         this.payload = payload;
@@ -3378,11 +3576,11 @@ var OnDeleteTask = /** @class */ (function () {
     return OnDeleteTask;
 }());
 
-var ResetStore = /** @class */ (function () {
-    function ResetStore() {
-        this.type = RESET_STORE;
+var ResetTaskStore = /** @class */ (function () {
+    function ResetTaskStore() {
+        this.type = RESET_TASK_STORE;
     }
-    return ResetStore;
+    return ResetTaskStore;
 }());
 
 
@@ -3423,11 +3621,10 @@ function tasksReducers(state, action) {
         case _tasks_actions__WEBPACK_IMPORTED_MODULE_0__["ON_DELETE_TASK"]:
             state.taskDetailsMode = false;
             state.showedTask = null;
-            return {
-                state: state
-            };
-        case _tasks_actions__WEBPACK_IMPORTED_MODULE_0__["RESET_STORE"]:
-            return __assign({}, initialTaskState);
+            return state;
+        case _tasks_actions__WEBPACK_IMPORTED_MODULE_0__["RESET_TASK_STORE"]:
+            state = initialTaskState;
+            return state;
         default:
             return state;
     }
@@ -3520,7 +3717,7 @@ var SET_CURRENT_USER_DETAILS = 'SET_CURRENT_USER_DETAILS';
 var SWITCH_TABLE_RESET = 'SWITCH_TABLE_RESET';
 var SET_NEW_WEB_SOCKET_CLIENT = 'SET_NEW_WEB_SOCKET_CLIENT';
 var SET_TASK_INFO = 'SET_TASK_INFO';
-var RESET_STORE = 'RESET_STORE';
+var RESET_STORE = 'RESET_USER_STORE';
 var SET_LOGIN_FAILURE_INFO = 'SET_LOGIN_FAILURE_INFO';
 var SET_LOGOUT_INFO = 'SET_LOGOUT_INFO';
 var SET_USER_DISPLAYED_TASK = 'SET_USER_DISPLAYED_TASK';
@@ -4418,6 +4615,9 @@ var MenuComponent = /** @class */ (function () {
     MenuComponent.prototype.ngOnInit = function () {
         var _this = this;
         this.extendedFilterMode = this.store.select('tables', 'extendedFilterMode');
+        this.extendedFilterMode.subscribe((function (filterModeValue) {
+            _this.extendedFilterModeValue = filterModeValue;
+        }));
         this.extendedTableView = this.store.select('tables', 'extendedTableView');
         this.extendedTableView.subscribe(function (value) {
             _this.extendedTableViewValue = value;
@@ -4439,10 +4639,13 @@ var MenuComponent = /** @class */ (function () {
         this.store.dispatch(new _shared_store_table_tables_actions__WEBPACK_IMPORTED_MODULE_3__["SetNewRowModeAction"](true));
     };
     MenuComponent.prototype.switchExtendedTableView = function () {
+        if (this.extendedFilterModeValue && this.extendedTableViewValue) {
+            this.onExtendedFilterMode();
+        }
         this.store.dispatch(new _shared_store_table_tables_actions__WEBPACK_IMPORTED_MODULE_3__["SetExtendedTableView"](!this.extendedTableViewValue));
     };
     MenuComponent.prototype.onExtendedFilterMode = function () {
-        this.store.dispatch(new _shared_store_table_tables_actions__WEBPACK_IMPORTED_MODULE_3__["SetExtendedFilterMode"]());
+        this.store.dispatch(new _shared_store_table_tables_actions__WEBPACK_IMPORTED_MODULE_3__["SetExtendedFilterMode"](!this.extendedFilterModeValue));
     };
     __decorate([
         Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["Input"])(),
@@ -4542,7 +4745,9 @@ var RowDetailsComponent = /** @class */ (function () {
         this.row = this.store.select('tables', 'editedRow');
         this.header = this.store.select('tables', 'tableDefinition');
         this.header.subscribe(function (header) {
-            _this.tableDefinition = header[0];
+            if (header) {
+                _this.tableDefinition = header[0];
+            }
         });
         this.row.subscribe(function (row) {
             _this.createUpdateRowForm(row);
@@ -4606,9 +4811,6 @@ var RowDetailsComponent = /** @class */ (function () {
             });
         }
     };
-    // show() { TODO remove
-    //   this.row.subscribe(this.updateRowForm.value);
-    // }
     RowDetailsComponent.prototype.onToggleRowEditMode = function () {
         this.store.dispatch(new _shared_store_table_tables_actions__WEBPACK_IMPORTED_MODULE_3__["SetEditRowMode"](false));
         this.store.dispatch(new _shared_store_table_tables_actions__WEBPACK_IMPORTED_MODULE_3__["SetNewRowModeAction"](false));
@@ -4639,7 +4841,9 @@ var RowDetailsComponent = /** @class */ (function () {
         var _this = this;
         var newRow = this.mapNewRow();
         this.header.forEach(function (header) {
-            _this.dss.addNewRow(header[0].id, newRow);
+            if (header) {
+                _this.dss.addNewRow(header[0].id, newRow);
+            }
         });
     };
     RowDetailsComponent.prototype.mapNewRow = function () {
@@ -4665,6 +4869,8 @@ var RowDetailsComponent = /** @class */ (function () {
         this.unlockFields = !this.unlockFields;
     };
     RowDetailsComponent.prototype.ngOnDestroy = function () {
+        this.store.dispatch(new _shared_store_task_tasks_actions__WEBPACK_IMPORTED_MODULE_7__["ResetTaskStore"]());
+        this.selectedTask = null;
     };
     RowDetailsComponent.prototype.onAddTask = function () {
         this.store.dispatch(new _shared_store_task_tasks_actions__WEBPACK_IMPORTED_MODULE_7__["SetTaskDetailsModeAction"](true));
@@ -4791,7 +4997,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _ngrx_store__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! @ngrx/store */ "./node_modules/@ngrx/store/fesm5/store.js");
 /* harmony import */ var _shared_data_storage_service__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../../shared/data-storage.service */ "./src/app/shared/data-storage.service.ts");
 /* harmony import */ var _shared_store_table_tables_actions__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../../shared/store/table/tables.actions */ "./src/app/shared/store/table/tables.actions.ts");
-/* harmony import */ var _shared_filter_filter_service__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ../../shared/filter/filter.service */ "./src/app/shared/filter/filter.service.ts");
+/* harmony import */ var _shared_store_task_tasks_actions__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ../../shared/store/task/tasks.actions */ "./src/app/shared/store/task/tasks.actions.ts");
+/* harmony import */ var _shared_filter_filter_service__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ../../shared/filter/filter.service */ "./src/app/shared/filter/filter.service.ts");
 var __decorate = (undefined && undefined.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -4801,6 +5008,7 @@ var __decorate = (undefined && undefined.__decorate) || function (decorators, ta
 var __metadata = (undefined && undefined.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
+
 
 
 
@@ -4823,7 +5031,6 @@ var RowComponent = /** @class */ (function () {
         var _this = this;
         this.initForm();
         this.filter = this.store.select('tables', 'tableFilter');
-        // this.editMode = this.store.select('tables', 'editRowMode');
         this.extendedTableView = this.store.select('tables', 'extendedTableView');
         this.filter.subscribe(function (filter) {
             if (filter !== '') {
@@ -4854,6 +5061,7 @@ var RowComponent = /** @class */ (function () {
     RowComponent.prototype.onEditForm = function () {
         this.store.dispatch(new _shared_store_table_tables_actions__WEBPACK_IMPORTED_MODULE_7__["SetNewRowModeAction"](false));
         this.store.dispatch(new _shared_store_table_tables_actions__WEBPACK_IMPORTED_MODULE_7__["SetEditRowMode"](true));
+        this.store.dispatch(new _shared_store_task_tasks_actions__WEBPACK_IMPORTED_MODULE_8__["ResetTaskStore"]());
         this.store.dispatch(new _shared_store_table_tables_actions__WEBPACK_IMPORTED_MODULE_7__["SetEditedRow"](this.row));
     };
     RowComponent.getMappedValue = function (object) {
@@ -4876,7 +5084,7 @@ var RowComponent = /** @class */ (function () {
         __metadata("design:paramtypes", [_question_control_service__WEBPACK_IMPORTED_MODULE_2__["QuestionControlService"],
             _ngrx_store__WEBPACK_IMPORTED_MODULE_5__["Store"],
             _shared_data_storage_service__WEBPACK_IMPORTED_MODULE_6__["DataStorageService"],
-            _shared_filter_filter_service__WEBPACK_IMPORTED_MODULE_8__["FilterService"]])
+            _shared_filter_filter_service__WEBPACK_IMPORTED_MODULE_9__["FilterService"]])
     ], RowComponent);
     return RowComponent;
     var RowComponent_1;
@@ -5093,6 +5301,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _shared_data_storage_service__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../shared/data-storage.service */ "./src/app/shared/data-storage.service.ts");
 /* harmony import */ var _shared_store_table_tables_actions__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../shared/store/table/tables.actions */ "./src/app/shared/store/table/tables.actions.ts");
 /* harmony import */ var _shared_store_user_users_actions__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../shared/store/user/users.actions */ "./src/app/shared/store/user/users.actions.ts");
+/* harmony import */ var _shared_store_task_tasks_actions__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../shared/store/task/tasks.actions */ "./src/app/shared/store/task/tasks.actions.ts");
 var __decorate = (undefined && undefined.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -5102,6 +5311,7 @@ var __decorate = (undefined && undefined.__decorate) || function (decorators, ta
 var __metadata = (undefined && undefined.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
+
 
 
 
@@ -5133,16 +5343,18 @@ var TablesComponent = /** @class */ (function () {
             _this.sortContentValue = sortContent;
         });
     };
-    // onToggleRowEditMode() {
-    //   this.contentStore.dispatch(new TablesActions.SetEditRowMode(false));
-    // }
     TablesComponent.prototype.setTable = function (tablesDetails) {
         this.showSpinner = true;
         this.contentStore.dispatch(new _shared_store_table_tables_actions__WEBPACK_IMPORTED_MODULE_3__["SwitchTableReset"]());
         this.contentStore.dispatch(new _shared_store_user_users_actions__WEBPACK_IMPORTED_MODULE_4__["SwitchTableReset"]());
+        this.contentStore.dispatch(new _shared_store_task_tasks_actions__WEBPACK_IMPORTED_MODULE_5__["ResetTaskStore"]());
         this.dss.getTableHeaderBy(tablesDetails.id);
         this.dss.getTableRowsBy(tablesDetails.id);
         this.tableChosen = true;
+    };
+    TablesComponent.prototype.ngOnDestroy = function () {
+        this.contentStore.dispatch(new _shared_store_task_tasks_actions__WEBPACK_IMPORTED_MODULE_5__["ResetTaskStore"]());
+        this.contentStore.dispatch(new _shared_store_table_tables_actions__WEBPACK_IMPORTED_MODULE_3__["SwitchTableReset"]());
     };
     TablesComponent = __decorate([
         Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["Component"])({
@@ -5345,60 +5557,6 @@ var DialogComponent = /** @class */ (function () {
 
 /***/ }),
 
-/***/ "./src/app/training/snack-bar/snack-bar.component.ts":
-/*!***********************************************************!*\
-  !*** ./src/app/training/snack-bar/snack-bar.component.ts ***!
-  \***********************************************************/
-/*! exports provided: SnackBarComponent */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "SnackBarComponent", function() { return SnackBarComponent; });
-/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm5/core.js");
-/* harmony import */ var _angular_material__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/material */ "./node_modules/@angular/material/esm5/material.es5.js");
-var __decorate = (undefined && undefined.__decorate) || function (decorators, target, key, desc) {
-    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
-    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
-    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
-    return c > 3 && r && Object.defineProperty(target, key, r), r;
-};
-var __metadata = (undefined && undefined.__metadata) || function (k, v) {
-    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
-};
-var __param = (undefined && undefined.__param) || function (paramIndex, decorator) {
-    return function (target, key) { decorator(target, key, paramIndex); }
-};
-
-
-var SnackBarComponent = /** @class */ (function () {
-    function SnackBarComponent(data) {
-        this.data = data;
-        this.message = data.message;
-        this.action = data.action;
-    }
-    SnackBarComponent.prototype.dismiss = function () {
-        this.ref.dismiss();
-    };
-    SnackBarComponent.prototype.dismissWithAction = function () {
-        this.ref.dismissWithAction();
-    };
-    SnackBarComponent = __decorate([
-        Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["Component"])({
-            selector: 'app-snack-bar',
-            template: "\n    <section class=\"form\"\n             fxLayout\n             fxLayoutAlign=\"center\">\n      <mat-card fxFlex.xs=\"100%\" fxFlex=\"100%\">\n        <mat-card-title fxLayoutAlign=\"center\">{{message || 'What!!!'}}</mat-card-title>\n        <mat-card-content fxLayoutAlign=\"center\">\n          <button mat-button color=\"primary\" (click)=\"dismiss()\">{{action || 'Dismiss'}}</button>\n          <button mat-button color=\"primary\" (click)=\"dismissWithAction()\">{{action || 'Dismiss '}} with action</button>\n        </mat-card-content>\n      </mat-card>\n    </section>\n  ",
-            styles: ["\n    ::ng-deep .styled-snack {\n      padding: 0;\n      margin: 0;\n    }\n  "],
-        }),
-        __param(0, Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["Inject"])(_angular_material__WEBPACK_IMPORTED_MODULE_1__["MAT_SNACK_BAR_DATA"])),
-        __metadata("design:paramtypes", [Object])
-    ], SnackBarComponent);
-    return SnackBarComponent;
-}());
-
-
-
-/***/ }),
-
 /***/ "./src/app/training/table/table.component.css":
 /*!****************************************************!*\
   !*** ./src/app/training/table/table.component.css ***!
@@ -5538,7 +5696,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm5/core.js");
 /* harmony import */ var _angular_material__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/material */ "./node_modules/@angular/material/esm5/material.es5.js");
 /* harmony import */ var _dialog_dialog_component__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./dialog/dialog.component */ "./src/app/training/dialog/dialog.component.ts");
-/* harmony import */ var _snack_bar_snack_bar_component__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./snack-bar/snack-bar.component */ "./src/app/training/snack-bar/snack-bar.component.ts");
+/* harmony import */ var _shared_snack_bar_action_snack_bar_component__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../shared/snack-bar/action-snack-bar.component */ "./src/app/shared/snack-bar/action-snack-bar.component.ts");
 var __decorate = (undefined && undefined.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -5594,7 +5752,7 @@ var TrainingComponent = /** @class */ (function () {
         console.log(f);
     };
     TrainingComponent.prototype.showSnackBar = function (message, action) {
-        this.snackBarRef = this.snackBar.openFromComponent(_snack_bar_snack_bar_component__WEBPACK_IMPORTED_MODULE_3__["SnackBarComponent"], {
+        this.snackBarRef = this.snackBar.openFromComponent(_shared_snack_bar_action_snack_bar_component__WEBPACK_IMPORTED_MODULE_3__["ActionSnackBarComponent"], {
             panelClass: ['styled-snack'],
             data: {
                 message: message,
@@ -5745,7 +5903,7 @@ module.exports = "li, td {\r\n  border: 1px solid #32383e;\r\n  background-color
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<div class=\"row\">\r\n  <div class=\"col-6\">\r\n    <div *ngIf=\"user && !(newUserMode | async)\">\r\n      <table class=\"table table-bordered table-striped\">\r\n        <tbody>\r\n        <tr>\r\n          <td><span class=\"text-info\">USERNAME:</span></td>\r\n          <td>\r\n            <div class=\"d-flex justify-content-between\">\r\n              <span> {{ user.username }} </span>\r\n              <button class=\"btn btn-outline-secondary text-danger\" data-toggle=\"modal\"\r\n                      data-target=\"#deleteConfirmModal\"> Delete User\r\n              </button>\r\n            </div>\r\n          </td>\r\n        </tr>\r\n        <tr>\r\n          <td><span class=\"text-info\">EMAIL:</span></td>\r\n          <td> {{ user.email }}</td>\r\n        </tr>\r\n        <tr>\r\n          <td><span class=\"text-info\">FIRSTNAME:</span></td>\r\n          <td>{{ user.firstName }}</td>\r\n        </tr>\r\n        <tr>\r\n          <td><span class=\"text-info\">LASTNAME:</span></td>\r\n          <td>{{ user.lastName }}</td>\r\n        </tr>\r\n        <tr>\r\n          <td><span class=\"text-info\">ENABLED:</span></td>\r\n          <td>{{ user.enabled }}</td>\r\n        </tr>\r\n        <tr>\r\n          <td>\r\n            <p class=\"text-info\">ROLES:</p>\r\n            <div *ngIf=\"editRoleMode && !(newUserMode | async)\">\r\n              <form [formGroup]=\"roleForm\" class=\"form-group\">\r\n                <select class=\"form-control border-secondary\" formControlName=\"role\">\r\n                  <option selected>- Select -</option>\r\n                  <option *ngFor=\"let role of (roles|async)\"> {{ role.name }}</option>\r\n                </select>\r\n                <div class=\"btn-group\" style=\"margin-top: 5px\">\r\n                  <button class=\"btn btn-outline-secondary\" (click)=\"postAddRole()\">+</button>\r\n                  <button class=\"btn btn-outline-secondary\" (click)=\"postRemove()\">-</button>\r\n                  <button class=\"btn btn-outline-secondary\" (click)=\"abortAddRole()\">Abort</button>\r\n                </div>\r\n              </form>\r\n            </div>\r\n            <div *ngIf=\"!editRoleMode\">\r\n              <button class=\"btn btn-outline-secondary\" (click)=\"onEditRoleMode()\">Edit</button>\r\n            </div>\r\n          </td>\r\n          <td>\r\n            <ul class=\"list-group\">\r\n              <li class=\"list-group-item\"\r\n                  *ngFor=\"let roleName of user.roleNames\"\r\n                  style=\"background-color: rgba(0, 0, 0, 0.05) !important\">\r\n                {{roleName}}\r\n              </li>\r\n            </ul>\r\n          </td>\r\n        </tr>\r\n        </tbody>\r\n      </table>\r\n      <ul class=\"list-group\">\r\n        <li class=\"list-group-item\" style=\"background-color: rgba(0,0,0,0.05);\">\r\n          <span class=\"text-info\">{{user.taskDtos.length > 0 ? 'TASKS' : 'NO TASKS'}}</span>\r\n        </li>\r\n        <li class=\"list-group-item list-group-item-action\"\r\n            *ngFor=\"let taskDto of user.taskDtos\" (click)=\"onSelectTask(taskDto)\"\r\n            [ngClass]=\"(userDisplayedTask|async)?.id == taskDto.id ? 'bg-light' : ''\"\r\n        > {{ taskDto.name }}\r\n        </li>\r\n      </ul>\r\n    </div>\r\n\r\n    <div *ngIf=\"(newUserMode | async)\">\r\n      <form [formGroup]=\"newUserForm\" #f>\r\n        <div class=\"form-group\">\r\n          <label class=\"text-info\">Username:</label>\r\n          <input type=\"text\" class=\"form-control border-secondary\" formControlName=\"username\" required>\r\n        </div>\r\n        <div class=\"form-group\">\r\n          <label class=\"text-info\">Password</label>\r\n          <input type=\"password\" class=\"form-control border-secondary\" formControlName=\"password\" required>\r\n        </div>\r\n        <div class=\"form-group\">\r\n          <label class=\"text-info\">First name</label>\r\n          <input type=\"text\" class=\"form-control border-secondary\" formControlName=\"firstName\" required>\r\n        </div>\r\n        <div class=\"form-group\">\r\n          <label class=\"text-info\">Last name</label>\r\n          <input type=\"text\" class=\"form-control border-secondary\" formControlName=\"lastName\" required>\r\n        </div>\r\n        <div class=\"form-group\">\r\n          <label class=\"text-info\">Email</label>\r\n          <input type=\"text\" class=\"form-control border-secondary\" formControlName=\"email\" required>\r\n        </div>\r\n        <div class=\"form-group\">\r\n          <label class=\"text-info\">Enabled</label>\r\n          <select class=\"form-control border-secondary\" formControlName=\"enabled\" required>\r\n            <option [value]=\"true\"  [selected]=\"true\" >Yes</option>\r\n            <option [value]=\"false\" >No</option>\r\n          </select>\r\n        </div>\r\n        <div class=\"form-group\">\r\n          <button (click)=\"onSubmitUser()\" class=\"btn btn-outline-secondary\" [disabled]=\"!newUserForm.valid\">Submit</button>\r\n          <button (click)=\"onAbortSubmitUser()\" class=\"btn btn-outline-secondary\">Close</button>\r\n        </div>\r\n      </form>\r\n    </div>\r\n  </div>\r\n  <div class=\"col-6\">\r\n    <div *ngIf=\"(userDisplayedTask | async)\">\r\n      <app-user-task [task]=\"(userDisplayedTask | async)\"></app-user-task>\r\n    </div>\r\n  </div>\r\n</div>\r\n\r\n\r\n<!-- Modal -->\r\n<div class=\"modal fade\" id=\"deleteConfirmModal\" tabindex=\"-1\" role=\"dialog\" aria-labelledby=\"exampleModalLabel\"\r\n     aria-hidden=\"true\">\r\n  <div class=\"modal-dialog\" role=\"document\">\r\n    <div class=\"modal-content\">\r\n      <div class=\"modal-header\">\r\n        <h5 class=\"modal-title\" id=\"exampleModalLabel\">User removal</h5>\r\n        <button type=\"button\" class=\"close\" data-dismiss=\"modal\" aria-label=\"Close\">\r\n          <span aria-hidden=\"true\">&times;</span>\r\n        </button>\r\n      </div>\r\n      <div class=\"modal-body\">\r\n        Whhaaaaaatt??!!\r\n      </div>\r\n      <div class=\"modal-footer\">\r\n        <button #closeModal type=\"button\" class=\"btn btn-outline-secondary\" data-dismiss=\"modal\">Close</button>\r\n        <button type=\"button\" class=\"btn btn-outline-secondary\" (click)=\"onRemoveUser(user.username, closeModal)\">Confirm</button>\r\n      </div>\r\n    </div>\r\n  </div>\r\n</div>\r\n"
+module.exports = "<div class=\"row\">\r\n  <div class=\"col-6\">\r\n    <div *ngIf=\"user && !(newUserMode | async)\">\r\n      <table class=\"table table-bordered table-striped\">\r\n        <tbody>\r\n        <tr>\r\n          <td><span class=\"text-info\">USERNAME:</span></td>\r\n          <td>\r\n            <div class=\"d-flex justify-content-between\">\r\n              <span> {{ user.username }} </span>\r\n              <button class=\"btn btn-outline-secondary text-danger\" data-toggle=\"modal\"\r\n                      data-target=\"#deleteConfirmModal\"> Delete User\r\n              </button>\r\n              <button class=\"btn btn-outline-secondary text-secondary\" (click)=\"closeUser()\" >Close\r\n              </button>\r\n            </div>\r\n          </td>\r\n        </tr>\r\n        <tr>\r\n          <td><span class=\"text-info\">EMAIL:</span></td>\r\n          <td> {{ user.email }}</td>\r\n        </tr>\r\n        <tr>\r\n          <td><span class=\"text-info\">FIRSTNAME:</span></td>\r\n          <td>{{ user.firstName }}</td>\r\n        </tr>\r\n        <tr>\r\n          <td><span class=\"text-info\">LASTNAME:</span></td>\r\n          <td>{{ user.lastName }}</td>\r\n        </tr>\r\n        <tr>\r\n          <td><span class=\"text-info\">ENABLED:</span></td>\r\n          <td>{{ user.enabled }}</td>\r\n        </tr>\r\n        <tr>\r\n          <td>\r\n            <p class=\"text-info\">ROLES:</p>\r\n            <div *ngIf=\"editRoleMode && !(newUserMode | async)\">\r\n              <form [formGroup]=\"roleForm\" class=\"form-group\">\r\n                <select class=\"form-control border-secondary\" formControlName=\"role\">\r\n                  <option selected>- Select -</option>\r\n                  <option *ngFor=\"let role of (roles|async)\"> {{ role.name }}</option>\r\n                </select>\r\n                <div class=\"btn-group\" style=\"margin-top: 5px\">\r\n                  <button class=\"btn btn-outline-secondary\" (click)=\"postAddRole()\">+</button>\r\n                  <button class=\"btn btn-outline-secondary\" (click)=\"postRemove()\">-</button>\r\n                  <button class=\"btn btn-outline-secondary\" (click)=\"abortAddRole()\">Abort</button>\r\n                </div>\r\n              </form>\r\n            </div>\r\n            <div *ngIf=\"!editRoleMode\">\r\n              <button class=\"btn btn-outline-secondary\" (click)=\"onEditRoleMode()\">Edit</button>\r\n            </div>\r\n          </td>\r\n          <td>\r\n            <ul class=\"list-group\">\r\n              <li class=\"list-group-item\"\r\n                  *ngFor=\"let roleName of user.roleNames\"\r\n                  style=\"background-color: rgba(0, 0, 0, 0.05) !important\">\r\n                {{roleName}}\r\n              </li>\r\n            </ul>\r\n          </td>\r\n        </tr>\r\n        </tbody>\r\n      </table>\r\n      <ul class=\"list-group\">\r\n        <li class=\"list-group-item\" style=\"background-color: rgba(0,0,0,0.05);\">\r\n          <span class=\"text-info\">{{user.taskDtos.length > 0 ? 'TASKS' : 'NO TASKS'}}</span>\r\n        </li>\r\n        <li class=\"list-group-item list-group-item-action\"\r\n            *ngFor=\"let taskDto of user.taskDtos\" (click)=\"onSelectTask(taskDto)\"\r\n            [ngClass]=\"(userDisplayedTask|async)?.id == taskDto.id ? 'bg-light' : ''\"\r\n        > {{ taskDto.name }}\r\n        </li>\r\n      </ul>\r\n    </div>\r\n\r\n    <div *ngIf=\"(newUserMode | async)\">\r\n      <form [formGroup]=\"newUserForm\" #f>\r\n        <div class=\"form-group\">\r\n          <label class=\"text-info\">Username:</label>\r\n          <input type=\"text\" class=\"form-control border-secondary\" formControlName=\"username\" required>\r\n        </div>\r\n        <div class=\"form-group\">\r\n          <label class=\"text-info\">Password</label>\r\n          <input type=\"password\" class=\"form-control border-secondary\" formControlName=\"password\" required>\r\n        </div>\r\n        <div class=\"form-group\">\r\n          <label class=\"text-info\">First name</label>\r\n          <input type=\"text\" class=\"form-control border-secondary\" formControlName=\"firstName\" required>\r\n        </div>\r\n        <div class=\"form-group\">\r\n          <label class=\"text-info\">Last name</label>\r\n          <input type=\"text\" class=\"form-control border-secondary\" formControlName=\"lastName\" required>\r\n        </div>\r\n        <div class=\"form-group\">\r\n          <label class=\"text-info\">Email</label>\r\n          <input type=\"text\" class=\"form-control border-secondary\" formControlName=\"email\" required>\r\n        </div>\r\n        <div class=\"form-group\">\r\n          <label class=\"text-info\">Enabled</label>\r\n          <select class=\"form-control border-secondary\" formControlName=\"enabled\" required>\r\n            <option [value]=\"true\"  [selected]=\"true\" >Yes</option>\r\n            <option [value]=\"false\" >No</option>\r\n          </select>\r\n        </div>\r\n        <div class=\"form-group\">\r\n          <button (click)=\"onSubmitUser()\" class=\"btn btn-outline-secondary\" [disabled]=\"!newUserForm.valid\">Submit</button>\r\n          <button (click)=\"onAbortSubmitUser()\" class=\"btn btn-outline-secondary\">Close</button>\r\n        </div>\r\n      </form>\r\n    </div>\r\n  </div>\r\n  <div class=\"col-6\">\r\n    <div *ngIf=\"(userDisplayedTask | async)\">\r\n      <app-user-task [task]=\"(userDisplayedTask | async)\"></app-user-task>\r\n    </div>\r\n  </div>\r\n</div>\r\n\r\n\r\n<!-- Modal -->\r\n<div class=\"modal fade\" id=\"deleteConfirmModal\" tabindex=\"-1\" role=\"dialog\" aria-labelledby=\"exampleModalLabel\"\r\n     aria-hidden=\"true\">\r\n  <div class=\"modal-dialog\" role=\"document\">\r\n    <div class=\"modal-content\">\r\n      <div class=\"modal-header\">\r\n        <h5 class=\"modal-title\" id=\"exampleModalLabel\">User removal</h5>\r\n        <button type=\"button\" class=\"close\" data-dismiss=\"modal\" aria-label=\"Close\">\r\n          <span aria-hidden=\"true\">&times;</span>\r\n        </button>\r\n      </div>\r\n      <div class=\"modal-body\">\r\n        Whhaaaaaatt??!!\r\n      </div>\r\n      <div class=\"modal-footer\">\r\n        <button #closeModal type=\"button\" class=\"btn btn-outline-secondary\" data-dismiss=\"modal\">Close</button>\r\n        <button type=\"button\" class=\"btn btn-outline-secondary\" (click)=\"onRemoveUser(user.username, closeModal)\">Confirm</button>\r\n      </div>\r\n    </div>\r\n  </div>\r\n</div>\r\n"
 
 /***/ }),
 
@@ -5809,9 +5967,7 @@ var UserDetailsComponent = /** @class */ (function () {
         this.editRoleMode = true;
     };
     UserDetailsComponent.prototype.postAddRole = function () {
-        if (this.dss.addRoleToUser({ username: this.user.username, rolename: this.roleForm.value.role })) {
-            this.user.roleNames.push(this.roleForm.value.role);
-        }
+        this.dss.addRoleToUser({ username: this.user.username, rolename: this.roleForm.value.role });
     };
     UserDetailsComponent.prototype.abortAddRole = function () {
         this.editRoleMode = false;
@@ -5847,6 +6003,9 @@ var UserDetailsComponent = /** @class */ (function () {
     UserDetailsComponent.prototype.onSelectTask = function (taskDto) {
         this.store.dispatch(new _shared_store_user_users_actions__WEBPACK_IMPORTED_MODULE_4__["SetUserDisplayedTask"](taskDto));
     };
+    UserDetailsComponent.prototype.closeUser = function () {
+        this.store.dispatch(new _shared_store_user_users_actions__WEBPACK_IMPORTED_MODULE_4__["SetSelectedUser"](null));
+    };
     UserDetailsComponent = __decorate([
         Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["Component"])({
             selector: 'app-user-details',
@@ -5881,7 +6040,7 @@ module.exports = "li, td {\r\n  border: 1px solid #32383e;\r\n  background-color
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<div *ngIf=\"task && !editTaskMode\">\r\n  <li class=\"list-group-item d-flex justify-content-between\" style=\"background-color: rgba(0,0,0,0.05);\">\r\n    <span>Name: {{task.name}}</span>\r\n    <button class=\"btn btn-outline-secondary\" (click)=\"onEditTaskMode(true)\">Edit</button>\r\n  </li>\r\n  <li class=\"list-group-item\"> ID: {{task.id}}</li>\r\n  <li class=\"list-group-item\"> Description: {{task.description}}</li>\r\n  <li class=\"list-group-item\"> Status: {{task.status}}</li>\r\n  <li class=\"list-group-item\" style=\"background-color: rgba(0,0,0,0.05);\">{{task.userNames.length <= 0 ? 'No users' : 'Assigned Users:'}}</li>\r\n  <li *ngFor=\" let username of task.userNames\" class=\"list-group-item\"> {{username}}</li>\r\n  <li class=\"list-group-item\" style=\"background-color: rgba(0,0,0,0.05);\">{{ task.taskDtos.length <= 0 ? 'No tasks' : 'Assigned Tasks:' }}</li>\r\n  <li class=\"list-group-item\" *ngFor=\"let taskDto of task.taskDtos\">\r\n    <app-user-task [task]=\"taskDto\"></app-user-task>\r\n  </li>\r\n</div>\r\n\r\n<div *ngIf=\"task && editTaskMode\">\r\n  <form [formGroup]=\"editedTaskForm\" #f>\r\n    <div class=\"form-group\">\r\n      <label class=\"text-info\">Name:</label>\r\n      <input class=\"form-control\" type=\"text\" formControlName=\"name\">\r\n    </div>\r\n    <div class=\"form-group\">\r\n      <label class=\"text-info\">Description:</label>\r\n      <textarea rows=\"20\" class=\"form-control\"  formControlName=\"description\"></textarea>\r\n    </div>\r\n    <div class=\"form-group\">\r\n      <label class=\"text-info\">Status:</label>\r\n      <select class=\"form-control\"  formControlName=\"status\">\r\n        <option [selected]=\"task.status == status[0]\" value=\"{{ status[0] }}\"> {{ status[0] }} </option>\r\n        <option [selected]=\"task.status == status[1]\" value=\"{{ status[1] }}\"> {{ status[1] }} </option>\r\n        <option [selected]=\"task.status == status[2]\" value=\"{{ status[2] }}\"> {{ status[2] }} </option>\r\n        <option [selected]=\"task.status == status[3]\" value=\"{{ status[3] }}\"> {{ status[3] }} </option>\r\n      </select>\r\n    </div>\r\n    <div class=\"form-group\">\r\n      <button class=\"btn btn-outline-secondary\" (click)=\"onSaveEditedTask(f)\">\r\n        Submit\r\n      </button>\r\n      <button class=\"btn btn-outline-secondary\" (click)=\"onEditTaskMode(false)\">Abort</button>\r\n    </div>\r\n  </form>\r\n</div>\r\n"
+module.exports = "<div *ngIf=\"task && !editTaskMode\">\r\n  <li class=\"list-group-item d-flex justify-content-between\" style=\"background-color: rgba(0,0,0,0.05);\">\r\n    <span>Name: {{task.name}}</span>\r\n    <button class=\"btn btn-outline-secondary\" (click)=\"onEditTaskMode(true)\">Edit</button>\r\n    <button class=\"btn btn-outline-secondary\" (click)=\"onCloseTaskMode()\">Close</button>\r\n  </li>\r\n  <li class=\"list-group-item\"> ID: {{task.id}}</li>\r\n  <li class=\"list-group-item\"> Description: {{task.description}}</li>\r\n  <li class=\"list-group-item\"> Status: {{task.status}}</li>\r\n  <li class=\"list-group-item\" style=\"background-color: rgba(0,0,0,0.05);\">{{task.userNames.length <= 0 ? 'No users' : 'Assigned Users:'}}</li>\r\n  <li *ngFor=\" let username of task.userNames\" class=\"list-group-item\"> {{username}}</li>\r\n  <li class=\"list-group-item\" style=\"background-color: rgba(0,0,0,0.05);\">{{ task.taskDtos.length <= 0 ? 'No tasks' : 'Assigned Tasks:' }}</li>\r\n  <li class=\"list-group-item\" *ngFor=\"let taskDto of task.taskDtos\">\r\n    <app-user-task [task]=\"taskDto\"></app-user-task>\r\n  </li>\r\n</div>\r\n\r\n<div *ngIf=\"task && editTaskMode\">\r\n  <form [formGroup]=\"editedTaskForm\" #f>\r\n    <div class=\"form-group\">\r\n      <label class=\"text-info\">Name:</label>\r\n      <input class=\"form-control\" type=\"text\" formControlName=\"name\">\r\n    </div>\r\n    <div class=\"form-group\">\r\n      <label class=\"text-info\">Description:</label>\r\n      <textarea rows=\"20\" class=\"form-control\"  formControlName=\"description\"></textarea>\r\n    </div>\r\n    <div class=\"form-group\">\r\n      <label class=\"text-info\">Status:</label>\r\n      <select class=\"form-control\"  formControlName=\"status\">\r\n        <option [selected]=\"task.status == status[0]\" value=\"{{ status[0] }}\"> {{ status[0] }} </option>\r\n        <option [selected]=\"task.status == status[1]\" value=\"{{ status[1] }}\"> {{ status[1] }} </option>\r\n        <option [selected]=\"task.status == status[2]\" value=\"{{ status[2] }}\"> {{ status[2] }} </option>\r\n        <option [selected]=\"task.status == status[3]\" value=\"{{ status[3] }}\"> {{ status[3] }} </option>\r\n      </select>\r\n    </div>\r\n    <div class=\"form-group\">\r\n      <button class=\"btn btn-outline-secondary\" (click)=\"onSaveEditedTask(f)\">\r\n        Submit\r\n      </button>\r\n      <button class=\"btn btn-outline-secondary\" (click)=\"onEditTaskMode(false)\">Abort</button>\r\n    </div>\r\n  </form>\r\n</div>\r\n"
 
 /***/ }),
 
@@ -5899,6 +6058,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _shared_table_model__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../shared/table.model */ "./src/app/shared/table.model.ts");
 /* harmony import */ var _angular_forms__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @angular/forms */ "./node_modules/@angular/forms/fesm5/forms.js");
 /* harmony import */ var _shared_data_storage_service__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../shared/data-storage.service */ "./src/app/shared/data-storage.service.ts");
+/* harmony import */ var _ngrx_store__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @ngrx/store */ "./node_modules/@ngrx/store/fesm5/store.js");
+/* harmony import */ var _shared_store_user_users_actions__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../../shared/store/user/users.actions */ "./src/app/shared/store/user/users.actions.ts");
 var __decorate = (undefined && undefined.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -5912,9 +6073,12 @@ var __metadata = (undefined && undefined.__metadata) || function (k, v) {
 
 
 
+
+
 var UserTaskComponent = /** @class */ (function () {
-    function UserTaskComponent(dss) {
+    function UserTaskComponent(dss, store) {
         this.dss = dss;
+        this.store = store;
         this.editTaskMode = false;
         this.status = _shared_table_model__WEBPACK_IMPORTED_MODULE_1__["Status"];
     }
@@ -5942,6 +6106,9 @@ var UserTaskComponent = /** @class */ (function () {
         };
         this.dss.updateTask(task);
     };
+    UserTaskComponent.prototype.onCloseTaskMode = function () {
+        this.store.dispatch(new _shared_store_user_users_actions__WEBPACK_IMPORTED_MODULE_5__["SetUserDisplayedTask"](null));
+    };
     __decorate([
         Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["Input"])(),
         __metadata("design:type", _shared_table_model__WEBPACK_IMPORTED_MODULE_1__["TaskModel"])
@@ -5952,7 +6119,8 @@ var UserTaskComponent = /** @class */ (function () {
             template: __webpack_require__(/*! ./user-task.component.html */ "./src/app/user/user-task/user-task.component.html"),
             styles: [__webpack_require__(/*! ./user-task.component.css */ "./src/app/user/user-task/user-task.component.css")]
         }),
-        __metadata("design:paramtypes", [_shared_data_storage_service__WEBPACK_IMPORTED_MODULE_3__["DataStorageService"]])
+        __metadata("design:paramtypes", [_shared_data_storage_service__WEBPACK_IMPORTED_MODULE_3__["DataStorageService"],
+            _ngrx_store__WEBPACK_IMPORTED_MODULE_4__["Store"]])
     ], UserTaskComponent);
     return UserTaskComponent;
 }());
