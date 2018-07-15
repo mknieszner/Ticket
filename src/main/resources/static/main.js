@@ -552,11 +552,13 @@ module.exports = "<div class=\"jumbotron\">\r\n  <div class=\"container\">\r\n  
 /*!****************************************************!*\
   !*** ./src/app/definition/definition.component.ts ***!
   \****************************************************/
-/*! exports provided: DefinitionComponent */
+/*! exports provided: COMMON_TABLE_ENVIRONMENT, SEPARATE_TABLE_ENVIRONMENT, DefinitionComponent */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "COMMON_TABLE_ENVIRONMENT", function() { return COMMON_TABLE_ENVIRONMENT; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "SEPARATE_TABLE_ENVIRONMENT", function() { return SEPARATE_TABLE_ENVIRONMENT; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "DefinitionComponent", function() { return DefinitionComponent; });
 /* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm5/core.js");
 /* harmony import */ var _angular_forms__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/forms */ "./node_modules/@angular/forms/fesm5/forms.js");
@@ -1390,6 +1392,7 @@ var DataStorageService = /** @class */ (function () {
         var _this = this;
         this.httpClient.get(this.basehost + '/v1/projects/tables/details')
             .subscribe(function (names) {
+            console.log(names);
             _this.store.dispatch(new _store_table_tables_actions__WEBPACK_IMPORTED_MODULE_5__["SetNamesAction"](names));
         }, function (response) {
             _this.snackBarService.showSnackBar(response.error.message);
@@ -1934,7 +1937,6 @@ var appRoutes = [
     { path: 'users', component: _user_user_component__WEBPACK_IMPORTED_MODULE_1__["UserComponent"] },
     { path: 'tables', component: _tables_tables_component__WEBPACK_IMPORTED_MODULE_9__["TablesComponent"] },
     { path: 'signin', component: _signin_signin_component__WEBPACK_IMPORTED_MODULE_4__["SigninComponent"] },
-    // {path: 'signin', component: TrainingComponent},
     { path: 'definitions', component: _definition_definition_component__WEBPACK_IMPORTED_MODULE_10__["DefinitionComponent"] },
     { path: 'statistics', component: _statistics_statistics_component__WEBPACK_IMPORTED_MODULE_7__["StatisticsComponent"] },
     { path: 'chat', component: _chat_chat_component__WEBPACK_IMPORTED_MODULE_2__["ChatComponent"] },
@@ -2752,25 +2754,26 @@ var StatisticsService = /** @class */ (function () {
         var doneTasks = [];
         rows.forEach(function (row) {
             row.taskDtos.forEach(function (task) {
-                switch (task.status.toString()) {
-                    case (_table_model__WEBPACK_IMPORTED_MODULE_0__["Status"].UNASSIGNED.toString()):
+                console.log(task.status);
+                switch (task.status) {
+                    case (_table_model__WEBPACK_IMPORTED_MODULE_0__["Status"].UNASSIGNED):
                         tasks.push(task);
                         unassignedTasks.push(task);
                         return;
-                    case (_table_model__WEBPACK_IMPORTED_MODULE_0__["Status"].ASSIGNED.toString()):
+                    case (_table_model__WEBPACK_IMPORTED_MODULE_0__["Status"].ASSIGNED):
                         tasks.push(task);
                         assignedTasks.push(task);
                         return;
-                    case (_table_model__WEBPACK_IMPORTED_MODULE_0__["Status"].IN_PROGRESS.toString()):
+                    case (_table_model__WEBPACK_IMPORTED_MODULE_0__["Status"].IN_PROGRESS):
                         tasks.push(task);
                         inProgressTasks.push(task);
                         return;
-                    case (_table_model__WEBPACK_IMPORTED_MODULE_0__["Status"].DONE.toString()):
+                    case (_table_model__WEBPACK_IMPORTED_MODULE_0__["Status"].DONE):
                         tasks.push(task);
                         doneTasks.push(task);
                         return;
                     default:
-                        throw new Error('Unknown task status: ' + task.status.toString());
+                        throw new Error('Unknown task status: ' + task.status);
                 }
             });
         });
@@ -4129,10 +4132,10 @@ var TaskModel = /** @class */ (function () {
 
 var Status;
 (function (Status) {
-    Status[Status["UNASSIGNED"] = 0] = "UNASSIGNED";
-    Status[Status["ASSIGNED"] = 1] = "ASSIGNED";
-    Status[Status["IN_PROGRESS"] = 2] = "IN_PROGRESS";
-    Status[Status["DONE"] = 3] = "DONE";
+    Status["UNASSIGNED"] = "UNASSIGNED";
+    Status["ASSIGNED"] = "ASSIGNED";
+    Status["IN_PROGRESS"] = "IN_PROGRESS";
+    Status["DONE"] = "DONE";
 })(Status || (Status = {}));
 var TableDefinitionModel = /** @class */ (function () {
     function TableDefinitionModel() {
@@ -4314,7 +4317,7 @@ module.exports = "li {\r\n  border: 1px solid #32383e;\r\n  background-color: rg
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<div class=\"jumbotron\">\r\n    <div class=\"row\">\r\n      <div class=\"col-3\">\r\n        <ul class=\"list-group\">\r\n          <li class=\"list-group-item\" style=\"background-color: rgba(0,0,0,0.05)\">Tables:</li>\r\n          <li class=\"list-group-item\" *ngFor=\"let tableName of (tableState | async).tablesNames\"\r\n              [ngClass]=\"(selectedTableName | async) == tableName ? 'bg-light' : ''\"\r\n              (click)=\"onSelectTableName(tableName)\"\r\n          >\r\n            {{ tableName }}\r\n          </li>\r\n        </ul>\r\n      </div>\r\n      <div class=\"col-9\">\r\n        <app-table-statistics></app-table-statistics>\r\n      </div>\r\n    </div>\r\n</div>\r\n"
+module.exports = "<div class=\"jumbotron\">\r\n  <div class=\"row\">\r\n    <div class=\"col-3\">\r\n      <ul class=\"list-group\">\r\n        <li class=\"list-group-item\" style=\"background-color: rgba(0,0,0,0.05)\">Tables:</li>\r\n        <li class=\"list-group-item\" *ngFor=\"let tableDetails of (tableState | async).tablesDetails\"\r\n            [ngClass]=\"(selectedTableName | async) == tableDetails.name ? 'bg-light' : ''\"\r\n            (click)=\"onSelectTableName(tableDetails)\"\r\n        >\r\n          {{ tableDetails.name }}  {{isSupported(tableDetails) ? '(C)':'(S - Not Supported)'}}\r\n        </li>\r\n      </ul>\r\n    </div>\r\n    <div class=\"col-9\">\r\n      <app-table-statistics></app-table-statistics>\r\n    </div>\r\n  </div>\r\n</div>\r\n"
 
 /***/ }),
 
@@ -4330,8 +4333,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "StatisticsComponent", function() { return StatisticsComponent; });
 /* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm5/core.js");
 /* harmony import */ var _ngrx_store__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @ngrx/store */ "./node_modules/@ngrx/store/fesm5/store.js");
-/* harmony import */ var _shared_data_storage_service__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../shared/data-storage.service */ "./src/app/shared/data-storage.service.ts");
-/* harmony import */ var _shared_store_statistics_statistics_actions__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../shared/store/statistics/statistics.actions */ "./src/app/shared/store/statistics/statistics.actions.ts");
+/* harmony import */ var _definition_definition_component__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../definition/definition.component */ "./src/app/definition/definition.component.ts");
+/* harmony import */ var _shared_data_storage_service__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../shared/data-storage.service */ "./src/app/shared/data-storage.service.ts");
+/* harmony import */ var _shared_store_statistics_statistics_actions__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../shared/store/statistics/statistics.actions */ "./src/app/shared/store/statistics/statistics.actions.ts");
 var __decorate = (undefined && undefined.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -4345,18 +4349,25 @@ var __metadata = (undefined && undefined.__metadata) || function (k, v) {
 
 
 
+
 var StatisticsComponent = /** @class */ (function () {
     function StatisticsComponent(store, dss) {
         this.store = store;
         this.dss = dss;
+        this.COMMON_TABLE_ENVIRONMENT = _definition_definition_component__WEBPACK_IMPORTED_MODULE_2__["COMMON_TABLE_ENVIRONMENT"];
     }
     StatisticsComponent.prototype.ngOnInit = function () {
         this.dss.getTablesDetails();
         this.tableState = this.store.select('tables');
         this.selectedTableName = this.store.select('statistics', 'selectedTableName');
     };
-    StatisticsComponent.prototype.onSelectTableName = function (tableName) {
-        this.store.dispatch(new _shared_store_statistics_statistics_actions__WEBPACK_IMPORTED_MODULE_3__["SetSelectedTableName"](tableName));
+    StatisticsComponent.prototype.onSelectTableName = function (tablesDetails) {
+        if (this.isSupported(tablesDetails)) {
+            this.store.dispatch(new _shared_store_statistics_statistics_actions__WEBPACK_IMPORTED_MODULE_4__["SetSelectedTableName"](tablesDetails.name));
+        }
+    };
+    StatisticsComponent.prototype.isSupported = function (tablesDetails) {
+        return tablesDetails.databaseEnvironment === _definition_definition_component__WEBPACK_IMPORTED_MODULE_2__["COMMON_TABLE_ENVIRONMENT"];
     };
     StatisticsComponent = __decorate([
         Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["Component"])({
@@ -4365,7 +4376,7 @@ var StatisticsComponent = /** @class */ (function () {
             styles: [__webpack_require__(/*! ./statistics.component.css */ "./src/app/statistics/statistics.component.css")]
         }),
         __metadata("design:paramtypes", [_ngrx_store__WEBPACK_IMPORTED_MODULE_1__["Store"],
-            _shared_data_storage_service__WEBPACK_IMPORTED_MODULE_2__["DataStorageService"]])
+            _shared_data_storage_service__WEBPACK_IMPORTED_MODULE_3__["DataStorageService"]])
     ], StatisticsComponent);
     return StatisticsComponent;
 }());
@@ -4410,6 +4421,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _ngrx_store__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @ngrx/store */ "./node_modules/@ngrx/store/fesm5/store.js");
 /* harmony import */ var _shared_data_storage_service__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../shared/data-storage.service */ "./src/app/shared/data-storage.service.ts");
 /* harmony import */ var _shared_statistics_statistics_service__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../shared/statistics/statistics.service */ "./src/app/shared/statistics/statistics.service.ts");
+/* harmony import */ var _shared_constants_service__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../shared/constants.service */ "./src/app/shared/constants.service.ts");
 var __decorate = (undefined && undefined.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -4423,11 +4435,13 @@ var __metadata = (undefined && undefined.__metadata) || function (k, v) {
 
 
 
+
 var TableStatisticsComponent = /** @class */ (function () {
-    function TableStatisticsComponent(store, dss, statistics) {
+    function TableStatisticsComponent(store, dss, statistics, constantsService) {
         this.store = store;
         this.dss = dss;
         this.statistics = statistics;
+        this.constantsService = constantsService;
         this.tableInfo = null;
         this.tasksInfo = null;
         this.enumCharts = [];
@@ -4496,7 +4510,8 @@ var TableStatisticsComponent = /** @class */ (function () {
         }),
         __metadata("design:paramtypes", [_ngrx_store__WEBPACK_IMPORTED_MODULE_1__["Store"],
             _shared_data_storage_service__WEBPACK_IMPORTED_MODULE_2__["DataStorageService"],
-            _shared_statistics_statistics_service__WEBPACK_IMPORTED_MODULE_3__["StatisticsService"]])
+            _shared_statistics_statistics_service__WEBPACK_IMPORTED_MODULE_3__["StatisticsService"],
+            _shared_constants_service__WEBPACK_IMPORTED_MODULE_4__["ConstantsService"]])
     ], TableStatisticsComponent);
     return TableStatisticsComponent;
 }());
@@ -5390,7 +5405,7 @@ module.exports = ".form-control {\r\n  background-color: rgba(200,200,200,0.05);
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<div *ngIf=\"(showedTask | async)\">\r\n  <ul class=\"list-group\">\r\n    <li class=\"list-group-item text-white text-center\" style=\"background-color: rgba(0,0,0,0.05);\">\r\n      <button class=\"btn btn-outline-secondary\" (click)=\"onHideTaskDetails()\">Hide Details</button>\r\n    </li>\r\n    <li class=\"list-group-item\">\r\n      <div class=\"list-group-item d-flex justify-content-between\">\r\n        <span class=\"text-info\">ID: </span>\r\n        <span>{{(showedTask | async)?.id}}</span>\r\n      </div>\r\n    </li>\r\n    <li class=\"list-group-item\">\r\n      <div class=\"list-group-item d-flex justify-content-between\">\r\n        <span class=\"text-info\">Name:</span>\r\n        <span>{{ (showedTask | async)?.name}}</span>\r\n      </div>\r\n    </li>\r\n    <li class=\"list-group-item\">\r\n      <div class=\"list-group-item d-flex justify-content-between\">\r\n        <span class=\"text-info\">Description:</span>\r\n        <span>{{ (showedTask | async)?.description }}</span>\r\n      </div>\r\n    </li>\r\n    <li class=\"list-group-item\">\r\n      <div class=\"list-group-item d-flex justify-content-between\">\r\n        <span class=\"text-info\">Status:</span>\r\n        <span>{{(showedTask | async)?.status}}</span>\r\n      </div>\r\n    </li>\r\n    <li class=\"list-group-item text-white text-center\" style=\"background-color: rgba(0,0,0,0.05);\">\r\n      <form class=\"form-group\">\r\n        <div class=\"form-group d-flex justify-content-between align-items-center\" style=\"margin-top: 5px\">\r\n          <div class=\"input-group\">\r\n            <select #userContol class=\"form-control\">\r\n              <option>{{(tableUsers| async).length != 0 ? 'Assign user' : 'No available users to assign'}}</option>\r\n              <option *ngFor=\"let tableUser of (tableUsers| async)\"> {{ tableUser }}</option>\r\n            </select>\r\n            <div class=\"input-group-append\" *ngIf=\"(tableUsers| async).length != 0\">\r\n              <button class=\"btn btn-outline-secondary\" (click)=\"onAssignUserToTask(userContol.value)\">+</button>\r\n              <button class=\"btn btn-outline-secondary\" (click)=\"onRemoveUserFromTask(userContol.value)\">-</button>\r\n            </div>\r\n          </div>\r\n        </div>\r\n      </form>\r\n    </li>\r\n    <li class=\"list-group-item text-white text-center\" style=\"background-color: rgba(0,0,0,0.05);\"><p\r\n      style=\"margin-bottom: 3px\">{{ (showedTask | async)?.userNames.length <= 0 ? 'No assigned users' : 'Assigned\r\n      Users:'}}</p></li>\r\n    <li class=\"list-group-item\" *ngFor=\" let username of (showedTask | async)?.userNames\">\r\n      <span class=\"text-info\">{{username}}</span>\r\n    </li>\r\n    <li class=\"list-group-item text-white text-center\" style=\"background-color: rgba(0,0,0,0.05);\">\r\n      {{ (showedTask | async)?.taskDtos.length <= 0 ? 'No tasks' : 'Assigned Tasks:'}}\r\n    </li>\r\n    <li class=\"list-group-item\" *ngFor=\"let taskDto of (showedTask | async)?.taskDtos\">\r\n      <!--<app-task></app-task>-->\r\n    </li>\r\n  </ul>\r\n</div>\r\n\r\n<div *ngIf=\"(showedTask | async) == null\">\r\n  <form>\r\n    <div class=\"form-group\">\r\n      <label class=\"text-info\">Name:</label>\r\n      <input class=\"form-control\" type=\"text\" #nameEl>\r\n    </div>\r\n    <div class=\"form-group\">\r\n      <label class=\"text-info\">Description:</label>\r\n      <textarea rows=\"20\" class=\"form-control\" #descriptionEl></textarea>\r\n    </div>\r\n    <div class=\"form-group\">\r\n      <label class=\"text-info\">Status:</label>\r\n      <select class=\"form-control\" #statusEl>\r\n        <option> {{status[0]}}</option>\r\n        <option> {{status[1]}}</option>\r\n        <option> {{status[2]}}</option>\r\n        <option> {{status[3]}}</option>\r\n      </select>\r\n    </div>\r\n    <div class=\"form-group\">\r\n      <button class=\"btn btn-dark text-white\"\r\n              (click)=\"onSaveRowNewTask({name: nameEl.value,description: descriptionEl.value,status: statusEl.value})\">\r\n        Submit\r\n      </button>\r\n      <button class=\"btn btn-dark text-white\" (click)=\"onHideTaskDetails()\">Abort</button>\r\n    </div>\r\n  </form>\r\n</div>\r\n"
+module.exports = "<div *ngIf=\"(showedTask | async)\">\r\n  <ul class=\"list-group\">\r\n    <li class=\"list-group-item text-white text-center\" style=\"background-color: rgba(0,0,0,0.05);\">\r\n      <button class=\"btn btn-outline-secondary\" (click)=\"onHideTaskDetails()\">Hide Details</button>\r\n    </li>\r\n    <li class=\"list-group-item\">\r\n      <div class=\"list-group-item d-flex justify-content-between\">\r\n        <span class=\"text-info\">ID: </span>\r\n        <span>{{(showedTask | async)?.id}}</span>\r\n      </div>\r\n    </li>\r\n    <li class=\"list-group-item\">\r\n      <div class=\"list-group-item d-flex justify-content-between\">\r\n        <span class=\"text-info\">Name:</span>\r\n        <span>{{ (showedTask | async)?.name}}</span>\r\n      </div>\r\n    </li>\r\n    <li class=\"list-group-item\">\r\n      <div class=\"list-group-item d-flex justify-content-between\">\r\n        <span class=\"text-info\">Description:</span>\r\n        <span>{{ (showedTask | async)?.description }}</span>\r\n      </div>\r\n    </li>\r\n    <li class=\"list-group-item\">\r\n      <div class=\"list-group-item d-flex justify-content-between\">\r\n        <span class=\"text-info\">Status:</span>\r\n        <span>{{(showedTask | async)?.status}}</span>\r\n      </div>\r\n    </li>\r\n    <li class=\"list-group-item text-white text-center\" style=\"background-color: rgba(0,0,0,0.05);\">\r\n      <form class=\"form-group\">\r\n        <div class=\"form-group d-flex justify-content-between align-items-center\" style=\"margin-top: 5px\">\r\n          <div class=\"input-group\">\r\n            <select #userContol class=\"form-control\">\r\n              <option>{{(tableUsers| async).length != 0 ? 'Assign user' : 'No available users to assign'}}</option>\r\n              <option *ngFor=\"let tableUser of (tableUsers| async)\"> {{ tableUser }}</option>\r\n            </select>\r\n            <div class=\"input-group-append\" *ngIf=\"(tableUsers| async).length != 0\">\r\n              <button class=\"btn btn-outline-secondary\" (click)=\"onAssignUserToTask(userContol.value)\">+</button>\r\n              <button class=\"btn btn-outline-secondary\" (click)=\"onRemoveUserFromTask(userContol.value)\">-</button>\r\n            </div>\r\n          </div>\r\n        </div>\r\n      </form>\r\n    </li>\r\n    <li class=\"list-group-item text-white text-center\" style=\"background-color: rgba(0,0,0,0.05);\"><p\r\n      style=\"margin-bottom: 3px\">{{ (showedTask | async)?.userNames.length <= 0 ? 'No assigned users' : 'Assigned\r\n      Users:'}}</p></li>\r\n    <li class=\"list-group-item\" *ngFor=\" let username of (showedTask | async)?.userNames\">\r\n      <span class=\"text-info\">{{username}}</span>\r\n    </li>\r\n    <li class=\"list-group-item text-white text-center\" style=\"background-color: rgba(0,0,0,0.05);\">\r\n      {{ (showedTask | async)?.taskDtos.length <= 0 ? 'No tasks' : 'Assigned Tasks:'}}\r\n    </li>\r\n    <li class=\"list-group-item\" *ngFor=\"let taskDto of (showedTask | async)?.taskDtos\">\r\n      <!--<app-task></app-task>-->\r\n    </li>\r\n  </ul>\r\n</div>\r\n\r\n<div *ngIf=\"(showedTask | async) == null\">\r\n  <form>\r\n    <div class=\"form-group\">\r\n      <label class=\"text-info\">Name:</label>\r\n      <input class=\"form-control\" type=\"text\" #nameEl>\r\n    </div>\r\n    <div class=\"form-group\">\r\n      <label class=\"text-info\">Description:</label>\r\n      <textarea rows=\"20\" class=\"form-control\" #descriptionEl></textarea>\r\n    </div>\r\n    <div class=\"form-group\">\r\n      <label class=\"text-info\">Status:</label>\r\n      <select class=\"form-control\" #statusEl>\r\n        <option> {{status.ASSIGNED}}</option>\r\n        <option> {{status.ASSIGNED}}</option>\r\n        <option> {{status.IN_PROGRESS}}</option>\r\n        <option> {{status.DONE}}</option>\r\n      </select>\r\n    </div>\r\n    <div class=\"form-group\">\r\n      <button class=\"btn btn-dark text-white\"\r\n              (click)=\"onSaveRowNewTask({name: nameEl.value,description: descriptionEl.value,status: statusEl.value})\">\r\n        Submit\r\n      </button>\r\n      <button class=\"btn btn-dark text-white\" (click)=\"onHideTaskDetails()\">Abort</button>\r\n    </div>\r\n  </form>\r\n</div>\r\n"
 
 /***/ }),
 
@@ -6040,7 +6055,7 @@ module.exports = "li, td {\r\n  border: 1px solid #32383e;\r\n  background-color
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<div *ngIf=\"task && !editTaskMode\">\r\n  <li class=\"list-group-item d-flex justify-content-between\" style=\"background-color: rgba(0,0,0,0.05);\">\r\n    <span>Name: {{task.name}}</span>\r\n    <button class=\"btn btn-outline-secondary\" (click)=\"onEditTaskMode(true)\">Edit</button>\r\n    <button class=\"btn btn-outline-secondary\" (click)=\"onCloseTaskMode()\">Close</button>\r\n  </li>\r\n  <li class=\"list-group-item\"> ID: {{task.id}}</li>\r\n  <li class=\"list-group-item\"> Description: {{task.description}}</li>\r\n  <li class=\"list-group-item\"> Status: {{task.status}}</li>\r\n  <li class=\"list-group-item\" style=\"background-color: rgba(0,0,0,0.05);\">{{task.userNames.length <= 0 ? 'No users' : 'Assigned Users:'}}</li>\r\n  <li *ngFor=\" let username of task.userNames\" class=\"list-group-item\"> {{username}}</li>\r\n  <li class=\"list-group-item\" style=\"background-color: rgba(0,0,0,0.05);\">{{ task.taskDtos.length <= 0 ? 'No tasks' : 'Assigned Tasks:' }}</li>\r\n  <li class=\"list-group-item\" *ngFor=\"let taskDto of task.taskDtos\">\r\n    <app-user-task [task]=\"taskDto\"></app-user-task>\r\n  </li>\r\n</div>\r\n\r\n<div *ngIf=\"task && editTaskMode\">\r\n  <form [formGroup]=\"editedTaskForm\" #f>\r\n    <div class=\"form-group\">\r\n      <label class=\"text-info\">Name:</label>\r\n      <input class=\"form-control\" type=\"text\" formControlName=\"name\">\r\n    </div>\r\n    <div class=\"form-group\">\r\n      <label class=\"text-info\">Description:</label>\r\n      <textarea rows=\"20\" class=\"form-control\"  formControlName=\"description\"></textarea>\r\n    </div>\r\n    <div class=\"form-group\">\r\n      <label class=\"text-info\">Status:</label>\r\n      <select class=\"form-control\"  formControlName=\"status\">\r\n        <option [selected]=\"task.status == status[0]\" value=\"{{ status[0] }}\"> {{ status[0] }} </option>\r\n        <option [selected]=\"task.status == status[1]\" value=\"{{ status[1] }}\"> {{ status[1] }} </option>\r\n        <option [selected]=\"task.status == status[2]\" value=\"{{ status[2] }}\"> {{ status[2] }} </option>\r\n        <option [selected]=\"task.status == status[3]\" value=\"{{ status[3] }}\"> {{ status[3] }} </option>\r\n      </select>\r\n    </div>\r\n    <div class=\"form-group\">\r\n      <button class=\"btn btn-outline-secondary\" (click)=\"onSaveEditedTask(f)\">\r\n        Submit\r\n      </button>\r\n      <button class=\"btn btn-outline-secondary\" (click)=\"onEditTaskMode(false)\">Abort</button>\r\n    </div>\r\n  </form>\r\n</div>\r\n"
+module.exports = "<div *ngIf=\"task && !editTaskMode\">\r\n  <li class=\"list-group-item d-flex justify-content-between\" style=\"background-color: rgba(0,0,0,0.05);\">\r\n    <span>Name: {{task.name}}</span>\r\n    <button class=\"btn btn-outline-secondary\" (click)=\"onEditTaskMode(true)\">Edit</button>\r\n    <button class=\"btn btn-outline-secondary\" (click)=\"onCloseTaskMode()\">Close</button>\r\n  </li>\r\n  <li class=\"list-group-item\"> ID: {{task.id}}</li>\r\n  <li class=\"list-group-item\"> Description: {{task.description}}</li>\r\n  <li class=\"list-group-item\"> Status: {{task.status}}</li>\r\n  <li class=\"list-group-item\" style=\"background-color: rgba(0,0,0,0.05);\">{{task.userNames.length <= 0 ? 'No users' : 'Assigned Users:'}}</li>\r\n  <li *ngFor=\" let username of task.userNames\" class=\"list-group-item\"> {{username}}</li>\r\n  <li class=\"list-group-item\" style=\"background-color: rgba(0,0,0,0.05);\">{{ task.taskDtos.length <= 0 ? 'No tasks' : 'Assigned Tasks:' }}</li>\r\n  <li class=\"list-group-item\" *ngFor=\"let taskDto of task.taskDtos\">\r\n    <app-user-task [task]=\"taskDto\"></app-user-task>\r\n  </li>\r\n</div>\r\n\r\n<div *ngIf=\"task && editTaskMode\">\r\n  <form [formGroup]=\"editedTaskForm\" #f>\r\n    <div class=\"form-group\">\r\n      <label class=\"text-info\">Name:</label>\r\n      <input class=\"form-control\" type=\"text\" formControlName=\"name\">\r\n    </div>\r\n    <div class=\"form-group\">\r\n      <label class=\"text-info\">Description:</label>\r\n      <textarea rows=\"20\" class=\"form-control\"  formControlName=\"description\"></textarea>\r\n    </div>\r\n    <div class=\"form-group\">\r\n      <label class=\"text-info\">Status:</label>\r\n      <select class=\"form-control\"  formControlName=\"status\">\r\n        <option [selected]=\"task.status == status.UNASSIGNED\" value=\"{{ status.UNASSIGNED }}\"> {{ status.UNASSIGNED }} </option>\r\n        <option [selected]=\"task.status == status.ASSIGNED\" value=\"{{ status.ASSIGNED }}\"> {{ status.ASSIGNED }} </option>\r\n        <option [selected]=\"task.status == status.IN_PROGRESS\" value=\"{{ status.IN_PROGRESS }}\"> {{ status.IN_PROGRESS }} </option>\r\n        <option [selected]=\"task.status == status.DONE\" value=\"{{ status.DONE }}\"> {{ status.DONE }} </option>\r\n      </select>\r\n    </div>\r\n    <div class=\"form-group\">\r\n      <button class=\"btn btn-outline-secondary\" (click)=\"onSaveEditedTask(f)\">\r\n        Submit\r\n      </button>\r\n      <button class=\"btn btn-outline-secondary\" (click)=\"onEditTaskMode(false)\">Abort</button>\r\n    </div>\r\n  </form>\r\n</div>\r\n"
 
 /***/ }),
 
