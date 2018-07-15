@@ -28,7 +28,10 @@ export class TaskModel {
 }
 
 export enum Status {
-  UNASSIGNED, ASSIGNED, IN_PROGRESS, DONE,
+  UNASSIGNED = 'UNASSIGNED',
+  ASSIGNED = 'ASSIGNED',
+  IN_PROGRESS = 'IN_PROGRESS',
+  DONE = 'DONE',
 }
 
 export class TableDefinitionModel {

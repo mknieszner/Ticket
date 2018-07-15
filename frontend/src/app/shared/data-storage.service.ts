@@ -94,6 +94,7 @@ export class DataStorageService {
     this.httpClient.get<TablesDetails[]>(this.basehost + '/v1/projects/tables/details')
       .subscribe(
         (names) => {
+          console.log(names)
           this.store.dispatch(new TablesActions.SetNamesAction(names));
         }, response => {
           this.snackBarService.showSnackBar(response.error.message);

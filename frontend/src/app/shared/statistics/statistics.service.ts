@@ -168,25 +168,26 @@ export class StatisticsService {
 
     rows.forEach((row) => {
       row.taskDtos.forEach((task: TaskModel) => {
-        switch (task.status.toString()) {
-          case (Status.UNASSIGNED.toString()):
+        console.log(task.status);
+        switch (task.status) {
+          case (Status.UNASSIGNED):
             tasks.push(task);
             unassignedTasks.push(task);
             return;
-          case (Status.ASSIGNED.toString()):
+          case (Status.ASSIGNED):
             tasks.push(task);
             assignedTasks.push(task);
             return;
-          case (Status.IN_PROGRESS.toString()):
+          case (Status.IN_PROGRESS):
             tasks.push(task);
             inProgressTasks.push(task);
             return;
-          case (Status.DONE.toString()):
+          case (Status.DONE):
             tasks.push(task);
             doneTasks.push(task);
             return;
           default:
-            throw new Error('Unknown task status: ' + task.status.toString());
+            throw new Error('Unknown task status: ' + task.status);
         }
       });
     });

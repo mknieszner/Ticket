@@ -10,6 +10,7 @@ import {EnumInfoModel, TableInfoModel} from '../../shared/statistics/table-info.
 import {StatisticsService} from '../../shared/statistics/statistics.service';
 import {TasksInfoModel} from '../../shared/statistics/tasks-info.model';
 import {EnumChart} from './charts.model';
+import {ConstantsService} from "../../shared/constants.service";
 
 
 @Component({
@@ -28,7 +29,8 @@ export class TableStatisticsComponent implements OnInit {
 
   constructor(private store: Store<fromAppReducers.AppState>,
               private dss: DataStorageService,
-              private statistics: StatisticsService) {
+              private statistics: StatisticsService,
+              public constantsService: ConstantsService) {
   }
 
   ngOnInit() {

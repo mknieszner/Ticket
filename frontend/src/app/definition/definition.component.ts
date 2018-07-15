@@ -3,8 +3,8 @@ import {FormArray, FormControl, FormGroup} from '@angular/forms';
 import * as fromDefinitionModel from '../shared/table.model';
 import {DataStorageService} from '../shared/data-storage.service';
 
-const COMMON_TABLE_ENVIRONMENT = "COMMON_TABLE_ENVIRONMENT";
-const SEPARATE_TABLE_ENVIRONMENT = "SEPARATE_TABLE_ENVIRONMENT";
+export const COMMON_TABLE_ENVIRONMENT = "COMMON_TABLE_ENVIRONMENT";
+export const SEPARATE_TABLE_ENVIRONMENT = "SEPARATE_TABLE_ENVIRONMENT";
 
 @Component({
   selector: 'app-definition',

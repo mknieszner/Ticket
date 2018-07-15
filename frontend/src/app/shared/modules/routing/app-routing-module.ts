@@ -17,7 +17,6 @@ export const appRoutes: Routes = [
   {path: 'users', component: UserComponent},
   {path: 'tables', component: TablesComponent},
   {path: 'signin', component: SigninComponent},
-  // {path: 'signin', component: TrainingComponent},
   {path: 'definitions', component: DefinitionComponent},
   {path: 'statistics', component: StatisticsComponent},
   {path: 'chat', component: ChatComponent},

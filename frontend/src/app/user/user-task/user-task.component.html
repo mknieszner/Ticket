@@ -28,10 +28,10 @@
     <div class="form-group">
       <label class="text-info">Status:</label>
       <select class="form-control"  formControlName="status">
-        <option [selected]="task.status == status[0]" value="{{ status[0] }}"> {{ status[0] }} </option>
-        <option [selected]="task.status == status[1]" value="{{ status[1] }}"> {{ status[1] }} </option>
-        <option [selected]="task.status == status[2]" value="{{ status[2] }}"> {{ status[2] }} </option>
-        <option [selected]="task.status == status[3]" value="{{ status[3] }}"> {{ status[3] }} </option>
+        <option [selected]="task.status == status.UNASSIGNED" value="{{ status.UNASSIGNED }}"> {{ status.UNASSIGNED }} </option>
+        <option [selected]="task.status == status.ASSIGNED" value="{{ status.ASSIGNED }}"> {{ status.ASSIGNED }} </option>
+        <option [selected]="task.status == status.IN_PROGRESS" value="{{ status.IN_PROGRESS }}"> {{ status.IN_PROGRESS }} </option>
+        <option [selected]="task.status == status.DONE" value="{{ status.DONE }}"> {{ status.DONE }} </option>
       </select>
     </div>
     <div class="form-group">
