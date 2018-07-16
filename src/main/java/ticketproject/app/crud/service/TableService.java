@@ -81,22 +81,22 @@ public class TableService {
 //
 //    }
 
-    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN') || @tableAccessManager.hasTableAccessAuthorityByTableName(#tableName)")
-    public List<RowDto> addRowsToTableByTableName(final List<RowDto> rowDtos, final String tableName, final String username) {
-        rowValidator.validateRows(getTableIdByName(tableName), rowDtos);
-        ProjectTable projectTable = projectTableRepository.findByName(tableName);
-        return rowMapper.mapToRowDtos(Lists.newArrayList(
-                rowRepository.save(rowDtos
-                        .stream()
-                        .map(rowMapper::mapToRow)
-                        .peek(row -> {
-                            row.setProjectTable(projectTable);
-                            row.setCreatedBy(username);
-                            row.setCreatedOn(LocalDateTime.now());
-                            row.setLastModifiedBy(username);
-                            row.setLastModifiedOn(LocalDateTime.now());
-                        }).collect(toList()))));
-    }
+//    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN') || @tableAccessManager.hasTableAccessAuthorityByTableName(#tableName)")
+//    public List<RowDto> addRowsToTableByTableName(final List<RowDto> rowDtos, final String tableName, final String username) {
+//        rowValidator.validateRows(getTableIdByName(tableName), rowDtos);
+//        ProjectTable projectTable = projectTableRepository.findByName(tableName);
+//        return rowMapper.mapToRowDtos(Lists.newArrayList(
+//                rowRepository.save(rowDtos
+//                        .stream()
+//                        .map(rowMapper::mapToRow)
+//                        .peek(row -> {
+//                            row.setProjectTable(projectTable);
+//                            row.setCreatedBy(username);
+//                            row.setCreatedOn(LocalDateTime.now());
+//                            row.setLastModifiedBy(username);
+//                            row.setLastModifiedOn(LocalDateTime.now());
+//                        }).collect(toList()))));
+//    }
 
 //    public ProjectTableDto updateTable(final ProjectTableDto projectTableDto, final Long projectId) {
 //        Project project = projectRepository.findOne(projectId);

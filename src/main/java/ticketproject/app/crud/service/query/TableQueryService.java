@@ -290,7 +290,7 @@ public class TableQueryService {
         statement = ADD_TASK_TO_ROW_REFERENCE_STATEMENT
                 .replaceFirst(TABLE_TASK_JUNCTION_NAME_VARIABLE, sqlCorrectTableName);
         values = new ArrayList<>();
-        values.add(rowId.toString());
+        values.add(rowId);
         values.add(taskDto.getId().toString());
         runParametrizedUpdate(statement, values);
 
