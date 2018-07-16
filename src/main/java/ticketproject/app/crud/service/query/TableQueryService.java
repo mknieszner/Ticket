@@ -243,7 +243,7 @@ public class TableQueryService {
         KeyHolder keys = runParametrizedUpdate(statement, rowValues);
 
         //mysql - posgres workaround
-        rowDto.setId((long) keys.getKeys().getOrDefault("GENERATED_KEY", keys.getKeys().get("ID")));
+        rowDto.setId(((Integer) keys.getKeys().getOrDefault("GENERATED_KEY", keys.getKeys().get("ID"))).longValue());
 
         return rowDto;
     }
