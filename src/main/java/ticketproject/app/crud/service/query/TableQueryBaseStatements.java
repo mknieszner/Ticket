@@ -188,7 +188,7 @@ public class TableQueryBaseStatements {
             );
 
     static final String DROP_TABLES_STATEMENT =
-            String.format("DROP TABLE IF EXISTS  `%s`",
+            String.format("DROP TABLE IF EXISTS  %s",
                     TABLE_NAME_VARIABLE
             );
 }
