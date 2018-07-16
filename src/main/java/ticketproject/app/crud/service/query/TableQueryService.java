@@ -291,7 +291,7 @@ public class TableQueryService {
                 .replaceFirst(TABLE_TASK_JUNCTION_NAME_VARIABLE, sqlCorrectTableName);
         values = new ArrayList<>();
         values.add(rowId);
-        values.add(taskDto.getId().toString());
+        values.add(taskDto.getId());
         runParametrizedUpdate(statement, values);
 
         return taskDto;
