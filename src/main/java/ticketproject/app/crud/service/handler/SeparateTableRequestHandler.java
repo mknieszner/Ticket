@@ -2,7 +2,9 @@ package ticketproject.app.crud.service.handler;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
+import ticketproject.app.crud.dao.ProjectRepository;
 import ticketproject.app.crud.dao.ProjectTableRepository;
+import ticketproject.app.crud.dao.RoleRepository;
 import ticketproject.app.crud.domain.dto.definition.ProjectDefinitionDto;
 import ticketproject.app.crud.domain.dto.definition.TableDefinitionDto;
 import ticketproject.app.crud.domain.dto.values.RowDto;
@@ -15,7 +17,6 @@ import ticketproject.app.crud.service.UserService;
 import ticketproject.app.crud.service.query.TableQueryService;
 
 import javax.transaction.Transactional;
-
 import java.util.List;
 
 import static ticketproject.app.crud.service.DatabaseEnvironment.SEPARATE_TABLE_REQUEST_HANDLER_BEAN_NAME;
@@ -28,6 +29,8 @@ public class SeparateTableRequestHandler implements TableRequestHandler {
     private final TableService tableService;
     private final ProjectTableRepository projectTableRepository;
     private final RowValidator rowValidator;
+    private final RoleRepository roleRepository;
+    private final ProjectRepository projectRepository;
 
     @Transactional
     public ProjectDefinitionDto handleTableDefinitionRequest(TableDefinitionDto tableDefinitionDto,
@@ -102,12 +105,17 @@ public class SeparateTableRequestHandler implements TableRequestHandler {
         return tableQueryService.updateTask(tableName, taskDto);
     }
 
-    private List<ColumnDetail> getColumnsDetails(final String name) {
-        return projectTableRepository.findByName(name).getColumnDetails();
+    @Override
+    public boolean deleteProject(Long tableId) {
+        String tableName = getTableNameBy(tableId);
+        projectRepository.delete(tableId);
+        roleRepository.deleteByName(tableName);
+        tableQueryService.deleteTable(tableName);//todo non transactional -> scheduler??
+        return true;
     }
 
-    private Long getTableIdBy(final String tableName) {
-        return projectTableRepository.findByName(tableName).getId();
+    private List<ColumnDetail> getColumnsDetails(final String name) {
+        return projectTableRepository.findByName(name).getColumnDetails();
     }
 
     private String getTableNameBy(final Long tableId) {

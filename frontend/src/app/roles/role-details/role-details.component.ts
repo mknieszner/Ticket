@@ -48,16 +48,9 @@ export class RoleDetailsComponent implements OnInit {
   }
 
   postAddUser() {
-    if (this.dss.addRoleToUser({rolename: this.role.name, username: <string>this.userForm.value.user})) {
-      this.users.subscribe((users: UserModel[]) => {
-        users.forEach((user) => {
-            if (user.username === this.userForm.value.user) {
-              this.role.userDtos.push(user);
-            }
-        });
-      }).unsubscribe();
-    }
+    this.dss.addRoleToUser({username: <string>this.userForm.value.user, roleName: this.role.name});
   }
+
 
   abortAddUser() {
     this.editUserMode = false;
@@ -81,7 +74,7 @@ export class RoleDetailsComponent implements OnInit {
     });
 
     this.snackBarRef.afterDismissed().subscribe((data) => {
-      if(data.dismissedByAction){
+      if (data.dismissedByAction) {
         this.dss.deleteRole(this.role.name);
       }
     });

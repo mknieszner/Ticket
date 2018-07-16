@@ -1,4 +1,4 @@
-<div class="container-fluid" style="padding: 0" *ngIf="chosenName">
+<div class="container-fluid" style="padding: 0" *ngIf="chosenName && parent !== 'definition'">
   <nav class="navbar" style="margin-bottom: 0;padding-bottom: 0; border-bottom: none;">
     <ul class="nav" style="margin-bottom: 0;padding-bottom: 0; border-bottom: none;">
       <li style="background-color: transparent !important;">
@@ -42,7 +42,8 @@
           <button class="btn btn-outline-secondary"
                   *ngFor="let tableDetails of tablesDetails" (click)="onChooseName(tableDetails.name)"
                   [ngClass]="chosenName == tableDetails.name ? 'text-info' : 'text-secondary'">
-            {{tableDetails.name}} <b>({{constants.getShortcut(tableDetails.databaseEnvironment)}})</b>
+            {{tableDetails.name}}
+            <b>({{constants.getShortcut(tableDetails.databaseEnvironment)}})</b>
           </button>
         </div>
       </li>
@@ -50,13 +51,15 @@
   </nav>
 </div>
 
-<div class="container" style="margin-top: 10%" *ngIf="chosenName == null || chosenName == undefined">
+<div class="container" style="margin-top: 10%" *ngIf="chosenName == null || chosenName == undefined || parent === 'definition'">
   <div class="row justify-content-center">
     <div class="col-sm-12 col-md-6">
       <ul class="list-group">
-        <li class="list-group-item bg-dark text-info">Select a table:</li>
-        <li class="list-group-item text-secondary" *ngFor="let tableDetails of tablesDetails"
-            (click)="onChooseName(tableDetails.name)">{{tableDetails.name}} <b>({{constants.getShortcut(tableDetails.databaseEnvironment)}})</b>
+        <li class="list-group-item bg-dark text-info" *ngIf="tablesDetails.length">Select a table:</li>
+        <li class="list-group-item text-secondary d-flex justify-content-between align-items-center" *ngFor="let tableDetails of tablesDetails"
+            (click)="onChooseName(tableDetails.name)">{{tableDetails.name}}
+          <b>({{constants.getShortcut(tableDetails.databaseEnvironment)}})</b>
+          <button *ngIf="parent === 'definition'" class="btn btn-outline-danger" (click)="deleteTable(tableDetails.id)"> DELETE </button>
         </li>
       </ul>
     </div>

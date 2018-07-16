@@ -168,7 +168,6 @@ export class StatisticsService {
 
     rows.forEach((row) => {
       row.taskDtos.forEach((task: TaskModel) => {
-        console.log(task.status);
         switch (task.status) {
           case (Status.UNASSIGNED):
             tasks.push(task);

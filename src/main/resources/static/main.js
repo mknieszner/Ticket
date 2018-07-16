@@ -544,7 +544,7 @@ module.exports = "li {\r\n  border: 1px solid #32383e;\r\n  background-color: rg
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<div class=\"jumbotron\">\r\n  <div class=\"container\">\r\n    <div class=\"row\">\r\n      <div class=\"col-12\">\r\n        <h3 class=\"text-center text-info\">Table Definition</h3>\r\n        <form [formGroup]=\"definitionForm\" style=\"margin-top: 10px\">\r\n          <div class=\"form-group\">\r\n            <input type=\"text\"\r\n                   id=\"table-name\"\r\n                   formControlName=\"name\"\r\n                   placeholder=\"Table Name\"\r\n                   class=\"form-control  border-secondary\" ngModel\r\n                   required\r\n            >\r\n          </div>\r\n          <div class=\"row justify-content-center\">\r\n            <div class=\"col-12\" formArrayName=\"columnDetailDefinitionDtoList\">\r\n              <div class=\"row justify-content-center\"\r\n                   *ngFor=\"let columnDetailDefinitionDto of getData().controls; let i = index;\"\r\n                   [formGroupName]=\"i\">\r\n                <div class=\"col-12 col-sm-5 col-md-3\">\r\n                  <div class=\"input-group\">\r\n                    <div class=\"input-group-prepend\">\r\n                      <label class=\"btn btn-outline-secondary\">Type:</label>\r\n                    </div>\r\n                    <select type=\"text\" class=\"form-control  border-secondary\" formControlName=\"type\" required>\r\n                      <option *ngFor=\"let option of options;\" [selected]=\"option.name\" [value]=\"option.shortcut\">{{\r\n                        option.name }}\r\n                      </option>\r\n                    </select>\r\n                  </div>\r\n                  <div *ngIf=\"definitionForm.value.columnDetailDefinitionDtoList[i].type=='EN'\">\r\n                    <div class=\"col-12\" formArrayName=\"optionList\">\r\n                      <div *ngFor=\"let option of columnDetailDefinitionDto.get('optionList').controls;let j = index\" class=\"row\">\r\n                        <div class=\"input-group\" style=\"margin-top: 3px;\">\r\n                          <input type=\"text\" class=\"form-control  border-secondary\"\r\n                                 [value]=\"definitionForm.value.columnDetailDefinitionDtoList[i].optionList[j]\" formControlName=\"{{j}}\"\r\n                                 placeholder=\"Option...\"\r\n                                 required>\r\n                          <div class=\"input-group-append\">\r\n                            <button type=\"button\" class=\"btn btn-outline-secondary text-danger\" (click)=\"onDeleteOption(i,j)\">X</button>\r\n                          </div>\r\n                        </div>\r\n                      </div>\r\n                      <div class=\"row\">\r\n                        <div class=\"form-group\" style=\"margin: 5px 0\">\r\n                          <button type=\"button\" class=\"btn btn-outline-secondary text-primary\" (click)=\"onAddOptions(i)\">\r\n                            Add option\r\n                          </button>\r\n                        </div>\r\n                      </div>\r\n                    </div>\r\n                  </div>\r\n                </div>\r\n                <div class=\"col-11 col-sm-6 col-md-5\">\r\n                  <div class=\"input-group\">\r\n                    <div class=\"input-group-prepend\">\r\n                      <label class=\"btn btn-outline-secondary\">Name:</label>\r\n                    </div>\r\n                    <input type=\"text\" class=\"form-control border-secondary\" formControlName=\"name\" required style=\"height: 38px;\">\r\n                  </div>\r\n                </div>\r\n                <div class=\"col-1\">\r\n                  <button type=\"button\" class=\"btn btn-outline-secondary text-danger\" (click)=\"onDeleteColumn(i)\">X</button>\r\n                </div>\r\n              </div>\r\n            </div>\r\n          </div>\r\n          <br>\r\n          <div class=\"row justify-content-center\">\r\n            <div class=\"form-group\">\r\n              <button type=\"button\" class=\"btn btn-outline-secondary text-primary\" (click)=\"onAddColumn()\">Add column</button>\r\n              <button type=\"button\" class=\"btn btn-outline-secondary text-danger\" (click)=\"onResetForm()\">Reset form</button>\r\n              <button type=\"submit\" class=\"btn btn-outline-secondary text-success\" [disabled]=\"!definitionForm.valid\" (click)=\"postCommonTableForm()\">Define in common table</button>\r\n              <button type=\"submit\" class=\"btn btn-outline-secondary text-success\" [disabled]=\"!definitionForm.valid\" (click)=\"postSepareteTableForm()\">Define in separate table</button>\r\n            </div>\r\n          </div>\r\n        </form>\r\n      </div>\r\n    </div>\r\n  </div>\r\n</div>\r\n"
+module.exports = "<div class=\"jumbotron\">\r\n  <div class=\"container\">\r\n    <div class=\"row\">\r\n      <div class=\"col-12\">\r\n        <h3 class=\"text-center text-info\">Table Definition</h3>\r\n        <form [formGroup]=\"definitionForm\" style=\"margin-top: 10px\">\r\n          <div class=\"form-group\">\r\n            <input type=\"text\"\r\n                   id=\"table-name\"\r\n                   formControlName=\"name\"\r\n                   placeholder=\"Table Name\"\r\n                   class=\"form-control  border-secondary\" ngModel\r\n                   required\r\n            >\r\n          </div>\r\n          <div class=\"row justify-content-center\">\r\n            <div class=\"col-12\" formArrayName=\"columnDetailDefinitionDtoList\">\r\n              <div class=\"row justify-content-center\"\r\n                   *ngFor=\"let columnDetailDefinitionDto of getData().controls; let i = index;\"\r\n                   [formGroupName]=\"i\">\r\n                <div class=\"col-12 col-sm-5 col-md-3\">\r\n                  <div class=\"input-group\">\r\n                    <div class=\"input-group-prepend\">\r\n                      <label class=\"btn btn-outline-secondary\">Type:</label>\r\n                    </div>\r\n                    <select type=\"text\" class=\"form-control  border-secondary\" formControlName=\"type\" required>\r\n                      <option *ngFor=\"let option of options;\" [selected]=\"option.name\" [value]=\"option.shortcut\">{{\r\n                        option.name }}\r\n                      </option>\r\n                    </select>\r\n                  </div>\r\n                  <div *ngIf=\"definitionForm.value.columnDetailDefinitionDtoList[i].type=='EN'\">\r\n                    <div class=\"col-12\" formArrayName=\"optionList\">\r\n                      <div *ngFor=\"let option of columnDetailDefinitionDto.get('optionList').controls;let j = index\" class=\"row\">\r\n                        <div class=\"input-group\" style=\"margin-top: 3px;\">\r\n                          <input type=\"text\" class=\"form-control  border-secondary\"\r\n                                 [value]=\"definitionForm.value.columnDetailDefinitionDtoList[i].optionList[j]\" formControlName=\"{{j}}\"\r\n                                 placeholder=\"Option...\"\r\n                                 required>\r\n                          <div class=\"input-group-append\">\r\n                            <button type=\"button\" class=\"btn btn-outline-secondary text-danger\" (click)=\"onDeleteOption(i,j)\">X</button>\r\n                          </div>\r\n                        </div>\r\n                      </div>\r\n                      <div class=\"row\">\r\n                        <div class=\"form-group\" style=\"margin: 5px 0\">\r\n                          <button type=\"button\" class=\"btn btn-outline-secondary text-primary\" (click)=\"onAddOptions(i)\">\r\n                            Add option\r\n                          </button>\r\n                        </div>\r\n                      </div>\r\n                    </div>\r\n                  </div>\r\n                </div>\r\n                <div class=\"col-11 col-sm-6 col-md-5\">\r\n                  <div class=\"input-group\">\r\n                    <div class=\"input-group-prepend\">\r\n                      <label class=\"btn btn-outline-secondary\">Name:</label>\r\n                    </div>\r\n                    <input type=\"text\" class=\"form-control border-secondary\" formControlName=\"name\" required style=\"height: 38px;\">\r\n                  </div>\r\n                </div>\r\n                <div class=\"col-1\">\r\n                  <button type=\"button\" class=\"btn btn-outline-secondary text-danger\" (click)=\"onDeleteColumn(i)\">X</button>\r\n                </div>\r\n              </div>\r\n            </div>\r\n          </div>\r\n          <br>\r\n          <div class=\"row justify-content-center\">\r\n            <div class=\"form-group\">\r\n              <button type=\"button\" class=\"btn btn-outline-secondary text-primary\" (click)=\"onAddColumn()\">Add column</button>\r\n              <button type=\"button\" class=\"btn btn-outline-secondary text-danger\" (click)=\"onResetForm()\">Reset form</button>\r\n              <button type=\"submit\" class=\"btn btn-outline-secondary text-success\" [disabled]=\"!definitionForm.valid\" (click)=\"postCommonTableForm()\">Define in common table</button>\r\n              <button type=\"submit\" class=\"btn btn-outline-secondary text-success\" [disabled]=\"!definitionForm.valid\" (click)=\"postSepareteTableForm()\">Define in separate table</button>\r\n            </div>\r\n          </div>\r\n        </form>\r\n      </div>\r\n    </div>\r\n  </div>\r\n</div>\r\n<div>\r\n  <app-menu [parent]=\"'definition'\"></app-menu>\r\n</div>\r\n"
 
 /***/ }),
 
@@ -584,9 +584,10 @@ var DefinitionComponent = /** @class */ (function () {
         this.dss = dss;
         this.options = _shared_table_model__WEBPACK_IMPORTED_MODULE_2__["options"];
     }
+    //[tablesDetails]="(tableState | async).tablesDetails"
     DefinitionComponent.prototype.ngOnInit = function () {
+        this.dss.getTablesDetails();
         this.initForm();
-        // this.options = fromDefinitionModel.options;
     };
     DefinitionComponent.prototype.initForm = function () {
         this.definitionForm = new _angular_forms__WEBPACK_IMPORTED_MODULE_1__["FormGroup"]({
@@ -925,16 +926,7 @@ var RoleDetailsComponent = /** @class */ (function () {
         this.editUserMode = true;
     };
     RoleDetailsComponent.prototype.postAddUser = function () {
-        var _this = this;
-        if (this.dss.addRoleToUser({ rolename: this.role.name, username: this.userForm.value.user })) {
-            this.users.subscribe(function (users) {
-                users.forEach(function (user) {
-                    if (user.username === _this.userForm.value.user) {
-                        _this.role.userDtos.push(user);
-                    }
-                });
-            }).unsubscribe();
-        }
+        this.dss.addRoleToUser({ username: this.userForm.value.user, roleName: this.role.name });
     };
     RoleDetailsComponent.prototype.abortAddUser = function () {
         this.editUserMode = false;
@@ -1335,7 +1327,7 @@ var DataStorageService = /** @class */ (function () {
             .subscribe(function (user) {
             _this.store.dispatch(new _store_user_users_actions__WEBPACK_IMPORTED_MODULE_4__["SetCurrntUserDetails"](user));
         }, function (response) {
-            _this.snackBarService.showSnackBar(response.error.message);
+            _this.snackBarService.showSnackBar(response.error);
         });
     };
     DataStorageService.prototype.updateUser = function (user) {
@@ -1345,7 +1337,7 @@ var DataStorageService = /** @class */ (function () {
             _this.store.dispatch(new _store_user_users_actions__WEBPACK_IMPORTED_MODULE_4__["SetCurrntUserDetails"](updatedUser));
             _this.snackBarService.showSnackBar('DONE!', _snack_bar_snack_bar_service__WEBPACK_IMPORTED_MODULE_10__["SnackBarTheme"].success);
         }, function (response) {
-            _this.snackBarService.showSnackBar(response.error.message);
+            _this.snackBarService.showSnackBar(response.error);
         });
     };
     DataStorageService.prototype.updatePassword = function (oldPassword, newPassword, username) {
@@ -1357,17 +1349,16 @@ var DataStorageService = /** @class */ (function () {
             .subscribe(function (done) {
             _this.snackBarService.showSnackBar('DONE!', _snack_bar_snack_bar_service__WEBPACK_IMPORTED_MODULE_10__["SnackBarTheme"].success);
         }, function (response) {
-            _this.snackBarService.showSnackBar(response.error.message);
+            _this.snackBarService.showSnackBar(response.error);
         });
     };
     DataStorageService.prototype.getActiveWsUsers = function () {
         var _this = this;
         this.httpClient.get(this.basehost + '/v1/users/ws-active')
             .subscribe(function (activeUsers) {
-            console.log('activeUsers', activeUsers);
             _this.store.dispatch(new _store_chat_chat_actions__WEBPACK_IMPORTED_MODULE_9__["SetActiveWsUsers"](activeUsers));
         }, function (response) {
-            _this.snackBarService.showSnackBar(response.error.message);
+            _this.snackBarService.showSnackBar(response.error);
         });
     };
     DataStorageService.prototype.getTableHeaderBy = function (tableId) {
@@ -1376,7 +1367,7 @@ var DataStorageService = /** @class */ (function () {
             .subscribe(function (definition) {
             _this.store.dispatch(new _store_table_tables_actions__WEBPACK_IMPORTED_MODULE_5__["SetTableDefinitionAction"](definition));
         }, function (response) {
-            _this.snackBarService.showSnackBar(response.error.message);
+            _this.snackBarService.showSnackBar(response.error);
         });
     };
     DataStorageService.prototype.getTableRowsBy = function (tableId) {
@@ -1385,17 +1376,16 @@ var DataStorageService = /** @class */ (function () {
             .subscribe(function (rows) {
             _this.store.dispatch(new _store_table_tables_actions__WEBPACK_IMPORTED_MODULE_5__["SetRowsAction"](rows));
         }, function (response) {
-            _this.snackBarService.showSnackBar(response.error.message);
+            _this.snackBarService.showSnackBar(response.error);
         });
     };
     DataStorageService.prototype.getTablesDetails = function () {
         var _this = this;
         this.httpClient.get(this.basehost + '/v1/projects/tables/details')
             .subscribe(function (names) {
-            console.log(names);
             _this.store.dispatch(new _store_table_tables_actions__WEBPACK_IMPORTED_MODULE_5__["SetNamesAction"](names));
         }, function (response) {
-            _this.snackBarService.showSnackBar(response.error.message);
+            _this.snackBarService.showSnackBar(response.error);
         });
     };
     DataStorageService.prototype.postTableDefinition = function (definition, databaseEnvironment) {
@@ -1403,8 +1393,9 @@ var DataStorageService = /** @class */ (function () {
         this.httpClient.post(this.basehost + '/v1/projects/tables/definition/' + databaseEnvironment, definition)
             .subscribe(function () {
             _this.snackBarService.showSnackBar("Done!", _snack_bar_snack_bar_service__WEBPACK_IMPORTED_MODULE_10__["SnackBarTheme"].success);
+            _this.getTablesDetails();
         }, function (response) {
-            _this.snackBarService.showSnackBar(response.error.message);
+            _this.snackBarService.showSnackBar(response.error);
         });
     };
     DataStorageService.prototype.getUsers = function () {
@@ -1413,7 +1404,7 @@ var DataStorageService = /** @class */ (function () {
             .subscribe(function (users) {
             _this.store.dispatch(new _store_user_users_actions__WEBPACK_IMPORTED_MODULE_4__["SetUsersAction"](users));
         }, function (response) {
-            _this.snackBarService.showSnackBar(response.error.message);
+            _this.snackBarService.showSnackBar(response.error);
         });
     };
     DataStorageService.prototype.getRoles = function () {
@@ -1422,16 +1413,17 @@ var DataStorageService = /** @class */ (function () {
             .subscribe(function (roles) {
             _this.store.dispatch(new _store_user_users_actions__WEBPACK_IMPORTED_MODULE_4__["SetRolesAction"](roles));
         }, function (response) {
-            _this.snackBarService.showSnackBar(response.error.message);
+            _this.snackBarService.showSnackBar(response.error);
         });
     };
     DataStorageService.prototype.addRoleToUser = function (data) {
         var _this = this;
-        this.httpClient.post(this.basehost + '/v1/users/' + data.username + '/roles/' + data.rolename, null)
+        this.httpClient.post(this.basehost + '/v1/users/' + data.username + '/roles/' + data.roleName, null)
             .subscribe(function (user) {
             _this.store.dispatch(new _store_user_users_actions__WEBPACK_IMPORTED_MODULE_4__["AddRoleToUser"](user));
+            _this.store.dispatch(new _store_user_users_actions__WEBPACK_IMPORTED_MODULE_4__["AddUserToRole"]({ username: data.username, roleName: data.roleName }));
         }, function (response) {
-            _this.snackBarService.showSnackBar(response.error.message);
+            _this.snackBarService.showSnackBar(response.error);
         });
     };
     DataStorageService.prototype.removeRoleFromUser = function (data) {
@@ -1443,7 +1435,7 @@ var DataStorageService = /** @class */ (function () {
                 _this.store.dispatch(new _store_user_users_actions__WEBPACK_IMPORTED_MODULE_4__["RemoveRoleFromUser"](data.user));
             }
         }, function (response) {
-            _this.snackBarService.showSnackBar(response.error.message);
+            _this.snackBarService.showSnackBar(response.error);
         });
     };
     DataStorageService.prototype.removeUserFromRole = function (data) {
@@ -1461,27 +1453,25 @@ var DataStorageService = /** @class */ (function () {
                 _this.store.dispatch(new _store_user_users_actions__WEBPACK_IMPORTED_MODULE_4__["RemoveUserFromRole"](data.role));
             }
         }, function (response) {
-            _this.snackBarService.showSnackBar(response.error.message);
+            _this.snackBarService.showSnackBar(response.error);
         });
     };
     DataStorageService.prototype.addNewRow = function (tableId, newRow) {
         var _this = this;
         this.httpClient.post(this.basehost + '/v1/projects/tables/' + tableId + '/row', newRow)
             .subscribe(function (savedRow) {
-            // console.log('addNewRow dss OK: ', savedRow)
             _this.store.dispatch(new _store_table_tables_actions__WEBPACK_IMPORTED_MODULE_5__["AddRowAction"](savedRow));
         }, function (response) {
-            _this.snackBarService.showSnackBar(response.error.message);
+            _this.snackBarService.showSnackBar(response.error);
         });
     };
     DataStorageService.prototype.updateRow = function (tableId, updatedRow) {
         var _this = this;
         this.httpClient.put(this.basehost + '/v1/projects/tables/' + tableId + '/row', updatedRow)
             .subscribe(function (savedRow) {
-            // console.log("updateRow dss OK: ", savedRow);
             _this.store.dispatch(new _store_table_tables_actions__WEBPACK_IMPORTED_MODULE_5__["UpdateRowAction"](savedRow));
         }, function (response) {
-            _this.snackBarService.showSnackBar(response.error.message);
+            _this.snackBarService.showSnackBar(response.error);
         });
     };
     DataStorageService.prototype.getCurrentUserRoles = function (username) {
@@ -1490,7 +1480,7 @@ var DataStorageService = /** @class */ (function () {
             .subscribe(function (roles) {
             _this.store.dispatch(new _store_user_users_actions__WEBPACK_IMPORTED_MODULE_4__["SetCurrentUserRolenames"](roles));
         }, function (response) {
-            _this.snackBarService.showSnackBar(response.error.message);
+            _this.snackBarService.showSnackBar(response.error);
         });
     };
     DataStorageService.prototype.saveNewRole = function (role) {
@@ -1499,7 +1489,7 @@ var DataStorageService = /** @class */ (function () {
             .subscribe(function (savedRole) {
             _this.store.dispatch(new _store_user_users_actions__WEBPACK_IMPORTED_MODULE_4__["AddRoleAction"](savedRole));
         }, function (response) {
-            _this.snackBarService.showSnackBar(response.error.message);
+            _this.snackBarService.showSnackBar(response.error);
         });
     };
     DataStorageService.prototype.deleteUser = function (username) {
@@ -1513,18 +1503,17 @@ var DataStorageService = /** @class */ (function () {
             }
             return true;
         }, function (response) {
-            _this.snackBarService.showSnackBar(response.error.message);
+            _this.snackBarService.showSnackBar(response.error);
         });
     };
     DataStorageService.prototype.saveNewUser = function (user) {
         var _this = this;
         this.httpClient.post(this.basehost + '/v1/users', user)
             .subscribe(function (savedUser) {
-            console.log('saveNewUser dss OK: ', savedUser);
             _this.store.dispatch(new _store_user_users_actions__WEBPACK_IMPORTED_MODULE_4__["AddUserAction"](savedUser));
             _this.store.dispatch(new _store_user_users_actions__WEBPACK_IMPORTED_MODULE_4__["SetNewUserModeAction"](false));
         }, function (response) {
-            _this.snackBarService.showSnackBar(response.error.message);
+            _this.snackBarService.showSnackBar(response.error);
         });
     };
     DataStorageService.prototype.saveNewTask = function (tableId, newTask, rowId) {
@@ -1533,17 +1522,16 @@ var DataStorageService = /** @class */ (function () {
             .subscribe(function (task) {
             _this.store.dispatch(new _store_table_tables_actions__WEBPACK_IMPORTED_MODULE_5__["AddTaskAction"]({ task: task, rowId: rowId }));
         }, function (response) {
-            _this.snackBarService.showSnackBar(response.error.message);
+            _this.snackBarService.showSnackBar(response.error);
         });
     };
     DataStorageService.prototype.setTableUsers = function (tableId) {
         var _this = this;
-        // console.log(tableName);
         this.httpClient.get(this.basehost + '/v1/users/table/' + tableId)
             .subscribe(function (users) {
             _this.store.dispatch(new _store_table_tables_actions__WEBPACK_IMPORTED_MODULE_5__["SetTableUsers"](users));
         }, function (response) {
-            _this.snackBarService.showSnackBar(response.error.message);
+            _this.snackBarService.showSnackBar(response.error);
         });
     };
     DataStorageService.prototype.onAssignUserToTask = function (tableId, rowId, taskId, username) {
@@ -1553,29 +1541,27 @@ var DataStorageService = /** @class */ (function () {
             _this.store.dispatch(new _store_table_tables_actions__WEBPACK_IMPORTED_MODULE_5__["UpdateRowsTaskAction"]({ rowId: rowId, task: task }));
             _this.taskInfoService.stompClient.send('/app/newTasks/' + username, {});
         }, function (response) {
-            _this.snackBarService.showSnackBar(response.error.message);
+            _this.snackBarService.showSnackBar(response.error);
         });
     };
     DataStorageService.prototype.onRemoveUserFromTask = function (tableId, rowId, taskId, username) {
         var _this = this;
         this.httpClient.delete(this.basehost + '/v1/projects/tables/' + tableId + '/rows/tasks/' + taskId + '/user/' + username)
             .subscribe(function (task) {
-            // console.log('onRemoveUserFromTask dss OK: ', task)
             _this.store.dispatch(new _store_table_tables_actions__WEBPACK_IMPORTED_MODULE_5__["UpdateRowsTaskAction"]({ rowId: rowId, task: task }));
             _this.taskInfoService.stompClient.send('/app/newTasks/' + username, {});
         }, function (response) {
-            _this.snackBarService.showSnackBar(response.error.message);
+            _this.snackBarService.showSnackBar(response.error);
         });
     };
     DataStorageService.prototype.updateTask = function (task) {
         var _this = this;
         this.httpClient.put(this.basehost + '/v1/projects/tables/' + task.tableId + '/rows/tasks', task)
             .subscribe(function (updatedTask) {
-            console.log('updateTask dss OK: ', updatedTask);
             _this.store.dispatch(new _store_table_tables_actions__WEBPACK_IMPORTED_MODULE_5__["UpdateTaskAction"](updatedTask));
             _this.store.dispatch(new _store_user_users_actions__WEBPACK_IMPORTED_MODULE_4__["UpdateTaskAction"](updatedTask));
         }, function (response) {
-            _this.snackBarService.showSnackBar(response.error.message);
+            _this.snackBarService.showSnackBar(response.error);
         });
     };
     DataStorageService.prototype.deleteTask = function (tableId, taskId, rowId) {
@@ -1587,7 +1573,7 @@ var DataStorageService = /** @class */ (function () {
                 _this.store.dispatch(new _store_table_tables_actions__WEBPACK_IMPORTED_MODULE_5__["DeleteTask"]({ rowId: rowId, taskId: taskId }));
             }
         }, function (response) {
-            _this.snackBarService.showSnackBar(response.error.message);
+            _this.snackBarService.showSnackBar(response.error);
         });
     };
     DataStorageService.prototype.deleteRow = function (tableId, rowId) {
@@ -1598,7 +1584,7 @@ var DataStorageService = /** @class */ (function () {
                 _this.store.dispatch(new _store_table_tables_actions__WEBPACK_IMPORTED_MODULE_5__["DeleteRow"](rowId));
             }
         }, function (response) {
-            _this.snackBarService.showSnackBar(response.error.message);
+            _this.snackBarService.showSnackBar(response.error);
         });
     };
     DataStorageService.prototype.deleteRole = function (roleName) {
@@ -1609,7 +1595,18 @@ var DataStorageService = /** @class */ (function () {
                 _this.store.dispatch(new _store_user_users_actions__WEBPACK_IMPORTED_MODULE_4__["DeleteRoleAction"](roleName));
             }
         }, function (response) {
-            _this.snackBarService.showSnackBar(response.error.message);
+            _this.snackBarService.showSnackBar(response.error);
+        });
+    };
+    DataStorageService.prototype.deleteProject = function (tableId) {
+        var _this = this;
+        this.httpClient.delete(this.basehost + '/v1/projects/' + tableId)
+            .subscribe(function (status) {
+            if (status) {
+                _this.store.dispatch(new _store_table_tables_actions__WEBPACK_IMPORTED_MODULE_5__["DeleteTable"](tableId));
+            }
+        }, function (response) {
+            _this.snackBarService.showSnackBar(response.error);
         });
     };
     DataStorageService = __decorate([
@@ -2031,7 +2028,6 @@ var OauthService = /** @class */ (function () {
             _this.saveToken(data, loginData.username);
             _this.router.navigate(['/home']);
         }, function (err) {
-            console.log(err.message);
             var errorMessage = err.message;
             if (errorMessage.includes('live-test')) {
                 _this.store.dispatch(new _store_user_users_actions__WEBPACK_IMPORTED_MODULE_6__["SetLoginFailureInfo"]('Invalid credentials!'));
@@ -2276,16 +2272,29 @@ var SnackBarService = /** @class */ (function () {
     function SnackBarService(snackBar) {
         this.snackBar = snackBar;
     }
-    SnackBarService.prototype.showSnackBar = function (message, color) {
+    SnackBarService.prototype.showSnackBar = function (error, color) {
         if (color === void 0) { color = SnackBarTheme.danger; }
         this.snackBarRef = this.snackBar.openFromComponent(_info_snack_bar_component__WEBPACK_IMPORTED_MODULE_1__["InfoSnackBarComponent"], {
             panelClass: [color],
             data: {
-                message: message,
+                message: this.getMessage(error),
                 className: color
             }
         });
         this.snackBarRef.instance.ref = this.snackBarRef;
+    };
+    SnackBarService.prototype.getMessage = function (error) {
+        var message = '';
+        if (error.message) {
+            message.concat("message: " + error.message);
+        }
+        if (error.message) {
+            message.concat("message: " + error.message);
+        }
+        if (!message.length) {
+            message = error;
+        }
+        return message;
     };
     SnackBarService = __decorate([
         Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["Injectable"])(),
@@ -2390,22 +2399,17 @@ var WebSocketService = /** @class */ (function () {
         var socket = new sockjs_client__WEBPACK_IMPORTED_MODULE_1__(_server_model__WEBPACK_IMPORTED_MODULE_7__["baseUrl"] + '/newTasks?access_token=' + _auth_cookies_handler__WEBPACK_IMPORTED_MODULE_2__["AuthCookie"].getAuth());
         this.stompClient = stompjs_lib_stomp_js__WEBPACK_IMPORTED_MODULE_3__["Stomp"].over(socket);
         this.stompClient.connect({}, function () {
-            // console.log('CONNECT CONNECT', frame);
             _this.store.select('users', 'currentUser').subscribe(function (username) {
                 _this.stompClient.subscribe('/topic/newTasks/' + username, function () {
-                    // console.log(messageOutput);
                     _this.store.dispatch(new _store_user_users_actions__WEBPACK_IMPORTED_MODULE_5__["SetTaskInfoAction"](true));
                 });
                 _this.stompClient.subscribe('/topic/chat', function (messageOutput) {
-                    // console.log('/topic/chat/',messageOutput.body);
                     _this.store.dispatch(new _store_chat_chat_actions__WEBPACK_IMPORTED_MODULE_6__["AppendChatWithMessage"](JSON.parse(messageOutput.body)));
                 });
                 _this.stompClient.subscribe('/topic/chat/' + username, function (messageOutput) {
-                    // console.log('/topic/chat/',messageOutput.body);
                     _this.store.dispatch(new _store_chat_chat_actions__WEBPACK_IMPORTED_MODULE_6__["AppendChatWithMessage"](JSON.parse(messageOutput.body)));
                 });
                 _this.stompClient.subscribe('/topic/people/chat', function (messageOutput) {
-                    // console.log('/topic/people/chat/',messageOutput.body);
                     _this.store.dispatch(new _store_chat_chat_actions__WEBPACK_IMPORTED_MODULE_6__["SetActiveWsUsers"](JSON.parse(messageOutput.body)));
                 });
             });
@@ -2754,7 +2758,6 @@ var StatisticsService = /** @class */ (function () {
         var doneTasks = [];
         rows.forEach(function (row) {
             row.taskDtos.forEach(function (task) {
-                console.log(task.status);
                 switch (task.status) {
                     case (_table_model__WEBPACK_IMPORTED_MODULE_0__["Status"].UNASSIGNED):
                         tasks.push(task);
@@ -3018,7 +3021,7 @@ function statisticsReducers(state, action) {
 /*!******************************************************!*\
   !*** ./src/app/shared/store/table/tables.actions.ts ***!
   \******************************************************/
-/*! exports provided: RESET_TABLE_STORE, ADD_ROW, ADD_TASK, SHOW_ROW, UPDATE_ROW, EDIT_ROW_MODE, EDITED_ROW, DELETE_ROW, SET_ROWS, SET_DEFINITION, SET_NAMES, ADD_NAMES, NEW_ROW_MODE, SET_FILTER, EXTENDED_FILTER_MODE, SET_EXTENDED_TABLE_VIEW, SET_EXTENDED_ROW_VIEW, RUN_EXTENDED_FILTER, SET_EXTENDED_FILTER, SET_EXTENDED_FILTER_SELECT, SET_SORT_CONTENT, SWITCH_TABLE_RESET, SET_ROW_TASKS, SET_TABLE_USERS, UPDATE_ROWS_TASK, UPDATE_TASK, DELETE_ROWS_TASK, SetNewRowModeAction, SetSortContent, AddRowAction, ShowRowDetailsAction, UpdateRowAction, SetRowsAction, SetTableDefinitionAction, SetNamesAction, AddNamesAction, SetEditRowMode, SetEditedRow, ResetStore, TableFilter, SetExtendedFilterMode, RunExtendedFilter, SetExtendedFilterSelect, SetExtendedFilter, SwitchTableReset, SetRowsTasksAction, SetTableUsers, UpdateRowsTaskAction, UpdateTaskAction, DeleteTask, SetExtendedTableView, SetExtendedRowView, DeleteRow, AddTaskAction */
+/*! exports provided: RESET_TABLE_STORE, ADD_ROW, ADD_TASK, SHOW_ROW, UPDATE_ROW, EDIT_ROW_MODE, EDITED_ROW, DELETE_ROW, SET_ROWS, SET_DEFINITION, SET_NAMES, ADD_NAMES, NEW_ROW_MODE, SET_FILTER, EXTENDED_FILTER_MODE, SET_EXTENDED_TABLE_VIEW, SET_EXTENDED_ROW_VIEW, RUN_EXTENDED_FILTER, SET_EXTENDED_FILTER, SET_EXTENDED_FILTER_SELECT, SET_SORT_CONTENT, SWITCH_TABLE_RESET, SET_ROW_TASKS, SET_TABLE_USERS, UPDATE_ROWS_TASK, UPDATE_TASK, DELETE_ROWS_TASK, DELETE_TABLE, SetNewRowModeAction, SetSortContent, AddRowAction, ShowRowDetailsAction, UpdateRowAction, SetRowsAction, SetTableDefinitionAction, SetNamesAction, AddNamesAction, SetEditRowMode, SetEditedRow, ResetStore, TableFilter, SetExtendedFilterMode, RunExtendedFilter, SetExtendedFilterSelect, SetExtendedFilter, SwitchTableReset, SetRowsTasksAction, SetTableUsers, UpdateRowsTaskAction, UpdateTaskAction, DeleteTask, SetExtendedTableView, SetExtendedRowView, DeleteRow, AddTaskAction, DeleteTable */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -3050,6 +3053,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "UPDATE_ROWS_TASK", function() { return UPDATE_ROWS_TASK; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "UPDATE_TASK", function() { return UPDATE_TASK; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "DELETE_ROWS_TASK", function() { return DELETE_ROWS_TASK; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "DELETE_TABLE", function() { return DELETE_TABLE; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "SetNewRowModeAction", function() { return SetNewRowModeAction; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "SetSortContent", function() { return SetSortContent; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "AddRowAction", function() { return AddRowAction; });
@@ -3077,6 +3081,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "SetExtendedRowView", function() { return SetExtendedRowView; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "DeleteRow", function() { return DeleteRow; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "AddTaskAction", function() { return AddTaskAction; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "DeleteTable", function() { return DeleteTable; });
 var RESET_TABLE_STORE = 'RESET_TABLE_STORE';
 var ADD_ROW = 'ADD_ROW';
 var ADD_TASK = 'ADD_TASK';
@@ -3104,6 +3109,7 @@ var SET_TABLE_USERS = 'SET_TABLE_USERS';
 var UPDATE_ROWS_TASK = 'UPDATE_ROWS_TASK';
 var UPDATE_TASK = 'UPDATE_TASK';
 var DELETE_ROWS_TASK = 'DELETE_ROWS_TASK';
+var DELETE_TABLE = 'DELETE_TABLE';
 var SetNewRowModeAction = /** @class */ (function () {
     function SetNewRowModeAction(payload) {
         this.payload = payload;
@@ -3317,6 +3323,14 @@ var AddTaskAction = /** @class */ (function () {
     return AddTaskAction;
 }());
 
+var DeleteTable = /** @class */ (function () {
+    function DeleteTable(payload) {
+        this.payload = payload;
+        this.type = DELETE_TABLE;
+    }
+    return DeleteTable;
+}());
+
 
 
 /***/ }),
@@ -3418,6 +3432,8 @@ function tablesReducers(state, action) {
             return __assign({}, state, { tableContent: deleteRow(state.tableContent, action.payload).slice(), editRowMode: initialTableState.editRowMode, editedRow: initialTableState.editedRow });
         case _tables_actions__WEBPACK_IMPORTED_MODULE_0__["ADD_TASK"]:
             return __assign({}, state, { tableContent: addRowTask(state.tableContent, action.payload).slice() });
+        case _tables_actions__WEBPACK_IMPORTED_MODULE_0__["DELETE_TABLE"]:
+            return __assign({}, state, { tablesDetails: deleteTable(state.tablesDetails, action.payload).slice() });
         default:
             return state;
     }
@@ -3479,6 +3495,14 @@ function addRowTask(rows, data) {
         }
     });
     return rows;
+}
+function deleteTable(tablesDetails, tableId) {
+    tablesDetails.forEach(function (tableDetails, i) {
+        if (tableDetails.id === tableId) {
+            tablesDetails.splice(i, 1);
+        }
+    });
+    return tablesDetails;
 }
 // function deleteItemByName(array: NameModel[], itemName: string): Array<NameModel> {// TODO GENERIC TYPE FUNCTION???  r.216/255 REMOVE?
 //   array.forEach((arrayItem, i) => {
@@ -3640,7 +3664,7 @@ function tasksReducers(state, action) {
 /*!****************************************************!*\
   !*** ./src/app/shared/store/user/users.actions.ts ***!
   \****************************************************/
-/*! exports provided: SET_NEW_USER_MODE, SET_USERS, ADD_USER, DELETE_USER, ADD_ROLE_TO_USER, REMOVE_ROLE_FROM_USER, SET_CURRENT_USER_ROLENAMES, SET_NEW_ROLE_MODE, SET_ROLES, ADD_ROLE, DELETE_ROLE, REMOVE_USER_FROM_ROLE, ADD_USER_TO_ROLE, SET_TOKEN, DELETE_TOKEN, DELETE_CURRENT_USER, SET_CURRENT_USER, SET_CURRENT_USER_DETAILS, SWITCH_TABLE_RESET, SET_NEW_WEB_SOCKET_CLIENT, SET_TASK_INFO, RESET_STORE, SET_LOGIN_FAILURE_INFO, SET_LOGOUT_INFO, SET_USER_DISPLAYED_TASK, SET_SELECTED_USER, UPDATE_TASK, DeleteUserAction, SetNewUserModeAction, SetUsersAction, AddUserAction, AddUserToRole, RemoveUserFromRole, SetCurrentUserRolenames, SetTokenAction, DeleteTokenAction, RemoveRoleFromUser, SetCurrentUserAction, DeleteCurrentUserAction, SetNewRoleModeAction, AddRoleAction, DeleteRoleAction, SetRolesAction, AddRoleToUser, SwitchTableReset, SetNewWebSocketClient, SetTaskInfoAction, SetLoginFailureInfo, SetLogoutInfo, ResetStore, SetUserDisplayedTask, SetSelectedUser, UpdateTaskAction, SetCurrntUserDetails */
+/*! exports provided: SET_NEW_USER_MODE, SET_USERS, ADD_USER, DELETE_USER, ADD_ROLE_TO_USER, REMOVE_ROLE_FROM_USER, SET_CURRENT_USER_ROLENAMES, SET_NEW_ROLE_MODE, SET_ROLES, ADD_ROLE, DELETE_ROLE, REMOVE_USER_FROM_ROLE, ADD_USER_TO_ROLE, SET_TOKEN, DELETE_TOKEN, DELETE_CURRENT_USER, SET_CURRENT_USER, SET_CURRENT_USER_DETAILS, SWITCH_TABLE_RESET, SET_NEW_WEB_SOCKET_CLIENT, SET_TASK_INFO, RESET_STORE, SET_LOGIN_FAILURE_INFO, SET_LOGOUT_INFO, SET_USER_DISPLAYED_TASK, SET_SELECTED_USER, UPDATE_TASK, DeleteUserAction, SetNewUserModeAction, SetUsersAction, AddUserAction, AddUserToRole, RemoveUserFromRole, SetCurrentUserRolenames, SetTokenAction, DeleteTokenAction, RemoveRoleFromUser, SetCurrentUserAction, DeleteCurrentUserAction, SetNewRoleModeAction, AddRoleAction, DeleteRoleAction, SetRolesAction, AddRoleToUser, SwitchTableReset, SetNewWebSocketClient, SetTaskInfoAction, SetLoginFailureInfo, SetLogoutInfo, ResetStore, SetUserDisplayedTask, SetSelectedUser, UpdateTaskAction, SetCurrntUserDetails, DeleteTableAction */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -3699,6 +3723,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "SetSelectedUser", function() { return SetSelectedUser; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "UpdateTaskAction", function() { return UpdateTaskAction; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "SetCurrntUserDetails", function() { return SetCurrntUserDetails; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "DeleteTableAction", function() { return DeleteTableAction; });
 var SET_NEW_USER_MODE = 'SET_NEW_USER_MODE';
 var SET_USERS = 'SET_USERS';
 var ADD_USER = 'ADD_USER';
@@ -3938,6 +3963,14 @@ var SetCurrntUserDetails = /** @class */ (function () {
     return SetCurrntUserDetails;
 }());
 
+var DeleteTableAction = /** @class */ (function () {
+    function DeleteTableAction(payload) {
+        this.payload = payload;
+        this.type = SET_CURRENT_USER_DETAILS;
+    }
+    return DeleteTableAction;
+}());
+
 
 
 /***/ }),
@@ -3999,10 +4032,12 @@ function usersReducers(state, action) {
             return __assign({}, state, { roles: action.payload.slice() });
         case _users_actions__WEBPACK_IMPORTED_MODULE_0__["ADD_ROLE_TO_USER"]:
             return __assign({}, state, { users: updateUsersRoles(state.users, action.payload).slice() });
+        case _users_actions__WEBPACK_IMPORTED_MODULE_0__["ADD_USER_TO_ROLE"]:
+            return __assign({}, state, { roles: addUserToRole(state.users, state.roles, action.payload).slice() });
         case _users_actions__WEBPACK_IMPORTED_MODULE_0__["REMOVE_ROLE_FROM_USER"]:
             return __assign({}, state, { users: updateUsersRoles(state.users, action.payload).slice() });
         case _users_actions__WEBPACK_IMPORTED_MODULE_0__["REMOVE_USER_FROM_ROLE"]:
-            return __assign({}, state, { roles: updateRoleUsers(state.roles, action.payload).slice() });
+            return __assign({}, state, { roles: updateRolesUsers(state.roles, action.payload).slice() });
         case _users_actions__WEBPACK_IMPORTED_MODULE_0__["SET_CURRENT_USER_ROLENAMES"]:
             return __assign({}, state, { currentUserRoles: action.payload });
         case _users_actions__WEBPACK_IMPORTED_MODULE_0__["DELETE_TOKEN"]:
@@ -4037,6 +4072,20 @@ function usersReducers(state, action) {
             return state;
     }
 }
+function addUserToRole(users, roles, payload) {
+    var user = null;
+    users.forEach(function (u) {
+        if (u.username === payload.username) {
+            user = u;
+        }
+    });
+    roles.forEach(function (role) {
+        if (role.name === payload.roleName) {
+            role.userDtos = role.userDtos.concat([user]);
+        }
+    });
+    return roles;
+}
 function updateUsersTask(usersToUpdate, task) {
     var users = usersToUpdate;
     users.forEach(function (user, i) {
@@ -4069,15 +4118,7 @@ function deleteItemByUsername(array, itemName) {
     });
     return array;
 }
-// function updateRow(rows: RowContentModel[], updatedRow: RowContentModel): RowContentModel[] { TODO remove?
-//   rows.forEach((row, i) => {
-//     if (row.id === updatedRow.id) {
-//       rows[i] = updatedRow;
-//     }
-//   });
-//   return rows;
-// }
-function updateRoleUsers(roles, newRole) {
+function updateRolesUsers(roles, newRole) {
     roles.forEach(function (role) {
         if (role.name === newRole.name) {
             role.userDtos = newRole.userDtos;
@@ -4449,9 +4490,6 @@ var TableStatisticsComponent = /** @class */ (function () {
     TableStatisticsComponent.prototype.ngOnInit = function () {
         var _this = this;
         this.tableHeaderState = this.store.select('tables', 'tableDefinition');
-        this.tableHeaderState.subscribe(function (header) {
-            console.log(header);
-        });
         this.tableState = this.store.select('tables');
         this.selectedTableName = this.store.select('statistics', 'selectedTableName');
         this.store.select('tables', 'tablesDetails')
@@ -4467,9 +4505,7 @@ var TableStatisticsComponent = /** @class */ (function () {
             if (tableState) {
                 _this.tasksInfo = _this.statistics.mapToTaskInfo(tableState.tableContent);
                 _this.tableInfo = _this.statistics.mapToRowsInfo(tableState.tableContent);
-                console.log(_this.tableInfo);
                 _this.tableInfo.columnInfo.enumInfo.forEach(function (enumInfo, i) {
-                    console.log('enumCharts', _this.enumCharts);
                     _this.setEnumChart(enumInfo, i);
                 });
             }
@@ -4583,7 +4619,7 @@ module.exports = "a.bg-dark:hover {\r\n  background-color: #343a40!important;\r\
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<div class=\"container-fluid\" style=\"padding: 0\" *ngIf=\"chosenName\">\r\n  <nav class=\"navbar\" style=\"margin-bottom: 0;padding-bottom: 0; border-bottom: none;\">\r\n    <ul class=\"nav\" style=\"margin-bottom: 0;padding-bottom: 0; border-bottom: none;\">\r\n      <li style=\"background-color: transparent !important;\">\r\n        <form class=\"form-inline input-group my-2 my-lg-0\" style=\"margin-bottom: 0;padding-left: 20px;\">\r\n          <div class=\"btn-group\" role=\"group\" aria-label=\"\">\r\n            <button class=\"btn btn-outline-secondary my-2 my-sm-0\" (click)=\"onNewRow()\">\r\n              New row\r\n            </button>\r\n            <button class=\"btn btn-outline-secondary my-2 my-sm-0\"\r\n                    *ngIf=\"(extendedTableView|async)\"\r\n                    (click)=\"onExtendedFilterMode()\">\r\n              Filter Mode\r\n            </button>\r\n            <button class=\"btn btn-outline-secondary my-2 my-sm-0\" (click)=\"switchExtendedTableView()\">\r\n              {{ (extendedTableView|async) ? 'Reduce View' : 'Extend View'}}\r\n            </button>\r\n          </div>\r\n          <div class=\"btn-group btn-group-toggle\" data-toggle=\"buttons\"\r\n               *ngIf=\"(extendedTableView|async) && (extendedFilterMode | async)\">\r\n            <label class=\"btn btn-outline-secondary active\" (click)=\"setFilterSelectValue(false)\">\r\n              <input type=\"radio\">\r\n              All\r\n            </label>\r\n            <label class=\"btn btn-outline-secondary\" (click)=\"setFilterSelectValue(true)\">\r\n              <input type=\"radio\">\r\n              Any\r\n            </label>\r\n          </div>\r\n          <div class=\"btn-group\" role=\"group\" aria-label=\"\">\r\n            <input class=\"form-control mr-sm-2\" type=\"text\" placeholder=\"Search\"\r\n                   (keyup)=\"onFilter(filterInput.value)\"\r\n                   *ngIf=\"!(extendedTableView|async)\"\r\n                   #filterInput>\r\n          </div>\r\n        </form>\r\n      </li>\r\n    </ul>\r\n    <ul class=\"nav nav-pills nav-collapse\" style=\"margin-bottom: 0;padding-bottom: 0;border-bottom: none;\">\r\n      <li class=\"nav-item\">\r\n        <div class=\"btn-group\" role=\"group\" aria-label=\"\">\r\n          <button class=\"btn btn-outline-secondary\"\r\n                  *ngFor=\"let tableDetails of tablesDetails\" (click)=\"onChooseName(tableDetails.name)\"\r\n                  [ngClass]=\"chosenName == tableDetails.name ? 'text-info' : 'text-secondary'\">\r\n            {{tableDetails.name}} <b>({{constants.getShortcut(tableDetails.databaseEnvironment)}})</b>\r\n          </button>\r\n        </div>\r\n      </li>\r\n    </ul>\r\n  </nav>\r\n</div>\r\n\r\n<div class=\"container\" style=\"margin-top: 10%\" *ngIf=\"chosenName == null || chosenName == undefined\">\r\n  <div class=\"row justify-content-center\">\r\n    <div class=\"col-sm-12 col-md-6\">\r\n      <ul class=\"list-group\">\r\n        <li class=\"list-group-item bg-dark text-info\">Select a table:</li>\r\n        <li class=\"list-group-item text-secondary\" *ngFor=\"let tableDetails of tablesDetails\"\r\n            (click)=\"onChooseName(tableDetails.name)\">{{tableDetails.name}} <b>({{constants.getShortcut(tableDetails.databaseEnvironment)}})</b>\r\n        </li>\r\n      </ul>\r\n    </div>\r\n  </div>\r\n</div>\r\n"
+module.exports = "<div class=\"container-fluid\" style=\"padding: 0\" *ngIf=\"chosenName && parent !== 'definition'\">\r\n  <nav class=\"navbar\" style=\"margin-bottom: 0;padding-bottom: 0; border-bottom: none;\">\r\n    <ul class=\"nav\" style=\"margin-bottom: 0;padding-bottom: 0; border-bottom: none;\">\r\n      <li style=\"background-color: transparent !important;\">\r\n        <form class=\"form-inline input-group my-2 my-lg-0\" style=\"margin-bottom: 0;padding-left: 20px;\">\r\n          <div class=\"btn-group\" role=\"group\" aria-label=\"\">\r\n            <button class=\"btn btn-outline-secondary my-2 my-sm-0\" (click)=\"onNewRow()\">\r\n              New row\r\n            </button>\r\n            <button class=\"btn btn-outline-secondary my-2 my-sm-0\"\r\n                    *ngIf=\"(extendedTableView|async)\"\r\n                    (click)=\"onExtendedFilterMode()\">\r\n              Filter Mode\r\n            </button>\r\n            <button class=\"btn btn-outline-secondary my-2 my-sm-0\" (click)=\"switchExtendedTableView()\">\r\n              {{ (extendedTableView|async) ? 'Reduce View' : 'Extend View'}}\r\n            </button>\r\n          </div>\r\n          <div class=\"btn-group btn-group-toggle\" data-toggle=\"buttons\"\r\n               *ngIf=\"(extendedTableView|async) && (extendedFilterMode | async)\">\r\n            <label class=\"btn btn-outline-secondary active\" (click)=\"setFilterSelectValue(false)\">\r\n              <input type=\"radio\">\r\n              All\r\n            </label>\r\n            <label class=\"btn btn-outline-secondary\" (click)=\"setFilterSelectValue(true)\">\r\n              <input type=\"radio\">\r\n              Any\r\n            </label>\r\n          </div>\r\n          <div class=\"btn-group\" role=\"group\" aria-label=\"\">\r\n            <input class=\"form-control mr-sm-2\" type=\"text\" placeholder=\"Search\"\r\n                   (keyup)=\"onFilter(filterInput.value)\"\r\n                   *ngIf=\"!(extendedTableView|async)\"\r\n                   #filterInput>\r\n          </div>\r\n        </form>\r\n      </li>\r\n    </ul>\r\n    <ul class=\"nav nav-pills nav-collapse\" style=\"margin-bottom: 0;padding-bottom: 0;border-bottom: none;\">\r\n      <li class=\"nav-item\">\r\n        <div class=\"btn-group\" role=\"group\" aria-label=\"\">\r\n          <button class=\"btn btn-outline-secondary\"\r\n                  *ngFor=\"let tableDetails of tablesDetails\" (click)=\"onChooseName(tableDetails.name)\"\r\n                  [ngClass]=\"chosenName == tableDetails.name ? 'text-info' : 'text-secondary'\">\r\n            {{tableDetails.name}}\r\n            <b>({{constants.getShortcut(tableDetails.databaseEnvironment)}})</b>\r\n          </button>\r\n        </div>\r\n      </li>\r\n    </ul>\r\n  </nav>\r\n</div>\r\n\r\n<div class=\"container\" style=\"margin-top: 10%\" *ngIf=\"chosenName == null || chosenName == undefined || parent === 'definition'\">\r\n  <div class=\"row justify-content-center\">\r\n    <div class=\"col-sm-12 col-md-6\">\r\n      <ul class=\"list-group\">\r\n        <li class=\"list-group-item bg-dark text-info\" *ngIf=\"tablesDetails.length\">Select a table:</li>\r\n        <li class=\"list-group-item text-secondary d-flex justify-content-between align-items-center\" *ngFor=\"let tableDetails of tablesDetails\"\r\n            (click)=\"onChooseName(tableDetails.name)\">{{tableDetails.name}}\r\n          <b>({{constants.getShortcut(tableDetails.databaseEnvironment)}})</b>\r\n          <button *ngIf=\"parent === 'definition'\" class=\"btn btn-outline-danger\" (click)=\"deleteTable(tableDetails.id)\"> DELETE </button>\r\n        </li>\r\n      </ul>\r\n    </div>\r\n  </div>\r\n</div>\r\n"
 
 /***/ }),
 
@@ -4602,6 +4638,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _ngrx_store__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @ngrx/store */ "./node_modules/@ngrx/store/fesm5/store.js");
 /* harmony import */ var _shared_store_table_tables_actions__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../shared/store/table/tables.actions */ "./src/app/shared/store/table/tables.actions.ts");
 /* harmony import */ var _shared_constants_service__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../shared/constants.service */ "./src/app/shared/constants.service.ts");
+/* harmony import */ var _shared_data_storage_service__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../../shared/data-storage.service */ "./src/app/shared/data-storage.service.ts");
 var __decorate = (undefined && undefined.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -4616,19 +4653,23 @@ var __metadata = (undefined && undefined.__metadata) || function (k, v) {
 
 
 
+
 var MenuComponent = /** @class */ (function () {
-    function MenuComponent(store, constants) {
+    function MenuComponent(store, dss, constants) {
         this.store = store;
+        this.dss = dss;
         this.constants = constants;
         this.chosenNameChanged = new rxjs_Subject__WEBPACK_IMPORTED_MODULE_1__["Subject"]();
         this.tableNames = [];
     }
     MenuComponent.prototype.setFilterSelectValue = function (value) {
-        console.log('setFilterSelectValue', value);
         this.store.dispatch(new _shared_store_table_tables_actions__WEBPACK_IMPORTED_MODULE_3__["SetExtendedFilterSelect"](value));
     };
     MenuComponent.prototype.ngOnInit = function () {
         var _this = this;
+        this.store.select("tables", "tablesDetails").subscribe(function (details) {
+            _this.tablesDetails = details;
+        });
         this.extendedFilterMode = this.store.select('tables', 'extendedFilterMode');
         this.extendedFilterMode.subscribe((function (filterModeValue) {
             _this.extendedFilterModeValue = filterModeValue;
@@ -4645,11 +4686,9 @@ var MenuComponent = /** @class */ (function () {
         this.chosenNameChanged.next(tableDetails);
     };
     MenuComponent.prototype.onFilter = function (filter) {
-        console.log(filter);
         this.store.dispatch(new _shared_store_table_tables_actions__WEBPACK_IMPORTED_MODULE_3__["TableFilter"](filter));
     };
     MenuComponent.prototype.onNewRow = function () {
-        // TODO new Row
         this.store.dispatch(new _shared_store_table_tables_actions__WEBPACK_IMPORTED_MODULE_3__["SetEditRowMode"](true));
         this.store.dispatch(new _shared_store_table_tables_actions__WEBPACK_IMPORTED_MODULE_3__["SetNewRowModeAction"](true));
     };
@@ -4662,10 +4701,16 @@ var MenuComponent = /** @class */ (function () {
     MenuComponent.prototype.onExtendedFilterMode = function () {
         this.store.dispatch(new _shared_store_table_tables_actions__WEBPACK_IMPORTED_MODULE_3__["SetExtendedFilterMode"](!this.extendedFilterModeValue));
     };
+    MenuComponent.prototype.deleteTable = function (tableId) {
+        this.dss.deleteProject(tableId);
+    };
+    MenuComponent.prototype.ngOnDestroy = function () {
+        this.dss.getTablesDetails();
+    };
     __decorate([
         Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["Input"])(),
-        __metadata("design:type", Array)
-    ], MenuComponent.prototype, "tablesDetails", void 0);
+        __metadata("design:type", String)
+    ], MenuComponent.prototype, "parent", void 0);
     __decorate([
         Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["Output"])(),
         __metadata("design:type", Object)
@@ -4676,7 +4721,9 @@ var MenuComponent = /** @class */ (function () {
             template: __webpack_require__(/*! ./menu.component.html */ "./src/app/tables/menu/menu.component.html"),
             styles: [__webpack_require__(/*! ./menu.component.css */ "./src/app/tables/menu/menu.component.css")]
         }),
-        __metadata("design:paramtypes", [_ngrx_store__WEBPACK_IMPORTED_MODULE_2__["Store"], _shared_constants_service__WEBPACK_IMPORTED_MODULE_4__["ConstantsService"]])
+        __metadata("design:paramtypes", [_ngrx_store__WEBPACK_IMPORTED_MODULE_2__["Store"],
+            _shared_data_storage_service__WEBPACK_IMPORTED_MODULE_5__["DataStorageService"],
+            _shared_constants_service__WEBPACK_IMPORTED_MODULE_4__["ConstantsService"]])
     ], MenuComponent);
     return MenuComponent;
 }());
@@ -4703,7 +4750,7 @@ module.exports = "li, td {\r\n  border: 1px solid #32383e;\r\n  background-color
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<div class=\"panel\" *ngIf=\"editRowMode\" style=\"border: solid 2px #343a40; border-radius: 8px\">\r\n\r\n  <div class=\"panel-heading text-center\" style=\"background-color: rgba(0,0,0,0.05); padding: 10px\">\r\n    <div class=\"btn-group\">\r\n      <button type=\"button\" class=\"btn btn-outline-secondary\" (click)=\"onToggleRowEditMode()\">Close</button>\r\n      <button type=\"button\" class=\"btn btn-outline-secondary\" (click)=\"onAddTask()\">Add Task</button>\r\n      <button type=\"button\" class=\"btn btn-outline-secondary\" *ngIf=\"unlockFields && !(newRowMode | async)\" (click)=\"onSubmit()\">Save</button>\r\n      <button type=\"button\" class=\"btn btn-outline-secondary\" *ngIf=\"!(newRowMode | async)\" (click)=\"toggleUnlock()\"> {{ unlockFields ? 'Cancel' : 'Edit' }}</button>\r\n      <button type=\"button\" class=\"btn btn-outline-secondary\" *ngIf=\"(newRowMode | async)\" (click)=\"onSaveNewRow()\">Save</button>\r\n      <button type=\"button\" class=\"btn btn-outline-secondary\" (click)=\"switchExtendedRowView()\">{{(extendedRowView| async) ? 'Reduce' : 'Extend'}}</button>\r\n      <button type=\"button\" class=\"btn btn-outline-secondary text-danger\" (click)=\"onDeleteRow()\"> Delete </button>\r\n    </div>\r\n  </div>\r\n\r\n  <div class=\"panel-body\" style=\"padding: 10px\">\r\n    <div *ngIf=\"!unlockFields && (newRowMode | async)\">\r\n      <div class=\"col-xs-12 \">\r\n        <form [formGroup]=\"newRowForm\">\r\n          <div class=\"form-group\" hidden>\r\n            <label for=\"id\" class=\"text-info\">ID:</label>\r\n            <input type=\"number\"\r\n                   id=\"id\"\r\n                   formControlName=\"id\"\r\n                   class=\"form-control\"\r\n            >\r\n          </div>\r\n          <div class=\"form-group\" hidden>\r\n            <label for=\"name\" class=\"text-info\">Name:</label>\r\n            <input type=\"text\"\r\n                   id=\"name\"\r\n                   formControlName=\"name\"\r\n                   class=\"form-control\"\r\n            >\r\n          </div>\r\n          <div class=\"form-group\" hidden>\r\n            <label for=\"createdBy\" class=\"text-info\">Created By:</label>\r\n            <input type=\"text\"\r\n                   id=\"createdBy\"\r\n                   formControlName=\"createdBy\"\r\n                   class=\"form-control\"\r\n            >\r\n          </div>\r\n          <div class=\"form-group\" hidden>\r\n            <label for=\"createdOn\" class=\"text-info\">Created On:</label>\r\n            <input type=\"datetime-local\"\r\n                   id=\"createdOn\"\r\n                   formControlName=\"createdOn\"\r\n                   class=\"form-control\"\r\n            >\r\n          </div>\r\n          <div class=\"form-group\" hidden>\r\n            <label for=\"lastModifiedBy\" class=\"text-info\">Last modified by:</label>\r\n            <input type=\"text\"\r\n                   id=\"lastModifiedBy\"\r\n                   formControlName=\"lastModifiedBy\"\r\n                   class=\"form-control\"\r\n            >\r\n          </div>\r\n          <div class=\"form-group\" hidden>\r\n            <label for=\"lastModifiedOn\" class=\"text-info\">Last modified on:</label>\r\n            <input type=\"datetime-local\"\r\n                   id=\"lastModifiedOn\"\r\n                   formControlName=\"lastModifiedOn\"\r\n                   class=\"form-control\"\r\n            >\r\n          </div>\r\n          <div formArrayName=\"columnValueDtos\">\r\n            <div *ngFor=\"let cell of newRowForm.get('columnValueDtos').controls;let j = index\">\r\n\r\n              <div [ngSwitch]=\"(cell.value | valueOnKey).key\" formGroupName=\"{{j}}\">\r\n\r\n                <div *ngSwitchCase=\"'DT'\" class=\"form-group\" style=\"margin-top: 10px\">\r\n                  <label class=\"text-info\">{{(header | async)[0].columnDetailDefinitionDtoList[j].name}}</label>\r\n                  <input type=\"datetime-local\"\r\n                         formControlName=\"DT\"\r\n                         class=\"form-control\"\r\n                         formControlName=\"DT\">\r\n                </div>\r\n                <div *ngSwitchCase=\"'ST'\" class=\"form-group\" style=\"margin-top: 10px\">\r\n                  <label class=\"text-info\">{{(header | async)[0].columnDetailDefinitionDtoList[j].name}}</label>\r\n                  <input\r\n                    [type]=\"'text'\"\r\n                    formControlName=\"ST\"\r\n                    class=\"form-control\">\r\n                </div>\r\n                <div *ngSwitchCase=\"'DE'\" class=\"form-group\" style=\"margin-top: 10px\">\r\n                  <label class=\"text-info\">{{(header | async)[0].columnDetailDefinitionDtoList[j].name}}</label>\r\n                  <textarea cols=\"30\" rows=\"10\"\r\n                            class=\"form-control\"\r\n                            formControlName=\"DE\">\r\n                </textarea>\r\n                </div>\r\n                <div *ngSwitchCase=\"'EN'\" class=\"form-group\" style=\"margin-top: 10px\">\r\n                  <label class=\"text-info\">{{(header | async)[0].columnDetailDefinitionDtoList[j].name}}</label>\r\n                  <select class=\"form-control\" formControlName=\"EN\">\r\n                    <option selected> -Select value-</option>\r\n                    <option *ngFor=\"let option of (header | async)[0].columnDetailDefinitionDtoList[j].optionList\">\r\n                      {{option.value}}\r\n                    </option>\r\n                  </select>\r\n                </div>\r\n                <div *ngSwitchCase=\"'IN'\" class=\"form-group\" style=\"margin-top: 10px\">\r\n                  <label class=\"text-info\">{{(header | async)[0].columnDetailDefinitionDtoList[j].name}}</label>\r\n                  <input [id]=\"(cell.value | valueOnKey).key\"\r\n                         [type]=\"'number'\"\r\n                         class=\"form-control\"\r\n                         formControlName=\"IN\">\r\n                </div>\r\n              </div>\r\n            </div>\r\n          </div>\r\n        </form>\r\n      </div>\r\n    </div>\r\n\r\n    <form *ngIf=\"unlockFields && !(newRowMode | async)\" [formGroup]=\"updateRowForm\" style=\"padding-left: 10px\" style=\"padding: 5px\">\r\n      <div formArrayName=\"columnValueDtos\">\r\n        <div *ngFor=\"let cell of updateRowForm.get('columnValueDtos').controls;let j = index\">\r\n          <div [ngSwitch]=\"(cell.value | valueOnKey).key\" formGroupName=\"{{j}}\">\r\n            <div *ngSwitchCase=\"'DT'\" class=\"form-group\" style=\"margin-top: 10px\">\r\n              <label class=\"text-info\"> {{ (header | async)[0].columnDetailDefinitionDtoList[j]?.name }} </label>\r\n              <input type=\"datetime-local\"\r\n                     formControlName=\"DT\"\r\n                     class=\"form-control\"\r\n              >\r\n            </div>\r\n            <div *ngSwitchCase=\"'ST'\" class=\"form-group\" style=\"margin-top: 10px\">\r\n              <label class=\"text-info\"> {{ (header | async)[0].columnDetailDefinitionDtoList[j]?.name }} </label>\r\n              <input formControlName=\"ST\"\r\n                     [type]=\"'text'\"\r\n                     class=\"form-control\"\r\n              >\r\n            </div>\r\n            <div *ngSwitchCase=\"'DE'\" class=\"form-group\" style=\"margin-top: 10px\">\r\n              <label class=\"text-info\"> {{ (header | async)[0].columnDetailDefinitionDtoList[j]?.name }} </label>\r\n              <textarea cols=\"30\" rows=\"10\"\r\n                        formControlName=\"DE\"\r\n                        class=\"form-control\"\r\n\r\n              >\r\n                </textarea>\r\n            </div>\r\n            <div *ngSwitchCase=\"'IN'\" class=\"form-group\" style=\"margin-top: 10px\">\r\n              <label class=\"text-info\"> {{ (header | async)[0].columnDetailDefinitionDtoList[j]?.name }} </label>\r\n              <input formControlName=\"IN\"\r\n                     [type]=\"'number'\"\r\n                     class=\"form-control\"\r\n\r\n              >\r\n            </div>\r\n            <div *ngSwitchCase=\"'EN'\" class=\"form-group\" style=\"margin-top: 10px\">\r\n              <label class=\"text-info\"> {{ (header | async)[0].columnDetailDefinitionDtoList[j]?.name }} </label>\r\n              <select class=\"form-control\"\r\n                      formControlName=\"EN\"\r\n                      style=\"height: 35px\"\r\n\r\n              >\r\n                <option *ngFor=\"let option of (header | async)[0].columnDetailDefinitionDtoList[j]?.optionList\"\r\n                        [value]=\"option.value\"\r\n                        [selected]=\"(row| async)?.columnValueDtos[j]['EN'].value == option.value\"\r\n                >{{ option.value }}\r\n              </select>\r\n            </div>\r\n          </div>\r\n        </div>\r\n      </div>\r\n      <div class=\"form-group\">\r\n        <label for=\"id\" class=\"text-info\">ID:</label>\r\n        <input type=\"number\"\r\n               id=\"id\"\r\n               formControlName=\"id\"\r\n               class=\"form-control\"\r\n               readonly\r\n               required\r\n        >\r\n      </div>\r\n      <div class=\"form-group\" hidden>\r\n        <label for=\"name\" class=\"text-info\">Name:</label>\r\n        <input type=\"text\"\r\n               id=\"name\"\r\n               formControlName=\"name\"\r\n               class=\"form-control\"\r\n               readonly\r\n        >\r\n      </div>\r\n      <div class=\"form-group\" >\r\n        <label for=\"createdBy\" class=\"text-info\">Created By:</label>\r\n        <input type=\"text\"\r\n               id=\"createdBy\"\r\n               formControlName=\"createdBy\"\r\n               class=\"form-control\"\r\n               readonly\r\n               required\r\n        >\r\n      </div>\r\n      <div class=\"form-group\">\r\n        <label class=\"text-info\">Created On:</label>\r\n        <input type=\"datetime-local\"\r\n               formControlName=\"createdOn\"\r\n               class=\"form-control\"\r\n               readonly\r\n               required\r\n        >\r\n      </div>\r\n      <div class=\"form-group\">\r\n        <label for=\"lastModifiedBy\" class=\"text-info\">Last modified by:</label>\r\n        <input type=\"text\"\r\n               id=\"lastModifiedBy\"\r\n               formControlName=\"lastModifiedBy\"\r\n               class=\"form-control\"\r\n               readonly\r\n               required\r\n        >\r\n      </div>\r\n      <div class=\"form-group\" disabled>\r\n        <label for=\"lastModifiedOn\" class=\"text-info\">Last modified on:</label>\r\n        <input type=\"datetime-local\"\r\n               id=\"lastModifiedOn\"\r\n               formControlName=\"lastModifiedOn\"\r\n               class=\"form-control\"\r\n               readonly\r\n               required\r\n        >\r\n      </div>\r\n    </form>\r\n\r\n    <div *ngIf=\"!unlockFields && !(newRowMode | async)\">\r\n      <table class=\"table\">\r\n        <tbody>\r\n        <tr *ngFor=\"let cellValue of (row | async)?.columnValueDtos; let i = index;\">\r\n          <td><span class=\"text-info\">\r\n            {{ (header | async)[0].columnDetailDefinitionDtoList[i]?.name }}</span>\r\n          </td>\r\n          <td>\r\n            {{(cellValue | valueOnKey).value.value }}\r\n          </td>\r\n        </tr>\r\n        <tr *ngIf=\"extendedRowView | async\">\r\n          <td><span class=\"text-info\">ID</span></td>\r\n          <td>{{ (row | async)?.id }}</td>\r\n        </tr>\r\n        <tr *ngIf=\"extendedRowView | async\" hidden>\r\n          <td><span class=\"text-info\">Name</span></td>\r\n          <td>{{ (row | async)?.name }}</td>\r\n        </tr>\r\n        <tr *ngIf=\"extendedRowView | async\">\r\n          <td><span class=\"text-info\">Created by</span></td>\r\n          <td>{{ (row | async)?.createdBy}}</td>\r\n        </tr>\r\n        <tr *ngIf=\"extendedRowView | async\">\r\n          <td><span class=\"text-info\">Created on</span></td>\r\n          <td>{{ (row | async)?.createdOn }}</td>\r\n        </tr>\r\n        <tr *ngIf=\"extendedRowView | async\">\r\n          <td><span class=\"text-info\">Last modified by</span></td>\r\n          <td>{{ (row | async)?.lastModifiedBy }}</td>\r\n        </tr>\r\n        <tr *ngIf=\"extendedRowView | async\">\r\n          <td><span class=\"text-info\">Last modified on</span></td>\r\n          <td>{{ (row | async)?.lastModifiedOn }}</td>\r\n        </tr>\r\n        </tbody>\r\n      </table>\r\n\r\n      <div *ngIf=\"(row | async)?.taskDtos.length <= 0\">\r\n        <ul class=\"list-group\" style=\"margin-bottom: 0\">\r\n          <li class=\"list-group-item text-white text-center\" style=\"background-color: rgba(0,0,0,0.05);\">\r\n            <h5>NO TASKS</h5>\r\n          </li>\r\n        </ul>\r\n      </div>\r\n\r\n      <div *ngIf=\"(row | async)?.taskDtos.length > 0\">\r\n        <ul class=\"list-group\" style=\"margin-bottom: 0\">\r\n          <li class=\"list-group-item text-white text-center\" style=\"background-color: rgba(0,0,0,0.05);\">\r\n            <h5>TASKS</h5>\r\n          </li>\r\n          <div *ngFor=\"let task of (row | async)?.taskDtos; let i = index;\">\r\n            <li class=\"list-group-item d-flex justify-content-between align-items-center\" style=\"margin-top: 3px\">\r\n              <span class=\"btn btn-outline-secondary text-info\"\r\n                    (click)=\"task.id == selectedTask?.id ? onShowTask(null) : onShowTask(task)\"> {{task.name }} </span>\r\n              <span class=\"btn btn-outline-secondary text-danger\" (click)=\"onDeleteTask(task.id)\" *ngIf=\"task.id == selectedTask?.id\"> Delete Task</span>\r\n              <span class=\"btn btn-outline-secondary\" (click)=\"onShowTaskDetails(task)\">Details</span>\r\n            </li>\r\n            <div *ngIf=\"task.id == selectedTask?.id\">\r\n              <li class=\"list-group-item\"> ID: {{task.id}}</li>\r\n              <li class=\"list-group-item\"> Name: {{task.name}}</li>\r\n              <li class=\"list-group-item\"> Description: {{task.description}}</li>\r\n              <li class=\"list-group-item\"> Status: {{task.status}}</li>\r\n            </div>\r\n          </div>\r\n        </ul>\r\n      </div>\r\n    </div>\r\n  </div>\r\n</div>\r\n"
+module.exports = "<div class=\"panel\" *ngIf=\"editRowMode\" style=\"border: solid 2px #343a40; border-radius: 8px\">\r\n\r\n  <div class=\"panel-heading text-center\" style=\"background-color: rgba(0,0,0,0.05); padding: 10px\">\r\n    <div class=\"btn-group\">\r\n      <button type=\"button\" class=\"btn btn-outline-secondary\" (click)=\"onToggleRowEditMode()\">Close</button>\r\n      <button type=\"button\" class=\"btn btn-outline-secondary\" *ngIf=\"!(newRowMode | async)\" (click)=\"onAddTask()\">Add Task</button>\r\n      <button type=\"button\" class=\"btn btn-outline-secondary\" *ngIf=\"unlockFields && !(newRowMode | async)\" (click)=\"onSubmit()\">Save</button>\r\n      <button type=\"button\" class=\"btn btn-outline-secondary\" *ngIf=\"!(newRowMode | async)\" (click)=\"toggleUnlock()\"> {{ unlockFields ? 'Cancel' : 'Edit' }}</button>\r\n      <button type=\"button\" class=\"btn btn-outline-secondary\" *ngIf=\"(newRowMode | async)\" (click)=\"onSaveNewRow()\">Save</button>\r\n      <button type=\"button\" class=\"btn btn-outline-secondary\" (click)=\"switchExtendedRowView()\">{{(extendedRowView| async) ? 'Reduce' : 'Extend'}}</button>\r\n      <button type=\"button\" class=\"btn btn-outline-secondary text-danger\" (click)=\"onDeleteRow()\"> Delete </button>\r\n    </div>\r\n  </div>\r\n\r\n  <div class=\"panel-body\" style=\"padding: 10px\">\r\n    <div *ngIf=\"!unlockFields && (newRowMode | async)\">\r\n      <div class=\"col-xs-12 \">\r\n        <form [formGroup]=\"newRowForm\">\r\n          <div class=\"form-group\" hidden>\r\n            <label for=\"id\" class=\"text-info\">ID:</label>\r\n            <input type=\"number\"\r\n                   id=\"id\"\r\n                   formControlName=\"id\"\r\n                   class=\"form-control\"\r\n            >\r\n          </div>\r\n          <div class=\"form-group\" hidden>\r\n            <label for=\"name\" class=\"text-info\">Name:</label>\r\n            <input type=\"text\"\r\n                   id=\"name\"\r\n                   formControlName=\"name\"\r\n                   class=\"form-control\"\r\n            >\r\n          </div>\r\n          <div class=\"form-group\" hidden>\r\n            <label for=\"createdBy\" class=\"text-info\">Created By:</label>\r\n            <input type=\"text\"\r\n                   id=\"createdBy\"\r\n                   formControlName=\"createdBy\"\r\n                   class=\"form-control\"\r\n            >\r\n          </div>\r\n          <div class=\"form-group\" hidden>\r\n            <label for=\"createdOn\" class=\"text-info\">Created On:</label>\r\n            <input type=\"datetime-local\"\r\n                   id=\"createdOn\"\r\n                   formControlName=\"createdOn\"\r\n                   class=\"form-control\"\r\n            >\r\n          </div>\r\n          <div class=\"form-group\" hidden>\r\n            <label for=\"lastModifiedBy\" class=\"text-info\">Last modified by:</label>\r\n            <input type=\"text\"\r\n                   id=\"lastModifiedBy\"\r\n                   formControlName=\"lastModifiedBy\"\r\n                   class=\"form-control\"\r\n            >\r\n          </div>\r\n          <div class=\"form-group\" hidden>\r\n            <label for=\"lastModifiedOn\" class=\"text-info\">Last modified on:</label>\r\n            <input type=\"datetime-local\"\r\n                   id=\"lastModifiedOn\"\r\n                   formControlName=\"lastModifiedOn\"\r\n                   class=\"form-control\"\r\n            >\r\n          </div>\r\n          <div formArrayName=\"columnValueDtos\">\r\n            <div *ngFor=\"let cell of newRowForm.get('columnValueDtos').controls;let j = index\">\r\n\r\n              <div [ngSwitch]=\"(cell.value | valueOnKey).key\" formGroupName=\"{{j}}\">\r\n\r\n                <div *ngSwitchCase=\"'DT'\" class=\"form-group\" style=\"margin-top: 10px\">\r\n                  <label class=\"text-info\">{{(header | async)[0].columnDetailDefinitionDtoList[j].name}}</label>\r\n                  <input type=\"datetime-local\"\r\n                         formControlName=\"DT\"\r\n                         class=\"form-control\"\r\n                         formControlName=\"DT\">\r\n                </div>\r\n                <div *ngSwitchCase=\"'ST'\" class=\"form-group\" style=\"margin-top: 10px\">\r\n                  <label class=\"text-info\">{{(header | async)[0].columnDetailDefinitionDtoList[j].name}}</label>\r\n                  <input\r\n                    [type]=\"'text'\"\r\n                    formControlName=\"ST\"\r\n                    class=\"form-control\">\r\n                </div>\r\n                <div *ngSwitchCase=\"'DE'\" class=\"form-group\" style=\"margin-top: 10px\">\r\n                  <label class=\"text-info\">{{(header | async)[0].columnDetailDefinitionDtoList[j].name}}</label>\r\n                  <textarea cols=\"30\" rows=\"10\"\r\n                            class=\"form-control\"\r\n                            formControlName=\"DE\">\r\n                </textarea>\r\n                </div>\r\n                <div *ngSwitchCase=\"'EN'\" class=\"form-group\" style=\"margin-top: 10px\">\r\n                  <label class=\"text-info\">{{(header | async)[0].columnDetailDefinitionDtoList[j].name}}</label>\r\n                  <select class=\"form-control\" formControlName=\"EN\">\r\n                    <option selected> -Select value-</option>\r\n                    <option *ngFor=\"let option of (header | async)[0].columnDetailDefinitionDtoList[j].optionList\">\r\n                      {{option.value}}\r\n                    </option>\r\n                  </select>\r\n                </div>\r\n                <div *ngSwitchCase=\"'IN'\" class=\"form-group\" style=\"margin-top: 10px\">\r\n                  <label class=\"text-info\">{{(header | async)[0].columnDetailDefinitionDtoList[j].name}}</label>\r\n                  <input [id]=\"(cell.value | valueOnKey).key\"\r\n                         [type]=\"'number'\"\r\n                         class=\"form-control\"\r\n                         formControlName=\"IN\">\r\n                </div>\r\n              </div>\r\n            </div>\r\n          </div>\r\n        </form>\r\n      </div>\r\n    </div>\r\n\r\n    <form *ngIf=\"unlockFields && !(newRowMode | async)\" [formGroup]=\"updateRowForm\" style=\"padding-left: 10px\" style=\"padding: 5px\">\r\n      <div formArrayName=\"columnValueDtos\">\r\n        <div *ngFor=\"let cell of updateRowForm.get('columnValueDtos').controls;let j = index\">\r\n          <div [ngSwitch]=\"(cell.value | valueOnKey).key\" formGroupName=\"{{j}}\">\r\n            <div *ngSwitchCase=\"'DT'\" class=\"form-group\" style=\"margin-top: 10px\">\r\n              <label class=\"text-info\"> {{ (header | async)[0].columnDetailDefinitionDtoList[j]?.name }} </label>\r\n              <input type=\"datetime-local\"\r\n                     formControlName=\"DT\"\r\n                     class=\"form-control\"\r\n              >\r\n            </div>\r\n            <div *ngSwitchCase=\"'ST'\" class=\"form-group\" style=\"margin-top: 10px\">\r\n              <label class=\"text-info\"> {{ (header | async)[0].columnDetailDefinitionDtoList[j]?.name }} </label>\r\n              <input formControlName=\"ST\"\r\n                     [type]=\"'text'\"\r\n                     class=\"form-control\"\r\n              >\r\n            </div>\r\n            <div *ngSwitchCase=\"'DE'\" class=\"form-group\" style=\"margin-top: 10px\">\r\n              <label class=\"text-info\"> {{ (header | async)[0].columnDetailDefinitionDtoList[j]?.name }} </label>\r\n              <textarea cols=\"30\" rows=\"10\"\r\n                        formControlName=\"DE\"\r\n                        class=\"form-control\"\r\n\r\n              >\r\n                </textarea>\r\n            </div>\r\n            <div *ngSwitchCase=\"'IN'\" class=\"form-group\" style=\"margin-top: 10px\">\r\n              <label class=\"text-info\"> {{ (header | async)[0].columnDetailDefinitionDtoList[j]?.name }} </label>\r\n              <input formControlName=\"IN\"\r\n                     [type]=\"'number'\"\r\n                     class=\"form-control\"\r\n\r\n              >\r\n            </div>\r\n            <div *ngSwitchCase=\"'EN'\" class=\"form-group\" style=\"margin-top: 10px\">\r\n              <label class=\"text-info\"> {{ (header | async)[0].columnDetailDefinitionDtoList[j]?.name }} </label>\r\n              <select class=\"form-control\"\r\n                      formControlName=\"EN\"\r\n                      style=\"height: 35px\"\r\n\r\n              >\r\n                <option *ngFor=\"let option of (header | async)[0].columnDetailDefinitionDtoList[j]?.optionList\"\r\n                        [value]=\"option.value\"\r\n                        [selected]=\"(row| async)?.columnValueDtos[j]['EN'].value == option.value\"\r\n                >{{ option.value }}\r\n              </select>\r\n            </div>\r\n          </div>\r\n        </div>\r\n      </div>\r\n      <div class=\"form-group\">\r\n        <label for=\"id\" class=\"text-info\">ID:</label>\r\n        <input type=\"number\"\r\n               id=\"id\"\r\n               formControlName=\"id\"\r\n               class=\"form-control\"\r\n               readonly\r\n               required\r\n        >\r\n      </div>\r\n      <div class=\"form-group\" hidden>\r\n        <label for=\"name\" class=\"text-info\">Name:</label>\r\n        <input type=\"text\"\r\n               id=\"name\"\r\n               formControlName=\"name\"\r\n               class=\"form-control\"\r\n               readonly\r\n        >\r\n      </div>\r\n      <div class=\"form-group\" >\r\n        <label for=\"createdBy\" class=\"text-info\">Created By:</label>\r\n        <input type=\"text\"\r\n               id=\"createdBy\"\r\n               formControlName=\"createdBy\"\r\n               class=\"form-control\"\r\n               readonly\r\n               required\r\n        >\r\n      </div>\r\n      <div class=\"form-group\">\r\n        <label class=\"text-info\">Created On:</label>\r\n        <input type=\"datetime-local\"\r\n               formControlName=\"createdOn\"\r\n               class=\"form-control\"\r\n               readonly\r\n               required\r\n        >\r\n      </div>\r\n      <div class=\"form-group\">\r\n        <label for=\"lastModifiedBy\" class=\"text-info\">Last modified by:</label>\r\n        <input type=\"text\"\r\n               id=\"lastModifiedBy\"\r\n               formControlName=\"lastModifiedBy\"\r\n               class=\"form-control\"\r\n               readonly\r\n               required\r\n        >\r\n      </div>\r\n      <div class=\"form-group\" disabled>\r\n        <label for=\"lastModifiedOn\" class=\"text-info\">Last modified on:</label>\r\n        <input type=\"datetime-local\"\r\n               id=\"lastModifiedOn\"\r\n               formControlName=\"lastModifiedOn\"\r\n               class=\"form-control\"\r\n               readonly\r\n               required\r\n        >\r\n      </div>\r\n    </form>\r\n\r\n    <div *ngIf=\"!unlockFields && !(newRowMode | async)\">\r\n      <table class=\"table\">\r\n        <tbody>\r\n        <tr *ngFor=\"let cellValue of (row | async)?.columnValueDtos; let i = index;\">\r\n          <td><span class=\"text-info\">\r\n            {{ (header | async)[0].columnDetailDefinitionDtoList[i]?.name }}</span>\r\n          </td>\r\n          <td>\r\n            {{(cellValue | valueOnKey).value.value }}\r\n          </td>\r\n        </tr>\r\n        <tr *ngIf=\"extendedRowView | async\">\r\n          <td><span class=\"text-info\">ID</span></td>\r\n          <td>{{ (row | async)?.id }}</td>\r\n        </tr>\r\n        <tr *ngIf=\"extendedRowView | async\" hidden>\r\n          <td><span class=\"text-info\">Name</span></td>\r\n          <td>{{ (row | async)?.name }}</td>\r\n        </tr>\r\n        <tr *ngIf=\"extendedRowView | async\">\r\n          <td><span class=\"text-info\">Created by</span></td>\r\n          <td>{{ (row | async)?.createdBy}}</td>\r\n        </tr>\r\n        <tr *ngIf=\"extendedRowView | async\">\r\n          <td><span class=\"text-info\">Created on</span></td>\r\n          <td>{{ (row | async)?.createdOn }}</td>\r\n        </tr>\r\n        <tr *ngIf=\"extendedRowView | async\">\r\n          <td><span class=\"text-info\">Last modified by</span></td>\r\n          <td>{{ (row | async)?.lastModifiedBy }}</td>\r\n        </tr>\r\n        <tr *ngIf=\"extendedRowView | async\">\r\n          <td><span class=\"text-info\">Last modified on</span></td>\r\n          <td>{{ (row | async)?.lastModifiedOn }}</td>\r\n        </tr>\r\n        </tbody>\r\n      </table>\r\n\r\n      <div *ngIf=\"(row | async)?.taskDtos.length <= 0\">\r\n        <ul class=\"list-group\" style=\"margin-bottom: 0\">\r\n          <li class=\"list-group-item text-white text-center\" style=\"background-color: rgba(0,0,0,0.05);\">\r\n            <h5>NO TASKS</h5>\r\n          </li>\r\n        </ul>\r\n      </div>\r\n\r\n      <div *ngIf=\"(row | async)?.taskDtos.length > 0\">\r\n        <ul class=\"list-group\" style=\"margin-bottom: 0\">\r\n          <li class=\"list-group-item text-white text-center\" style=\"background-color: rgba(0,0,0,0.05);\">\r\n            <h5>TASKS</h5>\r\n          </li>\r\n          <div *ngFor=\"let task of (row | async)?.taskDtos; let i = index;\">\r\n            <li class=\"list-group-item d-flex justify-content-between align-items-center\" style=\"margin-top: 3px\">\r\n              <span class=\"btn btn-outline-secondary text-info\"\r\n                    (click)=\"task.id == selectedTask?.id ? onShowTask(null) : onShowTask(task)\"> {{task.name }} </span>\r\n              <span class=\"btn btn-outline-secondary text-danger\" (click)=\"onDeleteTask(task.id)\" *ngIf=\"task.id == selectedTask?.id\"> Delete Task</span>\r\n              <span class=\"btn btn-outline-secondary\" (click)=\"onShowTaskDetails(task)\">Details</span>\r\n            </li>\r\n            <div *ngIf=\"task.id == selectedTask?.id\">\r\n              <li class=\"list-group-item\"> ID: {{task.id}}</li>\r\n              <li class=\"list-group-item\"> Name: {{task.name}}</li>\r\n              <li class=\"list-group-item\"> Description: {{task.description}}</li>\r\n              <li class=\"list-group-item\"> Status: {{task.status}}</li>\r\n            </div>\r\n          </div>\r\n        </ul>\r\n      </div>\r\n    </div>\r\n  </div>\r\n</div>\r\n"
 
 /***/ }),
 
@@ -5297,7 +5344,7 @@ module.exports = ".header-fixed {\r\n  width: 100%\r\n}\r\n\r\n.header-fixed > t
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<div class=\"row\" style=\"margin: 0 10px;padding: 0;\">\r\n  <div [ngClass]=\"(tableState | async).editRowMode ? ((taskDetailsMode | async) ? 'col-12 col-md-6 col-lg-4' : 'col-12 col-md-6 col-lg-4') : 'd-none'\"\r\n       style=\"margin: 41px 0\">\r\n    <app-row-details *ngIf=\"(tableState | async).editRowMode\"></app-row-details>\r\n  </div>\r\n  <div [ngClass]=\"(taskDetailsMode | async) ? 'col-12 col-md-6 col-lg-4' : 'd-none'\" style=\"margin: 41px 0\">\r\n    <app-task></app-task>\r\n  </div>\r\n  <div [ngClass]=\"(tableState | async).editRowMode ?\r\n                        ((taskDetailsMode | async) ? 'col-lg-4' : 'col-md-6 col-lg-8')\r\n                        : ('col-12')\" style=\"padding: 0\"\r\n  >\r\n\r\n\r\n    <div class=\"panel\">\r\n      {{showSpinner | json}}\r\n      <app-menu *ngIf=\"(tableState | async).tablesDetails.length != 0\"\r\n                [tablesDetails]=\"(tableState | async).tablesDetails\"\r\n                (chosenNameChanged)=\"setTable($event)\"></app-menu>\r\n      <div class=\"panel-body\" style=\"padding: 0\">\r\n\r\n        <div *ngIf=\"tableChosen && !showSpinner\">\r\n          <div class=\"table-responsive\" style=\"border-radius: 10px\">\r\n            <table\r\n              class=\"table table-hover header-fixed table-striped\"\r\n              style=\"margin-bottom: 0\"\r\n            >\r\n              <thead>\r\n                <app-table-header></app-table-header>\r\n              </thead>\r\n              <tbody style=\"max-height: 700px; height: auto; background-color: transparent\">\r\n                <app-row\r\n                  *ngFor=\"let row of ((tableState | async).tableContent)  | extendedFilter: extendedFilterContent : filterSelect | orderBy : sortContentValue\"\r\n                  [row]=\"row\"\r\n                  [header]=\"(tableState|async).tableDefinition\">\r\n                </app-row>\r\n              </tbody>\r\n            </table>\r\n          </div>\r\n        </div>\r\n        <app-spinner *ngIf=\"tableChosen && showSpinner\"></app-spinner>\r\n      </div>\r\n    </div>\r\n  </div>\r\n</div>\r\n"
+module.exports = "<div class=\"row\" style=\"margin: 0 10px;padding: 0;\">\r\n  <div [ngClass]=\"(tableState | async).editRowMode ? ((taskDetailsMode | async) ? 'col-12 col-md-6 col-lg-4' : 'col-12 col-md-6 col-lg-4') : 'd-none'\"\r\n       style=\"margin: 41px 0\">\r\n    <app-row-details *ngIf=\"(tableState | async).editRowMode\"></app-row-details>\r\n  </div>\r\n  <div [ngClass]=\"(taskDetailsMode | async) ? 'col-12 col-md-6 col-lg-4' : 'd-none'\" style=\"margin: 41px 0\">\r\n    <app-task></app-task>\r\n  </div>\r\n  <div [ngClass]=\"(tableState | async).editRowMode ?\r\n                        ((taskDetailsMode | async) ? 'col-lg-4' : 'col-md-6 col-lg-8')\r\n                        : ('col-12')\" style=\"padding: 0\"\r\n  >\r\n\r\n\r\n    <div class=\"panel\">\r\n      {{showSpinner | json}}\r\n      <app-menu *ngIf=\"(tableState | async).tablesDetails.length != 0\"\r\n                [parent]=\"'tables'\"\r\n                (chosenNameChanged)=\"setTable($event)\"></app-menu>\r\n      <div class=\"panel-body\" style=\"padding: 0\">\r\n\r\n        <div *ngIf=\"tableChosen && !showSpinner\">\r\n          <div class=\"table-responsive\" style=\"border-radius: 10px\">\r\n            <table\r\n              class=\"table table-hover header-fixed table-striped\"\r\n              style=\"margin-bottom: 0\"\r\n            >\r\n              <thead>\r\n                <app-table-header></app-table-header>\r\n              </thead>\r\n              <tbody style=\"max-height: 700px; height: auto; background-color: transparent\">\r\n                <app-row\r\n                  *ngFor=\"let row of ((tableState | async).tableContent)  | extendedFilter: extendedFilterContent : filterSelect | orderBy : sortContentValue\"\r\n                  [row]=\"row\"\r\n                  [header]=\"(tableState|async).tableDefinition\">\r\n                </app-row>\r\n              </tbody>\r\n            </table>\r\n          </div>\r\n        </div>\r\n        <app-spinner *ngIf=\"tableChosen && showSpinner\"></app-spinner>\r\n      </div>\r\n    </div>\r\n  </div>\r\n</div>\r\n"
 
 /***/ }),
 
@@ -5480,7 +5527,6 @@ var TaskComponent = /** @class */ (function () {
         this.dss.saveNewTask(this.tableDefinition.id, task, this.row.id);
     };
     TaskComponent.prototype.onAssignUserToTask = function (username) {
-        console.log('onAssignUserToTask username >' + username + '<');
         this.dss.onAssignUserToTask(this.tableDefinition.id, this.row.id, this.task.id, username);
     };
     TaskComponent.prototype.onRemoveUserFromTask = function (username) {
@@ -5851,7 +5897,6 @@ var UserInfoComponent = /** @class */ (function () {
         this.usernameState = this.store.select('users', 'currentUser');
         this.usernDetailsState = this.store.select('users', 'currentUserDetails');
         this.usernDetailsState.subscribe(function (user) {
-            console.log('user', user);
             _this.userDetails = user;
         });
         this.usernameState.subscribe(function (username) {
@@ -5879,9 +5924,6 @@ var UserInfoComponent = /** @class */ (function () {
     UserInfoComponent.prototype.updatePassword = function (formValue) {
         if (formValue.newPassword === formValue.confirmPassword && formValue.newPassword.length > 1) {
             this.dss.updatePassword(formValue.oldPassword, formValue.newPassword, this.userDetails.username);
-        }
-        else {
-            console.log('Passwords do not match!');
         }
     };
     UserInfoComponent = __decorate([
@@ -5966,6 +6008,9 @@ var UserDetailsComponent = /** @class */ (function () {
         this.userDisplayedTask = this.store.select('users', 'userDisplayedTask');
         this.newUserMode = this.store.select('users', 'newUserMode');
         this.roles = this.store.select('users', 'roles');
+        this.roles.subscribe(function (roles) {
+            _this.rolesValues = roles;
+        });
         this.dss.getRoles();
         this.roleForm =
             new _angular_forms__WEBPACK_IMPORTED_MODULE_3__["FormGroup"]({
@@ -5982,7 +6027,7 @@ var UserDetailsComponent = /** @class */ (function () {
         this.editRoleMode = true;
     };
     UserDetailsComponent.prototype.postAddRole = function () {
-        this.dss.addRoleToUser({ username: this.user.username, rolename: this.roleForm.value.role });
+        this.dss.addRoleToUser({ username: this.user.username, roleName: this.roleForm.value.role });
     };
     UserDetailsComponent.prototype.abortAddRole = function () {
         this.editRoleMode = false;
@@ -6008,10 +6053,6 @@ var UserDetailsComponent = /** @class */ (function () {
             closeModalButton.click();
         }
     };
-    // onSubmitRole(name, description) {
-    //   console.log(name, description);
-    //   this.dss.saveNewRole({name: name, description: description});
-    // }
     UserDetailsComponent.prototype.onSubmitUser = function () {
         this.dss.saveNewUser(this.newUserForm.value);
     };

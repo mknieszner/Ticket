@@ -27,7 +27,7 @@ public class Project {
   @NotNull
   @OneToMany(
       fetch = FetchType.EAGER,
-      cascade = CascadeType.PERSIST,
+      cascade = CascadeType.ALL,
       mappedBy = "project"
   )
   @Column(nullable = false)
@@ -48,22 +48,4 @@ public class Project {
     this.projectTables.addAll(projectTables);
     this.databaseEnvironment = databaseEnvironment;
   }
-
-  //  public Project(final String name) {
-//    this.name = name;
-//  }
-//
-//  public Project(final String name, final List<ProjectTable> projectTables) {
-//    this.name = name;
-//    this.projectTables.addAll(projectTables);
-//  }
-//
-//  public void addProjectTable(final ProjectTable projectTable) {
-//    this.projectTables.add(projectTable);
-//    projectTable.setProject(this);
-//  }
-//
-//  public void addProjectTables(final List<ProjectTable> projectTables) {
-//    this.projectTables.addAll(projectTables);
-//  }
 }

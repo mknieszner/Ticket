@@ -35,9 +35,6 @@ export class TableStatisticsComponent implements OnInit {
 
   ngOnInit() {
     this.tableHeaderState = this.store.select('tables', 'tableDefinition');
-    this.tableHeaderState.subscribe((header: TableDefinitionModel) => {
-      console.log(header);
-    });
     this.tableState = this.store.select('tables');
     this.selectedTableName = this.store.select('statistics', 'selectedTableName');
     this.store.select('tables', 'tablesDetails')
@@ -53,9 +50,7 @@ export class TableStatisticsComponent implements OnInit {
       if (tableState) {
         this.tasksInfo = this.statistics.mapToTaskInfo(tableState.tableContent);
         this.tableInfo = this.statistics.mapToRowsInfo(tableState.tableContent);
-        console.log(this.tableInfo);
         this.tableInfo.columnInfo.enumInfo.forEach((enumInfo: EnumInfoModel[], i) => {
-          console.log('enumCharts', this.enumCharts);
           this.setEnumChart(enumInfo, i);
         });
       }

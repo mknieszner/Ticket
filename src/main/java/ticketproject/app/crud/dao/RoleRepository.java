@@ -11,6 +11,8 @@ import java.util.List;
 @Repository
 public interface RoleRepository extends CrudRepository<Role, Long> {
   Role findByName(String name);
-  void deleteByName(String name);
+
   List<Role> findAllByUsers_Username(final String username);
+
+  void deleteByName(String name);
 }

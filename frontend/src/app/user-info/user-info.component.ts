@@ -25,7 +25,6 @@ export class UserInfoComponent implements OnInit {
     this.usernameState = this.store.select('users', 'currentUser');
     this.usernDetailsState = this.store.select('users', 'currentUserDetails');
     this.usernDetailsState.subscribe((user: UserModel) => {
-      console.log('user', user);
       this.userDetails = user;
     });
     this.usernameState.subscribe((username: string) => {
@@ -58,8 +57,6 @@ export class UserInfoComponent implements OnInit {
   updatePassword(formValue: { oldPassword, newPassword, confirmPassword }) {
     if (formValue.newPassword === formValue.confirmPassword && formValue.newPassword.length > 1) {
       this.dss.updatePassword(formValue.oldPassword, formValue.newPassword, this.userDetails.username);
-    } else {
-      console.log('Passwords do not match!');
     }
   }
 }

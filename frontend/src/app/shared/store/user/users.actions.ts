@@ -75,7 +75,7 @@ export class AddUserAction implements Action {
 export class AddUserToRole implements Action {
   readonly type = ADD_USER_TO_ROLE;
 
-  constructor(public payload: RoleModel) {
+  constructor(public payload: { username: string, roleName: string}) {
   }
 }
 
@@ -235,7 +235,12 @@ export class SetCurrntUserDetails implements Action {
   constructor(public payload: UserModel) {
   }
 }
+export class DeleteTableAction implements Action {
+  readonly type = SET_CURRENT_USER_DETAILS;
 
+  constructor(public payload: UserModel) {
+  }
+}
 
 export type UserActions =
   SetCurrentUserRolenames |
@@ -265,4 +270,3 @@ export type UserActions =
   SetSelectedUser |
   UpdateTaskAction |
   SetCurrntUserDetails;
-

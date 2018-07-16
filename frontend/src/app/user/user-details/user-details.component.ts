@@ -19,6 +19,7 @@ export class UserDetailsComponent implements OnInit {
   user: UserModel;
   editRoleMode = false;
   roles: Observable<RoleModel[]>;
+  rolesValues: RoleModel[];
   roleForm: FormGroup;
   newUserMode: Observable<boolean>;
   newUserForm: FormGroup;
@@ -36,6 +37,9 @@ export class UserDetailsComponent implements OnInit {
     this.userDisplayedTask = this.store.select('users', 'userDisplayedTask');
     this.newUserMode = this.store.select('users', 'newUserMode');
     this.roles = this.store.select('users', 'roles');
+    this.roles.subscribe(roles => {
+      this.rolesValues = roles;
+    });
     this.dss.getRoles();
     this.roleForm =
       new FormGroup({
@@ -55,7 +59,7 @@ export class UserDetailsComponent implements OnInit {
   }
 
   postAddRole() {
-    this.dss.addRoleToUser({username: this.user.username, rolename: <string>this.roleForm.value.role})
+    this.dss.addRoleToUser({username: this.user.username, roleName: <string>this.roleForm.value.role})
   }
 
   abortAddRole() {
@@ -85,12 +89,6 @@ export class UserDetailsComponent implements OnInit {
       closeModalButton.click();
     }
   }
-
-
-// onSubmitRole(name, description) {
-//   console.log(name, description);
-//   this.dss.saveNewRole({name: name, description: description});
-// }
 
   onSubmitUser() {
     this.dss.saveNewUser(this.newUserForm.value);

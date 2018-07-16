@@ -3,7 +3,7 @@
   <div class="panel-heading text-center" style="background-color: rgba(0,0,0,0.05); padding: 10px">
     <div class="btn-group">
       <button type="button" class="btn btn-outline-secondary" (click)="onToggleRowEditMode()">Close</button>
-      <button type="button" class="btn btn-outline-secondary" (click)="onAddTask()">Add Task</button>
+      <button type="button" class="btn btn-outline-secondary" *ngIf="!(newRowMode | async)" (click)="onAddTask()">Add Task</button>
       <button type="button" class="btn btn-outline-secondary" *ngIf="unlockFields && !(newRowMode | async)" (click)="onSubmit()">Save</button>
       <button type="button" class="btn btn-outline-secondary" *ngIf="!(newRowMode | async)" (click)="toggleUnlock()"> {{ unlockFields ? 'Cancel' : 'Edit' }}</button>
       <button type="button" class="btn btn-outline-secondary" *ngIf="(newRowMode | async)" (click)="onSaveNewRow()">Save</button>

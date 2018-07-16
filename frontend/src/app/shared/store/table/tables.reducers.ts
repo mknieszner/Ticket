@@ -2,6 +2,7 @@ import * as TableActions from './tables.actions';
 import {ExtendedFilterModel, RowContentModel, TableDefinitionModel, TablesDetails, TaskModel} from '../../table.model';
 import {UserModel} from '../../../user/user.model';
 import {SortModel} from '../../sort/sort.model';
+import {DELETE_TABLE} from "./tables.actions";
 
 export interface TableState {
   editRowMode: boolean;
@@ -178,12 +179,17 @@ export function tablesReducers(state: TableState = initialTableState, action: Ta
         ...state,
         tableContent: [...addRowTask(state.tableContent, action.payload)]
       };
+    case TableActions.DELETE_TABLE:
+      return {
+        ...state,
+        tablesDetails: [...deleteTable(state.tablesDetails, action.payload)]
+      };
     default:
       return state;
   }
 }
 
-function updateTask(tableContent: RowContentModel[], payload: TaskModel) {
+function updateTask(tableContent: RowContentModel[], payload: TaskModel): RowContentModel[] {
   tableContent.forEach((row: RowContentModel, i) => {
     row.taskDtos.forEach((taskDto: TaskModel, j) => {
       if (taskDto.id === payload.id) {
@@ -195,7 +201,7 @@ function updateTask(tableContent: RowContentModel[], payload: TaskModel) {
 }
 
 
-function deleteRow(tableContent: RowContentModel[], rowId: number) {
+function deleteRow(tableContent: RowContentModel[], rowId: number): RowContentModel[] {
   tableContent.forEach((row: RowContentModel, i) => {
     if (row.id === rowId) {
       tableContent.splice(i, 1);
@@ -247,6 +253,15 @@ function addRowTask(rows: RowContentModel[], data: { task: TaskModel, rowId }): 
     }
   });
   return rows;
+}
+
+function deleteTable(tablesDetails: TablesDetails[], tableId: number): TablesDetails[] {
+  tablesDetails.forEach((tableDetails, i) => {
+    if (tableDetails.id === tableId) {
+      tablesDetails.splice(i, 1)
+    }
+  });
+  return tablesDetails;
 }
 
 // function deleteItemByName(array: NameModel[], itemName: string): Array<NameModel> {// TODO GENERIC TYPE FUNCTION???  r.216/255 REMOVE?

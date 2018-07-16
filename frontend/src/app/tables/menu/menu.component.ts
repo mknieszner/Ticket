@@ -1,4 +1,4 @@
-import {Component, Input, OnInit, Output} from '@angular/core';
+import {Component, Input, OnDestroy, OnInit, Output} from '@angular/core';
 import {Subject} from 'rxjs/Subject';
 import {Store} from '@ngrx/store';
 import * as fromAppReducers from '../../shared/store/app.reducers';
@@ -6,15 +6,17 @@ import * as TablesActions from '../../shared/store/table/tables.actions';
 import {Observable} from 'rxjs/Observable';
 import {TablesDetails} from "../../shared/table.model";
 import {ConstantsService} from "../../shared/constants.service";
+import {DataStorageService} from "../../shared/data-storage.service";
 
 @Component({
   selector: 'app-menu',
   templateUrl: './menu.component.html',
   styleUrls: ['./menu.component.css']
 })
-export class MenuComponent implements OnInit {
-  @Input() tablesDetails: TablesDetails[];
+export class MenuComponent implements OnInit, OnDestroy {
+  @Input() parent: string;
   @Output() chosenNameChanged = new Subject<TablesDetails>();
+  tablesDetails: TablesDetails[];
 
   tableNames: string[] = [];
   chosenName: string;
@@ -24,15 +26,19 @@ export class MenuComponent implements OnInit {
   extendedFilterModeValue: boolean;
 
 
-  constructor(private store: Store<fromAppReducers.AppState>, public constants: ConstantsService) {
+  constructor(private store: Store<fromAppReducers.AppState>,
+              private dss: DataStorageService,
+              public constants: ConstantsService) {
   }
 
   setFilterSelectValue(value: boolean) {
-    console.log('setFilterSelectValue', value);
     this.store.dispatch(new TablesActions.SetExtendedFilterSelect(value));
   }
 
   ngOnInit() {
+    this.store.select("tables", "tablesDetails").subscribe((details) => {
+      this.tablesDetails = details;
+    });
     this.extendedFilterMode = this.store.select('tables', 'extendedFilterMode');
     this.extendedFilterMode.subscribe((filterModeValue => {
       this.extendedFilterModeValue = filterModeValue;
@@ -51,18 +57,16 @@ export class MenuComponent implements OnInit {
   }
 
   onFilter(filter) {
-    console.log(filter);
     this.store.dispatch(new TablesActions.TableFilter(filter));
   }
 
   onNewRow() {
-    // TODO new Row
     this.store.dispatch(new TablesActions.SetEditRowMode(true));
     this.store.dispatch(new TablesActions.SetNewRowModeAction(true));
   }
 
   switchExtendedTableView() {
-    if(this.extendedFilterModeValue && this.extendedTableViewValue){
+    if (this.extendedFilterModeValue && this.extendedTableViewValue) {
       this.onExtendedFilterMode()
     }
     this.store.dispatch(new TablesActions.SetExtendedTableView(!this.extendedTableViewValue));
@@ -70,5 +74,13 @@ export class MenuComponent implements OnInit {
 
   onExtendedFilterMode() {
     this.store.dispatch(new TablesActions.SetExtendedFilterMode(!this.extendedFilterModeValue));
+  }
+
+  deleteTable(tableId: number) {
+    this.dss.deleteProject(tableId);
+  }
+
+  ngOnDestroy() {
+    this.dss.getTablesDetails();
   }
 }

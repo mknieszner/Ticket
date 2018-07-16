@@ -66,6 +66,8 @@ public class Role {
 
     @PreRemove
     public void removeAllUsers() {
-        users.forEach(user -> user.getRoles().remove(this));
+        for (User user : users) {
+            user.getRoles().remove(this);
+        }
     }
 }

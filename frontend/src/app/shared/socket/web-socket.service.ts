@@ -26,22 +26,17 @@ export class WebSocketService {
     const socket = new SockJS(baseUrl + '/newTasks?access_token=' + AuthCookie.getAuth()) as WebSocket;
     this.stompClient = Stomp.over(socket);
     this.stompClient.connect({}, () => {
-      // console.log('CONNECT CONNECT', frame);
       this.store.select('users', 'currentUser').subscribe((username: string) => {
-        this.stompClient.subscribe('/topic/newTasks/' + username, () => { // (messageOutput) =>
-          // console.log(messageOutput);
+        this.stompClient.subscribe('/topic/newTasks/' + username, () => {
           this.store.dispatch(new UserActions.SetTaskInfoAction(true));
         });
         this.stompClient.subscribe('/topic/chat', (messageOutput: Frame) => {
-          // console.log('/topic/chat/',messageOutput.body);
           this.store.dispatch(new ChatActions.AppendChatWithMessage(JSON.parse(messageOutput.body)));
         });
         this.stompClient.subscribe('/topic/chat/' + username, (messageOutput: Frame) => {
-          // console.log('/topic/chat/',messageOutput.body);
           this.store.dispatch(new ChatActions.AppendChatWithMessage(JSON.parse(messageOutput.body)));
         });
         this.stompClient.subscribe('/topic/people/chat', (messageOutput: Frame) => {
-          // console.log('/topic/people/chat/',messageOutput.body);
           this.store.dispatch(new ChatActions.SetActiveWsUsers(JSON.parse(messageOutput.body)));
         });
       });

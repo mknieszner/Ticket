@@ -39,6 +39,7 @@ export const SET_TABLE_USERS = 'SET_TABLE_USERS';
 export const UPDATE_ROWS_TASK = 'UPDATE_ROWS_TASK';
 export const UPDATE_TASK = 'UPDATE_TASK';
 export const DELETE_ROWS_TASK = 'DELETE_ROWS_TASK';
+export const DELETE_TABLE = 'DELETE_TABLE';
 
 
 export class SetNewRowModeAction implements Action {
@@ -230,6 +231,13 @@ export class AddTaskAction implements Action {
   }
 }
 
+export class DeleteTable implements Action {
+  readonly type = DELETE_TABLE;
+
+  constructor(public payload: number) {
+  }
+}
+
 export type TableActions =
   AddRowAction |
   SetNamesAction |
@@ -257,4 +265,5 @@ export type TableActions =
   SetExtendedRowView |
   SetSortContent |
   DeleteRow |
-  AddTaskAction;
+  AddTaskAction |
+  DeleteTable;

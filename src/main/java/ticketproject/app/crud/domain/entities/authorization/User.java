@@ -32,7 +32,8 @@ public class User implements Serializable {
     private String email;
     private String password;
     private boolean enabled;
-    @ManyToMany(mappedBy = "users",
+    @ManyToMany(
+            mappedBy = "users",
             fetch = FetchType.EAGER
     )
     @Cascade({org.hibernate.annotations.CascadeType.SAVE_UPDATE, org.hibernate.annotations.CascadeType.DELETE})

@@ -9,7 +9,6 @@ import {UserComponent} from './user/user.component';
 import {RolesComponent} from './roles/roles.component';
 import {TablesComponent} from './tables/tables.component';
 import {HomeComponent} from './home/home.component';
-import {RouterModule, Routes} from '@angular/router';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {RowComponent} from './tables/row/row.component';
 import {StoreModule} from '@ngrx/store';

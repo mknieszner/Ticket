@@ -8,6 +8,7 @@ export enum SnackBarTheme {
   primary = 'primary',
   success = 'success',
 }
+
 @Injectable()
 export class SnackBarService {
   snackBarRef: MatSnackBarRef<InfoSnackBarComponent>;
@@ -15,14 +16,28 @@ export class SnackBarService {
   constructor(public snackBar: MatSnackBar) {
   }
 
-  public showSnackBar(message: string, color: SnackBarTheme = SnackBarTheme.danger): void {
+  public showSnackBar(error: string, color: SnackBarTheme = SnackBarTheme.danger): void {
     this.snackBarRef = this.snackBar.openFromComponent(InfoSnackBarComponent, {
       panelClass: [color],
       data: {
-        message: message,
+        message: this.getMessage(error),
         className: color
       }
     });
     this.snackBarRef.instance.ref = this.snackBarRef;
+  }
+
+  private getMessage(error: any): string {
+    let message: string = '';
+    if (error.message) {
+      message.concat("message: " + error.message)
+    }
+    if (error.message) {
+      message.concat("message: " + error.message)
+    }
+    if (!message.length) {
+      message = error;
+    }
+    return message
   }
 }

@@ -186,4 +186,9 @@ public class TableQueryBaseStatements {
             String.format("DELETE FROM %s WHERE (task_id = ? AND user_id = ?)",
                     TABLE_TASK_USER_JUNCTION_NAME_VARIABLE
             );
+
+    static final String DROP_TABLES_STATEMENT =
+            String.format("DROP TABLE IF EXISTS  `%s`",
+                    TABLE_NAME_VARIABLE
+            );
 }

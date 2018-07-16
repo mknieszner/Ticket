@@ -87,6 +87,11 @@ export function usersReducers(state: UserState = initialUserState, action: UserA
         ...state,
         users: [...updateUsersRoles(state.users, action.payload)]
       };
+    case UserActions.ADD_USER_TO_ROLE:
+      return {
+        ...state,
+        roles: [...addUserToRole(state.users, state.roles, action.payload)]
+      };
     case UserActions.REMOVE_ROLE_FROM_USER:
       return {
         ...state,
@@ -95,7 +100,7 @@ export function usersReducers(state: UserState = initialUserState, action: UserA
     case UserActions.REMOVE_USER_FROM_ROLE:
       return {
         ...state,
-        roles: [...updateRoleUsers(state.roles, action.payload)]
+        roles: [...updateRolesUsers(state.roles, action.payload)]
       };
     case UserActions.SET_CURRENT_USER_ROLENAMES:
       return {
@@ -183,6 +188,20 @@ export function usersReducers(state: UserState = initialUserState, action: UserA
   }
 }
 
+function addUserToRole(users: UserModel[], roles: RoleModel[], payload: { username: string, roleName: string }): RoleModel[] {
+  let user = null;
+  users.forEach(u => {
+    if (u.username === payload.username) {
+      user = u;
+    }
+  });
+  roles.forEach(role => {
+    if (role.name === payload.roleName) {
+      role.userDtos = [...role.userDtos, user]
+    }
+  });
+  return roles;
+}
 
 function updateUsersTask(usersToUpdate: UserModel[], task: TaskModel): UserModel[] {
   const users = usersToUpdate;
@@ -220,17 +239,7 @@ function deleteItemByUsername(array: UsernameModel[], itemName: string) {
   return array;
 }
 
-
-// function updateRow(rows: RowContentModel[], updatedRow: RowContentModel): RowContentModel[] { TODO remove?
-//   rows.forEach((row, i) => {
-//     if (row.id === updatedRow.id) {
-//       rows[i] = updatedRow;
-//     }
-//   });
-//   return rows;
-// }
-
-function updateRoleUsers(roles: RoleModel[], newRole: RoleModel): RoleModel[] {
+function updateRolesUsers(roles: RoleModel[], newRole: RoleModel): RoleModel[] {
   roles.forEach((role) => {
     if (role.name === newRole.name) {
       role.userDtos = newRole.userDtos;

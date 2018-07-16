@@ -50,7 +50,6 @@ export class OauthService {
           this.router.navigate(['/home']);
         },
         err => {
-          console.log(err.message);
           const errorMessage = err.message;
           if (errorMessage.includes('live-test')) {
             this.store.dispatch(new UserActions.SetLoginFailureInfo('Invalid credentials!'));

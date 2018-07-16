@@ -29,6 +29,7 @@ import java.sql.SQLException;
 import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import static java.util.Optional.ofNullable;
 import static java.util.stream.Collectors.toList;
@@ -109,7 +110,7 @@ public class TableQueryService {
     }
 
     public List<RowDto> getRows(String tableName, List<ColumnDetail> columnDetails) {
-        List<ColumnDetail>  toCorrectSqlColumnDetails = columnDetails.stream()
+        List<ColumnDetail> toCorrectSqlColumnDetails = columnDetails.stream()
                 .peek(detail -> detail.setName(toCorrectSqlColumnName(detail.getName())))
                 .collect(toList());
 
@@ -377,6 +378,40 @@ public class TableQueryService {
         task.getUserNames().remove(username);
 
         return task;
+    }
+
+    public boolean deleteTable(String tableName) {
+        String sqlCorrectTableName = toCorrectSqlTableName(tableName);
+
+        String tableTaskUserJunction = TABLE_TASK_USER_JUNCTION_NAME_VARIABLE
+                .replaceFirst(TABLE_NAME_VARIABLE, sqlCorrectTableName);
+        String taskTableJunctionName = TABLE_TASK_JUNCTION_NAME_VARIABLE
+                .replaceFirst(TABLE_NAME_VARIABLE, sqlCorrectTableName);
+        String taskTableName = TABLE_TASK_NAME_VARIABLE
+                .replaceFirst(TABLE_NAME_VARIABLE, sqlCorrectTableName);
+
+
+        List<String> statement = Stream.of(
+                taskTableJunctionName,
+                sqlCorrectTableName,
+                tableTaskUserJunction,
+                taskTableName
+        )
+                .map(name -> DROP_TABLES_STATEMENT.replace(TABLE_NAME_VARIABLE, name))
+                .collect(Collectors.toList());
+
+        statement.forEach(stat -> {
+                    try {
+                        getJDBCTemplate()
+                                .execute(stat);
+                    } catch (Exception e) {
+                        throw new RuntimeException(e);
+                    }
+                }
+
+        );
+
+        return true;
     }
 
     // == private methods ==

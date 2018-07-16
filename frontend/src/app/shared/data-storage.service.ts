@@ -14,6 +14,7 @@ import {Client} from 'stompjs/lib/stomp.js';
 import {TaskInfoService} from './socket/task-info.service';
 import * as ChatActions from './store/chat/chat.actions';
 import {SnackBarService, SnackBarTheme} from "./snack-bar/snack-bar.service";
+import {Subscription} from "rxjs/Subscription";
 
 @Injectable()
 export class DataStorageService {
@@ -33,7 +34,7 @@ export class DataStorageService {
       .subscribe((user: UserModel) => {
         this.store.dispatch(new UsersActions.SetCurrntUserDetails(user));
       }, response => {
-        this.snackBarService.showSnackBar(response.error.message);
+        this.snackBarService.showSnackBar(response.error);
       });
   }
 
@@ -44,7 +45,7 @@ export class DataStorageService {
           this.store.dispatch(new UsersActions.SetCurrntUserDetails(updatedUser));
           this.snackBarService.showSnackBar('DONE!', SnackBarTheme.success);
         }, response => {
-          this.snackBarService.showSnackBar(response.error.message);
+          this.snackBarService.showSnackBar(response.error);
         });
   }
 
@@ -57,7 +58,7 @@ export class DataStorageService {
         (done: boolean) => {
           this.snackBarService.showSnackBar('DONE!', SnackBarTheme.success);
         }, response => {
-          this.snackBarService.showSnackBar(response.error.message);
+          this.snackBarService.showSnackBar(response.error);
         }
       );
   }
@@ -65,10 +66,9 @@ export class DataStorageService {
   getActiveWsUsers() {
     this.httpClient.get<string[]>(this.basehost + '/v1/users/ws-active')
       .subscribe((activeUsers: string[]) => {
-        console.log('activeUsers',activeUsers)
         this.store.dispatch(new ChatActions.SetActiveWsUsers(activeUsers));
       }, response => {
-        this.snackBarService.showSnackBar(response.error.message);
+        this.snackBarService.showSnackBar(response.error);
       });
   }
 
@@ -77,7 +77,7 @@ export class DataStorageService {
       .subscribe((definition: TableDefinitionModel) => {
         this.store.dispatch(new TablesActions.SetTableDefinitionAction(definition));
       }, response => {
-        this.snackBarService.showSnackBar(response.error.message);
+        this.snackBarService.showSnackBar(response.error);
       });
   }
 
@@ -86,7 +86,7 @@ export class DataStorageService {
       .subscribe((rows: RowContentModel[]) => {
         this.store.dispatch(new TablesActions.SetRowsAction(rows));
       }, response => {
-        this.snackBarService.showSnackBar(response.error.message);
+        this.snackBarService.showSnackBar(response.error);
       });
   }
 
@@ -94,10 +94,9 @@ export class DataStorageService {
     this.httpClient.get<TablesDetails[]>(this.basehost + '/v1/projects/tables/details')
       .subscribe(
         (names) => {
-          console.log(names)
           this.store.dispatch(new TablesActions.SetNamesAction(names));
         }, response => {
-          this.snackBarService.showSnackBar(response.error.message);
+          this.snackBarService.showSnackBar(response.error);
         }
       );
   }
@@ -106,8 +105,9 @@ export class DataStorageService {
     this.httpClient.post(this.basehost + '/v1/projects/tables/definition/' + databaseEnvironment, definition)
       .subscribe(() => {
           this.snackBarService.showSnackBar("Done!", SnackBarTheme.success);
+          this.getTablesDetails()
         }, response => {
-          this.snackBarService.showSnackBar(response.error.message);
+          this.snackBarService.showSnackBar(response.error);
         }
       );
   }
@@ -117,7 +117,7 @@ export class DataStorageService {
       .subscribe((users: UserModel[]) => {
         this.store.dispatch(new UsersActions.SetUsersAction(users));
       }, response => {
-        this.snackBarService.showSnackBar(response.error.message);
+        this.snackBarService.showSnackBar(response.error);
       });
   }
 
@@ -126,16 +126,17 @@ export class DataStorageService {
       .subscribe((roles: RoleModel[]) => {
         this.store.dispatch(new UsersActions.SetRolesAction(roles));
       }, response => {
-        this.snackBarService.showSnackBar(response.error.message);
+        this.snackBarService.showSnackBar(response.error);
       });
   }
 
-  addRoleToUser(data: { username: string, rolename: string }) {
-    this.httpClient.post(this.basehost + '/v1/users/' + data.username + '/roles/' + data.rolename, null)
+  addRoleToUser(data: { username: string, roleName: string}) {
+    this.httpClient.post(this.basehost + '/v1/users/' + data.username + '/roles/' + data.roleName, null)
       .subscribe((user: UserModel) => {
         this.store.dispatch(new UsersActions.AddRoleToUser(user));
+        this.store.dispatch(new UsersActions.AddUserToRole( { username: data.username, roleName: data.roleName}));
       }, response => {
-        this.snackBarService.showSnackBar(response.error.message);
+        this.snackBarService.showSnackBar(response.error);
       });
   }
 
@@ -147,7 +148,7 @@ export class DataStorageService {
           this.store.dispatch(new UsersActions.RemoveRoleFromUser(data.user));
         }
       }, response => {
-        this.snackBarService.showSnackBar(response.error.message);
+        this.snackBarService.showSnackBar(response.error);
       });
   }
 
@@ -165,18 +166,17 @@ export class DataStorageService {
           this.store.dispatch(new UsersActions.RemoveUserFromRole(data.role));
         }
       }, response => {
-        this.snackBarService.showSnackBar(response.error.message)
+        this.snackBarService.showSnackBar(response.error)
       });
   }
 
   addNewRow(tableId: number, newRow: RowContentModel) {
     this.httpClient.post<RowContentModel>(this.basehost + '/v1/projects/tables/' + tableId + '/row', newRow)
       .subscribe((savedRow: RowContentModel) => {
-          // console.log('addNewRow dss OK: ', savedRow)
           this.store.dispatch(new TablesActions.AddRowAction(savedRow));
         },
         response => {
-          this.snackBarService.showSnackBar(response.error.message);
+          this.snackBarService.showSnackBar(response.error);
         });
   }
 
@@ -184,10 +184,9 @@ export class DataStorageService {
     this.httpClient.put<RowContentModel>(this.basehost + '/v1/projects/tables/' + tableId + '/row', updatedRow)
       .subscribe(
         (savedRow: RowContentModel) => {
-          // console.log("updateRow dss OK: ", savedRow);
           this.store.dispatch(new TablesActions.UpdateRowAction(savedRow));
         }, response => {
-          this.snackBarService.showSnackBar(response.error.message);
+          this.snackBarService.showSnackBar(response.error);
         }
       );
   }
@@ -198,7 +197,7 @@ export class DataStorageService {
           this.store.dispatch(new UsersActions.SetCurrentUserRolenames(roles));
         },
         response => {
-          this.snackBarService.showSnackBar(response.error.message);
+          this.snackBarService.showSnackBar(response.error);
         }
       );
   }
@@ -209,7 +208,7 @@ export class DataStorageService {
           this.store.dispatch(new UsersActions.AddRoleAction(savedRole));
         },
         response => {
-          this.snackBarService.showSnackBar(response.error.message);
+          this.snackBarService.showSnackBar(response.error);
         });
   }
 
@@ -224,19 +223,18 @@ export class DataStorageService {
           return true;
         },
         response => {
-          this.snackBarService.showSnackBar(response.error.message);
+          this.snackBarService.showSnackBar(response.error);
         });
   }
 
   saveNewUser(user: UserModel) {
     this.httpClient.post<UserModel>(this.basehost + '/v1/users', user)
       .subscribe((savedUser: UserModel) => {
-          console.log('saveNewUser dss OK: ', savedUser)
           this.store.dispatch(new UsersActions.AddUserAction(savedUser));
           this.store.dispatch(new UsersActions.SetNewUserModeAction(false));
         },
         response => {
-          this.snackBarService.showSnackBar(response.error.message);
+          this.snackBarService.showSnackBar(response.error);
         });
   }
 
@@ -246,18 +244,17 @@ export class DataStorageService {
           this.store.dispatch(new TablesActions.AddTaskAction({task: task, rowId: rowId}));
         },
         response => {
-          this.snackBarService.showSnackBar(response.error.message);
+          this.snackBarService.showSnackBar(response.error);
         });
   }
 
   setTableUsers(tableId: number) {
-    // console.log(tableName);
     this.httpClient.get<UserModel[]>(this.basehost + '/v1/users/table/' + tableId)
       .subscribe((users: UserModel[]) => {
           this.store.dispatch(new TablesActions.SetTableUsers(users));
         },
         response => {
-          this.snackBarService.showSnackBar(response.error.message);
+          this.snackBarService.showSnackBar(response.error);
         }
       );
   }
@@ -269,19 +266,18 @@ export class DataStorageService {
           this.taskInfoService.stompClient.send('/app/newTasks/' + username, {});
         },
         response => {
-          this.snackBarService.showSnackBar(response.error.message);
+          this.snackBarService.showSnackBar(response.error);
         });
   }
 
   onRemoveUserFromTask(tableId: number, rowId: number, taskId: number, username: string) {
     this.httpClient.delete<TaskModel>(this.basehost + '/v1/projects/tables/' + tableId + '/rows/tasks/' + taskId + '/user/' + username)
       .subscribe((task: TaskModel) => {
-          // console.log('onRemoveUserFromTask dss OK: ', task)
           this.store.dispatch(new TablesActions.UpdateRowsTaskAction({rowId: rowId, task: task}));
           this.taskInfoService.stompClient.send('/app/newTasks/' + username, {});
         },
         response => {
-          this.snackBarService.showSnackBar(response.error.message);
+          this.snackBarService.showSnackBar(response.error);
         });
   }
 
@@ -289,11 +285,10 @@ export class DataStorageService {
     this.httpClient.put<TaskModel>(this.basehost + '/v1/projects/tables/' + task.tableId + '/rows/tasks', task)
       .subscribe(
         (updatedTask: TaskModel) => {
-          console.log('updateTask dss OK: ', updatedTask);
           this.store.dispatch(new TablesActions.UpdateTaskAction(updatedTask));
           this.store.dispatch(new UsersActions.UpdateTaskAction(updatedTask));
         }, response => {
-          this.snackBarService.showSnackBar(response.error.message);
+          this.snackBarService.showSnackBar(response.error);
         }
       );
   }
@@ -306,7 +301,7 @@ export class DataStorageService {
           this.store.dispatch(new TablesActions.DeleteTask({rowId: rowId, taskId: taskId}));
         }
       }, response => {
-        this.snackBarService.showSnackBar(response.error.message);
+        this.snackBarService.showSnackBar(response.error);
       });
   }
 
@@ -317,7 +312,7 @@ export class DataStorageService {
           this.store.dispatch(new TablesActions.DeleteRow(rowId));
         }
       }, response => {
-        this.snackBarService.showSnackBar(response.error.message);
+        this.snackBarService.showSnackBar(response.error);
       });
   }
 
@@ -329,7 +324,19 @@ export class DataStorageService {
           }
         },
         response => {
-          this.snackBarService.showSnackBar(response.error.message);
+          this.snackBarService.showSnackBar(response.error);
+        });
+  }
+
+  deleteProject(tableId: number) {
+    this.httpClient.delete<boolean>(this.basehost + '/v1/projects/' + tableId)
+      .subscribe((status: boolean) => {
+          if (status) {
+            this.store.dispatch(new TablesActions.DeleteTable(tableId));
+          }
+        },
+        response => {
+          this.snackBarService.showSnackBar(response.error);
         });
   }
 }

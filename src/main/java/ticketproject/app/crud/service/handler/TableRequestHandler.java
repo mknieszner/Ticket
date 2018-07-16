@@ -30,4 +30,6 @@ public interface TableRequestHandler {
     TaskDto removeUserFromTask(Long tableId, Long taskId, String username);
 
     TaskDto updateTask(Long tableId, TaskDto taskDto);
+
+    boolean deleteProject(Long tableId);
 }

@@ -64,7 +64,6 @@ export class TaskComponent implements OnInit {
   }
 
   onAssignUserToTask(username: string ) {
-    console.log('onAssignUserToTask username >' + username + '<');
     this.dss.onAssignUserToTask(this.tableDefinition.id, this.row.id, this.task.id , username);
   }
 

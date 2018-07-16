@@ -16,12 +16,13 @@ export class DefinitionComponent implements OnInit {
   options = fromDefinitionModel.options;
 
 
-  constructor(private dss: DataStorageService) {
+  constructor(private dss: DataStorageService,
+              ) {
   }
-
+//[tablesDetails]="(tableState | async).tablesDetails"
   ngOnInit() {
+    this.dss.getTablesDetails();
     this.initForm();
-    // this.options = fromDefinitionModel.options;
   }
 
   private initForm() {

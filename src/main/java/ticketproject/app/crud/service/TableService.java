@@ -10,7 +10,6 @@ import ticketproject.app.crud.domain.dto.definition.ProjectDefinitionDto;
 import ticketproject.app.crud.domain.dto.definition.TableDefinitionDto;
 import ticketproject.app.crud.domain.dto.definition.TableDetailsDto;
 import ticketproject.app.crud.domain.dto.values.*;
-import ticketproject.app.crud.domain.entities.Project;
 import ticketproject.app.crud.domain.entities.ProjectTable;
 import ticketproject.app.crud.domain.entities.Row;
 import ticketproject.app.crud.domain.entities.Task;
@@ -46,25 +45,13 @@ public class TableService {
 
     private final ColumnValueMapper columnValueMapper;
 
-//  public ProjectDto saveProjectDto(final ProjectDto projectDto) {
-//    System.out.println("DBSer " + projectDto);
-//    Project project = projectMapper.mapToProject(projectDto);
-//    System.out.println(project);
-//    return projectMapper.mapToProjectDto(projectRepository.save(project));
-//  }
-
-//  public ProjectDefinitionDto defineProject(final ProjectDefinitionDto projectDefinitionDto) {
-//    return definitionMapper.mapProjectToProjectDefinitionDto(projectRepository.save(definitionMapper.mapProjectDefinitionToProject(projectDefinitionDto)));
-//  }
-
-
-    public ProjectDefinitionDto getAllProjectHeaders(final Long projectId) {
-        return definitionMapper.mapProjectToProjectDefinitionDto(projectRepository.findOne(projectId));
-    }
-
-    public ProjectDto getProjectById(final Long projectId) {
-        return projectMapper.mapToProjectDto(projectRepository.findOne(projectId));
-    }
+//    public ProjectDefinitionDto getAllProjectHeaders(final Long projectId) {
+//        return definitionMapper.mapProjectToProjectDefinitionDto(projectRepository.findOne(projectId));
+//    }
+//
+//    public ProjectDto getProjectById(final Long projectId) {
+//        return projectMapper.mapToProjectDto(projectRepository.findOne(projectId));
+//    }
 
 
     @PreAuthorize("hasAnyAuthority('ROLE_ADMIN') || @tableAccessManager.hasTableAccessAuthorityBy(#tableId)")
@@ -81,19 +68,17 @@ public class TableService {
                 taskMapper.mapTaskDtosToTasks(rowDto.getTaskDtos()))));
     }
 
-    public RowDto getRowByTableIdAndRowId(final Long tableId, final Long rowId) {
-        return rowMapper.mapToRowDto(rowRepository.findByProjectTableIdAndId(tableId, rowId));
-    }
-
-    public ProjectTableDto getTableValuesById(final Long tableId) {
-        return projectTableMapper.mapToProjectTableDto(projectTableRepository.findValuesById(tableId));
-    }
-
-//    public List<RowDto> getTableRowsByTableId(final Long tableId) {
-//        System.out.println(tableId);
-//        List<Row> rows = rowRepository.findAllByProjectTable_Id(tableId);
-//        System.out.println(rows);
-//        return rowMapper.mapToRowDtos(rows);
+//    public RowDto getRowByTableIdAndRowId(final Long tableId, final Long rowId) {
+//        return rowMapper.mapToRowDto(rowRepository.findByProjectTableIdAndId(tableId, rowId));
+//    }
+//
+//    public ProjectTableDto getTableValuesById(final Long tableId) {
+//        return projectTableMapper.mapToProjectTableDto(projectTableRepository.findValuesById(tableId));
+//    }
+//
+//    public RowDto getRowById(final Long rowId) {
+//        return rowMapper.mapToRowDto(rowRepository.findOne(rowId));
+//
 //    }
 
     @PreAuthorize("hasAnyAuthority('ROLE_ADMIN') || @tableAccessManager.hasTableAccessAuthorityByTableName(#tableName)")
@@ -113,17 +98,12 @@ public class TableService {
                         }).collect(toList()))));
     }
 
-    public RowDto getRowById(final Long rowId) {
-        return rowMapper.mapToRowDto(rowRepository.findOne(rowId));
-
-    }
-
-    public ProjectTableDto updateTable(final ProjectTableDto projectTableDto, final Long projectId) {
-        Project project = projectRepository.findOne(projectId);
-        ProjectTable projectTable = projectTableMapper.mapToProjectTable(projectTableDto);
-        projectTable.setProject(project);
-        return projectTableMapper.mapToProjectTableDto(projectTableRepository.save(projectTable));
-    }
+//    public ProjectTableDto updateTable(final ProjectTableDto projectTableDto, final Long projectId) {
+//        Project project = projectRepository.findOne(projectId);
+//        ProjectTable projectTable = projectTableMapper.mapToProjectTable(projectTableDto);
+//        projectTable.setProject(project);
+//        return projectTableMapper.mapToProjectTableDto(projectTableRepository.save(projectTable));
+//    }
 
 
     @PreAuthorize("hasAnyAuthority('ROLE_ADMIN') || @tableAccessManager.hasTableAccessAuthorityBy(#tableId)")
@@ -133,17 +113,17 @@ public class TableService {
         return rowMapper.mapToRowDto(rowRepository.save(rowMapper.updateRow(oldRow, rowDto)));
     }
 
-    public List<RowDto> updateRowsByTableId(final List<RowDto> rowDtos, final Long tableId) {
-        ProjectTable projectTable = projectTableRepository.findOne(tableId);
-        return rowMapper.mapToRowDtos(Lists.newArrayList(rowRepository.save(rowDtos.stream().map(rowMapper::mapToRow).peek(row -> row.setProjectTable(projectTable)).collect(toList()))));
-    }
-
-    public ProjectTableDto addTableByProjectId(final ProjectTableDto projectTableDto, final Long projectId) {
-        Project project = projectRepository.findOne(projectId);
-        ProjectTable projectTable = projectTableMapper.mapToProjectTable(projectTableDto);
-        projectTable.setProject(project);
-        return projectTableMapper.mapToProjectTableDto(projectTableRepository.save(projectTable));
-    }
+//    public List<RowDto> updateRowsByTableId(final List<RowDto> rowDtos, final Long tableId) {
+//        ProjectTable projectTable = projectTableRepository.findOne(tableId);
+//        return rowMapper.mapToRowDtos(Lists.newArrayList(rowRepository.save(rowDtos.stream().map(rowMapper::mapToRow).peek(row -> row.setProjectTable(projectTable)).collect(toList()))));
+//    }
+//
+//    public ProjectTableDto addTableByProjectId(final ProjectTableDto projectTableDto, final Long projectId) {
+//        Project project = projectRepository.findOne(projectId);
+//        ProjectTable projectTable = projectTableMapper.mapToProjectTable(projectTableDto);
+//        projectTable.setProject(project);
+//        return projectTableMapper.mapToProjectTableDto(projectTableRepository.save(projectTable));
+//    }
 
     @PreAuthorize("hasAnyAuthority('ROLE_ADMIN') || @tableAccessManager.hasTableAccessAuthorityByTableName(#tableDefinitionDto.name)")
     public ProjectDefinitionDto defineSingleTableProject(final TableDefinitionDto tableDefinitionDto,
@@ -168,27 +148,23 @@ public class TableService {
     }
 
     @Transactional
-    public void deleteTablebyId(final Long tableId) { //TODO:TRANSACTION?
-        roleRepository.deleteByName(getTableNameBy(tableId));
-        projectTableRepository.delete(tableId);
-    }
-
     @PreAuthorize("hasAnyAuthority('ROLE_ADMIN')")
-    public void deleteTablebyName(final String tableName) { //TODO:TRANSACTION?
+    public void deleteTable(final Long tableId) {
+        String tableName = getTableNameBy(tableId);
+        projectRepository.delete(tableId);
         roleRepository.deleteByName(tableName);
-        projectTableRepository.deleteByName(tableName);
     }
 
-    public List<TableDetailsDto> getTablesNamesListAuthorized(final String username) {
+    public List<TableDetailsDto> getTablesNamesListAuthorized() {
         List<TableDetailsDto> tablesDetails = Lists.newArrayList(projectTableRepository.findAll())
                 .stream()
                 .map(projectTable -> new TableDetailsDto(projectTable.getId(), projectTable.getName(), projectTable.getProject().getDatabaseEnvironment().name()))
                 .collect(toList());
 
-        if (isAdmin(username)) {
+        if (isAdmin(getCurrentUserUsername())) {
             return tablesDetails;
         } else {
-            List<String> userRoleNames = getUsersRoles(username);
+            List<String> userRoleNames = getUsersRoles(getCurrentUserUsername());
             return tablesDetails.stream()
                     .filter(tableDetailsDto -> userRoleNames.contains(tableDetailsDto.getName()))
                     .collect(toList());
@@ -215,10 +191,10 @@ public class TableService {
         return userRepository.findByUsername(username).getRoles().stream().map(Role::getName).collect(toList());
     }
 
-    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN') || @tableAccessManager.hasTableAccessAuthorityByRowId(#rowId)")
-    public RowInfoDto getRowDetails(final Long rowId) {
-        return rowMapper.mapRowToRowInfoDto(rowRepository.findOne(rowId));
-    }
+//    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN') || @tableAccessManager.hasTableAccessAuthorityByRowId(#rowId)")
+//    public RowInfoDto getRowDetails(final Long rowId) {
+//        return rowMapper.mapRowToRowInfoDto(rowRepository.findOne(rowId));
+//    }
 
     @PreAuthorize("hasAnyAuthority('ROLE_ADMIN') || @tableAccessManager.hasTableAccessAuthorityByRowId(#rowId)")
     public TaskDto addTaskToRow(final Long rowId, TaskDto taskDto) {
@@ -274,12 +250,12 @@ public class TableService {
         return taskMapper.mapTaskToTaskDto(taskRepository.save(task));
     }
 
-    private Row updateRowTask(final Row row, final TaskDto newTask) {
-        Task task = taskMapper.mapTaskDtoToTask(newTask);
-        row.updateTask(task);
-        taskRepository.save(task);
-        return row;
-    }
+//    private Row updateRowTask(final Row row, final TaskDto newTask) {
+//        Task task = taskMapper.mapTaskDtoToTask(newTask);
+//        row.updateTask(task);
+//        taskRepository.save(task);
+//        return row;
+//    }
 
     public List<String> findAllUserCommonTableRoleNames(User user) {
         return user.getRoles().stream()

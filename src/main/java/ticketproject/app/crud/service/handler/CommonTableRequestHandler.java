@@ -2,7 +2,9 @@ package ticketproject.app.crud.service.handler;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
+import ticketproject.app.crud.dao.ProjectRepository;
 import ticketproject.app.crud.dao.ProjectTableRepository;
+import ticketproject.app.crud.dao.RoleRepository;
 import ticketproject.app.crud.domain.dto.definition.ProjectDefinitionDto;
 import ticketproject.app.crud.domain.dto.definition.TableDefinitionDto;
 import ticketproject.app.crud.domain.dto.values.RowDto;
@@ -25,6 +27,8 @@ public class CommonTableRequestHandler implements TableRequestHandler {
     private final TableService tableService;
     private final ProjectTableRepository projectTableRepository;
     private final RowValidator rowValidator;
+    private final ProjectRepository projectRepository;
+    private final RoleRepository roleRepository;
 
     @Transactional
     public ProjectDefinitionDto handleTableDefinitionRequest(TableDefinitionDto tableDefinitionDto,
@@ -79,6 +83,12 @@ public class CommonTableRequestHandler implements TableRequestHandler {
     @Override
     public TaskDto updateTask(Long tableId, TaskDto taskDto) {
         return tableService.updateTask(tableId, taskDto);
+    }
+
+    @Override
+    public boolean deleteProject(Long tableId) {
+        tableService.deleteTable(tableId);
+        return true;
     }
 
     private Long getTableIdByName(final String tableName) {
