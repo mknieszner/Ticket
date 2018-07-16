@@ -172,7 +172,7 @@ public class TableQueryBaseStatements {
             );
 
     static final String GET_TASK_USERS_STATEMENT =
-            String.format("SELECT * FROM %s JOIN users WHERE %s.user_id = users.id AND (task_id = ?)",
+            String.format("SELECT * FROM %s, users WHERE %s.user_id = users.id AND (task_id = ?)",
                     TABLE_TASK_USER_JUNCTION_NAME_VARIABLE,
                     TABLE_TASK_USER_JUNCTION_NAME_VARIABLE
             );
