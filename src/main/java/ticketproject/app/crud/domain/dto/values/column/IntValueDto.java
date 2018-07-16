@@ -29,5 +29,9 @@ public class IntValueDto extends ColumnValueDto {
   public ColumnValue mapThisToColumnValue() {
     return new IntValue(value);
   }
+
+  public Long getValue(){
+    return (value.longValue());
+  }
 }
 
