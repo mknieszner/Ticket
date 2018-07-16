@@ -283,7 +283,9 @@ public class TableQueryService {
         values.add(taskDto.getDescription());
         values.add(taskDto.getName());
         values.add(taskDto.getStatus().name());
-        taskDto.setId(runParametrizedUpdate(statement, values).getKey().longValue());
+
+        //postgres
+        taskDto.setId(((Integer) runParametrizedUpdate(statement, values).getKeys().get("ID")).longValue());
 
         statement = ADD_TASK_TO_ROW_REFERENCE_STATEMENT
                 .replaceFirst(TABLE_TASK_JUNCTION_NAME_VARIABLE, sqlCorrectTableName);
